@@ -87,7 +87,7 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Clicked"));
-	//Todo
+	//어빌리티를 발동시키면됨
 }
 
 void ACAS_Player::TestCapture(const FInputActionValue& Value)

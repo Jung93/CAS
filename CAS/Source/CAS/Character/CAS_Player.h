@@ -79,7 +79,6 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 public:	
-	//void ActivateAbility(const FGameplayTag& tag);
 	virtual void InitAbilitySystemComponent() override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 

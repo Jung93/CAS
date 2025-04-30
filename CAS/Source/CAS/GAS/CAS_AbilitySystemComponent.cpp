@@ -2,7 +2,7 @@
 
 
 #include "GAS/CAS_AbilitySystemComponent.h"
-
+#include "GAS/CAS_GameplayAbility.h"
 void UCAS_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& Abilities)
 {
 	for (auto& AbilityClass : Abilities) {
@@ -21,6 +21,26 @@ void UCAS_AbilitySystemComponent::ActivateAbility(const FGameplayTag& Tag)
 		TryActivateAbility(Spec->Handle);
 	}
 }
+
+void UCAS_AbilitySystemComponent::GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<UCAS_GameplayAbility*>& Abilities)
+{
+	TArray<FGameplayAbilitySpec*> AbilitiesToActivate;
+	GetActivatableGameplayAbilitySpecsByAllMatchingTags(GameplayTagContainer, AbilitiesToActivate, false);
+
+	// Iterate the list of all ability specs
+	for (FGameplayAbilitySpec* Spec : AbilitiesToActivate)
+	{
+		// Iterate all instances on this ability spec
+		TArray<UGameplayAbility*> AbilityInstances = Spec->GetAbilityInstances();
+
+		for (UGameplayAbility* ActiveAbility : AbilityInstances)
+		{
+			Abilities.Add(Cast<UCAS_GameplayAbility>(ActiveAbility));
+		}
+	}
+}
+
+
 
 FGameplayAbilitySpec* UCAS_AbilitySystemComponent::FindAbilitySpecByTag(const FGameplayTag& Tag)
 {

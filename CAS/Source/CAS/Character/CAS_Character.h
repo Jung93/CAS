@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "GAS/CAS_AttributeSet.h"
 #include "GAS/CAS_GamePlayTag.h"
+#include "GAS/CAS_GameplayAbility.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
 #include "CAS_Character.generated.h"
@@ -39,6 +40,11 @@ public:
 	virtual void GiveDefaultAbilities();
 	virtual void AddAbilites();
 	virtual void InitAbilitySystemComponent();
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	void GetActiveAbilitiesWithTags(FGameplayTagContainer AbilityTags, TArray<UCAS_GameplayAbility*>& Abilities);
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	bool CanActivateAbilitiesWithTags(FGameplayTagContainer AbilityTags, bool bAllowRemoteActivation = true);
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)

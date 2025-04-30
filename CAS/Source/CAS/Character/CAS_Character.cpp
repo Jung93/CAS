@@ -72,5 +72,23 @@ void ACAS_Character::InitAbilitySystemComponent()
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
+void ACAS_Character::GetActiveAbilitiesWithTags(FGameplayTagContainer AbilityTags, TArray<UCAS_GameplayAbility*>& Abilities)
+{
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->GetActiveAbilitiesWithTags(AbilityTags, Abilities);
+	}
+}
+
+bool ACAS_Character::CanActivateAbilitiesWithTags(FGameplayTagContainer AbilityTags, bool bAllowRemoteActivation)
+{
+	if (AbilitySystemComponent)
+	{
+		return AbilitySystemComponent->TryActivateAbilitiesByTag(AbilityTags, bAllowRemoteActivation);
+	}
+
+	return false;
+}
+
 
 
