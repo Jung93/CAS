@@ -6,7 +6,6 @@
 #include "GameFramework/Character.h"
 #include "GAS/CAS_AttributeSet.h"
 #include "GAS/CAS_GamePlayTag.h"
-#include "GAS/CAS_GameplayAbility.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
 #include "CAS_Character.generated.h"

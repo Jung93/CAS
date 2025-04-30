@@ -5,7 +5,7 @@
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {
-	AbilityTags.AddTag(CAS_GamePlayTag::Ability_Attack_TEST);
+	//AbilityTags.AddTag(CAS_GamePlayTag::Ability_Attack_TEST); 코드로 작성해도 되지만 블루프린트에서 하는게 더 디자이너 친화적
 }
 
 bool UCAS_Ability_TESTFUNC::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
@@ -22,24 +22,26 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	if (!AttackMontage) {
+		return;
+	}
 	if (ActorInfo && ActorInfo->AvatarActor.IsValid())
 	{
 		UAnimInstance* AnimInstance = ActorInfo->AvatarActor->FindComponentByClass<USkeletalMeshComponent>()->GetAnimInstance();
-		if (AnimInstance && AttackMontage) // AttackMontage는 UAnimMontage* 변수로 미리 선언되어 있어야 합니다.
-		{
+		if (AnimInstance){
 			AnimInstance->Montage_Play(AttackMontage);
 		}
 	}
 	if (ActorInfo && ActorInfo->OwnerActor.IsValid())
 	{
-		UAbilitySystemComponent* ASC = ActorInfo->AbilitySystemComponent.Get();
-		if (ASC)
+		auto Character = Cast<ACAS_Character>(ActorInfo->AvatarActor);
+
+		if (Character)
 		{
-			auto Attribute = Cast<ACAS_Character>(ActorInfo->OwnerActor)->GetAttributeSet();
+			auto Attribute = Character->GetAttributeSet();
 			float CurrHealth = Attribute->GetHealth();
-			
-			//dead 예외처리필요
-			float HP = CurrHealth - 10.0f; // 체력감소
+		
+			float HP = CurrHealth - 10.0f; 
 			
 			Attribute->SetHealth(HP);
 		}

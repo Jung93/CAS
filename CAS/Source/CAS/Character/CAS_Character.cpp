@@ -2,7 +2,7 @@
 
 #include "CAS_Character.h"
 #include "Components/CapsuleComponent.h"
-
+#include "GAS/CAS_GameplayAbility.h"
 
 // Sets default values
 ACAS_Character::ACAS_Character()

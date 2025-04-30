@@ -84,6 +84,7 @@ public:
 
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
+	void ActivateAbility(const FGameplayTag tag);
 protected:
 	UPROPERTY(EditAnywhere, Category = "Hat")
 	TSubclassOf<class ACAS_Hat> _hatBP;

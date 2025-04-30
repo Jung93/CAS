@@ -87,7 +87,8 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Clicked"));
-	//어빌리티를 발동시키면됨
+	
+	ActivateAbility(CAS_GamePlayTag::Ability_Attack_TEST);
 }
 
 void ACAS_Player::TestCapture(const FInputActionValue& Value)
@@ -190,5 +191,10 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 	auto Attribute = playerState->GetAttributeSet();
 
 	return Attribute;
+}
+
+void ACAS_Player::ActivateAbility(const FGameplayTag tag)
+{
+	AbilitySystemComponent->ActivateAbility(tag);
 }
 
