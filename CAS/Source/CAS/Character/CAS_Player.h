@@ -31,6 +31,8 @@ protected:
 
 	void TESTFUNC(const FInputActionValue& Value);
 
+	void TestCapture(const FInputActionValue& Value);
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -58,6 +60,9 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LeftClickAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* TestCaptureAction;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -79,4 +84,11 @@ public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Hat")
+	TSubclassOf<class ACAS_Hat> _hatBP;
+
+	UPROPERTY()
+	class ACAS_Hat* _hatSpawn = nullptr;
 };

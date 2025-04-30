@@ -12,6 +12,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
+#include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
 
 
@@ -87,11 +88,41 @@ void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 	//Todo
 }
 
+void ACAS_Player::TestCapture(const FInputActionValue& Value)
+{
+	bool isPress = Value.Get<bool>();
+	auto enemy = _hatSpawn->GetEnemyCapt();
+
+	if (isPress && enemy == nullptr)
+	{
+
+		FVector forwardVec = GetActorForwardVector();
+
+		_hatSpawn->ThrowHat(forwardVec);
+
+	}
+}
+
 // Called when the game starts or when spawned
 void ACAS_Player::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (_hatBP->IsValidLowLevel())
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+
+		FVector Location = GetActorLocation() + FVector(0, 0, 50.0f);
+		FRotator Rotation = FRotator::ZeroRotator;
+
+		_hatSpawn = GetWorld()->SpawnActor<ACAS_Hat>(_hatBP, Location, FRotator::ZeroRotator, SpawnParams);
+
+		if (_hatSpawn)
+		{
+			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+		}
+	}
 }
 
 // Called every frame
@@ -127,6 +158,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
+		EnhancedInputComponent->BindAction(TestCaptureAction, ETriggerEvent::Triggered, this, &ACAS_Player::TestCapture);
 
 	}
 	
