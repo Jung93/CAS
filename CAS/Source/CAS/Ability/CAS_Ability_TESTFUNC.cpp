@@ -69,6 +69,7 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 				if (SpecHandle.IsValid())
 				{
 					//스펙핸들에서 스펙을 뽑아와서 태그를 통해 키값을확인해서 데미지입력
+					//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
 					SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -10.0f);
 					ASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, ASC);
 				}
