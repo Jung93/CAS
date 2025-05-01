@@ -8,4 +8,6 @@ namespace CAS_GamePlayTag {
 	//UE_DEFINE_GAMEPLAY_TAG();
 	//UE_DEFINE_GAMEPLAY_TAG();
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_TEST, "Ability.Attack.TEST")
+	UE_DEFINE_GAMEPLAY_TAG(Effect_Attack_TEST, "Effect.Attack.TEST")
+		
 }
