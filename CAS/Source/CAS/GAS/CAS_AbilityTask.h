@@ -14,4 +14,10 @@ class CAS_API UCAS_AbilityTask : public UAbilityTask
 {
 	GENERATED_BODY()
 	
+public:
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TObjectPtr<UAnimMontage> Montage;
+	UPROPERTY()
+	float PlayRate = 1.0f;
 };

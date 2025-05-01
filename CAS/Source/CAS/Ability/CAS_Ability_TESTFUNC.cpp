@@ -2,6 +2,7 @@
 
 
 #include "Ability/CAS_Ability_TESTFUNC.h"
+#include "Ability_Task/CAS_Task_Attack.h"
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {
@@ -36,13 +37,11 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	1. 적에게 텔레포트하는 몽타주
 	2. 실제 텔레포트 하는 기능
 	*/
-	if (ActorInfo && ActorInfo->AvatarActor.IsValid())
-	{
-		UAnimInstance* AnimInstance = Cast<ACAS_Character>(ActorInfo->AvatarActor)->GetMesh()->GetAnimInstance();
-		if (AnimInstance){
-			AnimInstance->Montage_Play(AttackMontage);
-		}
+	auto Task = UCAS_Task_Attack::CAS_Task_Attack(this,"TEST_Attack",AttackMontage,1.5f);
+	if (Task->IsValidLowLevel()) {
+		Task->ReadyForActivation();
 	}
+
 
 	//2.
 	/*
