@@ -7,7 +7,9 @@
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {
 	//AbilityTags.AddTag(CAS_GamePlayTag::Ability_Attack_TEST); 코드로 작성해도 되지만 블루프린트에서 하는게 더 디자이너 친화적
+	notifyName = "Attack_Hit";
 }
+
 
 bool UCAS_Ability_TESTFUNC::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
@@ -55,21 +57,25 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	*/
 	if (ActorInfo && ActorInfo->OwnerActor.IsValid())
 	{
+		if (!DamageEffectClass) {
+			return;
+		}
 		auto Character = Cast<ACAS_Character>(ActorInfo->AvatarActor);
 		UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
 
 		if (ASC)
 		{
 			FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
+			EffectContextHandle.AddInstigator(Character,nullptr);
 
-			if (DamageEffectClass)
+			if (bNotifyFlag)
 			{
 				ApplyGamePlayEffect(Character, DamageEffectClass, 1, EffectContextHandle);
+				bNotifyFlag = false;
 			}
 		}
 	}
-	
-	
+
 }
 
 void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
@@ -77,7 +83,7 @@ void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, FGameplayEffectContextHandle EffectContext)
+void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext)
 {
 	auto Character = Cast<ACAS_Character>(EffectContext.GetInstigator());
 	UAbilitySystemComponent* MyASC = Character->GetAbilitySystemComponent();
@@ -92,6 +98,15 @@ void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(class ACAS_Character* Target, TS
 		//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -10.0f);
 		MyASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, MyASC);
+	}
+}
+
+void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	Super::PlayAnimNotify(NotifyName, BranchingPointPayload);
+	if (NotifyName == notifyName) {
+
+		bNotifyFlag = true;
 	}
 }
 

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Abilities/Tasks/AbilityTask.h"
+#include "GAS/CAS_GameplayAbility.h"
 #include "CAS_AbilityTask.generated.h"
 
 /**

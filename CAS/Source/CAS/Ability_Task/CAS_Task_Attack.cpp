@@ -32,6 +32,8 @@ void UCAS_Task_Attack::Activate()
 			return;
 		}
 	
+		auto OwnAbility = Cast<UCAS_GameplayAbility>(Ability);
+		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(OwnAbility, &UCAS_GameplayAbility::PlayAnimNotify);
 		AnimInstance->Montage_Play(Montage, PlayRate);
 		
 	}

@@ -17,6 +17,8 @@ public:
 	static UCAS_Task_Attack* CAS_Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
 
 	virtual void Activate() override;
+
+	FPlayMontageAnimNotifyDelegate OnNotifyTriggered;
 protected:
 
 };
