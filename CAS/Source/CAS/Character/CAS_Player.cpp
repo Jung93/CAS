@@ -101,8 +101,9 @@ void ACAS_Player::TestCapture(const FInputActionValue& Value)
 
 		FVector forwardVec = GetActorForwardVector();
 
-		_hatSpawn->ThrowHat(forwardVec);
+		_hatSpawn->Throw(forwardVec);
 
+		_hatSpawn->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	}
 }
 
@@ -123,6 +124,8 @@ void ACAS_Player::BeginPlay()
 
 		if (_hatSpawn)
 		{
+
+			_hatSpawn->SetPlayer(this);
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
 		}
 	}
@@ -161,7 +164,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
-		EnhancedInputComponent->BindAction(TestCaptureAction, ETriggerEvent::Triggered, this, &ACAS_Player::TestCapture);
+		EnhancedInputComponent->BindAction(TestCaptureAction, ETriggerEvent::Started, this, &ACAS_Player::TestCapture);
 
 	}
 	

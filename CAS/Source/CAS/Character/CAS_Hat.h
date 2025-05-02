@@ -34,7 +34,13 @@ public:
 	ACAS_EnemyCapt* GetEnemyCapt() { return _testCaptureTarget; }
 
 	UFUNCTION()
-	void ThrowHat(const FVector& direction);
+	void Throw(const FVector& direction);
+
+	UFUNCTION()
+	void ThrowAndReturn(float DeltaTime);
+
+	UFUNCTION()
+	void SetPlayer(class ACAS_Player* player) { _player = player; };
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
@@ -45,6 +51,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "TestCaptureTarget")
 	class ACAS_EnemyCapt* _testCaptureTarget;
+
+	UPROPERTY(VisibleAnywhere, Category = "Player")
+	class ACAS_Player* _player;
 
 
 	FVector StartLocation;

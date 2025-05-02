@@ -227,7 +227,7 @@ void ACASCharacter::TestCapture(const FInputActionValue& Value)
 
 		FVector forwardVec = GetActorForwardVector();
 
-		_hatSpawn->ThrowHat(forwardVec);
+		_hatSpawn->Throw(forwardVec);
 
 	}
 

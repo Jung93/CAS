@@ -4,6 +4,7 @@
 #include "Character/CAS_Hat.h"
 #include "Components/SphereComponent.h"
 #include "CAS/Character/CAS_EnemyCapt.h"
+#include "CAS/Character/CAS_Player.h"
 
 // Sets default values
 ACAS_Hat::ACAS_Hat()
@@ -32,42 +33,8 @@ void ACAS_Hat::Tick(float DeltaTime)
 
 	if (_isThrowing)
 	{
-		_capturingTime += DeltaTime;
-
-		float halfTime = _totalMoveTime / 2.0f;
-		float lerpValue = _capturingTime / halfTime;
-
-		if (!_isReturning)
-		{
-			FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue);
-			SetActorLocation(NewLocation);
-
-			if (_capturingTime >= halfTime)
-			{
-				// 반환 시작
-				_capturingTime = 0.0f;
-				_isReturning = true;
-			}
-		}
-		else
-		{
-			FVector NewLocation = FMath::Lerp(TargetLocation, StartLocation, lerpValue);
-			SetActorLocation(NewLocation);
-
-			if (_capturingTime >= halfTime)
-			{
-				_isThrowing = false;
-				_isReturning = false;
-				_capturingTime = 0.0f;
-			}
-		}
-
+		ThrowAndReturn(DeltaTime);
 	}
-
-
-
-
-
 }
 
 void ACAS_Hat::PostInitializeComponents()
@@ -89,40 +56,66 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 {
 	auto enemy = Cast<ACAS_EnemyCapt>(OtherActor);
 
-	if (!enemy->IsValidLowLevel())
+	if (enemy->IsValidLowLevel())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("xcvmklwefrlqasxlmcdhlxmdcula"));
-		return;
+		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected!!"));
+
+		_testCaptureTarget = enemy;
+
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("Enemy Detected!!"));
-
-	_testCaptureTarget = enemy;
-
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-
 }
 
-void ACAS_Hat::ThrowHat(const FVector& direction)
+void ACAS_Hat::Throw(const FVector& direction)
 {
+	if (_isThrowing)
+		return;
 
 	StartLocation = GetActorLocation();
 	MoveDirection = direction.GetSafeNormal();
-	TargetLocation = StartLocation + MoveDirection * 100.0f; // 예: 1000 거리까지
+	TargetLocation = StartLocation + MoveDirection * 200.0f;
 
 	_isThrowing = true;
 	_capturingTime = 0.0f;
 	_isReturning = false;
-
 }
 
-//void ACAS_Hat::ThrowHat()
-//{
-//	if (_isThrowing)
-//		return;
-//
-//	_isThrowing = true;
-//
-//}
+void ACAS_Hat::ThrowAndReturn(float DeltaTime)
+{
+	_capturingTime += DeltaTime;
+
+	float halfTime = _totalMoveTime / 2.0f;
+	float lerpValue = _capturingTime / halfTime;
+
+	if (!_isReturning)
+	{
+		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue);
+		SetActorLocation(NewLocation);
+
+		if (_capturingTime >= halfTime)
+		{
+			// 반환 시작
+			_capturingTime = 0.0f;
+			_isReturning = true;
+		}
+	}
+	else
+	{
+		FVector playerLocation = _player->GetMesh()->GetSocketTransform(FName("head")).GetLocation();
+
+		FVector NewLocation = FMath::Lerp(TargetLocation, playerLocation, lerpValue);
+		SetActorLocation(NewLocation);
+
+		if (_capturingTime >= halfTime)
+		{
+			_isThrowing = false;
+			_isReturning = false;
+			_capturingTime = 0.0f;
+
+			SetActorLocation(playerLocation);
+			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+		}
+	}
+}
 
