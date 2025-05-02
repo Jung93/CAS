@@ -62,8 +62,11 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 		_testCaptureTarget = enemy;
 
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
+		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+		_isThrowing = false;
+		_isReturning = false;
+		//SetActorHiddenInGame(true);
+		//SetActorEnableCollision(false);
 	}
 }
 
@@ -102,7 +105,7 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	}
 	else
 	{
-		FVector playerLocation = _player->GetMesh()->GetSocketTransform(FName("head")).GetLocation();
+		FVector playerLocation = _player->GetMesh()->GetSocketTransform(FName("tophead")).GetLocation();
 
 		FVector NewLocation = FMath::Lerp(TargetLocation, playerLocation, lerpValue);
 		SetActorLocation(NewLocation);
@@ -114,7 +117,7 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 			_capturingTime = 0.0f;
 
 			SetActorLocation(playerLocation);
-			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
 }

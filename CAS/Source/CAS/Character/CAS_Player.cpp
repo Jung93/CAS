@@ -126,7 +126,7 @@ void ACAS_Player::BeginPlay()
 		{
 
 			_hatSpawn->SetPlayer(this);
-			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
 }
