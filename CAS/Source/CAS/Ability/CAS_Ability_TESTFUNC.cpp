@@ -66,13 +66,10 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		if (ASC)
 		{
 			FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
-			EffectContextHandle.AddInstigator(Character,nullptr);
+			EffectContextHandle.AddInstigator(Character, nullptr);
 
-			if (bNotifyFlag)
-			{
-				ApplyGamePlayEffect(Character, DamageEffectClass, 1, EffectContextHandle);
-				bNotifyFlag = false;
-			}
+			ApplyGamePlayEffect(Character, DamageEffectClass, 1, EffectContextHandle);
+
 		}
 	}
 
@@ -106,7 +103,7 @@ void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPoi
 	Super::PlayAnimNotify(NotifyName, BranchingPointPayload);
 	if (NotifyName == notifyName) {
 
-		bNotifyFlag = true;
+	
 	}
 }
 

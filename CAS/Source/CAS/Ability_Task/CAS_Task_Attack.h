@@ -18,7 +18,6 @@ public:
 
 	virtual void Activate() override;
 
-	FPlayMontageAnimNotifyDelegate OnNotifyTriggered;
 protected:
-
+	virtual void OnDestroy(bool bInOwnerFinished) override;
 };

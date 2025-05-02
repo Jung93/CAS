@@ -23,6 +23,6 @@ public:
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 protected:
 	virtual void ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext);
+	UPROPERTY(Editanywhere,Category="NotifyName")
 	FName notifyName;
-	bool bNotifyFlag = false;
 };
