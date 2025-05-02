@@ -17,5 +17,8 @@ UCLASS()
 class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
-	
+
+public:
+protected:
+	virtual void ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, FGameplayEffectContextHandle EffectContext);
 };

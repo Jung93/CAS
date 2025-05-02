@@ -57,21 +57,14 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	{
 		auto Character = Cast<ACAS_Character>(ActorInfo->AvatarActor);
 		UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
+
 		if (ASC)
 		{
 			FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
 
 			if (DamageEffectClass)
 			{
-				//스펙을 클래스로 받아와서 만들어줌 1.0은 레벨지정 데이터테이블로 고렙 -> 고데미지 스킬로 만들수있음
-				FGameplayEffectSpecHandle SpecHandle = ASC->MakeOutgoingSpec(DamageEffectClass, 1.0f, EffectContextHandle);
-				if (SpecHandle.IsValid())
-				{
-					//스펙핸들에서 스펙을 뽑아와서 태그를 통해 키값을확인해서 데미지입력
-					//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
-					SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -10.0f);
-					ASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, ASC);
-				}
+				ApplyGamePlayEffect(Character, DamageEffectClass, 1, EffectContextHandle);
 			}
 		}
 	}
@@ -83,3 +76,23 @@ void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
+
+void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, FGameplayEffectContextHandle EffectContext)
+{
+	auto Character = Cast<ACAS_Character>(EffectContext.GetInstigator());
+	UAbilitySystemComponent* MyASC = Character->GetAbilitySystemComponent();
+
+	UAbilitySystemComponent* TargetASC = Target->GetAbilitySystemComponent();
+	
+	//스펙을 클래스로 받아와서 만들어줌 1.0은 레벨지정 데이터테이블로 고렙 -> 고데미지 스킬로 만들수있음
+	FGameplayEffectSpecHandle SpecHandle = MyASC->MakeOutgoingSpec(DamageEffectClass, 1.0f, EffectContext);
+	if (SpecHandle.IsValid())
+	{
+		//스펙핸들에서 스펙을 뽑아와서 태그를 통해 키값을확인해서 데미지입력
+		//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
+		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -10.0f);
+		MyASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, MyASC);
+	}
+}
+
+
