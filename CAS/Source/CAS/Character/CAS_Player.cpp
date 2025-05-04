@@ -86,8 +86,6 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Yellow, TEXT("Clicked"));
-	
 	ActivateAbility(CAS_GamePlayTag::Ability_Attack_TEST);
 }
 

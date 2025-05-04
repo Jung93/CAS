@@ -5,9 +5,8 @@
 #include "Ability_Task/CAS_Task_Attack.h"
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
-{
+{	
 	//AbilityTags.AddTag(CAS_GamePlayTag::Ability_Attack_TEST); 코드로 작성해도 되지만 블루프린트에서 하는게 더 디자이너 친화적
-	notifyName = "Attack_Hit";
 }
 
 
@@ -26,24 +25,31 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	/*
-	1.행동(Task) 실행
-	2.효과(Effect) 적용
+	행동(Task) 실행,효과(Effect) 적용
+
+	해당 어빌리티 실행 과정
+	1. 태스크에서 몽타주를재생
+	2. 몽타주 애님 노티파이 델리게이트로 해당 시점의 적이 있는지 체크하는 함수 호출
+	3. 적이 있다면 델리게이트로 어빌리티에 접근하여 타겟을 알려줌
+	4. 타겟에 이펙트를 적용
 	*/
+	
 	if (!AttackMontage || !DamageEffectClass) {
 		return;
 	}
 	//1.
 	/*
-	정의할 행동과 기능 
-	예를들면 순간적으로 이동하여 공격을 한다면 
+	정의할 행동과 기능
+	예를들면 순간적으로 이동하여 공격을 한다면
 	1. 적에게 텔레포트하는 몽타주
 	2. 실제 텔레포트 하는 기능
 	*/
-	auto Task = UCAS_Task_Attack::CAS_Task_Attack(this,"TEST_Attack",AttackMontage,1.5f);
+	auto Task = UCAS_Task_Attack::CAS_Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
 	if (Task->IsValidLowLevel()) {
+		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
 		Task->ReadyForActivation();
 	}
-
+	
 
 	//2.
 	/*
@@ -55,23 +61,8 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	2. 이펙트에서 정의한 공격에 세부적인 데미지 정의 10 을 modifier에 전달
 	3. 핸들을 통해 전달하여 적용
 	*/
-	if (ActorInfo && ActorInfo->OwnerActor.IsValid())
-	{
-		if (!DamageEffectClass) {
-			return;
-		}
-		auto Character = Cast<ACAS_Character>(ActorInfo->AvatarActor);
-		UAbilitySystemComponent* ASC = Character->GetAbilitySystemComponent();
-
-		if (ASC)
-		{
-			FGameplayEffectContextHandle EffectContextHandle = ASC->MakeEffectContext();
-			EffectContextHandle.AddInstigator(Character, nullptr);
-
-			ApplyGamePlayEffect(Character, DamageEffectClass, 1, EffectContextHandle);
-
-		}
-	}
+	
+	
 
 }
 
@@ -80,31 +71,47 @@ void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
-void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(class ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext)
+void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
 {
-	auto Character = Cast<ACAS_Character>(EffectContext.GetInstigator());
-	UAbilitySystemComponent* MyASC = Character->GetAbilitySystemComponent();
-
-	UAbilitySystemComponent* TargetASC = Target->GetAbilitySystemComponent();
 	
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
 	//스펙을 클래스로 받아와서 만들어줌 1.0은 레벨지정 데이터테이블로 고렙 -> 고데미지 스킬로 만들수있음
-	FGameplayEffectSpecHandle SpecHandle = MyASC->MakeOutgoingSpec(DamageEffectClass, 1.0f, EffectContext);
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
 	if (SpecHandle.IsValid())
 	{
 		//스펙핸들에서 스펙을 뽑아와서 태그를 통해 키값을확인해서 데미지입력
 		//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -10.0f);
-		MyASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, MyASC);
+		AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 	}
 }
 
-void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target , int32 TaskLevel)
 {
-	Super::PlayAnimNotify(NotifyName, BranchingPointPayload);
-	if (NotifyName == notifyName) {
-
-	
+	if (!DamageEffectClass) {
+		return;
 	}
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());	
+	UAbilitySystemComponent* AbilitySystemComp;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+		EffectContextHandle.AddInstigator(PlayerState, nullptr);
+		
+		ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+			FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+			EffectContextHandle.AddInstigator(CharacterState, nullptr);
+
+			ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		}
+	}	
+	float currHealth = Target->GetAttributeSet()->GetHealth();
+	FString DebugMessage = FString::Printf(TEXT("Current Health: %.2f"), currHealth);
+	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Green,DebugMessage);
 }
-
-
