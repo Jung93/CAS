@@ -5,19 +5,19 @@
 #include "Ability_Task/CAS_Task_Attack.h"
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
-{	
-	//AbilityTags.AddTag(CAS_GamePlayTag::Ability_Attack_TEST); 코드로 작성해도 되지만 블루프린트에서 하는게 더 디자이너 친화적
+{		
+	//공격당하면 이 어빌리티는 실행되지않음
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.TakeDamage"));
 }
 
 
 bool UCAS_Ability_TESTFUNC::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	if (Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags) == false)
-	{
+	auto isPlaying = Cast<ACAS_Character>(ActorInfo->AvatarActor)->GetMesh()->GetAnimInstance()->Montage_IsPlaying(AttackMontage);
+	if (isPlaying) {
 		return false;
 	}
-
-	return true;
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -47,6 +47,7 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	auto Task = UCAS_Task_Attack::CAS_Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
 	if (Task->IsValidLowLevel()) {
 		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
+		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 	}
 	
@@ -61,7 +62,6 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	2. 이펙트에서 정의한 공격에 세부적인 데미지 정의 10 을 modifier에 전달
 	3. 핸들을 통해 전달하여 적용
 	*/
-	
 	
 
 }

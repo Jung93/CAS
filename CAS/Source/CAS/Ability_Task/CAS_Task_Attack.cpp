@@ -27,7 +27,7 @@ void UCAS_Task_Attack::Activate()
 
 		UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 
-		if (!AnimInstance|| AnimInstance->Montage_IsPlaying(Montage))
+		if (!AnimInstance)
 		{
 			return;
 		}
@@ -92,6 +92,11 @@ void UCAS_Task_Attack::PlayAnimNotify(FName NotifyName, const FBranchingPointNot
 	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 	AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(this, &ThisClass::PlayAnimNotify);
 
+	auto Handle = Ability->GetCurrentAbilitySpecHandle();
+	auto ActorInfo = Ability->GetCurrentActorInfo();
+	auto ActivationInfo = Ability->GetCurrentActivationInfo();
+
+	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 }
 
 

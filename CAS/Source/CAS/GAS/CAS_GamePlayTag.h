@@ -6,10 +6,17 @@
 
 
 namespace CAS_GamePlayTag {
-	//UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputMode_Nomal);
-	//UE_DECLARE_GAMEPLAY_TAG_EXTERN(InputMode_UI);
-	//UE_DECLARE_GAMEPLAY_TAG_EXTERN(Action_Attack_Nomal);
+	
+	//Ability
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_TakeDamage);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_TEST);
+
+	//Effect
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Attack_TEST);
+
+	//State
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Nomal);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);
+	//UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);
 
 }
