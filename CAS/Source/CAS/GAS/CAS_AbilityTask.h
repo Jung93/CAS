@@ -17,6 +17,7 @@ class CAS_API UCAS_AbilityTask : public UAbilityTask
 	
 public:
 protected:
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TObjectPtr<UAnimMontage> Montage;
 	UPROPERTY()

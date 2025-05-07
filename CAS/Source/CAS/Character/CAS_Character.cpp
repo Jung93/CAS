@@ -70,6 +70,7 @@ void ACAS_Character::AddAbilites()
 void ACAS_Character::InitAbilitySystemComponent()
 {
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 void ACAS_Character::GetActiveAbilitiesWithTags(FGameplayTagContainer AbilityTags, TArray<UCAS_GameplayAbility*>& Abilities)
