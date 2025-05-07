@@ -44,7 +44,7 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	1. 적에게 텔레포트하는 몽타주
 	2. 실제 텔레포트 하는 기능
 	*/
-	auto Task = UCAS_Task_Attack::CAS_Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
+	auto Task = UCAS_Task_Attack::Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
 	if (Task->IsValidLowLevel()) {
 		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
 		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);

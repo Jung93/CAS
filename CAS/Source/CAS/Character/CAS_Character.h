@@ -17,7 +17,7 @@ class UInputAction;
 struct FInputActionValue;
 
 UCLASS(Abstract)
-class CAS_API ACAS_Character : public ACharacter, public IAbilitySystemInterface
+class CAS_API ACAS_Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -33,7 +33,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 public:
-	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Player::GetAttributeSet, return nullptr;);}
 
 	virtual void GiveDefaultAbilities();

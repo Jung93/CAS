@@ -14,12 +14,12 @@ class CAS_API UCAS_Task_Attack : public UCAS_AbilityTask
 {
 	GENERATED_BODY()
 public:
-	static UCAS_Task_Attack* CAS_Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
+	static UCAS_Task_Attack* Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
 
 	FAttackHitEvent OnAttackHit;
 	FAbilityEndEvent OnAbilityEnd;
 protected:
 	virtual void Activate() override;
-	UFUNCTION()
+
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };

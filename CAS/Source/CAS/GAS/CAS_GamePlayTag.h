@@ -10,6 +10,7 @@ namespace CAS_GamePlayTag {
 	//Ability
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_TakeDamage);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_TEST);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Capture);
 
 	//Effect
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Attack_TEST);

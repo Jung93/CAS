@@ -86,23 +86,25 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
-	ActivateAbility(CAS_GamePlayTag::Ability_Attack_TEST);
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.TEST"));
 }
 
 void ACAS_Player::TestCapture(const FInputActionValue& Value)
 {
-	bool isPress = Value.Get<bool>();
-	auto enemy = _hatSpawn->GetEnemyCapt();
+	//bool isPress = Value.Get<bool>();
+	//auto enemy = _hatSpawn->GetEnemyCapt();
+	//
+	//if (isPress && enemy == nullptr)
+	//{
+	//
+	//	FVector forwardVec = GetActorForwardVector();
+	//
+	//	_hatSpawn->Throw(forwardVec);
+	//
+	//	_hatSpawn->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	//}
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
 
-	if (isPress && enemy == nullptr)
-	{
-
-		FVector forwardVec = GetActorForwardVector();
-
-		_hatSpawn->Throw(forwardVec);
-
-		_hatSpawn->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	}
 }
 
 // Called when the game starts or when spawned
