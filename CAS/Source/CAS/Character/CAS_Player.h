@@ -78,6 +78,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	class ACAS_Hat* GetHat() { return _hatSpawn; }
+
 public:	
 	virtual void InitAbilitySystemComponent() override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -86,6 +88,7 @@ public:
 
 	void ActivateAbility(const FGameplayTag tag);
 protected:
+	
 	UPROPERTY(EditAnywhere, Category = "Hat")
 	TSubclassOf<class ACAS_Hat> _hatBP;
 

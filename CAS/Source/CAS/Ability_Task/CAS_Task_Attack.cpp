@@ -4,7 +4,7 @@
 #include "Ability_Task/CAS_Task_Attack.h"
 #include "Character/CAS_Character.h"
 
-UCAS_Task_Attack* UCAS_Task_Attack::CAS_Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate)
+UCAS_Task_Attack* UCAS_Task_Attack::Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate)
 {
 	if (!MontageToPlay) {
 		return nullptr;
@@ -32,7 +32,6 @@ void UCAS_Task_Attack::Activate()
 			return;
 		}
 	
-		auto OwnAbility = Cast<UCAS_GameplayAbility>(Ability);
 		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ThisClass::PlayAnimNotify);
 		AnimInstance->Montage_Play(Montage, PlayRate);		
 	}
