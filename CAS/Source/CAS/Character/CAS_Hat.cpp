@@ -54,6 +54,9 @@ void ACAS_Hat::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
 {
+	if (!_isThrowing)
+		return;
+
 	auto enemy = Cast<ACAS_EnemyCapt>(OtherActor);
 
 	if (enemy->IsValidLowLevel())
@@ -125,6 +128,8 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 
 void ACAS_Hat::Return()
 {
+	TargetLocation = GetActorLocation();
+
 	_isThrowing = true;
 	_isReturning = true;
 	_capturingTime = 0.0f;

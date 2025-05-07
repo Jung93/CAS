@@ -31,7 +31,7 @@ public:
 	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	ACAS_EnemyCapt* GetEnemyCapt() { return _testCaptureTarget; }
+	class ACAS_EnemyCapt* GetEnemyCapt() { return _testCaptureTarget; }
 
 	UFUNCTION()
 	void Throw(const FVector& direction);
@@ -43,7 +43,10 @@ public:
 	void Return();
 
 	UFUNCTION()
-	void SetPlayer(class ACAS_Player* player) { _player = player; };
+	void SetPlayer(class ACAS_Player* player) { _player = player; }
+
+	UFUNCTION()
+	class ACAS_Player* GetPlayer() { return _player; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")

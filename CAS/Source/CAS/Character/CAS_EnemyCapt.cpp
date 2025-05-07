@@ -9,6 +9,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Character/CAS_Hat.h"
+#include "AIController.h"
+#include "CAS/Character/CAS_Character.h"
+#include "CAS/Character/CAS_Player.h"
 
 ACAS_EnemyCapt::ACAS_EnemyCapt()
 {
@@ -100,6 +103,23 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 	auto controller = GetController();
 
 	controller->UnPossess();
+
+	//_hat->GetPlayer()->
+	//auto character = Cast<ACAS_Character>(pawn);
+	//controller->Possess(_hat->GetPlayer()->GetOwner());
+
+	auto iter = GetWorld()->GetControllerIterator();
+	int controllerCount = GetWorld()->GetNumControllers();
+	for (int i = 0; i < controllerCount; i++)
+	{
+		if ((*iter)->GetPawn() != nullptr)
+			iter++;
+		break;
+	}
+
+	auto aiController = Cast<AAIController>(*iter);
+
+	aiController->Possess(this);
 
 	_hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	_hat->Return();
