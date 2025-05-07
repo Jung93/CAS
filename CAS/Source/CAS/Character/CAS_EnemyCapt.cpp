@@ -101,16 +101,11 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 	_isCaptured = false;
 
 	auto controller = GetController();
-
 	controller->UnPossess();
-
-	//_hat->GetPlayer()->
-	//auto character = Cast<ACAS_Character>(pawn);
-	//controller->Possess(_hat->GetPlayer()->GetOwner());
+	controller->Possess(_hat->GetPlayer());
 
 	auto iter = GetWorld()->GetControllerIterator();
-	int controllerCount = GetWorld()->GetNumControllers();
-	for (int i = 0; i < controllerCount; i++)
+	for (int i = 0; i < GetWorld()->GetNumControllers(); i++)
 	{
 		if ((*iter)->GetPawn() != nullptr)
 			iter++;
@@ -118,11 +113,9 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 	}
 
 	auto aiController = Cast<AAIController>(*iter);
-
 	aiController->Possess(this);
 
 	_hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	_hat->Return();
-
 	_hat = nullptr;
 }

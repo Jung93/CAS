@@ -133,6 +133,5 @@ void ACAS_Hat::Return()
 	_isThrowing = true;
 	_isReturning = true;
 	_capturingTime = 0.0f;
-
 }
 
