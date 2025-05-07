@@ -61,6 +61,7 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected!!"));
 
 		_testCaptureTarget = enemy;
+		_testCaptureTarget->BeCaptured(this);
 
 		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
 		_isThrowing = false;
@@ -120,5 +121,13 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
+}
+
+void ACAS_Hat::Return()
+{
+	_isThrowing = true;
+	_isReturning = true;
+	_capturingTime = 0.0f;
+
 }
 

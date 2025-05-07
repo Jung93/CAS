@@ -40,6 +40,9 @@ public:
 	void ThrowAndReturn(float DeltaTime);
 
 	UFUNCTION()
+	void Return();
+
+	UFUNCTION()
 	void SetPlayer(class ACAS_Player* player) { _player = player; };
 
 private:
