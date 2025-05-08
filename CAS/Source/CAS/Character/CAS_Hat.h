@@ -31,9 +31,6 @@ public:
 	void OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
 
 	UFUNCTION()
-	class ACAS_EnemyCapt* GetEnemyCapt() { return _testCaptureTarget; }
-
-	UFUNCTION()
 	void Throw(const FVector& direction);
 
 	UFUNCTION()
@@ -60,7 +57,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Player")
 	class ACAS_Player* _player;
-
 
 	FVector StartLocation;
 	FVector TargetLocation;

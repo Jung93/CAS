@@ -66,7 +66,6 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 			
-	void TestCapture(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
@@ -104,11 +103,7 @@ public:
 
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Hat")
-	TSubclassOf<class ACAS_Hat> _hatBP;
 
-	UPROPERTY()
-	class ACAS_Hat* _hatSpawn = nullptr;
 
 };
 
