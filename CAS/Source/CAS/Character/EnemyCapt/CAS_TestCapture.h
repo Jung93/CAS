@@ -17,5 +17,8 @@ class CAS_API ACAS_TestCapture : public ACAS_EnemyCapt
 public:
 	ACAS_TestCapture();
 
-
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void TestAbility(const FInputActionValue& Value);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AbilityAction;
 };

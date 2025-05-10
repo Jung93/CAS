@@ -85,8 +85,7 @@ public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
-
-	void ActivateAbility(const FGameplayTag tag);
+		
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
