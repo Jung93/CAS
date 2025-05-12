@@ -66,12 +66,32 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		_testCaptureTarget = enemy;
 		_testCaptureTarget->BeCaptured(this);
 
-		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("head")); // 소켓 이름 "head" 예시
+		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		_isThrowing = false;
 		_isReturning = false;
 		//SetActorHiddenInGame(true);
 		//SetActorEnableCollision(false);
+
+		_player->SetActorHiddenInGame(true);
+		_player->SetActorEnableCollision(false);
+		return;
 	}
+
+	if (_isReturning)
+	{
+		auto player = Cast<ACAS_Player>(OtherActor);
+
+		if (player->IsValidLowLevel())
+		{
+
+			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+			_isThrowing = false;
+			_isReturning = false;
+
+
+		}
+	}
+
 }
 
 void ACAS_Hat::Throw(const FVector& direction)
@@ -93,11 +113,11 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	_capturingTime += DeltaTime;
 
 	float halfTime = _totalMoveTime / 2.0f;
-	float lerpValue = _capturingTime / halfTime;
+	float lerpValue = (_capturingTime / halfTime);
 
 	if (!_isReturning)
 	{
-		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue);
+		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue * 3.0f);
 		SetActorLocation(NewLocation);
 
 		if (_capturingTime >= halfTime)
@@ -105,6 +125,7 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 			// 반환 시작
 			_capturingTime = 0.0f;
 			_isReturning = true;
+			TargetLocation = GetActorLocation();
 		}
 	}
 	else
@@ -121,17 +142,23 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 			_capturingTime = 0.0f;
 
 			SetActorLocation(playerLocation);
-			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+			//AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
 }
 
 void ACAS_Hat::Return()
 {
-	TargetLocation = GetActorLocation();
+	/*TargetLocation = GetActorLocation();
 
 	_isThrowing = true;
 	_isReturning = true;
-	_capturingTime = 0.0f;
+	_capturingTime = 0.0f;*/
+	_player->SetActorHiddenInGame(false);
+	_player->SetActorEnableCollision(true);
+
+	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+
+
 }
 

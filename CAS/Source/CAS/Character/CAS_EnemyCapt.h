@@ -35,7 +35,9 @@ public:
 
 	void Move(const FInputActionValue& Value);
 	void TestDeCapture(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
+	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -50,8 +52,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* TestDeCaptureAction;
 
+	/** Look Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* LookAction;
+
+	/** MappingContext */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputMappingContext* DefaultMappingContext;
+
 	UPROPERTY(VisibleAnywhere, Category = "Hat")
 	class ACAS_Hat* _hat;
 
 	bool _isCaptured = false;
+
 };
