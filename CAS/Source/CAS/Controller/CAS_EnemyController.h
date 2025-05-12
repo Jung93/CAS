@@ -14,4 +14,23 @@ class CAS_API ACAS_EnemyController : public AAIController
 {
 	GENERATED_BODY()
 	
+public:
+	ACAS_EnemyController();
+
+	virtual void OnPossess(APawn* pawn) override;
+	virtual void OnUnPossess() override;
+
+	UFUNCTION()
+	void RandMove();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBlackboardData* BlackboardData;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBehaviorTree* BehaviorTree;
+
+private:
+	UPROPERTY()
+	FTimerHandle TimerHandle;
+
 };
