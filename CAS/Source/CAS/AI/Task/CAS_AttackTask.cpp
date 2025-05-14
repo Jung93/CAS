@@ -21,7 +21,7 @@ EBTNodeResult::Type UCAS_AttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
     auto curPawn = Cast<ACAS_Character>(OwnerComp.GetAIOwner()->GetPawn());
     auto player = Cast<ACAS_Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(Key.SelectedKeyName));
 
-    if (curPawn->IsValidLowLevel()||player->IsValidLowLevel()) {
+    if (!curPawn->IsValidLowLevel()||!player->IsValidLowLevel()) {
         return EBTNodeResult::Failed;
     }
     

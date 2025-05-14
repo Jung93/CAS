@@ -39,7 +39,7 @@ void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 		qParams
 	);
 
-	DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Green, false, 0.3f);
+	DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Green, false, 0.2f);
 
 	if (!result)
 	{
@@ -55,7 +55,7 @@ void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 			if (player->IsValidLowLevel())
 			{
 				OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, player);
-				DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Red, false, 0.3f);
+				DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Red, false, 0.2f);
 				return;
 			}
 		}
