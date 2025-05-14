@@ -19,6 +19,8 @@
 #include "CAS/Character/CAS_Character.h"
 #include "CAS/Character/CAS_Player.h"
 
+#include "Math/UnrealMathUtility.h"
+
 ACAS_EnemyCapt::ACAS_EnemyCapt()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -148,12 +150,28 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 	for (int i = 0; i < GetWorld()->GetNumControllers(); i++)
 	{
 		if ((*iter)->GetPawn() != nullptr)
+		{
 			iter++;
+			continue;
+		}
 		break;
 	}
 
 	auto aiController = Cast<AAIController>(*iter);
 	aiController->Possess(this);
+
+	FVector acotrLocation = GetActorLocation();
+
+	float dropRadius = 200.0f;
+	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
+	FVector dropLocation = acotrLocation + randomOffset;
+	dropLocation.Z = acotrLocation.Z;
+
+	auto player = _hat->GetPlayer();
+	player->SetActorLocation(dropLocation);
+	player->SetActorHiddenInGame(false);
+	player->SetActorEnableCollision(true);
+
 
 	_hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	_hat->Return();
