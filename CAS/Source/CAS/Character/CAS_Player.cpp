@@ -198,8 +198,4 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 	return Attribute;
 }
 
-void ACAS_Player::ActivateAbility(const FGameplayTag tag)
-{
-	AbilitySystemComponent->ActivateAbility(tag);
-}
 

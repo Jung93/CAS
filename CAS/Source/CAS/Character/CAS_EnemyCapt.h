@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Character/CAS_Character.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
 #include "CAS_EnemyCapt.generated.h"
+
 
 /**
  * 

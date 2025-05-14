@@ -40,6 +40,7 @@ public:
 	virtual void AddAbilites();
 	virtual void InitAbilitySystemComponent();
 
+	virtual void ActivateAbility(const FGameplayTag tag);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void GetActiveAbilitiesWithTags(FGameplayTagContainer AbilityTags, TArray<UCAS_GameplayAbility*>& Abilities);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
