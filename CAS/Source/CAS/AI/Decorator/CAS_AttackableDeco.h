@@ -14,6 +14,9 @@ class CAS_API UCAS_AttackableDeco : public UBTDecorator
 {
 	GENERATED_BODY()
 public:
+	UCAS_AttackableDeco();
+protected:
 	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector TargetKey;
 };

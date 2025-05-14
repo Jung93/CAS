@@ -5,22 +5,28 @@
 
 #include "Controller/CAS_EnemyController.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Character/CAS_Character.h"
 #include "Character/CAS_Player.h"
 #include "Engine/OverlapResult.h"
+
+UCAS_FindPlayerService::UCAS_FindPlayerService()
+{
+	NodeName = TEXT("FindPlayerService");
+	Interval = 0.5f;
+}
 
 void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	auto curPawn = OwnerComp.GetAIOwner()->GetPawn();
+	APawn* curPawn = OwnerComp.GetAIOwner()->GetPawn();
 
 	if (!curPawn->IsValidLowLevel()){
 		return;
 	}
 
 	FVector pos = curPawn->GetActorLocation();
-	float sphereRaidus = 1000.0f;
-
+	
 	TArray<FOverlapResult> overlapResults;
 	FCollisionQueryParams qParams(NAME_None, false, curPawn);
 
@@ -29,15 +35,15 @@ void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 		pos,
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel4,
-		FCollisionShape::MakeSphere(sphereRaidus),
+		FCollisionShape::MakeSphere(Radius),
 		qParams
 	);
 
-	DrawDebugSphere(GetWorld(), pos, sphereRaidus, 30, FColor::Green, false, 0.3f);
+	DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Green, false, 0.3f);
 
 	if (!result)
 	{
-		OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Player")), nullptr);
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, nullptr);
 		return;
 	}
 	else
@@ -48,8 +54,8 @@ void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 			
 			if (player->IsValidLowLevel())
 			{
-				OwnerComp.GetBlackboardComponent()->SetValueAsObject(FName(TEXT("Player")), player);
-				DrawDebugSphere(GetWorld(), pos, sphereRaidus, 30, FColor::Red, false, 0.3f);
+				OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, player);
+				DrawDebugSphere(GetWorld(), pos, Radius, 30, FColor::Red, false, 0.3f);
 				return;
 			}
 		}

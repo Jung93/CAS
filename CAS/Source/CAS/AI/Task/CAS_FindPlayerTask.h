@@ -4,19 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_AttackTask.generated.h"
+#include "CAS_FindPlayerTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_AttackTask : public UBTTaskNode
+class CAS_API UCAS_FindPlayerTask : public UBTTaskNode
 {
 	GENERATED_BODY()
+	
 public:
-	UCAS_AttackTask();
+	UCAS_FindPlayerTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+
 	UPROPERTY(EditAnywhere)
 	FBlackboardKeySelector Key;
+	UPROPERTY(EditAnywhere)
+	float Radius = 1000.0f;
+
 };

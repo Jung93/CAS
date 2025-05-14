@@ -9,21 +9,25 @@
 #include "Character/CAS_Player.h"
 #include "Kismet/KismetMathLibrary.h"
 
+UCAS_AttackTask::UCAS_AttackTask()
+{
+    NodeName = TEXT("AttackTask");
+}
+
 EBTNodeResult::Type UCAS_AttackTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-    auto result = Super::ExecuteTask(OwnerComp, NodeMemory);
+    Super::ExecuteTask(OwnerComp, NodeMemory);
 
     auto curPawn = Cast<ACAS_Character>(OwnerComp.GetAIOwner()->GetPawn());
-    auto player = Cast<ACAS_Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(FName(TEXT("Player"))));
+    auto player = Cast<ACAS_Player>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(Key.SelectedKeyName));
 
     if (curPawn->IsValidLowLevel()||player->IsValidLowLevel()) {
         return EBTNodeResult::Failed;
     }
-
+    
     auto quat = UKismetMathLibrary::FindLookAtRotation(curPawn->GetActorLocation(), player->GetActorLocation());
     curPawn->SetActorRotation(quat);
     curPawn->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.TEST"));
-
     return EBTNodeResult::Succeeded;
 
 }
