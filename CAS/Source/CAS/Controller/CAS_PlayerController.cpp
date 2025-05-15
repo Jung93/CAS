@@ -16,4 +16,34 @@ void ACAS_PlayerController::BeginPlay()
         ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
     }
 #endif
+
+
+}
+
+void ACAS_PlayerController::SetupInputComponent()
+{
+    Super::SetupInputComponent();
+
+    if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+    {
+        Subsystem->AddMappingContext(_inputMappingContext, 0);
+    }
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
+
+		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ThisClass::PrintDebugMessage);
+
+	}
+}
+
+void ACAS_PlayerController::PrintDebugMessage(const FInputActionValue& Value)
+{
+    if (IsLocalController())
+    {
+        ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
+    }
+    else {
+        FString DebugMessage = FString::Printf(TEXT("LocalController XXXXX"));
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
+
+    }
 }
