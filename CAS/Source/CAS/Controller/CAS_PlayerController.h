@@ -16,9 +16,12 @@ class CAS_API ACAS_PlayerController : public APlayerController
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void SetupInputComponent() override;
 
+	void PrintDebugMessage(const FInputActionValue& Value);
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
+	UInputAction* DebugAction;
 };
