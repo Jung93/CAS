@@ -1,8 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CAS_Character.h"
+#include "Components/WidgetComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "UI/CAS_Hpbar.h"
 
 // Sets default values
 ACAS_Character::ACAS_Character()
@@ -17,13 +19,28 @@ ACAS_Character::ACAS_Character()
 	AbilitySystemComponent = CreateDefaultSubobject<UCAS_AbilitySystemComponent>("AbilitySystemComponent");
 	AttributeSet = CreateDefaultSubobject<UCAS_AttributeSet>("PlayerAttributeSet");
 
+	HpBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
+	HpBarWidgetComponent->SetupAttachment(GetMesh());
+	HpBarWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
+	
+	//static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass(TEXT("/Game/UI/HpBarWidget"));
+	//
+	//if (WidgetClassFinder.Succeeded())
+	//{
+	//	HpBarWidgetClass = WidgetClassFinder.Class;
+	//}
 }
 
 // Called when the game starts or when spawned
 void ACAS_Character::BeginPlay()
 {
 	Super::BeginPlay();
+	if(HpBarWidgetClass){
 	
+		HpBarWidgetComponent->SetWidgetClass(HpBarWidgetClass);
+		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
+		widget->SetHpCount(HpCount);
+	}
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
