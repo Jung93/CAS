@@ -99,6 +99,9 @@ void ACAS_Hat::Throw(const FVector& direction)
 	if (_isThrowing)
 		return;
 
+	if (_testCaptureTarget->IsValidLowLevel())
+		return;
+
 	StartLocation = GetActorLocation();
 	MoveDirection = direction.GetSafeNormal();
 	TargetLocation = StartLocation + MoveDirection * 200.0f;
@@ -159,6 +162,7 @@ void ACAS_Hat::Return()
 
 	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 
+	_testCaptureTarget = nullptr;
 
 }
 

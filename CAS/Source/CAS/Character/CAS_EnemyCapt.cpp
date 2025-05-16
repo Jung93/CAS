@@ -162,8 +162,8 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 
 	FVector acotrLocation = GetActorLocation();
 
-	float dropRadius = 200.0f;
-	FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
+	float dropRadius = 300.0f;
+	FVector randomOffset = FMath::VRand() * FMath::FRandRange(200.0f, dropRadius);
 	FVector dropLocation = acotrLocation + randomOffset;
 	dropLocation.Z = acotrLocation.Z;
 
