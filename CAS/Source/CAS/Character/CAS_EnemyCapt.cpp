@@ -88,7 +88,9 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 {
-
+	if (_isCaptured) {
+		return;
+	}
 	_hat = hat;
 	_isCaptured = true;
 

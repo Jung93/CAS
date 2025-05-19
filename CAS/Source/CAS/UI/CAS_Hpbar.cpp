@@ -9,16 +9,9 @@
 
 void UCAS_Hpbar::UpdateHp(int32 count)
 {
-    CurHp += count;
-
-
-}
-
-void UCAS_Hpbar::NativeConstruct()
-{
-	Super::NativeConstruct();
-	
-    for (int32 i = 0; i < HpCount; ++i)
+    CAS_HpBar->ClearChildren();
+    
+    for (int32 i = 0; i < count; i++)
     {
         UWidgetTree* WidgetTreePtr = WidgetTree.Get();
         UImage* hpBlock = WidgetTreePtr->ConstructWidget<UImage>(HpBlock);
@@ -28,4 +21,25 @@ void UCAS_Hpbar::NativeConstruct()
         }
     }
 
+}
+
+void UCAS_Hpbar::InitSetting(int32 count)
+{
+    HpCount = count;
+    for (int32 i = 0; i < HpCount; i++)
+    {
+        UWidgetTree* WidgetTreePtr = WidgetTree.Get();
+        UImage* hpBlock = WidgetTreePtr->ConstructWidget<UImage>(HpBlock);
+        if (hpBlock)
+        {
+            CAS_HpBar->AddChildToHorizontalBox(hpBlock);
+        }
+    }
+
+}
+
+void UCAS_Hpbar::NativeConstruct()
+{
+	Super::NativeConstruct();
+    
 }

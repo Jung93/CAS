@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "UI/CAS_Hpbar.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ACAS_Character::ACAS_Character()
@@ -20,15 +21,16 @@ ACAS_Character::ACAS_Character()
 	AttributeSet = CreateDefaultSubobject<UCAS_AttributeSet>("PlayerAttributeSet");
 
 	HpBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
-	HpBarWidgetComponent->SetupAttachment(GetMesh());
+	HpBarWidgetComponent->SetupAttachment(RootComponent);
+
 	HpBarWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 	
-	//static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass(TEXT("/Game/UI/HpBarWidget"));
-	//
-	//if (WidgetClassFinder.Succeeded())
-	//{
-	//	HpBarWidgetClass = WidgetClassFinder.Class;
-	//}
+	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/CAS/Blueprint/UI/HpBar/BP_HpBar.BP_HpBar_C'"));
+	
+	if (WidgetClass.Succeeded())
+	{
+		HpBarWidgetClass = WidgetClass.Class;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -39,7 +41,17 @@ void ACAS_Character::BeginPlay()
 	
 		HpBarWidgetComponent->SetWidgetClass(HpBarWidgetClass);
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
-		widget->SetHpCount(HpCount);
+		if (widget) { 
+			widget->InitSetting(HpCount);
+		}
+		HpBarWidgetComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+	}
+	if (AttributeSet) {
+		AttributeSet->SetHealth(HpCount);
+		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
+		if (widget) {
+			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
+		}		
 	}
 }
 
@@ -61,7 +73,15 @@ void ACAS_Character::OnRep_PlayerState()
 void ACAS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	auto playerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
 
+	if (playerCameraManager)
+	{
+		FVector hpBarLocation = HpBarWidgetComponent->GetComponentLocation();
+		FVector cameraLocation = playerCameraManager->GetCameraLocation();
+		FRotator rotation = UKismetMathLibrary::FindLookAtRotation(hpBarLocation, cameraLocation);
+		HpBarWidgetComponent->SetWorldRotation(rotation);
+	}
 }
 
 UAbilitySystemComponent* ACAS_Character::GetAbilitySystemComponent() const

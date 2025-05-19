@@ -63,6 +63,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
-	int32 HpCount = 0;
+	//FDelegateHandle HealthChangedDelegateHandle;
+
+	int32 HpCount = 3;
 };
 

@@ -15,10 +15,7 @@ class CAS_API UCAS_Hpbar : public UUserWidget
 	GENERATED_BODY()
 public:
 	void UpdateHp(int32 count);
-
-	void SetHpCount(int32 count) { HpCount = count; SetCurHp(HpCount);}
-	int32 GetCurHp() { return CurHp; }
-	void SetCurHp(int32 value) { CurHp = value; }
+	void InitSetting(int32 count);
 protected:
 	virtual void NativeConstruct() override;
 protected:
@@ -29,5 +26,4 @@ protected:
 	UPROPERTY(Editanywhere, BlueprintReadWrite)
 	TSubclassOf<class UImage> HpBlock;
 
-	int32 CurHp;
 };
