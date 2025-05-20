@@ -141,13 +141,24 @@ void ACAS_EnemyCapt::Move(const FInputActionValue& Value)
 
 void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 {
+	if (!_isCaptured) {
+		return;
+	}
 	_isCaptured = false;
+	auto player = _hat->GetPlayer();
 
 	auto controller = Cast<APlayerController>(GetController());
 	controller->UnPossess();
-	controller->Possess(_hat->GetPlayer());
 
+	controller->Possess(player);
+	
+	int32 curHp = this->GetAttributeSet()->GetHealth();
 
+	player->SetHp(curHp);
+	
+	//디버그용으로 빙의해제되면 체력이 1 남음
+	SetHp(1);
+	
 	auto iter = GetWorld()->GetControllerIterator();
 	for (int i = 0; i < GetWorld()->GetNumControllers(); i++)
 	{
@@ -169,7 +180,6 @@ void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
 	FVector dropLocation = acotrLocation + randomOffset;
 	dropLocation.Z = acotrLocation.Z;
 
-	auto player = _hat->GetPlayer();
 	player->SetActorLocation(dropLocation);
 	player->SetActorHiddenInGame(false);
 	player->SetActorEnableCollision(true);

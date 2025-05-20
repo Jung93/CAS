@@ -29,7 +29,6 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
-	virtual void OnRep_PlayerState() override;
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -39,7 +38,8 @@ public:
 
 	virtual void GiveDefaultAbilities();
 	virtual void AddAbilites();
-	virtual void InitAbilitySystemComponent();
+	virtual void InitAbilitySystemComponent(AController* controller);
+	void SetHp(int32 value);
 
 	virtual void ActivateAbility(const FGameplayTag tag);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")

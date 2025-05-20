@@ -111,7 +111,5 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target , int32 TaskLev
 			ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 		}
 	}	
-	float currHealth = Target->GetAttributeSet()->GetHealth();
-	FString DebugMessage = FString::Printf(TEXT("Current Health: %.2f"), currHealth);
-	GEngine->AddOnScreenDebugMessage(-1,5.0f,FColor::Green,DebugMessage);
+	
 }

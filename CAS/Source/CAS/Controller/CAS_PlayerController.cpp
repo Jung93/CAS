@@ -41,9 +41,4 @@ void ACAS_PlayerController::PrintDebugMessage(const FInputActionValue& Value)
     {
         ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
     }
-    else {
-        FString DebugMessage = FString::Printf(TEXT("LocalController XXXXX"));
-        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
-
-    }
 }

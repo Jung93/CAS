@@ -170,10 +170,14 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	
 }
 
-void ACAS_Player::InitAbilitySystemComponent()
+void ACAS_Player::InitAbilitySystemComponent(AController* controller)
 {
 	ACAS_PlayerState* playerState = GetPlayerState<ACAS_PlayerState>();
-	if (!playerState) { return; }
+	if (!playerState) {
+		FString DebugMessage = FString::Printf(TEXT("PlayerState XXXXXXX"));
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
+		return; 
+	}
 
 	AbilitySystemComponent = Cast<UCAS_AbilitySystemComponent>(playerState->GetAbilitySystemComponent());
 	AbilitySystemComponent->InitAbilityActorInfo(playerState, this);
@@ -197,5 +201,7 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 	return Attribute;
 }
+
+
 
 

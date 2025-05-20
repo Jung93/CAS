@@ -5,6 +5,8 @@
 #include "Components/CapsuleComponent.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "UI/CAS_Hpbar.h"
+#include "Controller/CAS_PlayerController.h"
+#include "Controller/CAS_EnemyController.h"
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -58,14 +60,7 @@ void ACAS_Character::BeginPlay()
 void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	InitAbilitySystemComponent();
-	AddAbilites();
-}
-
-void ACAS_Character::OnRep_PlayerState()
-{
-	Super::OnRep_PlayerState();
-	InitAbilitySystemComponent();
+	InitAbilitySystemComponent(NewController);
 	AddAbilites();
 }
 
@@ -113,10 +108,22 @@ void ACAS_Character::AddAbilites()
 	ASC->AddCharacterAbilities(DefaultAbilities);
 }
 
-void ACAS_Character::InitAbilitySystemComponent()
+void ACAS_Character::InitAbilitySystemComponent(AController* controller)
 {
+	if (auto curController = Cast<ACAS_PlayerController>(controller)) {
+		auto playerState = Cast<ACAS_PlayerState>(GetPlayerState());
+		int32 curHp = playerState->GetAttributeSet()->GetHealth();
+		SetHp(curHp);
+	}
+	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
+}
+
+void ACAS_Character::SetHp(int32 value)
+{
+	AttributeSet->SetHealth(value);
+	AttributeSet->HpChanged.Broadcast(value);
 }
 
 void ACAS_Character::ActivateAbility(const FGameplayTag tag)

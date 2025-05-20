@@ -81,11 +81,10 @@ public:
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
 
 public:	
-	virtual void InitAbilitySystemComponent() override;
+	virtual void InitAbilitySystemComponent(AController* controller) override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
-		
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
@@ -93,4 +92,6 @@ protected:
 
 	UPROPERTY()
 	class ACAS_Hat* _hatSpawn = nullptr;
+
+	
 };
