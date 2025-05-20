@@ -25,7 +25,7 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	Super::PostGameplayEffectExecute(Data);
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
-		int32 Hp = static_cast<int32>(GetHealth());
+		int32 Hp = FMath::RoundToInt(GetHealth());
 		if (Hp <= 0)
 		{
 			FString DebugMessage = FString::Printf(TEXT("Current Health: %.2f"), GetHealth());
