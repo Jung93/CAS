@@ -50,6 +50,7 @@ void ACAS_Character::BeginPlay()
 	}
 	if (AttributeSet) {
 		AttributeSet->SetHealth(HpCount);
+		AttributeSet->DeadEvent.AddUObject(this, &ThisClass::DeadEvent);
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
 		if (widget) {
 			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
@@ -62,6 +63,13 @@ void ACAS_Character::PossessedBy(AController* NewController)
 	Super::PossessedBy(NewController);
 	InitAbilitySystemComponent(NewController);
 	AddAbilites();
+}
+
+void ACAS_Character::DeadEvent()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	Controller->UnPossess();
 }
 
 // Called every frame

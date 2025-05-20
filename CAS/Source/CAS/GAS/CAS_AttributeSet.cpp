@@ -28,8 +28,7 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		int32 Hp = FMath::RoundToInt(GetHealth());
 		if (Hp <= 0)
 		{
-			FString DebugMessage = FString::Printf(TEXT("Current Health: %.2f"), GetHealth());
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, DebugMessage);
+			DeadEvent.Broadcast();
 		}
 		else {
 			HpChanged.Broadcast(Hp);

@@ -13,6 +13,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)				
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FHpChangedEvent, int32);
+DECLARE_MULTICAST_DELEGATE(FDeadEvent);
 
 UCLASS()
 class CAS_API UCAS_AttributeSet : public UAttributeSet
@@ -28,6 +29,7 @@ public:
 	ATTRIBUTE_ACCESSORS(ThisClass, MaxHealth);
 	
 	FHpChangedEvent HpChanged;
+	FDeadEvent DeadEvent;
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData Health;
