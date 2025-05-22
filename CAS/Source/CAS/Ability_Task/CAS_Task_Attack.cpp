@@ -19,6 +19,8 @@ UCAS_Task_Attack* UCAS_Task_Attack::Task_Attack(UGameplayAbility* OwningAbility,
 
 void UCAS_Task_Attack::Activate()
 {
+	Super::Activate();
+
 	if (!Montage) {
 		return;
 	}

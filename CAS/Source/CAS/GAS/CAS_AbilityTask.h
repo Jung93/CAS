@@ -7,15 +7,16 @@
 #include "GAS/CAS_GameplayAbility.h"
 #include "CAS_AbilityTask.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE_FiveParams(FAbilityEndEvent, FGameplayAbilitySpecHandle, const FGameplayAbilityActorInfo*, FGameplayAbilityActivationInfo, bool, bool);
+
 UCLASS()
 class CAS_API UCAS_AbilityTask : public UAbilityTask
 {
 	GENERATED_BODY()
 	
 public:
+
+	FAbilityEndEvent OnAbilityEnd;
 protected:
 	UFUNCTION()
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
@@ -24,3 +25,5 @@ protected:
 	UPROPERTY()
 	float PlayRate = 1.0f;
 };
+
+

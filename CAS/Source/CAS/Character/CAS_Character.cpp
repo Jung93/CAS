@@ -67,9 +67,8 @@ void ACAS_Character::PossessedBy(AController* NewController)
 
 void ACAS_Character::DeadEvent()
 {
-	SetActorHiddenInGame(true);
-	SetActorEnableCollision(false);
-	Controller->UnPossess();
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
+
 }
 
 // Called every frame
@@ -89,7 +88,7 @@ void ACAS_Character::Tick(float DeltaTime)
 
 UAbilitySystemComponent* ACAS_Character::GetAbilitySystemComponent() const
 {
-	return AbilitySystemComponent;
+	return AbilitySystemComponent.Get();
 }
 
 void ACAS_Character::GiveDefaultAbilities()

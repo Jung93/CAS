@@ -4,21 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_AbilityTask.h"
-#include "CAS_Task_Attack.generated.h"
+#include "CAS_Task_Dead.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FAttackHitEvent, ACAS_Character*, int32);
-
+/**
+ * 
+ */
 UCLASS()
-class CAS_API UCAS_Task_Attack : public UCAS_AbilityTask
+class CAS_API UCAS_Task_Dead : public UCAS_AbilityTask
 {
 	GENERATED_BODY()
 public:
-	static UCAS_Task_Attack* Task_Attack(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
-
-	FAttackHitEvent OnAttackHit;
-	
+	static UCAS_Task_Dead* Task_Dead(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
 protected:
 	virtual void Activate() override;
-
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };
