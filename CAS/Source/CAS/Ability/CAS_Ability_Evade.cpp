@@ -6,7 +6,7 @@
 
 UCAS_Ability_Evade::UCAS_Ability_Evade()
 {
-	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.TakeDamage"));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
 }
 
 bool UCAS_Ability_Evade::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const

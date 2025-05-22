@@ -7,7 +7,7 @@
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {		
 	//공격당하면 이 어빌리티는 실행되지않음
-	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("Ability.TakeDamage"));
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
 }
 
 
