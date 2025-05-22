@@ -62,7 +62,7 @@ void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilitySystemComponent(NewController);
-	AddAbilites();
+	AddDefaultAbilites();
 }
 
 void ACAS_Character::DeadEvent()
@@ -91,22 +91,8 @@ UAbilitySystemComponent* ACAS_Character::GetAbilitySystemComponent() const
 	return AbilitySystemComponent.Get();
 }
 
-void ACAS_Character::GiveDefaultAbilities()
-{
-	if (!AbilitySystemComponent) {
-		return;
-	}
-	if (!HasAuthority()) {
-		return;
-	}
-	for (TSubclassOf<UGameplayAbility> abilityClass : DefaultAbilities) {
 
-		FGameplayAbilitySpec abilitySpec = FGameplayAbilitySpec(abilityClass, 1);
-		AbilitySystemComponent->GiveAbility(abilitySpec);
-	}
-}
-
-void ACAS_Character::AddAbilites()
+void ACAS_Character::AddDefaultAbilites()
 {
 	UCAS_AbilitySystemComponent* ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
 	if (!ASC) {

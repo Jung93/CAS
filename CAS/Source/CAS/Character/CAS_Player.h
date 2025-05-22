@@ -85,6 +85,8 @@ public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
+
+	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
@@ -93,5 +95,9 @@ protected:
 	UPROPERTY()
 	class ACAS_Hat* _hatSpawn = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = Abilities)
+	TArray<TSubclassOf<class UGameplayAbility>> PlayerAbilities;
 	
+	UPROPERTY(EditAnywhere, Category = Abilities)
+	int32 PlayerAbilityCount = 4;
 };

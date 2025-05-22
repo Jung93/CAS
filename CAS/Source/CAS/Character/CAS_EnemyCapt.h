@@ -41,6 +41,8 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
+	
+	void AddPlayerAbility();
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;

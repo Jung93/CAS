@@ -202,6 +202,20 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 	return Attribute;
 }
 
+void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
+{
+	if (PlayerAbilities.Num() >= PlayerAbilityCount) {
+		return;
+	}
+
+	auto ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
+	if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
+		auto AbilitySpec = FGameplayAbilitySpec(newAbility);
+		ASC->GiveAbility(AbilitySpec);
+	}
+	return;
+}
+
 
 
 

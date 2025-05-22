@@ -212,3 +212,8 @@ void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 		FollowCamera->GetCameraView(DeltaTime, OutResult);
 	}
 }
+
+void ACAS_EnemyCapt::AddPlayerAbility()
+{
+	//Player->AddPlayerAbility(내 고유 스킬 클래스);
+}

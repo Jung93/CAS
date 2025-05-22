@@ -37,8 +37,7 @@ public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Player::GetAttributeSet, return nullptr;);}
 
-	virtual void GiveDefaultAbilities();
-	virtual void AddAbilites();
+	virtual void AddDefaultAbilites();
 	virtual void InitAbilitySystemComponent(AController* controller);
 	void SetHp(int32 value);
 
@@ -64,8 +63,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
-	//FDelegateHandle HealthChangedDelegateHandle;
-
 	int32 HpCount = 3;
 };
 
