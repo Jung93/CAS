@@ -10,6 +10,7 @@ namespace CAS_GamePlayTag {
 	//Ability
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_TEST);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Capture);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_DeCapture);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_Evade);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Invincible);

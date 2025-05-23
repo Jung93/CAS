@@ -40,6 +40,12 @@ public:
 	void TestDeCapture(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	ACAS_Hat* GetHat() { return _hat; }
+	void ClearHat() { _hat = nullptr; }
+	bool IsCaptured() { return _isCaptured; }
+	void ActivateCapture(bool value) { _isCaptured = value; }
+	void DeCaptureAbility(const FInputActionValue& Value);
+
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -67,5 +73,7 @@ private:
 	class ACAS_Hat* _hat;
 
 	bool _isCaptured = false;
+
+
 
 };

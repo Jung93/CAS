@@ -79,7 +79,7 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Move);
-		EnhancedInputComponent->BindAction(TestDeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::TestDeCapture);
+		EnhancedInputComponent->BindAction(TestDeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Look);
 
 	}
@@ -201,6 +201,11 @@ void ACAS_EnemyCapt::Look(const FInputActionValue& Value)
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
+}
+
+void ACAS_EnemyCapt::DeCaptureAbility(const FInputActionValue& Value)
+{
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.DeCapture"));
 }
 
 void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
