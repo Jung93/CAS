@@ -88,6 +88,7 @@ public:
 
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 	int32 PlayerAbilities_EmptyIndex();
+	class UTexture2D* GetAbilityIcon(int32 index);
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")

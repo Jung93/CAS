@@ -235,18 +235,19 @@ int32 ACAS_Player::PlayerAbilities_EmptyIndex()
 	return -1;
 }
 
-/*
-UI에 어빌리티 아이콘 넣기
-for (auto AbilityClass : PlayerAbilities)
+UTexture2D* ACAS_Player::GetAbilityIcon(int32 index)
 {
-	if (AbilityClass)
-	{
-		auto DefaultObj = AbilityClass->GetDefaultObject<UCAS_GameplayAbility>();
-		UTexture2D* Icon = DefaultObj->AbilityIcon;
-
-		아이콘 받아서 델리게이트
+	auto DefaultObj = PlayerAbilities[index]->GetDefaultObject<UCAS_GameplayAbility>();
+	UTexture2D* icon = DefaultObj->AbilityIcon;
+	if (icon->IsValidLowLevel()) {
+		return icon;
 	}
+	return nullptr;
 }
-*/
 
+/*
+*변경점
+어빌리티에 아이콘도 넣어줘야함
+적에게 기본어빌리티와 플레이어에게 넘겨줄 어빌리티를 구분해서 넣어줘야함
+*/
 
