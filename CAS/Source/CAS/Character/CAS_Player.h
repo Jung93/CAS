@@ -87,6 +87,7 @@ public:
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
+	int32 PlayerAbilities_EmptyIndex();
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
@@ -100,4 +101,5 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Abilities)
 	int32 PlayerAbilityCount = 4;
+
 };

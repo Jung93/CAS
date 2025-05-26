@@ -213,7 +213,21 @@ void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 	}
 }
 
-void ACAS_EnemyCapt::AddPlayerAbility()
+void ACAS_EnemyCapt::AddDefaultAbilites()
 {
-	//Player->AddPlayerAbility(내 고유 스킬 클래스);
+	UCAS_AbilitySystemComponent* ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
+	if (!ASC) {
+		return;
+	}
+	DefaultAbilities.Add(EnemyAbility);
+	ASC->AddCharacterAbilities(DefaultAbilities);
+
+}
+
+void ACAS_EnemyCapt::AddPlayerAbility(AActor* actor)
+{
+	auto Player = Cast<ACAS_Player>(actor);
+	if (Player->IsValidLowLevel()) {
+		Player->AddPlayerAbility(EnemyAbility);
+	}
 }

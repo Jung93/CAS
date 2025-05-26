@@ -41,8 +41,8 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
-	
-	void AddPlayerAbility();
+	virtual void AddDefaultAbilites() override;
+	void AddPlayerAbility(AActor* actor);
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -64,6 +64,9 @@ private:
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UGameplayAbility> EnemyAbility;
 
 	UPROPERTY(VisibleAnywhere, Category = "Hat")
 	class ACAS_Hat* _hat;
