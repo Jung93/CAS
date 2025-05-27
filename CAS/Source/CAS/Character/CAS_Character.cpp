@@ -33,6 +33,12 @@ ACAS_Character::ACAS_Character()
 	{
 		HpBarWidgetClass = WidgetClass.Class;
 	}
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> DeadAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Dead.GA_Ability_Dead_C'"));
+
+	if (DeadAbilityClass.Succeeded())
+	{
+		DefaultAbilities.Add(DeadAbilityClass.Class);
+	}
 }
 
 // Called when the game starts or when spawned
