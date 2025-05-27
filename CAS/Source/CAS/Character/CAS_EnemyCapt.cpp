@@ -236,3 +236,22 @@ void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 		FollowCamera->GetCameraView(DeltaTime, OutResult);
 	}
 }
+
+void ACAS_EnemyCapt::AddDefaultAbilites()
+{
+	UCAS_AbilitySystemComponent* ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
+	if (!ASC) {
+		return;
+	}
+	DefaultAbilities.Add(EnemyAbility);
+	ASC->AddCharacterAbilities(DefaultAbilities);
+
+}
+
+void ACAS_EnemyCapt::AddPlayerAbility(AActor* actor)
+{
+	auto Player = Cast<ACAS_Player>(actor);
+	if (Player->IsValidLowLevel()) {
+		Player->AddPlayerAbility(EnemyAbility);
+	}
+}

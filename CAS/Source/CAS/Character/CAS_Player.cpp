@@ -14,7 +14,7 @@
 
 #include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
-
+#include "GAS/CAS_GameplayAbility.h"
 
 // Sets default values
 ACAS_Player::ACAS_Player()
@@ -48,6 +48,8 @@ ACAS_Player::ACAS_Player()
 
 	AbilitySystemComponent = nullptr;
 	AttributeSet = nullptr;
+
+	PlayerAbilities.Init(nullptr, PlayerAbilityCount);
 }
 
 void ACAS_Player::Move(const FInputActionValue& Value)
@@ -202,6 +204,51 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 	return Attribute;
 }
 
+void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
+{
+	int32 index = PlayerAbilities_EmptyIndex();
+	if (index < 0) {
+		return;
+	}
 
+	auto ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
+	if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
+		auto AbilitySpec = FGameplayAbilitySpec(newAbility);
+		ASC->GiveAbility(AbilitySpec);
+		PlayerAbilities[index] = newAbility;
+		auto icon = GetAbilityIcon(index);
+	}
 
+}
+
+int32 ACAS_Player::PlayerAbilities_EmptyIndex()
+{
+	int32 indexCount = 0;
+	for (auto& playerAbility : PlayerAbilities) {
+		if (playerAbility == nullptr) {
+			return indexCount;
+		}
+		else {
+			indexCount++;
+		}
+	}
+	
+	return -1;
+}
+
+UTexture2D* ACAS_Player::GetAbilityIcon(int32 index)
+{
+	auto DefaultObj = PlayerAbilities[index]->GetDefaultObject<UCAS_GameplayAbility>();
+	UTexture2D* icon = DefaultObj->AbilityIcon;
+	if (icon->IsValidLowLevel()) {
+		return icon;
+	}
+	return nullptr;
+}
+
+/*
+*변경점
+어빌리티에 아이콘도 넣어줘야함
+적에게 기본어빌리티와 플레이어에게 넘겨줄 어빌리티를 구분해서 넣어줘야함
+*/
 
