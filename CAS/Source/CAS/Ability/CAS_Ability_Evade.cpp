@@ -22,9 +22,9 @@ void UCAS_Ability_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	if (!AttackMontage) {
-		return;
-	}
+	//if (!AttackMontage) {
+	//	return;
+	//}
 
 	auto Task = UCAS_Task_Evade::Task_Evade(this, "Evade", AttackMontage, 1.5f);
 	if (Task->IsValidLowLevel()) {

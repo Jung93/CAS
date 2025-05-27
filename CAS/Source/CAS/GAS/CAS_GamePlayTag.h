@@ -20,6 +20,7 @@ namespace CAS_GamePlayTag {
 	//Effect
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Attack_TEST);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Move_Evade);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Status_Stun);
 
 	//StateState_TakeDamage
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN();
