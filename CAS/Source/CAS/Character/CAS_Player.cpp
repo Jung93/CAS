@@ -216,6 +216,7 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 		auto AbilitySpec = FGameplayAbilitySpec(newAbility);
 		ASC->GiveAbility(AbilitySpec);
 		PlayerAbilities[index] = newAbility;
+		auto icon = GetAbilityIcon(index);
 	}
 
 }
