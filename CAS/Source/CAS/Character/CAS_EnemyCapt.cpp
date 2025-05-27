@@ -49,6 +49,13 @@ ACAS_EnemyCapt::ACAS_EnemyCapt()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	FollowCamera->SetActive(false);
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> DecaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_DeCapture.GA_Ability_DeCapture_C'"));
+
+	if (DecaptureAbilityClass.Succeeded())
+	{
+		DefaultAbilities.Add(DecaptureAbilityClass.Class);
+	}
+
 }
 
 void ACAS_EnemyCapt::BeginPlay()
