@@ -59,6 +59,14 @@ void ACAS_EnemyCapt::BeginPlay()
 void ACAS_EnemyCapt::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+
+	if (_isStun)
+	{
+		Stunning(DeltaTime);
+	}
+
+
 }
 
 void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -206,6 +214,17 @@ void ACAS_EnemyCapt::Look(const FInputActionValue& Value)
 void ACAS_EnemyCapt::DeCaptureAbility(const FInputActionValue& Value)
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.DeCapture"));
+}
+
+void ACAS_EnemyCapt::Stunning(float DeltaTime)
+{
+	_stunTime += DeltaTime;
+
+	if (_stunTime >= _maxStunTime)
+	{
+		_isStun = false;
+		_stunTime = 0.0f;
+	}
 }
 
 void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)

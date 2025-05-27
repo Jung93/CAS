@@ -71,4 +71,6 @@ void UCAS_Task_DeCapture::Activate()
 	owner->GetHat()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	owner->GetHat()->Return();
 	owner->ClearHat();
+	owner->BeStunned();
+
 }

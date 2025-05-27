@@ -45,6 +45,9 @@ public:
 	bool IsCaptured() { return _isCaptured; }
 	void ActivateCapture(bool value) { _isCaptured = value; }
 	void DeCaptureAbility(const FInputActionValue& Value);
+	void Stunning(float DeltaTime);
+	void BeStunned() { _isStun = true; };
+	bool IsStunned() { return _isStun; }
 
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
 private:
@@ -74,6 +77,9 @@ private:
 
 	bool _isCaptured = false;
 
+	bool _isStun = false;
+	float _stunTime = 0.0f;
+	float _maxStunTime = 5.0f;
 
 
 };
