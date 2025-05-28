@@ -44,7 +44,6 @@ void UCAS_Task_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNotif
 
 	Character->SetActorHiddenInGame(true);
 	Character->SetActorEnableCollision(false);
-	Character->Controller->UnPossess();
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();
@@ -53,6 +52,7 @@ void UCAS_Task_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNotif
 	auto ASC = Character->GetAbilitySystemComponent();
 	ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
+	Character->Controller->UnPossess();
 	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 
 }
