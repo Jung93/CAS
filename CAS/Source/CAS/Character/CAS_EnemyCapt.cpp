@@ -57,45 +57,21 @@ ACAS_EnemyCapt::ACAS_EnemyCapt()
 		DefaultAbilities.Add(DecaptureAbilityClass.Class);
 	}
 
-
-
-
 }
 
 void ACAS_EnemyCapt::BeginPlay()
 {
 	Super::BeginPlay();
-
-	FVector Location = GetCapsuleComponent()->GetComponentLocation();
-	float HalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
-	float Radius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
-	FQuat Rotation = GetActorQuat();
-
-	DrawDebugCapsule(
-		GetWorld(),
-		Location,
-		HalfHeight,
-		Radius,
-		Rotation,
-		FColor::Green,
-		false,    // 지속 시간 무한
-		-1.f,    // 지속 시간
-		0,
-		1.f      // 선 굵기
-	);
-
 }
 
 void ACAS_EnemyCapt::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-
 	if (_isStun)
 	{
 		Stunning(DeltaTime);
 	}
-
 
 }
 
@@ -113,13 +89,10 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-
 		
-		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Move);
 		EnhancedInputComponent->BindAction(DeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Look);
-
 	}
 
 }
