@@ -37,7 +37,6 @@ public:
 	void BeCaptured(class ACAS_Hat* hat);
 
 	void Move(const FInputActionValue& Value);
-	void TestDeCapture(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
 	ACAS_Hat* GetHat() { return _hat; }
@@ -64,7 +63,7 @@ private:
 	UInputAction* MoveAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* TestDeCaptureAction;
+	UInputAction* DeCaptureAction;
 
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
