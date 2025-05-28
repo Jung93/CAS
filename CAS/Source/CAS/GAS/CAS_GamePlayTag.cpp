@@ -11,10 +11,10 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_Evade, "Ability.Move.Evade")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Dead, "Ability.State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Invincible, "Ability.State.Invincible")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperJump, "Ability.Move.SuperJump")
 
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Attack_TEST, "Effect.Attack.TEST")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_Evade, "Effect.Move.Evade")
-	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_Evade, "Effect.Move.SuperJump")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Status_Stun, "Effect.Status.Stun")
 
 	UE_DEFINE_GAMEPLAY_TAG(State_TakeDamage, "State.TakeDamage")
