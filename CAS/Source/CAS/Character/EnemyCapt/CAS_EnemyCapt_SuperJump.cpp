@@ -2,9 +2,13 @@
 
 
 #include "Character/EnemyCapt/CAS_EnemyCapt_SuperJump.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 
 ACAS_EnemyCapt_SuperJump::ACAS_EnemyCapt_SuperJump()
 {
+
+	GetCharacterMovement()->JumpZVelocity = 1200.0f;
 }
 
 void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

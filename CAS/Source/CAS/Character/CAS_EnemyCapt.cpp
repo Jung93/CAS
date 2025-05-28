@@ -21,6 +21,7 @@
 
 #include "Math/UnrealMathUtility.h"
 
+#include "DrawDebugHelpers.h"
 ACAS_EnemyCapt::ACAS_EnemyCapt()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -56,11 +57,33 @@ ACAS_EnemyCapt::ACAS_EnemyCapt()
 		DefaultAbilities.Add(DecaptureAbilityClass.Class);
 	}
 
+
+
+
 }
 
 void ACAS_EnemyCapt::BeginPlay()
 {
 	Super::BeginPlay();
+
+	FVector Location = GetCapsuleComponent()->GetComponentLocation();
+	float HalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	float Radius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	FQuat Rotation = GetActorQuat();
+
+	DrawDebugCapsule(
+		GetWorld(),
+		Location,
+		HalfHeight,
+		Radius,
+		Rotation,
+		FColor::Green,
+		false,    // 지속 시간 무한
+		-1.f,    // 지속 시간
+		0,
+		1.f      // 선 굵기
+	);
+
 }
 
 void ACAS_EnemyCapt::Tick(float DeltaTime)

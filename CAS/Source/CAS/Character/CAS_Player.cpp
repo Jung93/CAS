@@ -133,6 +133,24 @@ void ACAS_Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector Location = GetCapsuleComponent()->GetComponentLocation();
+	float HalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	float Radius = GetCapsuleComponent()->GetUnscaledCapsuleRadius();
+	FQuat Rotation = GetActorQuat();
+
+	DrawDebugCapsule(
+		GetWorld(),
+		Location,
+		HalfHeight,
+		Radius,
+		Rotation,
+		FColor::Green,
+		false,    // 지속 시간 무한
+		-1.f,    // 지속 시간
+		0,
+		1.f      // 선 굵기
+	);
+
 }
 
 // Called to bind functionality to input
