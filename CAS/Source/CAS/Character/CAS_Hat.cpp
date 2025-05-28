@@ -23,7 +23,6 @@ ACAS_Hat::ACAS_Hat()
 void ACAS_Hat::BeginPlay()
 {
 	Super::BeginPlay();
-	
 
 }
 
@@ -36,21 +35,6 @@ void ACAS_Hat::Tick(float DeltaTime)
 	{
 		ThrowAndReturn(DeltaTime);
 	}
-
-	FVector Location = _collider->GetComponentLocation();
-	float Radius = _collider->GetUnscaledSphereRadius();
-
-	DrawDebugSphere(
-		GetWorld(),
-		Location,
-		Radius,
-		16,                // 구의 세그먼트 수 (더 높이면 더 부드럽게 보임)
-		FColor::Red,
-		false,              // 지속 여부 (true면 영구)
-		-1.f,              // 지속 시간 (true일 경우 무시됨)
-		0,
-		1.f                // 선 굵기
-	);
 
 }
 

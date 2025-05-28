@@ -27,6 +27,8 @@ ACAS_Character::ACAS_Character()
 
 	HpBarWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 	
+	HpBarWidgetComponent->SetCollisionProfileName("NoCollision");
+
 	static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/CAS/Blueprint/UI/HpBar/BP_HpBar.BP_HpBar_C'"));
 	
 	if (WidgetClass.Succeeded())
