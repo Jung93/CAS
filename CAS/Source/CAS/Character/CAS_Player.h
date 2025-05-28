@@ -31,7 +31,7 @@ protected:
 
 	void TESTFUNC(const FInputActionValue& Value);
 
-	void TestCapture(const FInputActionValue& Value);
+	void Capture(const FInputActionValue& Value);
 
 protected:
 
@@ -59,10 +59,10 @@ protected:
 	UInputAction* LookAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* LeftClickAction;
+	UInputAction* RightClickAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* TestCaptureAction;
+	UInputAction* CaptureAction;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

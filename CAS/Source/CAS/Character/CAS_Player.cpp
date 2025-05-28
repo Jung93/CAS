@@ -94,23 +94,12 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
-	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.TEST"));
+	//ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.TEST"));
 }
 
-void ACAS_Player::TestCapture(const FInputActionValue& Value)
+void ACAS_Player::Capture(const FInputActionValue& Value)
 {
-	//bool isPress = Value.Get<bool>();
-	//auto enemy = _hatSpawn->GetEnemyCapt();
-	//
-	//if (isPress && enemy == nullptr)
-	//{
-	//
-	//	FVector forwardVec = GetActorForwardVector();
-	//
-	//	_hatSpawn->Throw(forwardVec);
-	//
-	//	_hatSpawn->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	//}
+	
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
 
 }
@@ -171,8 +160,8 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
-		EnhancedInputComponent->BindAction(LeftClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
-		EnhancedInputComponent->BindAction(TestCaptureAction, ETriggerEvent::Started, this, &ACAS_Player::TestCapture);
+		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
 
 	}
 	

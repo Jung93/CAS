@@ -94,7 +94,7 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Move);
-		EnhancedInputComponent->BindAction(TestDeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
+		EnhancedInputComponent->BindAction(DeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Look);
 
 	}
@@ -154,57 +154,6 @@ void ACAS_EnemyCapt::Move(const FInputActionValue& Value)
 	}
 }
 
-void ACAS_EnemyCapt::TestDeCapture(const FInputActionValue& Value)
-{
-	if (!_isCaptured) {
-		return;
-	}
-	_isCaptured = false;
-	auto player = _hat->GetPlayer();
-
-	auto controller = Cast<APlayerController>(GetController());
-	controller->UnPossess();
-
-	controller->Possess(player);
-	
-	int32 curHp = this->GetAttributeSet()->GetHealth();
-
-	player->SetHp(curHp);
-	
-	//디버그용으로 빙의해제되면 체력이 1 남음
-	SetHp(1);
-	
-	auto iter = GetWorld()->GetControllerIterator();
-	for (int i = 0; i < GetWorld()->GetNumControllers(); i++)
-	{
-		if ((*iter)->GetPawn() != nullptr)
-		{
-			iter++;
-			continue;
-		}
-		break;
-	}
-
-	auto aiController = Cast<AAIController>(*iter);
-	aiController->Possess(this);
-
-	FVector acotrLocation = GetActorLocation();
-
-	float dropRadius = 300.0f;
-	FVector randomOffset = FMath::VRand() * FMath::FRandRange(200.0f, dropRadius);
-	FVector dropLocation = acotrLocation + randomOffset;
-	dropLocation.Z = acotrLocation.Z;
-
-	player->SetActorLocation(dropLocation);
-	player->SetActorHiddenInGame(false);
-	player->SetActorEnableCollision(true);
-
-
-	_hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	_hat->Return();
-	_hat = nullptr;
-
-}
 
 void ACAS_EnemyCapt::Look(const FInputActionValue& Value)
 {
