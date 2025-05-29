@@ -52,9 +52,10 @@ void ACAS_Character::BeginPlay()
 		HpBarWidgetComponent->SetWidgetClass(HpBarWidgetClass);
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
 		if (widget) { 
-			widget->InitSetting(HpCount);
+			widget->InitSetting(HpCount);			
 		}
 		HpBarWidgetComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+		HpBarWidgetComponent->SetCastShadow(false);
 	}
 	if (AttributeSet) {
 		AttributeSet->SetHealth(HpCount);
