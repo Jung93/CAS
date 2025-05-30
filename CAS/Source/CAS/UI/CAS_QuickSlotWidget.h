@@ -17,10 +17,10 @@ class CAS_API UCAS_QuickSlotWidget : public UUserWidget
 public:
 	void InitSetting(int32 count);
 	void SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* DropSlot);
-	const FCAS_SlotData& GetSlotData(int32 SlotIndex) const;
+	const FCAS_SlotData& GetSlotData(int32 SlotIndex) const { return SkillSlots[SlotIndex]->GetSlotData(); }
+	void SetSlotData(int32 index, const FCAS_SlotData& AbilityData);
+	void RemoveSlotData(int32 index);
 protected:
-	virtual void NativeConstruct() override;
-
 	int32 SlotCount;
 protected:
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
@@ -28,7 +28,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slots")
 	TSubclassOf<UCAS_SkillSlot> SlotWidgetClass;
 	UPROPERTY()
-	TArray<class UCAS_SkillSlot*> SlotWidgets;
-	UPROPERTY()
-	TArray<FCAS_SlotData> SlotData;
+	TArray<UCAS_SkillSlot*> SkillSlots;
+	
 };

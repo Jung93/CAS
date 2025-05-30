@@ -7,39 +7,29 @@
 #include "Components/HorizontalBoxSlot.h"
 void UCAS_QuickSlotWidget::InitSetting(int32 count)
 {
-	//SlotCount = count;
-    //for (int32 i = 0; i < SlotCount; i++)
-    //{
-    //    UWidgetTree* WidgetTreePtr = WidgetTree.Get();
-    //    UImage* hpBlock = WidgetTreePtr->ConstructWidget<UImage>(HpBlock);
-    //    if (hpBlock)
-    //    {
-    //        CAS_HpBar->AddChildToHorizontalBox(hpBlock);
-    //    }
-    //}
-    //SlotWidgets.SetNum(4);
-    //SlotDataArray.SetNum(4);
-    //
-    //for (int32 i = 0; i < 4; ++i)
-    //{
-    //    if (SlotWidgetClass)
-    //    {
-    //        UQuickSlotWidget* NewSlot = CreateWidget<UQuickSlotWidget>(this, SlotWidgetClass);
-    //        FQuickSlotData Data;
-    //        Data.SlotIndex = i;
-    //        Data.IconTexture = nullptr; // 초기값
-    //        Data.AbilityTag = FName(TEXT("None"));
-    //
-    //        NewSlot->SetSlotData(Data);
-    //        SlotWidgets[i] = NewSlot;
-    //        SlotDataArray[i] = Data;
-    //
-    //        if (SlotBox)
-    //        {
-    //            SlotBox->AddChildToHorizontalBox(NewSlot);
-    //        }
-    //    }
-    //}
+    SlotCount = count;
+
+    SkillSlots.SetNum(SlotCount);
+
+    for (int32 i = 0; i < SlotCount; ++i)
+    {
+        if (SlotWidgetClass)
+        {
+            UCAS_SkillSlot* slot = CreateWidget<UCAS_SkillSlot>(GetWorld(), SlotWidgetClass);
+            FCAS_SlotData Data;
+            Data.SlotIndex = i;
+            Data.SlotTexture = nullptr;
+            Data.AbilityTag = FName(TEXT("None"));
+
+            slot->SetSlotData(Data);
+            SkillSlots[i] = slot;
+            SlotBox->IsValidLowLevel();
+            if (SlotBox->IsValidLowLevel())
+            {
+                SlotBox->AddChildToHorizontalBox(slot);
+            }
+        }
+    }
 
 }
 
@@ -48,48 +38,25 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
     int32 DragIndex = DragSlot->GetSlotIndex();
     int32 DropIndex = DropSlot->GetSlotIndex();
 
-    // Swap SlotData
-    FCAS_SlotData Temp = SlotData[DragIndex];
-    SlotData[DragIndex] = SlotData[DropIndex];
-    SlotData[DropIndex] = Temp;
+    FCAS_SlotData DragSlotData = DragSlot->GetSlotData();
+    FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
 
-    SlotData[DragIndex].SlotIndex = DragIndex;
-    SlotData[DropIndex].SlotIndex = DropIndex;
-
-    DragSlot->SetSlotData(SlotData[DragIndex]);
-    DropSlot->SetSlotData(SlotData[DropIndex]);
+    DragSlot->SetSlotData(DropSlotData);
+    DropSlot->SetSlotData(DragSlotData);
+   
 }
 
-const FCAS_SlotData& UCAS_QuickSlotWidget::GetSlotData(int32 SlotIndex) const
+void UCAS_QuickSlotWidget::SetSlotData(int32 index, const FCAS_SlotData& AbilityData)
 {
-    return SlotData[SlotIndex];
+    SkillSlots[index]->SetSlotData(AbilityData);
 }
 
-void UCAS_QuickSlotWidget::NativeConstruct()
+void UCAS_QuickSlotWidget::RemoveSlotData(int32 index)
 {
-    Super::NativeConstruct();
+    FCAS_SlotData Data;
+    Data.SlotIndex = index;
+    Data.SlotTexture = nullptr;
+    Data.AbilityTag = FName(TEXT("None"));
 
-    SlotWidgets.SetNum(SlotCount);
-    SlotData.SetNum(SlotCount);
-
-    for (int32 i = 0; i < SlotCount; ++i)
-    {
-        if (SlotWidgetClass)
-        {
-            UCAS_SkillSlot* NewSlot = CreateWidget<FCAS_SlotData>(this, SlotWidgetClass);
-            FCAS_SlotData Data;
-            Data.SlotIndex = i;
-            Data.SlotTexture = nullptr; // 초기값
-            Data.AbilityTag = FName(TEXT("None"));
-
-            NewSlot->SetSlotData(Data);
-            SlotWidgets[i] = NewSlot;
-            SlotData[i] = Data;
-
-            if (SlotBox)
-            {
-                SlotBox->AddChildToHorizontalBox(NewSlot);
-            }
-        }
-    }
+    SkillSlots[index]->SetSlotData(Data);
 }

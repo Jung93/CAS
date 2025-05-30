@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CAS_SkillSlot.generated.h"
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FCAS_SlotData
 {
     GENERATED_BODY()
@@ -18,7 +18,7 @@ struct FCAS_SlotData
     int32 SlotIndex;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName AbilityTag;;
+    FName AbilityTag;
 };
 UCLASS()
 class CAS_API UCAS_SkillSlot : public UUserWidget
@@ -26,8 +26,8 @@ class CAS_API UCAS_SkillSlot : public UUserWidget
 	GENERATED_BODY()
 public:
     void SetSlotData(const FCAS_SlotData& InitData);
-    FCAS_SlotData GetSlotData() const { return SlotData; }
-    int32 GetSlotIndex() const { return SlotData.SlotIndex; }
+    const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
+    int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
 
     void UpdateIcon();
 
@@ -41,6 +41,6 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     class UTexture2D* DefaultTexture;
-private:
-    FCAS_SlotData SlotData;
+protected:
+    FCAS_SlotData DragSlotData;
 };

@@ -7,18 +7,18 @@
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/DragDropOperation.h"
 
-void UCAS_SkillSlot::SetSlotData(const FCAS_SlotData& InitData)
+void UCAS_SkillSlot::SetSlotData(const FCAS_SlotData& Data)
 {
-	SlotData = InitData;
+	DragSlotData = Data;
 	UpdateIcon();
 }
 
 void UCAS_SkillSlot::UpdateIcon()
 {
 	UTexture2D* Texture;
-	if (SlotData.SlotTexture)
+	if (DragSlotData.SlotTexture->IsValidLowLevel())
 	{
-		Texture = SlotData.SlotTexture;
+		Texture = DragSlotData.SlotTexture;
 	}
 	else {
 		Texture = DefaultTexture;
@@ -37,6 +37,7 @@ FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 
 void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
+	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
 	UDragDropOperation* DragOp = NewObject<UDragDropOperation>();
 	DragOp->Payload = this;
 	DragOp->DefaultDragVisual = this;
@@ -53,5 +54,5 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 			return true;
 		}
 	}
-	return false;
+	return Super::NativeOnDrop(InGeometry,InDragDropEvent,InOperation);
 }
