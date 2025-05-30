@@ -10,6 +10,7 @@ UCAS_AttributeSet::UCAS_AttributeSet()
 {
 	InitHealth(3.0f);
 	InitMaxHealth(6.0f);
+	InitWalkSpeed(500.0f);
 }
 
 void UCAS_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)

@@ -27,6 +27,7 @@ public:
 public:
 	ATTRIBUTE_ACCESSORS(ThisClass, Health);
 	ATTRIBUTE_ACCESSORS(ThisClass, MaxHealth);
+	ATTRIBUTE_ACCESSORS(ThisClass, WalkSpeed);
 	
 	FHpChangedEvent HpChanged;
 	FDeadEvent DeadEvent;
@@ -37,4 +38,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData MaxHealth;
 	
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FGameplayAttributeData WalkSpeed;
+
 };
