@@ -81,35 +81,35 @@ void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclas
 	if (SpecHandle.IsValid())
 	{
 		//스펙핸들에서 스펙을 뽑아와서 태그를 통해 키값을확인해서 데미지입력
-		//FGameplayEffectSpec* Spec = SpecHandle.Data.Get(); 이 코드도 사용은 가능하지만 캡슐화 원칙 위배
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -1.0f);
 		AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 	}
+
 }
 
-void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target , int32 TaskLevel)
+void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
-	if (!DamageEffectClass) {
+	if (!DamageEffectClass || !TagEffectClass) {
 		return;
 	}
-	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());	
-	UAbilitySystemComponent* AbilitySystemComp;
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp = nullptr;
 	if (PlayerState->IsValidLowLevel()) {
 		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
-		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
-		EffectContextHandle.AddInstigator(PlayerState, nullptr);
-		
-		ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
 		if (CharacterState->IsValidLowLevel()) {
 			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
-			FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
-			EffectContextHandle.AddInstigator(CharacterState, nullptr);
-
-			ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 		}
-	}	
-	
+	}
+	if (!AbilitySystemComp->IsValidLowLevel()) {
+		return;
+	}
+	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+	EffectContextHandle.AddInstigator(PlayerState, nullptr);
+
+	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
 }

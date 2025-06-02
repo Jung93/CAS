@@ -19,7 +19,7 @@ class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 
 public:
-
+	UCAS_GameplayAbility();
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	UTexture2D* AbilityIcon;
 protected:

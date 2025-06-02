@@ -29,4 +29,6 @@ protected:
 	TObjectPtr<UAnimMontage> AttackMontage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> TagEffectClass;
 };

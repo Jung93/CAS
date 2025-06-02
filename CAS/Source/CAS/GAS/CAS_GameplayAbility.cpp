@@ -2,3 +2,8 @@
 
 
 #include "GAS/CAS_GameplayAbility.h"
+
+UCAS_GameplayAbility::UCAS_GameplayAbility()
+{
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+}
