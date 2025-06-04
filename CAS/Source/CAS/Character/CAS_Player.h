@@ -97,9 +97,10 @@ protected:
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "PlayerAblilties|QuickSlots")
-	class UCAS_QuickSlotWidget* QuickSlotWidget;
+	TSubclassOf<class UCAS_QuickSlotWidget> QuickSlotWidgetClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
 	int32 PlayerAbilityCount = 4;
 
+	class UCAS_QuickSlotWidget* QuickSlotWidget;
 	class UCAS_QuickSlotWidgetComponent* QuickSlotWidgetComponent;
 };

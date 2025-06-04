@@ -11,7 +11,7 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
 
     SkillSlots.SetNum(SlotCount);
 
-    for (int32 i = 0; i < SlotCount; ++i)
+    for (int32 i = 0; i < SlotCount;i++)
     {
         if (SlotWidgetClass)
         {
@@ -22,8 +22,8 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             Data.AbilityTag = FName(TEXT("None"));
 
             slot->SetSlotData(Data);
+
             SkillSlots[i] = slot;
-            SlotBox->IsValidLowLevel();
             if (SlotBox->IsValidLowLevel())
             {
                 SlotBox->AddChildToHorizontalBox(slot);

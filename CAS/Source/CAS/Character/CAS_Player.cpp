@@ -59,6 +59,7 @@ ACAS_Player::ACAS_Player()
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
 
+
 }
 
 void ACAS_Player::Move(const FInputActionValue& Value)
@@ -129,12 +130,14 @@ void ACAS_Player::BeginPlay()
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
+	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
+
+	QuickSlotWidget = NewQuickSlotWidget;
+
 	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel()) {
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
-		QuickSlotWidget->InitSetting(PlayerAbilityCount);
-
 		QuickSlotWidget->AddToViewport();
-		QuickSlotWidget->SetVisibility(ESlateVisibility::Collapsed);
+		QuickSlotWidget->InitSetting(PlayerAbilityCount);
 	}
 
 }
