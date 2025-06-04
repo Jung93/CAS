@@ -35,4 +35,11 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 			HpChanged.Broadcast(Hp);
 		}
 	}
+
+	if (Data.EvaluatedData.Attribute == GetWalkSpeedAttribute())
+	{
+		int32 speed = GetWalkSpeed();
+		SpeedChanged.Broadcast(speed);
+	}
+
 }

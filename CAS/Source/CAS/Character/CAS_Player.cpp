@@ -99,11 +99,7 @@ void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
 {
-	
-	//ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
-
-	GetCharacterMovement()->MaxWalkSpeed = 750.f;
-
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
 
 }
 

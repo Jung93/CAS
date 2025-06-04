@@ -40,6 +40,7 @@ public:
 	virtual void AddDefaultAbilites();
 	virtual void InitAbilitySystemComponent(AController* controller);
 	void SetHp(int32 value);
+	void SetWalkSpeed(int32 value);
 
 	virtual void ActivateAbility(const FGameplayTag tag);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")

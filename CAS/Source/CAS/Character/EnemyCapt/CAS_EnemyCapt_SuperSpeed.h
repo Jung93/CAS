@@ -13,5 +13,16 @@ UCLASS()
 class CAS_API ACAS_EnemyCapt_SuperSpeed : public ACAS_EnemyCapt
 {
 	GENERATED_BODY()
-	
+
+public:
+
+	ACAS_EnemyCapt_SuperSpeed();
+
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//void ActivateAbility(const FInputActionValue& Value);
+
+	virtual void BeginPlay() override;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UInputAction* AbilityAction;
 };

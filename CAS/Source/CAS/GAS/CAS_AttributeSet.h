@@ -13,6 +13,7 @@
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)				
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FHpChangedEvent, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FSpeedChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE(FDeadEvent);
 
 UCLASS()
@@ -30,7 +31,10 @@ public:
 	ATTRIBUTE_ACCESSORS(ThisClass, WalkSpeed);
 	
 	FHpChangedEvent HpChanged;
+	FSpeedChangedEvent SpeedChanged;
 	FDeadEvent DeadEvent;
+
+
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData Health;

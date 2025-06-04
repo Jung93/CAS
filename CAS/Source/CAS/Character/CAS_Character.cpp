@@ -8,6 +8,7 @@
 #include "Controller/CAS_PlayerController.h"
 #include "Controller/CAS_EnemyController.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ACAS_Character::ACAS_Character()
@@ -63,6 +64,8 @@ void ACAS_Character::BeginPlay()
 		if (widget) {
 			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
 		}		
+
+		AttributeSet->SpeedChanged.AddUObject(this, &ThisClass::SetWalkSpeed);
 	}
 }
 
@@ -125,6 +128,12 @@ void ACAS_Character::SetHp(int32 value)
 {
 	AttributeSet->SetHealth(value);
 	AttributeSet->HpChanged.Broadcast(value);
+}
+
+void ACAS_Character::SetWalkSpeed(int32 value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = value;
+
 }
 
 void ACAS_Character::ActivateAbility(const FGameplayTag tag)
