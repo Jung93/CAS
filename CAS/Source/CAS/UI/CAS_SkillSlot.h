@@ -6,12 +6,41 @@
 #include "Blueprint/UserWidget.h"
 #include "CAS_SkillSlot.generated.h"
 
-/**
- * 
- */
+USTRUCT(BlueprintType)
+struct FCAS_SlotData
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    class UTexture2D* SlotTexture;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    int32 SlotIndex;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    FName AbilityTag;
+};
 UCLASS()
 class CAS_API UCAS_SkillSlot : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+    void SetSlotData(const FCAS_SlotData& InitData);
+    const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
+    int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
+
+    void UpdateIcon();
+
+protected:
+    virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+    virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+    virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+
+    UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+    class UImage* CAS_Image;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    class UTexture2D* DefaultTexture;
+protected:
+    FCAS_SlotData DragSlotData;
 };

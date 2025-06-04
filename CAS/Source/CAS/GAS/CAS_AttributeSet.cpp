@@ -31,9 +31,9 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		{
 			DeadEvent.Broadcast();
 		}
-		else {
-			HpChanged.Broadcast(Hp);
-		}
+		
+		HpChanged.Broadcast(Hp);
+		
 	}
 
 	if (Data.EvaluatedData.Attribute == GetWalkSpeedAttribute())

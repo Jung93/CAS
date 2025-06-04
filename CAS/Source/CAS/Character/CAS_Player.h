@@ -83,12 +83,10 @@ public:
 public:	
 	virtual void InitAbilitySystemComponent(AController* controller) override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
-	int32 PlayerAbilities_EmptyIndex();
-	class UTexture2D* GetAbilityIcon(int32 index);
+	void RemovePlayerAbility();
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
@@ -97,10 +95,12 @@ protected:
 	UPROPERTY()
 	class ACAS_Hat* _hatSpawn = nullptr;
 
-	UPROPERTY(VisibleAnywhere, Category = Abilities)
-	TArray<TSubclassOf<class UGameplayAbility>> PlayerAbilities;
-	
-	UPROPERTY(EditAnywhere, Category = Abilities)
+protected:
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "PlayerAblilties|QuickSlots")
+	TSubclassOf<class UCAS_QuickSlotWidget> QuickSlotWidgetClass;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
 	int32 PlayerAbilityCount = 4;
 
+	class UCAS_QuickSlotWidget* QuickSlotWidget;
+	class UCAS_QuickSlotWidgetComponent* QuickSlotWidgetComponent;
 };

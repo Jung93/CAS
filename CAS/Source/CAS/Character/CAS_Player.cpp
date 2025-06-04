@@ -14,7 +14,9 @@
 
 #include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
-#include "GAS/CAS_GameplayAbility.h"
+
+#include "UI/CAS_QuickSlotWidgetComponent.h"
+#include "UI/CAS_QuickSlotWidget.h"
 
 // Sets default values
 ACAS_Player::ACAS_Player()
@@ -55,7 +57,9 @@ ACAS_Player::ACAS_Player()
 		DefaultAbilities.Add(CaptureAbilityClass.Class);
 	}
 
-	PlayerAbilities.Init(nullptr, PlayerAbilityCount);
+	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
+
+
 }
 
 void ACAS_Player::Move(const FInputActionValue& Value)
@@ -94,7 +98,7 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
 {
-	//ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.TEST"));
+	
 }
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
@@ -125,6 +129,16 @@ void ACAS_Player::BeginPlay()
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
+	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
+
+	QuickSlotWidget = NewQuickSlotWidget;
+
+	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel()) {
+		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
+		QuickSlotWidget->AddToViewport();
+		QuickSlotWidget->InitSetting(PlayerAbilityCount);
+	}
+
 }
 
 // Called every frame
@@ -159,7 +173,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
 
 	}
 	
@@ -199,44 +213,22 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
 {
-	int32 index = PlayerAbilities_EmptyIndex();
-	if (index < 0) {
+	int32 Index = QuickSlotWidgetComponent->FindEmptyPlayerAbilityIndex();
+	if (Index < 0) {
 		return;
 	}
 
-	auto ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
-	if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
-		auto AbilitySpec = FGameplayAbilitySpec(newAbility);
-		ASC->GiveAbility(AbilitySpec);
-		PlayerAbilities[index] = newAbility;
-		auto icon = GetAbilityIcon(index);
-	}
+	QuickSlotWidgetComponent->AddPlayerAbility(Index,newAbility);
+	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
 
+	QuickSlotWidget->SetSlotData(Index, SlotData);
 }
 
-int32 ACAS_Player::PlayerAbilities_EmptyIndex()
+void ACAS_Player::RemovePlayerAbility()
 {
-	int32 indexCount = 0;
-	for (auto& playerAbility : PlayerAbilities) {
-		if (playerAbility == nullptr) {
-			return indexCount;
-		}
-		else {
-			indexCount++;
-		}
-	}
-	
-	return -1;
-}
+	QuickSlotWidgetComponent->RemovePlayerAbility();
 
-UTexture2D* ACAS_Player::GetAbilityIcon(int32 index)
-{
-	auto DefaultObj = PlayerAbilities[index]->GetDefaultObject<UCAS_GameplayAbility>();
-	UTexture2D* icon = DefaultObj->AbilityIcon;
-	if (icon->IsValidLowLevel()) {
-		return icon;
-	}
-	return nullptr;
+
 }
 
 /*
