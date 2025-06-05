@@ -96,9 +96,71 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 	}
 }
 
-void ACAS_Player::TESTFUNC(const FInputActionValue& Value)
+void ACAS_Player::StealAbility(const FInputActionValue& Value)
 {
-	
+	/*
+	레이캐스팅으로 적에게 레이가 닿으면
+	적에게 Press Key 뜨고
+	키 눌리면
+	적을 특정해서 AddAbility(This)실행
+	*/
+
+	//FVector2D viewportSize;
+	//if (GEngine && GEngine->GameViewport)
+	//{
+	//	GEngine->GameViewport->GetViewportSize(viewportSize);
+	//}
+	//
+	//bool isPressed = Value.Get<bool>();
+	//auto controller = Cast<ARSP_PlayerController>(GetController());
+	//if (controller != nullptr && isPressed) {
+	//	auto screenX = viewportSize.X / 2.0f;
+	//	auto screenY = viewportSize.Y / 2.0f;
+	//
+	//	FVector WorldLocation;
+	//	FVector WorldDirection;
+	//
+	//	if (controller->DeprojectScreenPositionToWorld(screenX, screenY, WorldLocation, WorldDirection)) {
+	//		FVector Start = WorldLocation;
+	//		FVector End = Start + (WorldDirection * 1000.0f);
+	//
+	//		FHitResult HitResult;
+	//		FCollisionQueryParams TraceParams(FName(TEXT("RSP_line")), true, this);
+	//		TraceParams.bTraceComplex = true;
+	//		TraceParams.bReturnPhysicalMaterial = false;
+	//
+	//		bool bHit = GetWorld()->LineTraceSingleByChannel(
+	//			HitResult,
+	//			Start,
+	//			End,
+	//			ECC_GameTraceChannel6,
+	//			TraceParams
+	//		);
+	//		if (bHit)
+	//		{
+	//			AActor* HitActor = HitResult.GetActor();
+	//			if (HitActor)
+	//			{
+	//				auto RSP_itemShop = Cast<ARSP_ItemShop>(HitActor);
+	//				auto RSP_item = Cast<ARSP_Item>(HitActor);
+	//				if (RSP_itemShop) {
+	//					if (RSP_itemShop->bCanInteraction)
+	//					{
+	//						RSP_itemShop->bCanInteraction = false;
+	//						RSP_itemShop->OpenShopUI(this);
+	//					}
+	//				}
+	//				if (RSP_item) {
+	//					if (RSP_item->bCanInteraction) {
+	//						RSP_item->bCanInteraction = false;
+	//						RSP_item->ActivateItemEffect(this);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//}
 }
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
@@ -173,7 +235,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
-		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::TESTFUNC);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
 
 	}
 	

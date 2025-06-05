@@ -29,7 +29,7 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void TESTFUNC(const FInputActionValue& Value);
+	void StealAbility(const FInputActionValue& Value);
 
 	void Capture(const FInputActionValue& Value);
 
