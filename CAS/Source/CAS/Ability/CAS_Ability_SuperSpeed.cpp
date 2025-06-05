@@ -53,7 +53,7 @@ void UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_Character* Target, TSubcl
 
 void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
-	if (!DamageEffectClass) {
+	if (!TagEffectClass || !TagEffectClassOther) {
 		return;
 	}
 	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
@@ -63,7 +63,8 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 		EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
-		ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		ApplyGamePlayEffect(Target, TagEffectClassOther, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
@@ -72,7 +73,8 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 			FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 			EffectContextHandle.AddInstigator(CharacterState, nullptr);
 
-			ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			ApplyGamePlayEffect(Target, TagEffectClassOther, TaskLevel, EffectContextHandle, AbilitySystemComp);
 		}
 	}
 

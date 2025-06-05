@@ -59,6 +59,9 @@ void UCAS_FindPlayerService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 				return;
 			}
 		}
+
+		OwnerComp.GetBlackboardComponent()->SetValueAsObject(TargetKey.SelectedKeyName, nullptr);
+		return;
 	}
 
 
