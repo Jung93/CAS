@@ -38,9 +38,14 @@ FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
+
 	UDragDropOperation* DragOp = NewObject<UDragDropOperation>();
+
+	UCAS_SkillSlot* DragVisual = DuplicateObject<UCAS_SkillSlot>(this, this);
+	DragVisual->SetRenderOpacity(0.7f);
 	DragOp->Payload = this;
-	DragOp->DefaultDragVisual = this;
+	DragOp->DefaultDragVisual = DragVisual;
+
 	OutOperation = DragOp;
 }
 
