@@ -38,14 +38,24 @@ FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
-
 	UDragDropOperation* DragOp = NewObject<UDragDropOperation>();
 
-	UCAS_SkillSlot* DragVisual = DuplicateObject<UCAS_SkillSlot>(this, this);
+	UCAS_SkillSlot* DragVisual = CreateWidget<UCAS_SkillSlot>(GetOwningPlayer(), SkillSlotWidgetClass);
+
 	DragVisual->SetRenderOpacity(0.7f);
+
+	if (CAS_Image && CAS_Image->Brush.GetResourceObject())
+	{
+		UTexture2D* Texture = Cast<UTexture2D>(CAS_Image->Brush.GetResourceObject());
+		if (Texture->IsValidLowLevel())
+		{
+			DragVisual->CAS_Image->SetBrushFromTexture(Texture, false);
+			DragVisual->CAS_Image->SetDesiredSizeOverride(FVector2D(128.f, 128.f));
+		}
+	}
+
 	DragOp->Payload = this;
 	DragOp->DefaultDragVisual = DragVisual;
-
 	OutOperation = DragOp;
 }
 
@@ -53,7 +63,8 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 {
 	if (auto otherSlot = Cast<UCAS_SkillSlot>(InOperation->Payload))
 	{
-		if (UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(GetParent()))
+		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(GetParent());
+		if (quickSlotWidget->IsValidLowLevel())
 		{
 			quickSlotWidget->SwapSlots(this, otherSlot);
 			return true;

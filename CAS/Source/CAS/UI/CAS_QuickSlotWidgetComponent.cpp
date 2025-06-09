@@ -34,7 +34,7 @@ void UCAS_QuickSlotWidgetComponent::TickComponent(float DeltaTime, ELevelTick Ti
 	// ...
 }
 
-void UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclassOf<class UGameplayAbility>& newAbility)
+bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclassOf<class UGameplayAbility>& newAbility)
 {
 	auto player = Cast<ACAS_Player>(GetOwner());
 	if (player->IsValidLowLevel()) {
@@ -43,8 +43,10 @@ void UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 			auto AbilitySpec = FGameplayAbilitySpec(newAbility);
 			ASC->GiveAbility(AbilitySpec);
 			PlayerAbilities[index] = newAbility;
+			return true;
 		}
 	}
+	return false;
 }
 
 void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility()

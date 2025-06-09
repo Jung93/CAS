@@ -26,7 +26,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	void InitSetting(int32 count ){ PlayerAbilities.Init(nullptr, count); }
 	
-	void AddPlayerAbility(int32 index, const TSubclassOf<class UGameplayAbility>& newAbility);
+	bool AddPlayerAbility(int32 index, const TSubclassOf<class UGameplayAbility>& newAbility);
 	void RemovePlayerAbility();
 
 	int32 FindEmptyPlayerAbilityIndex();

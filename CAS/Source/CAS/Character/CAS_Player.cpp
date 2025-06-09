@@ -13,7 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
-
+#include "Character/CAS_EnemyCapt.h"
 #include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
 
@@ -108,62 +108,65 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 	적을 특정해서 AddAbility(This)실행
 	*/
 
-	//FVector2D viewportSize;
-	//if (GEngine && GEngine->GameViewport)
-	//{
-	//	GEngine->GameViewport->GetViewportSize(viewportSize);
-	//}
-	//
-	//bool isPressed = Value.Get<bool>();
-	//auto controller = Cast<ARSP_PlayerController>(GetController());
-	//if (controller != nullptr && isPressed) {
-	//	auto screenX = viewportSize.X / 2.0f;
-	//	auto screenY = viewportSize.Y / 2.0f;
-	//
-	//	FVector WorldLocation;
-	//	FVector WorldDirection;
-	//
-	//	if (controller->DeprojectScreenPositionToWorld(screenX, screenY, WorldLocation, WorldDirection)) {
-	//		FVector Start = WorldLocation;
-	//		FVector End = Start + (WorldDirection * 1000.0f);
-	//
-	//		FHitResult HitResult;
-	//		FCollisionQueryParams TraceParams(FName(TEXT("RSP_line")), true, this);
-	//		TraceParams.bTraceComplex = true;
-	//		TraceParams.bReturnPhysicalMaterial = false;
-	//
-	//		bool bHit = GetWorld()->LineTraceSingleByChannel(
-	//			HitResult,
-	//			Start,
-	//			End,
-	//			ECC_GameTraceChannel6,
-	//			TraceParams
-	//		);
-	//		if (bHit)
-	//		{
-	//			AActor* HitActor = HitResult.GetActor();
-	//			if (HitActor)
-	//			{
-	//				auto RSP_itemShop = Cast<ARSP_ItemShop>(HitActor);
-	//				auto RSP_item = Cast<ARSP_Item>(HitActor);
-	//				if (RSP_itemShop) {
-	//					if (RSP_itemShop->bCanInteraction)
-	//					{
-	//						RSP_itemShop->bCanInteraction = false;
-	//						RSP_itemShop->OpenShopUI(this);
-	//					}
-	//				}
-	//				if (RSP_item) {
-	//					if (RSP_item->bCanInteraction) {
-	//						RSP_item->bCanInteraction = false;
-	//						RSP_item->ActivateItemEffect(this);
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//
-	//}
+	FVector2D viewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(viewportSize);
+	}
+	
+	bool isPressed = Value.Get<bool>();
+	auto controller = Cast<ACAS_PlayerController>(GetController());
+	if (controller != nullptr && isPressed) {
+		auto screenX = viewportSize.X / 2.0f;
+		auto screenY = viewportSize.Y / 2.0f;
+	
+		FVector WorldLocation;
+		FVector WorldDirection;
+	
+		if (controller->DeprojectScreenPositionToWorld(screenX, screenY, WorldLocation, WorldDirection)) {
+			FVector Start = WorldLocation;
+			FVector End = Start + (WorldDirection * 1000.0f);
+	
+			FHitResult HitResult;
+			FCollisionQueryParams TraceParams(FName(TEXT("CAS_line")), true, this);
+			TraceParams.bTraceComplex = true;
+			TraceParams.bReturnPhysicalMaterial = false;
+	
+			DrawDebugLine(
+				GetWorld(),
+				Start,
+				End,
+				FColor::Red,   
+				false,         
+				3.0f,          
+				0,             
+				5.0f           
+			);
+
+
+			bool bHit = GetWorld()->LineTraceSingleByChannel(
+				HitResult,
+				Start,
+				End,
+				ECC_GameTraceChannel3,
+				TraceParams
+			);
+			if (bHit)
+			{
+				AActor* HitActor = HitResult.GetActor();
+				if (HitActor)
+				{
+					auto Enemy = Cast<ACAS_EnemyCapt>(HitActor);
+					
+					if (Enemy->IsValidLowLevel()) {
+						Enemy->AddPlayerAbility(this);
+					}
+					
+				}
+			}
+		}
+	
+	}
 }
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
@@ -296,10 +299,14 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 		return;
 	}
 
-	QuickSlotWidgetComponent->AddPlayerAbility(Index,newAbility);
-	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+	bool bAddPlayerAbility = QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
 
-	QuickSlotWidget->SetSlotData(Index, SlotData);
+	if (bAddPlayerAbility) {
+		auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+		QuickSlotWidget->SetSlotData(Index, SlotData);
+	}
+	//이번에 들어온 어빌리티가 이미 있을경우 
+	
 }
 
 void ACAS_Player::RemovePlayerAbility()
@@ -308,10 +315,3 @@ void ACAS_Player::RemovePlayerAbility()
 
 
 }
-
-/*
-*변경점
-어빌리티에 아이콘도 넣어줘야함
-적에게 기본어빌리티와 플레이어에게 넘겨줄 어빌리티를 구분해서 넣어줘야함
-*/
-

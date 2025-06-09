@@ -41,6 +41,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     class UTexture2D* DefaultTexture;
+
+    UPROPERTY(EditDefaultsOnly, Category = "QuickSlot")
+    TSubclassOf<UCAS_SkillSlot> SkillSlotWidgetClass;
 protected:
     FCAS_SlotData DragSlotData;
 };
