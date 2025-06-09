@@ -26,7 +26,7 @@ EBTNodeResult::Type UCAS_FindRandomPosTask::ExecuteTask(UBehaviorTreeComponent& 
 		return EBTNodeResult::Type::Failed;
 
 	FNavLocation randomLocation;
-	if (nav->GetRandomPointInNavigableRadius(pos, 300.0f, randomLocation))
+	if (nav->GetRandomPointInNavigableRadius(pos, 1300.0f, randomLocation))
 	{
 		OwnerComp.GetBlackboardComponent()->SetValueAsVector(FName(TEXT("Destination")), randomLocation.Location);
 
