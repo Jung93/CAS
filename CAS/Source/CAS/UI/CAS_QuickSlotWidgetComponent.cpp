@@ -2,7 +2,6 @@
 
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
-#include "UI/CAS_SkillSlot.h"
 #include "Character/CAS_Player.h"
 #include "GAS/CAS_GameplayAbility.h"
 
