@@ -33,6 +33,7 @@ protected:
 
 	void Capture(const FInputActionValue& Value);
 
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
