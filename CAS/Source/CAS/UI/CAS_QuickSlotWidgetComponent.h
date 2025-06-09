@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "UI/CAS_SkillSlot.h"
 #include "CAS_QuickSlotWidgetComponent.generated.h"
 
 
