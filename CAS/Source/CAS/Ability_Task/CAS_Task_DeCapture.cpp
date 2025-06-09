@@ -71,6 +71,12 @@ void UCAS_Task_DeCapture::Activate()
 	owner->GetHat()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	owner->GetHat()->Return();
 	owner->ClearHat();
-	owner->BeStunned();
+	//owner->BeStunned();
+
+	auto Handle = Ability->GetCurrentAbilitySpecHandle();
+	auto ActorInfo = Ability->GetCurrentActorInfo();
+	auto ActivationInfo = Ability->GetCurrentActivationInfo();
+
+	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 
 }

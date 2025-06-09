@@ -8,9 +8,11 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
+#include "Controller/CAS_PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+
 
 #include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
@@ -170,6 +172,18 @@ void ACAS_Player::Capture(const FInputActionValue& Value)
 
 }
 
+void ACAS_Player::ShowMouse(const FInputActionValue& Value)
+{
+	auto controller = Cast<ACAS_PlayerController>(GetController());
+
+	if (controller->IsValidLowLevel())
+	{
+		controller->bShowMouseCursor = true;
+
+	}
+
+}
+
 // Called when the game starts or when spawned
 void ACAS_Player::BeginPlay()
 {
@@ -237,6 +251,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
+		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
 
 	}
 	

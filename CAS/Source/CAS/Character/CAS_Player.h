@@ -33,6 +33,8 @@ protected:
 
 	void Capture(const FInputActionValue& Value);
 
+	void ShowMouse(const FInputActionValue& Value);
+
 
 protected:
 
@@ -64,6 +66,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CaptureAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ShowMouseAction;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
