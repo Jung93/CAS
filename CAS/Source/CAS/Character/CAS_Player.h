@@ -34,6 +34,7 @@ protected:
 	void Capture(const FInputActionValue& Value);
 
 	void ShowMouse(const FInputActionValue& Value);
+	void HideMouse(const FInputActionValue& Value);
 
 
 protected:

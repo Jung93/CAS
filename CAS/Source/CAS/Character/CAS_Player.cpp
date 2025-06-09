@@ -180,8 +180,27 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 	{
 		controller->bShowMouseCursor = true;
 
+		FInputModeGameAndUI InputMode;
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		InputMode.SetHideCursorDuringCapture(false);
+
+		controller->SetInputMode(InputMode);
+
 	}
 
+}
+
+void ACAS_Player::HideMouse(const FInputActionValue& Value)
+{
+	auto controller = Cast<ACAS_PlayerController>(GetController());
+
+	if (controller->IsValidLowLevel())
+	{
+		controller->bShowMouseCursor = false;
+
+		FInputModeGameOnly InputMode;
+		controller->SetInputMode(InputMode);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -251,7 +270,10 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
+
+		//Mouse Pointer
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
+		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
 
 	}
 	
