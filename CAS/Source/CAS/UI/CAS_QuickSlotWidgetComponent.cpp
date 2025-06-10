@@ -56,18 +56,19 @@ void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility()
 
 FCAS_SlotData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)
 {
-
-	auto DefaultObj = PlayerAbilities[index]->GetDefaultObject<UCAS_GameplayAbility>();
-	
 	FCAS_SlotData Data;
 	Data.SlotIndex = index;
 
-	if (DefaultObj->IsValidLowLevel()) {
-		UTexture2D* TextureData = DefaultObj->AbilityIcon;
-		FName TagData = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
+	if (PlayerAbilities[index]) {
+		auto DefaultObj = PlayerAbilities[index]->GetDefaultObject<UCAS_GameplayAbility>();
 
-		Data.SlotTexture = TextureData;
-		Data.AbilityTag = TagData;
+		if (DefaultObj->IsValidLowLevel()) {
+			UTexture2D* TextureData = DefaultObj->AbilityIcon;
+			FName TagData = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
+
+			Data.SlotTexture = TextureData;
+			Data.AbilityTag = TagData;
+		}
 	}
 	else {
 		Data.SlotTexture = nullptr;
@@ -75,6 +76,11 @@ FCAS_SlotData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)
 	}
 
 	return Data;
+}
+
+void UCAS_QuickSlotWidgetComponent::UpdateQuickSlot(int32 index, FCAS_SlotData slotData)
+{
+	PlayerAbilities[index] = 
 }
 
 int32 UCAS_QuickSlotWidgetComponent::FindEmptyPlayerAbilityIndex()

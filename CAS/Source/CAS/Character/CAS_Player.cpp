@@ -100,14 +100,6 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::StealAbility(const FInputActionValue& Value)
 {
-
-	/*
-	레이캐스팅으로 적에게 레이가 닿으면
-	적에게 Press Key 뜨고
-	키 눌리면
-	적을 특정해서 AddAbility(This)실행
-	*/
-
 	FVector2D viewportSize;
 	if (GEngine && GEngine->GameViewport)
 	{
@@ -148,7 +140,7 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 				HitResult,
 				Start,
 				End,
-				ECC_GameTraceChannel3,
+				ECC_GameTraceChannel1,
 				TraceParams
 			);
 			if (bHit)
@@ -187,6 +179,46 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 
 }
 
+void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction02(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(1);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction03(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(2);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(3);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
 // Called when the game starts or when spawned
 void ACAS_Player::BeginPlay()
 {
@@ -217,6 +249,7 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->AddToViewport();
 		QuickSlotWidget->InitSetting(PlayerAbilityCount);
+		QuickSlotWidget->QuickSlotSwapEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::UpdateQuickSlot);
 	}
 
 }
@@ -255,6 +288,11 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
+
+		EnhancedInputComponent->BindAction(QuickSlot01, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction01);
+		EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
+		EnhancedInputComponent->BindAction(QuickSlot03, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction03);
+		EnhancedInputComponent->BindAction(QuickSlot04, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction04);
 
 	}
 	

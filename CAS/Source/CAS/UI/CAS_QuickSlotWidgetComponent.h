@@ -32,6 +32,7 @@ public:
 	int32 FindEmptyPlayerAbilityIndex();
 
 	FCAS_SlotData GetAbilityData(int32 index);
+	void UpdateQuickSlot(int32 index, FCAS_SlotData slotData);
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Abilities)

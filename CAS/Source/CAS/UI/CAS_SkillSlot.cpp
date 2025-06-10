@@ -4,6 +4,7 @@
 #include "UI/CAS_SkillSlot.h"
 #include "UI/CAS_QuickSlotWidget.h"
 #include "Components/Image.h"
+#include "Character/CAS_Player.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
 #include "Blueprint/WidgetTree.h"
 #include "Blueprint/DragDropOperation.h"
@@ -64,9 +65,9 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 {
 	if (auto otherSlot = Cast<UCAS_SkillSlot>(InOperation->Payload))
 	{
-		UWidgetTree* widgetTree = this->WidgetTree;
+		auto player = Cast<ACAS_Player>(GetOwningPlayerPawn());
 		
-		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(widgetTree->RootWidget);
+		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(player->GetQuickSlotWidget());
 		if (quickSlotWidget->IsValidLowLevel())
 		{
 			quickSlotWidget->SwapSlots(this, otherSlot);
