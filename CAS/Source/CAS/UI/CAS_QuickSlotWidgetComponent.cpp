@@ -60,7 +60,7 @@ void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)
 	if (slotData.SlotTexture == nullptr) {
 		return;
 	}
-	PlayerAbilities;
+
 	auto player = Cast<ACAS_Player>(GetOwner());
 	if (player->IsValidLowLevel()) {
 		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
@@ -75,7 +75,6 @@ void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)
 
 		PlayerAbilities[index] = slotData;
 	}
-	PlayerAbilities;
 }
 
 FCAS_SlotData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)
