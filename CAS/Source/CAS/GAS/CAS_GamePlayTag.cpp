@@ -16,6 +16,7 @@ namespace CAS_GamePlayTag {
 
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Attack_TEST, "Effect.Attack.TEST")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_Evade, "Effect.Move.Evade")
+	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_SuperJump, "Effect.Move.SuperJump")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_SuperSpeed, "Effect.Move.SuperSpeed")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Status_Stun, "Effect.Status.Stun")
 

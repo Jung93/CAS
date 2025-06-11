@@ -11,6 +11,8 @@ UCAS_AttributeSet::UCAS_AttributeSet()
 	InitHealth(3.0f);
 	InitMaxHealth(6.0f);
 	InitWalkSpeed(500.0f);
+	InitJumpForce(700.0f);
+
 }
 
 void UCAS_AttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
@@ -42,4 +44,9 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 		SpeedChanged.Broadcast(speed);
 	}
 
+	if (Data.EvaluatedData.Attribute == GetJumpForceAttribute())
+	{
+		int32 force = GetJumpForce();
+		JumpForceChanged.Broadcast(force);
+	}
 }

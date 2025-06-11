@@ -8,7 +8,14 @@
 ACAS_EnemyCapt_SuperJump::ACAS_EnemyCapt_SuperJump()
 {
 
-	GetCharacterMovement()->JumpZVelocity = 1200.0f;
+}
+
+void ACAS_EnemyCapt_SuperJump::BeginPlay()
+{
+	Super::BeginPlay();
+
+	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
+
 }
 
 void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -17,7 +24,7 @@ void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* Player
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::Jump);
 
 	}
 }

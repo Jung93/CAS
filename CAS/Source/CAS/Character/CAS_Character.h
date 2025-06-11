@@ -42,6 +42,9 @@ public:
 	void SetHp(int32 value);
 	void SetWalkSpeed(int32 value);
 
+	void SetJumpForce(float value);
+	void OnJumpForceChanged(const FOnAttributeChangeData& Data);
+
 	virtual void ActivateAbility(const FGameplayTag tag);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	void GetActiveAbilitiesWithTags(FGameplayTagContainer AbilityTags, TArray<UCAS_GameplayAbility*>& Abilities);

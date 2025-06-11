@@ -18,6 +18,8 @@ public:
 
 	ACAS_EnemyCapt_SuperJump();
 
+	virtual void BeginPlay() override;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	void ActivateAbility(const FInputActionValue& Value);
 

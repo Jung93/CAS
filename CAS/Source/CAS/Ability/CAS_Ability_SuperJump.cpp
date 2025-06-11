@@ -24,11 +24,80 @@ void UCAS_Ability_SuperJump::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 	if (Task->IsValidLowLevel()) {
 		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
+
+		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));
+
+		JumpTarget(owner, 1);
 	}
+
 }
 
 void UCAS_Ability_SuperJump::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+}
+
+FActiveGameplayEffectHandle UCAS_Ability_SuperJump::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+{
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
+	if (SpecHandle.IsValid())
+	{
+		//SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperSpeed")), 2.0f);
+		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+
+		return Handle;
+	}
+
+	return FActiveGameplayEffectHandle();
+}
+
+void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
+{
+	if (!TagEffectClassJump)
+		return;
+
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+		EffectContextHandle.AddInstigator(PlayerState, nullptr);
+
+		if (AbilitySystemComp->GetActiveGameplayEffect(ActiveEffectHandle) == nullptr)
+		{
+			FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(TagEffectClassJump, GetAbilityLevel());
+			ActiveEffectHandle = ApplyGamePlayEffect(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		}
+		else
+		{
+			AbilitySystemComp->RemoveActiveGameplayEffect(ActiveEffectHandle);
+			ActiveEffectHandle = FActiveGameplayEffectHandle();
+		}
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+
+			FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+			EffectContextHandle.AddInstigator(CharacterState, nullptr);
+
+			if (AbilitySystemComp->GetActiveGameplayEffect(ActiveEffectHandle) == nullptr)
+			{
+				FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(TagEffectClassJump, GetAbilityLevel());
+				ActiveEffectHandle = ApplyGamePlayEffect(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			}
+			else
+			{
+				AbilitySystemComp->RemoveActiveGameplayEffect(ActiveEffectHandle);
+				ActiveEffectHandle = FActiveGameplayEffectHandle();
+			}
+		}
+	}
+
+
 
 }

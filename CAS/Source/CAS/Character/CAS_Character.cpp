@@ -67,7 +67,14 @@ void ACAS_Character::BeginPlay()
 		}		
 
 		AttributeSet->SpeedChanged.AddUObject(this, &ThisClass::SetWalkSpeed);
+		//AttributeSet->JumpForceChanged.AddUObject(this, &ThisClass::SetJumpForce);
 	}
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AttributeSet->GetJumpForceAttribute()).AddUObject(this, &ACAS_Character::OnJumpForceChanged);
+
+
+	//AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetJumpForceAttribute().AddUObject(this, &ACAS_Character::SetJumpForce));
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
@@ -136,6 +143,19 @@ void ACAS_Character::SetWalkSpeed(int32 value)
 	GetCharacterMovement()->MaxWalkSpeed = value;
 
 }
+
+void ACAS_Character::SetJumpForce(float value)
+{
+	GetCharacterMovement()->JumpZVelocity = value;
+
+}
+
+void ACAS_Character::OnJumpForceChanged(const FOnAttributeChangeData& Data)
+{
+	SetJumpForce(Data.NewValue); // JumpZVelocity 반영
+}
+
+
 
 void ACAS_Character::ActivateAbility(const FGameplayTag tag)
 {

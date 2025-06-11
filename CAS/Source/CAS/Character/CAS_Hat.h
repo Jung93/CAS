@@ -65,5 +65,5 @@ private:
 	bool _isThrowing = false;
 	bool _isReturning = false;
 	float _capturingTime = 0.0f;
-	float _totalMoveTime = 2.0f;
+	float _totalMoveTime = 1.0f;
 };

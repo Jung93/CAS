@@ -14,6 +14,7 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FHpChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FSpeedChangedEvent, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FJumpForceChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE(FDeadEvent);
 
 UCLASS()
@@ -29,9 +30,11 @@ public:
 	ATTRIBUTE_ACCESSORS(ThisClass, Health);
 	ATTRIBUTE_ACCESSORS(ThisClass, MaxHealth);
 	ATTRIBUTE_ACCESSORS(ThisClass, WalkSpeed);
+	ATTRIBUTE_ACCESSORS(ThisClass, JumpForce);
 	
 	FHpChangedEvent HpChanged;
 	FSpeedChangedEvent SpeedChanged;
+	FJumpForceChangedEvent JumpForceChanged;
 	FDeadEvent DeadEvent;
 
 
@@ -45,4 +48,6 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	FGameplayAttributeData WalkSpeed;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	FGameplayAttributeData JumpForce;
 };

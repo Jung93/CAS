@@ -89,7 +89,6 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			_isThrowing = false;
 			_isReturning = false;
 
-
 		}
 	}
 
@@ -105,7 +104,7 @@ void ACAS_Hat::Throw(const FVector& direction)
 
 	StartLocation = GetActorLocation();
 	MoveDirection = direction.GetSafeNormal();
-	TargetLocation = StartLocation + MoveDirection * 200.0f;
+	TargetLocation = StartLocation + MoveDirection * 600.0f;
 
 	_isThrowing = true;
 	_capturingTime = 0.0f;
@@ -116,12 +115,13 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 {
 	_capturingTime += DeltaTime;
 
-	float halfTime = _totalMoveTime / 2.0f;
+
+	float halfTime = _isReturning? _totalMoveTime * 0.8f : _totalMoveTime * 0.4f;
 	float lerpValue = (_capturingTime / halfTime);
 
 	if (!_isReturning)
 	{
-		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue * 3.0f);
+		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue);
 		SetActorLocation(NewLocation);
 
 		if (_capturingTime >= halfTime)

@@ -2,7 +2,7 @@
 
 
 #include "Ability_Task/CAS_Task_SuperJump.h"
-//#include "Character/CAS_EnemyCapt.h"
+#include "Character/CAS_EnemyCapt.h"
 
 UCAS_Task_SuperJump* UCAS_Task_SuperJump::Task_SuperJump(UGameplayAbility* OwningAbility, FName TaskName)
 {
@@ -13,17 +13,10 @@ UCAS_Task_SuperJump* UCAS_Task_SuperJump::Task_SuperJump(UGameplayAbility* Ownin
 
 void UCAS_Task_SuperJump::Activate()
 {
-	auto owner = Cast<ACAS_Character>(GetAvatarActor());
-
-	if (!owner->IsValidLowLevel())
-		return;
-
-	owner->Jump();
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();
 	auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
 	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
-
 }
