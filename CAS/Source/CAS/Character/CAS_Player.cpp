@@ -177,8 +177,25 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 	{
 		controller->bShowMouseCursor = true;
 
-	}
+		FInputModeGameAndUI InputMode;
+		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+		InputMode.SetHideCursorDuringCapture(false);
 
+		controller->SetInputMode(InputMode);
+	}
+}
+
+void ACAS_Player::HideMouse(const FInputActionValue& Value)
+{
+	auto controller = Cast<ACAS_PlayerController>(GetController());
+
+	if (controller->IsValidLowLevel())
+	{
+		controller->bShowMouseCursor = false;
+
+		FInputModeGameOnly InputMode;
+		controller->SetInputMode(InputMode);
+	}
 }
 
 void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
@@ -291,7 +308,9 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
+
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
+		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
 
 		EnhancedInputComponent->BindAction(QuickSlot01, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction01);
 		EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
