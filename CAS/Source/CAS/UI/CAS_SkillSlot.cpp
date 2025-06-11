@@ -63,6 +63,7 @@ void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPo
 
 bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
 {
+	bool result = Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 	if (auto otherSlot = Cast<UCAS_SkillSlot>(InOperation->Payload))
 	{
 		auto player = Cast<ACAS_Player>(GetOwningPlayerPawn());
@@ -70,9 +71,9 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(player->GetQuickSlotWidget());
 		if (quickSlotWidget->IsValidLowLevel())
 		{
-			quickSlotWidget->SwapSlots(this, otherSlot);
-			return true;
+			result = true;
+			quickSlotWidget->SwapSlots(otherSlot, this);
 		}
 	}
-	return Super::NativeOnDrop(InGeometry,InDragDropEvent,InOperation);
+	return result;
 }
