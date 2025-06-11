@@ -36,6 +36,10 @@ protected:
 	void ShowMouse(const FInputActionValue& Value);
 	void HideMouse(const FInputActionValue& Value);
 
+	void QuickSlotFunction01(const FInputActionValue& Value);
+	void QuickSlotFunction02(const FInputActionValue& Value);
+	void QuickSlotFunction03(const FInputActionValue& Value);
+	void QuickSlotFunction04(const FInputActionValue& Value);
 
 protected:
 
@@ -71,6 +75,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShowMouseAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* QuickSlot01;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* QuickSlot02;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* QuickSlot03;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* QuickSlot04;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -93,6 +106,7 @@ public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
+	class UCAS_QuickSlotWidget* GetQuickSlotWidget() { return QuickSlotWidget; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 	void RemovePlayerAbility();
 protected:

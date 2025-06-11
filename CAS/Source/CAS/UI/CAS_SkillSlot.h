@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "CAS_SkillSlot.generated.h"
 
+
 USTRUCT(BlueprintType)
 struct FCAS_SlotData
 {
@@ -29,6 +30,7 @@ public:
     const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
     int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
 
+protected:
     void UpdateIcon();
 
 protected:
@@ -41,6 +43,9 @@ protected:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     class UTexture2D* DefaultTexture;
+
+    UPROPERTY(EditDefaultsOnly, Category = "QuickSlot")
+    TSubclassOf<UCAS_SkillSlot> SkillSlotWidgetClass;
 protected:
     FCAS_SlotData DragSlotData;
 };
