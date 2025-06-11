@@ -54,15 +54,28 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 	return false;
 }
 
-void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility()
+void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)
 {
-	//auto player = Cast<ACAS_Player>(GetOwner());
-	//if (player->IsValidLowLevel()) {
-	//	auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
-	//
-	//	ASC->RemoveAbility(AbilitySpec);
-	//
-	//}
+	FCAS_SlotData slotData = PlayerAbilities[index];
+	if (slotData.SlotTexture == nullptr) {
+		return;
+	}
+	PlayerAbilities;
+	auto player = Cast<ACAS_Player>(GetOwner());
+	if (player->IsValidLowLevel()) {
+		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
+		
+		FName tagName = slotData.AbilityTag;
+
+		ASC->RemoveAbility(FGameplayTag::RequestGameplayTag(tagName));
+
+		slotData.SlotIndex = index;
+		slotData.SlotTexture = nullptr;
+		slotData.AbilityTag = FName(TEXT("None"));
+
+		PlayerAbilities[index] = slotData;
+	}
+	PlayerAbilities;
 }
 
 FCAS_SlotData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)

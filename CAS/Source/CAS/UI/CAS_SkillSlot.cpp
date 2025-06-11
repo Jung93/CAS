@@ -34,6 +34,15 @@ FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 	{
 		return UWidgetBlueprintLibrary::DetectDragIfPressed(InMouseEvent, this, EKeys::LeftMouseButton).NativeReply;
 	}
+	if (InMouseEvent.IsMouseButtonDown(EKeys::RightMouseButton))
+	{
+		auto player = Cast<ACAS_Player>(GetOwningPlayerPawn());
+		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(player->GetQuickSlotWidget());
+		if (quickSlotWidget->IsValidLowLevel()) {
+			quickSlotWidget->RemoveAbilityEvent.Broadcast(this->GetSlotIndex());
+		}
+
+	}
 	return Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 }
 

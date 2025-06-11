@@ -8,6 +8,7 @@
 #include "CAS_QuickSlotWidget.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
+DECLARE_MULTICAST_DELEGATE_OneParam(FRemoveAbilityEvent, int32);
 
 UCLASS()
 class CAS_API UCAS_QuickSlotWidget : public UUserWidget
@@ -21,6 +22,8 @@ public:
 	void RemoveSlotData(int32 index);
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
+	FRemoveAbilityEvent RemoveAbilityEvent;
+
 protected:
 	int32 SlotCount;
 protected:

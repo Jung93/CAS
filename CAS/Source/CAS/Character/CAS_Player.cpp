@@ -250,6 +250,8 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidget->AddToViewport();
 		QuickSlotWidget->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->QuickSlotSwapEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::UpdateQuickSlot);
+		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::RemovePlayerAbility);
+		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
 
 }
@@ -345,11 +347,4 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 	}
 	//이번에 들어온 어빌리티가 이미 있을경우 
 	
-}
-
-void ACAS_Player::RemovePlayerAbility()
-{
-	QuickSlotWidgetComponent->RemovePlayerAbility();
-
-
 }
