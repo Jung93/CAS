@@ -7,9 +7,9 @@
 #include "UI/CAS_SkillSlot.h"
 #include "CAS_QuickSlotWidget.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
+DECLARE_MULTICAST_DELEGATE_OneParam(FRemoveAbilityEvent, int32);
+
 UCLASS()
 class CAS_API UCAS_QuickSlotWidget : public UUserWidget
 {
@@ -20,6 +20,10 @@ public:
 	const FCAS_SlotData& GetSlotData(int32 SlotIndex) const { return SkillSlots[SlotIndex]->GetSlotData(); }
 	void SetSlotData(int32 index, const FCAS_SlotData& AbilityData);
 	void RemoveSlotData(int32 index);
+
+	FQuickSlotSwapEvent QuickSlotSwapEvent;
+	FRemoveAbilityEvent RemoveAbilityEvent;
+
 protected:
 	int32 SlotCount;
 protected:

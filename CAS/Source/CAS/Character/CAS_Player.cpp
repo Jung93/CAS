@@ -13,7 +13,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
 
-
+#include "Character/CAS_EnemyCapt.h"
 #include "Character/CAS_Hat.h"
 #include "Character/CAS_PlayerState.h"
 
@@ -102,70 +102,65 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 
 void ACAS_Player::StealAbility(const FInputActionValue& Value)
 {
+	FVector2D viewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(viewportSize);
+	}
+	
+	bool isPressed = Value.Get<bool>();
+	auto controller = Cast<ACAS_PlayerController>(GetController());
+	if (controller != nullptr && isPressed) {
+		auto screenX = viewportSize.X / 2.0f;
+		auto screenY = viewportSize.Y / 2.0f;
+	
+		FVector WorldLocation;
+		FVector WorldDirection;
+	
+		if (controller->DeprojectScreenPositionToWorld(screenX, screenY, WorldLocation, WorldDirection)) {
+			FVector Start = WorldLocation;
+			FVector End = Start + (WorldDirection * 1000.0f);
+	
+			FHitResult HitResult;
+			FCollisionQueryParams TraceParams(FName(TEXT("CAS_line")), true, this);
+			TraceParams.bTraceComplex = true;
+			TraceParams.bReturnPhysicalMaterial = false;
+	
+			DrawDebugLine(
+				GetWorld(),
+				Start,
+				End,
+				FColor::Red,   
+				false,         
+				3.0f,          
+				0,             
+				5.0f           
+			);
 
-	/*
-	레이캐스팅으로 적에게 레이가 닿으면
-	적에게 Press Key 뜨고
-	키 눌리면
-	적을 특정해서 AddAbility(This)실행
-	*/
 
-	//FVector2D viewportSize;
-	//if (GEngine && GEngine->GameViewport)
-	//{
-	//	GEngine->GameViewport->GetViewportSize(viewportSize);
-	//}
-	//
-	//bool isPressed = Value.Get<bool>();
-	//auto controller = Cast<ARSP_PlayerController>(GetController());
-	//if (controller != nullptr && isPressed) {
-	//	auto screenX = viewportSize.X / 2.0f;
-	//	auto screenY = viewportSize.Y / 2.0f;
-	//
-	//	FVector WorldLocation;
-	//	FVector WorldDirection;
-	//
-	//	if (controller->DeprojectScreenPositionToWorld(screenX, screenY, WorldLocation, WorldDirection)) {
-	//		FVector Start = WorldLocation;
-	//		FVector End = Start + (WorldDirection * 1000.0f);
-	//
-	//		FHitResult HitResult;
-	//		FCollisionQueryParams TraceParams(FName(TEXT("RSP_line")), true, this);
-	//		TraceParams.bTraceComplex = true;
-	//		TraceParams.bReturnPhysicalMaterial = false;
-	//
-	//		bool bHit = GetWorld()->LineTraceSingleByChannel(
-	//			HitResult,
-	//			Start,
-	//			End,
-	//			ECC_GameTraceChannel6,
-	//			TraceParams
-	//		);
-	//		if (bHit)
-	//		{
-	//			AActor* HitActor = HitResult.GetActor();
-	//			if (HitActor)
-	//			{
-	//				auto RSP_itemShop = Cast<ARSP_ItemShop>(HitActor);
-	//				auto RSP_item = Cast<ARSP_Item>(HitActor);
-	//				if (RSP_itemShop) {
-	//					if (RSP_itemShop->bCanInteraction)
-	//					{
-	//						RSP_itemShop->bCanInteraction = false;
-	//						RSP_itemShop->OpenShopUI(this);
-	//					}
-	//				}
-	//				if (RSP_item) {
-	//					if (RSP_item->bCanInteraction) {
-	//						RSP_item->bCanInteraction = false;
-	//						RSP_item->ActivateItemEffect(this);
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//
-	//}
+			bool bHit = GetWorld()->LineTraceSingleByChannel(
+				HitResult,
+				Start,
+				End,
+				ECC_GameTraceChannel1,
+				TraceParams
+			);
+			if (bHit)
+			{
+				AActor* HitActor = HitResult.GetActor();
+				if (HitActor)
+				{
+					auto Enemy = Cast<ACAS_EnemyCapt>(HitActor);
+					
+					if (Enemy->IsValidLowLevel()) {
+						Enemy->AddPlayerAbility(this);
+					}
+					
+				}
+			}
+		}
+	
+	}
 }
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
@@ -182,27 +177,48 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 	{
 		controller->bShowMouseCursor = true;
 
-		FInputModeGameAndUI InputMode;
-		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-		InputMode.SetHideCursorDuringCapture(false);
-
-		controller->SetInputMode(InputMode);
-
 	}
 
 }
 
-void ACAS_Player::HideMouse(const FInputActionValue& Value)
+void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
 {
-	auto controller = Cast<ACAS_PlayerController>(GetController());
-
-	if (controller->IsValidLowLevel())
-	{
-		controller->bShowMouseCursor = false;
-
-		FInputModeGameOnly InputMode;
-		controller->SetInputMode(InputMode);
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
 	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction02(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(1);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction03(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(2);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(3);
+	if (SlotData.SlotTexture == nullptr) {
+		return;
+	}
+	FName name = SlotData.AbilityTag;
+	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
 }
 
 // Called when the game starts or when spawned
@@ -235,6 +251,9 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->AddToViewport();
 		QuickSlotWidget->InitSetting(PlayerAbilityCount);
+		QuickSlotWidget->QuickSlotSwapEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::UpdateQuickSlot);
+		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::RemovePlayerAbility);
+		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
 
 }
@@ -272,10 +291,12 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
 		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
-
-		//Mouse Pointer
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
-		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
+
+		EnhancedInputComponent->BindAction(QuickSlot01, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction01);
+		EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
+		EnhancedInputComponent->BindAction(QuickSlot03, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction03);
+		EnhancedInputComponent->BindAction(QuickSlot04, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction04);
 
 	}
 	
@@ -320,22 +341,12 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 		return;
 	}
 
-	QuickSlotWidgetComponent->AddPlayerAbility(Index,newAbility);
-	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+	bool bAddPlayerAbility = QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
 
-	QuickSlotWidget->SetSlotData(Index, SlotData);
+	if (bAddPlayerAbility) {
+		auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+		QuickSlotWidget->SetSlotData(Index, SlotData);
+	}
+	//이번에 들어온 어빌리티가 이미 있을경우 
+	
 }
-
-void ACAS_Player::RemovePlayerAbility()
-{
-	QuickSlotWidgetComponent->RemovePlayerAbility();
-
-
-}
-
-/*
-*변경점
-어빌리티에 아이콘도 넣어줘야함
-적에게 기본어빌리티와 플레이어에게 넘겨줄 어빌리티를 구분해서 넣어줘야함
-*/
-

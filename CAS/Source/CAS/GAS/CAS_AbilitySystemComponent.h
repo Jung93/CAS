@@ -16,10 +16,11 @@ class CAS_API UCAS_AbilitySystemComponent : public UAbilitySystemComponent
 	GENERATED_BODY()
 public:
 	void AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& Abilities);
-	TArray<FGameplayAbilitySpecHandle> SpecHandles;
+	void RemoveAbility(const FGameplayTag& Tag);
 	void ActivateAbility(const FGameplayTag& Tag);
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<class UCAS_GameplayAbility*>& Abilities);
 
 private:
+	TArray<FGameplayAbilitySpecHandle> SpecHandles;
 	FGameplayAbilitySpec* FindAbilitySpecByTag(const FGameplayTag& Tag);
 };
