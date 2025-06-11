@@ -39,7 +39,7 @@ void UCAS_Ability_SuperSpeed::EndAbility(const FGameplayAbilitySpecHandle Handle
 
 }
 
-void UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+FActiveGameplayEffectHandle  UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
 {
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
@@ -47,15 +47,20 @@ void UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_Character* Target, TSubcl
 	if (SpecHandle.IsValid())
 	{
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperSpeed")), 2.0f);
-		AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+
+		return Handle;
 	}
+
+	return FActiveGameplayEffectHandle();
 }
 
 void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
-	if (!TagEffectClass || !TagEffectClassOther) {
+	if (!TagEffectClass || !TagEffectClassEnemy || !TagEffectClassPlayer) {
 		return;
 	}
+
 	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
 	UAbilitySystemComponent* AbilitySystemComp;
 	if (PlayerState->IsValidLowLevel()) {
@@ -63,8 +68,21 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 		EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
+		// Delay 타이머 설정
+		FTimerHandle TimerHandle;
+		FTimerDelegate TimerDelegate;
+
 		ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
-		ApplyGamePlayEffect(Target, TagEffectClassOther, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		FActiveGameplayEffectHandle Handle = ApplyGamePlayEffect(Target, TagEffectClassEnemy, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+		TimerDelegate.BindLambda([this, Target, TaskLevel, EffectContextHandle, AbilitySystemComp, Handle]()
+		{
+			ApplyGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			AbilitySystemComp->RemoveActiveGameplayEffect(Handle);
+		});
+
+		Target->GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, 5.0f, false);
+
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
@@ -74,7 +92,7 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 			EffectContextHandle.AddInstigator(CharacterState, nullptr);
 
 			ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
-			ApplyGamePlayEffect(Target, TagEffectClassOther, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			ApplyGamePlayEffect(Target, TagEffectClassEnemy, TaskLevel, EffectContextHandle, AbilitySystemComp);
 		}
 	}
 

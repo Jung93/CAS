@@ -13,9 +13,11 @@ UCAS_Task_SuperSpeed* UCAS_Task_SuperSpeed::Task_SuperSpeed(UGameplayAbility* Ow
 void UCAS_Task_SuperSpeed::Activate()
 {
 
+	auto Handle = Ability->GetCurrentAbilitySpecHandle();
+	auto ActorInfo = Ability->GetCurrentActorInfo();
+	auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
-
-
+	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 }
 
 
