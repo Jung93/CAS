@@ -108,7 +108,6 @@ public:
 
 	class UCAS_QuickSlotWidget* GetQuickSlotWidget() { return QuickSlotWidget; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
-	void RemovePlayerAbility();
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
