@@ -25,7 +25,7 @@ void UCAS_Ability_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 	auto Task = UCAS_Task_Dead::Task_Dead(this, "TEST_Attack", DeadMontage, 1.0f);
 	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 	}
 }

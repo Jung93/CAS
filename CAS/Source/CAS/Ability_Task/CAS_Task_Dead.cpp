@@ -53,6 +53,6 @@ void UCAS_Task_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNotif
 	ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
 	Character->Controller->UnPossess();
-	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
+	AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 
 }

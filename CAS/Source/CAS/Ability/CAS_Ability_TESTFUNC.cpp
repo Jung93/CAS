@@ -47,7 +47,7 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	auto Task = UCAS_Task_Attack::Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
 	if (Task->IsValidLowLevel()) {
 		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 	}
 	

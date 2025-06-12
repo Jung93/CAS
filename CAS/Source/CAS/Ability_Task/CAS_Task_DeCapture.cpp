@@ -73,10 +73,5 @@ void UCAS_Task_DeCapture::Activate()
 	owner->ClearHat();
 	//owner->BeStunned();
 
-	auto Handle = Ability->GetCurrentAbilitySpecHandle();
-	auto ActorInfo = Ability->GetCurrentActorInfo();
-	auto ActivationInfo = Ability->GetCurrentActivationInfo();
-
-	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
-
+	TaskEndEvent.Broadcast();
 }
