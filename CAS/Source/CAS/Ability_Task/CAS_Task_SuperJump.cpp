@@ -13,6 +13,7 @@ UCAS_Task_SuperJump* UCAS_Task_SuperJump::Task_SuperJump(UGameplayAbility* Ownin
 
 void UCAS_Task_SuperJump::Activate()
 {
+	Super::Activate();
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();

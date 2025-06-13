@@ -18,6 +18,7 @@ UCAS_Task_DeCapture* UCAS_Task_DeCapture::Task_DeCapture(UGameplayAbility* Ownin
 
 void UCAS_Task_DeCapture::Activate()
 {
+	Super::Activate();
 
 	auto owner = Cast<ACAS_EnemyCapt>(GetAvatarActor());
 

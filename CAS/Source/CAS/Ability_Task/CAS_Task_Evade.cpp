@@ -20,6 +20,8 @@ UCAS_Task_Evade* UCAS_Task_Evade::Task_Evade(UGameplayAbility* OwningAbility, FN
 
 void UCAS_Task_Evade::Activate()
 {
+	Super::Activate();
+
 	if (!Montage) {
 		return;
 	}

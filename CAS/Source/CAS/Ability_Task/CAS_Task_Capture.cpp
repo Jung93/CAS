@@ -13,6 +13,8 @@ UCAS_Task_Capture* UCAS_Task_Capture::Task_Capture(UGameplayAbility* OwningAbili
 
 void UCAS_Task_Capture::Activate()
 {
+	Super::Activate();
+
 	auto player = Cast<ACAS_Player>((GetAvatarActor()));
 	if (player->IsValidLowLevel()) {
 

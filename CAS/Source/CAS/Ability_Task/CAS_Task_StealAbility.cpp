@@ -12,7 +12,7 @@ UCAS_Task_StealAbility* UCAS_Task_StealAbility::Task_StealAbility(UGameplayAbili
 
 void UCAS_Task_StealAbility::Activate()
 {
-
+	Super::Activate();
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();
