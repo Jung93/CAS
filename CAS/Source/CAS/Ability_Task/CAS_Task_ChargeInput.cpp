@@ -3,7 +3,7 @@
 
 #include "Ability_Task/CAS_Task_ChargeInput.h"
 
-UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate,float MaxChargeTime)
+UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float MaxChargeTime, float Rate)
 {
 	if (!MontageToPlay) {
 		return nullptr;
@@ -21,11 +21,11 @@ void UCAS_Task_ChargeInput::Activate()
 {
 	Super::Activate();
 
-	auto Character = Cast<ACAS_Character>(Ability->GetOwningActorFromActorInfo());
-	auto ASC = Character->GetAbilitySystemComponent();
-	
+	//auto Character = Cast<ACAS_Character>(Ability->GetOwningActorFromActorInfo());
+	//auto ASC = Character->GetAbilitySystemComponent();
+	//
 	//ASC->IsInputPressed(Ability->GetCurrentAbilitySpecHandle()
-	ASC->AbilitySpecInputPressed
-
-	ChargeReleaseEvent.Broadcast(ChargeTime);
+	//ASC->AbilitySpecInputPressed
+	//
+	//ChargeReleaseEvent.Broadcast(ChargeTime);
 }
