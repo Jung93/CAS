@@ -12,7 +12,7 @@ void UCAS_Ability_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	//auto WaitRelease = UCAS_Task_ChargeInput::CAS_Task_ChargeInput(this,"ChargeInput",);
+	auto WaitRelease = UCAS_Task_ChargeInput::CAS_Task_ChargeInput(this,"ChargeInput",);
 	//WaitRelease->ChargeReleaseEvent.AddDynamic(this, &UGA_VaultBreaker::OnChargeReleased);
 	//WaitRelease->ReadyForActivation();
 }

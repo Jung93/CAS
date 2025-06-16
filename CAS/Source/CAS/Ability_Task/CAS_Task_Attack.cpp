@@ -39,11 +39,6 @@ void UCAS_Task_Attack::Activate()
 	}
 }
 
-void UCAS_Task_Attack::OnDestroy(bool bInOwnerFinished)
-{
-	Super::OnDestroy(bInOwnerFinished);
-}
-
 void UCAS_Task_Attack::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 	FHitResult hitResult;
