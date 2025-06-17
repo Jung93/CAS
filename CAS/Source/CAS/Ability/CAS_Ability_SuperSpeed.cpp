@@ -83,7 +83,6 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 
 		Target->GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, 5.0f, false);
 
-
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());

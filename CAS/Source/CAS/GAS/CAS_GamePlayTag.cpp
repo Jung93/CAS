@@ -8,6 +8,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_TEST, "Ability.Attack.TEST")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_Capture, "Ability.Attack.Capture")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_DeCapture, "Ability.Attack.DeCapture")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_FireBreath, "Ability.Attack.FireBreath")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_Evade, "Ability.Move.Evade")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Dead, "Ability.State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Invincible, "Ability.State.Invincible")
@@ -20,10 +21,16 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_SuperSpeed, "Effect.Move.SuperSpeed")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Status_Stun, "Effect.Status.Stun")
 
+
+	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_FireBreath, "GameplayCue.FireBreath")
+
+
 	UE_DEFINE_GAMEPLAY_TAG(State_TakeDamage, "State.TakeDamage")
 	UE_DEFINE_GAMEPLAY_TAG(State_Nomal, "State.Nomal")
 	UE_DEFINE_GAMEPLAY_TAG(State_Dead, "State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(State_Invincible, "State.Invincible")
 	UE_DEFINE_GAMEPLAY_TAG(State_Ability_Attacking, "State.Ability.Attacking")
+
+
 		
 }
