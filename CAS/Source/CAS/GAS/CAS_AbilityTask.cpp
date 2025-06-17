@@ -3,6 +3,3 @@
 
 #include "GAS/CAS_AbilityTask.h"
 
-void UCAS_AbilityTask::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
-{
-}

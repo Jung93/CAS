@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "Ability_Task/CAS_Task_Attack.h"
+#include "Ability_Task/CAS_Task_PlayMontage.h"
 #include "CAS_Ability_TESTFUNC.generated.h"
 
 /**
@@ -32,7 +33,13 @@ protected:
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> TagEffectClass;
-
+protected:
 	UPROPERTY()
 	UCAS_Task_Attack* AttackTask;
+	UPROPERTY()
+	UCAS_Task_PlayMontage* PlayMontageTask;
+
+public:
+	UFUNCTION()
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };

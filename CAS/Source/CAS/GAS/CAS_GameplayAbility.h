@@ -24,6 +24,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	UTexture2D* AbilityIcon;
+
+	void CAS_EndAbility();
+public:
+	UFUNCTION()
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
+	
 protected:
 	
 };

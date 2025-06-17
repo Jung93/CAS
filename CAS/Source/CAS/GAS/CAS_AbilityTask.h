@@ -17,13 +17,7 @@ class CAS_API UCAS_AbilityTask : public UAbilityTask
 public:
 	FTaskEndEvent TaskEndEvent;
 	FAbilityEndEvent AbilityEndEvent;
-protected:
-	UFUNCTION()
-	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UAnimMontage> Montage;
-	UPROPERTY()
-	float PlayRate = 1.0f;
+	
 };
 
 

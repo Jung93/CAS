@@ -18,3 +18,17 @@ void UCAS_GameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		return;
 	}
 }
+
+void UCAS_GameplayAbility::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+}
+
+void UCAS_GameplayAbility::CAS_EndAbility()
+{
+	auto Handle = this->GetCurrentAbilitySpecHandle();
+	auto ActorInfo = this->GetCurrentActorInfo();
+	auto ActivationInfo = this->GetCurrentActivationInfo();
+
+	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+
+}

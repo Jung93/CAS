@@ -44,13 +44,15 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	1. 적에게 텔레포트하는 몽타주
 	2. 실제 텔레포트 하는 기능
 	*/
-	AttackTask = UCAS_Task_Attack::Task_Attack(this, "TEST_Attack", AttackMontage, 1.5f);
-	if (AttackTask->IsValidLowLevel()) {
-		AttackTask->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
-		AttackTask->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
-		AttackTask->ReadyForActivation();
+	AttackTask = UCAS_Task_Attack::Task_Attack(this, "TEST_Attack", 150.0f, 150.0f);
+	if (AttackTask) {
+
 	}
 	
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", AttackMontage, 1.5f);
+	if (PlayMontageTask) {
+		PlayMontageTask->ReadyForActivation();
+	}
 
 	//2.
 	/*
@@ -68,6 +70,9 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 
 void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	AttackTask->EndTask();
+	PlayMontageTask->EndTask();
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -90,7 +95,7 @@ void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclas
 void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
 	if (!DamageEffectClass || !TagEffectClass) {
-		return;
+		CAS_EndAbility();
 	}
 	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
 	UAbilitySystemComponent* AbilitySystemComp = nullptr;
@@ -112,4 +117,9 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 
+}
+
+void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	AttackTask->ReadyForActivation();
 }
