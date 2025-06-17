@@ -39,7 +39,6 @@ protected:
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;
 
-public:
-	UFUNCTION()
+public:	
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };

@@ -25,10 +25,6 @@ void UCAS_GameplayAbility::PlayAnimNotify(FName NotifyName, const FBranchingPoin
 
 void UCAS_GameplayAbility::CAS_EndAbility()
 {
-	auto Handle = this->GetCurrentAbilitySpecHandle();
-	auto ActorInfo = this->GetCurrentActorInfo();
-	auto ActivationInfo = this->GetCurrentActivationInfo();
-
-	EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);
 
 }

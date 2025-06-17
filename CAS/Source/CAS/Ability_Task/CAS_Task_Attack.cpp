@@ -60,7 +60,7 @@ void UCAS_Task_Attack::Activate()
 		1.0f
 	);
 
-	
+	TaskEndEvent.Broadcast();
 }
 
 
