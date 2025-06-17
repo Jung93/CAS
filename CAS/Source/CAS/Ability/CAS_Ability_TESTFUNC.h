@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Ability_Task/CAS_Task_Attack.h"
 #include "CAS_Ability_TESTFUNC.generated.h"
 
 /**
@@ -31,4 +32,7 @@ protected:
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> TagEffectClass;
+
+	UPROPERTY()
+	UCAS_Task_Attack* AttackTask;
 };

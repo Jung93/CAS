@@ -3,7 +3,7 @@
 
 #include "Ability_Task/CAS_Task_ChargeInput.h"
 
-UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate,float MaxChargeTime)
+UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float MaxChargeTime,float Rate)
 {
 	if (!MontageToPlay) {
 		return nullptr;
@@ -12,8 +12,8 @@ UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbil
 
 	Task->Montage = MontageToPlay;
 	Task->PlayRate = Rate;
-	Task->MaxCharageTime = MaxChargeTime;
-	Task->StartTime = OwningAbility->GetWorld()->GetTimeSeconds();
+	Task->MaxChargeTime = MaxChargeTime;
+	Task->StartTime = 0.0f;
 	return Task;
 }
 
@@ -21,11 +21,28 @@ void UCAS_Task_ChargeInput::Activate()
 {
 	Super::Activate();
 
-	auto Character = Cast<ACAS_Character>(Ability->GetOwningActorFromActorInfo());
-	auto ASC = Character->GetAbilitySystemComponent();
-	
-	//ASC->IsInputPressed(Ability->GetCurrentAbilitySpecHandle()
-	ASC->AbilitySpecInputPressed
+	if (!Ability || !Ability->GetCurrentActorInfo())
+	{
+		EndTask();
+		return;
+	}
+	StartTime = GetWorld()->GetTimeSeconds();
 
-	ChargeReleaseEvent.Broadcast(ChargeTime);
+	if (MaxChargeTime > 0.f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(
+			TimerHandle,
+			this,
+			&UCAS_Task_ChargeInput::ChargeReleased,
+			MaxChargeTime,
+			false
+		);
+	}
+	
+}
+
+void UCAS_Task_ChargeInput::ChargeReleased()
+{
+	//auto ChargeTime = 
+	//ChargeReleaseEvent.Broadcast(ChargeTime);
 }
