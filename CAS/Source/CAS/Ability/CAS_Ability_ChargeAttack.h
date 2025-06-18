@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Ability_Task/CAS_Task_ChargeInput.h"
 #include "CAS_Ability_ChargeAttack.generated.h"
 
 /**
@@ -16,9 +17,10 @@ class CAS_API UCAS_Ability_ChargeAttack : public UCAS_GameplayAbility
 public:
 	UCAS_Ability_ChargeAttack();
 
-	//virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
+	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo);
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
 	UFUNCTION()
 	void OnChargeReleased(float HeldTime);
@@ -27,7 +29,9 @@ protected:
 	float MaxChargeTime = 4.0f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ChargeAttack")
-	TObjectPtr<UAnimMontage> ChargeAttackMontage;
+	UAnimMontage* ChargeAttackMontage;
 
+protected:
+	UCAS_Task_ChargeInput* ChargeInputTask;
 	
 };

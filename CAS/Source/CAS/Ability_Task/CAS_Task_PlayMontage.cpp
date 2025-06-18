@@ -41,7 +41,7 @@ void UCAS_Task_PlayMontage::Activate()
 		}
 		AnimInstance->Montage_Play(Montage, PlayRate);
 		
-		TaskEndEvent.Broadcast();
+		
 	}
 }
 

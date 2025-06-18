@@ -25,7 +25,6 @@ void UCAS_Ability_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 
 	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "Dead", DeadMontage, 1.0f,true);
-
 	if (PlayMontageTask->IsValidLowLevel()) {
 		PlayMontageTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
 		PlayMontageTask->ReadyForActivation();
@@ -41,8 +40,6 @@ void UCAS_Ability_Dead::EndAbility(const FGameplayAbilitySpecHandle Handle, cons
 }
 void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
-	Super::PlayAnimNotify(NotifyName, BranchingPointPayload);
-
 	auto Character = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
 
 	Character->SetActorHiddenInGame(true);
@@ -53,4 +50,5 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 
 	Character->Controller->UnPossess();
 
+	PlayMontageTask->TaskEndEvent.Broadcast();
 }

@@ -15,9 +15,11 @@ class CAS_API UCAS_Task_ChargeInput : public UCAS_AbilityTask
 public:
 	static UCAS_Task_ChargeInput* CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName,float MaxChargeTime);
 	FChargeReleaseEvent ChargeReleaseEvent;
+
+	void ChargeReleased(int32 ReleasedTime);
+	void ChargeReleased();
 protected:
 	virtual void Activate() override;
-	void ChargeReleased();
 	float MaxChargeTime;
 	float StartTime;
 	FTimerHandle TimerHandle;

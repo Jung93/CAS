@@ -38,3 +38,8 @@ void UCAS_Ability_Evade::EndAbility(const FGameplayAbilitySpecHandle Handle, con
 	PlayMontageTask->EndTask();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
+
+void UCAS_Ability_Evade::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	PlayMontageTask->TaskEndEvent.Broadcast();
+}

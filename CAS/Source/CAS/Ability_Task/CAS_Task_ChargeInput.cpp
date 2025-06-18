@@ -36,8 +36,13 @@ void UCAS_Task_ChargeInput::Activate()
 	
 }
 
+void UCAS_Task_ChargeInput::ChargeReleased(int32 ReleasedTime)
+{
+	float ChargeTime = ReleasedTime - StartTime;
+	ChargeReleaseEvent.Broadcast(ChargeTime);
+}
+
 void UCAS_Task_ChargeInput::ChargeReleased()
 {
-	//auto ChargeTime = 
-	//ChargeReleaseEvent.Broadcast(ChargeTime);
+	ChargeReleaseEvent.Broadcast(MaxChargeTime);
 }
