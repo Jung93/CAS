@@ -30,7 +30,7 @@ void UCAS_Task_Capture::Activate()
 		auto ActorInfo = Ability->GetCurrentActorInfo();
 		auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
-		OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
+		AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 
 	}
 }

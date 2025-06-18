@@ -17,5 +17,4 @@ public:
 	static UCAS_Task_Dead* Task_Dead(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
 protected:
 	virtual void Activate() override;
-	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };

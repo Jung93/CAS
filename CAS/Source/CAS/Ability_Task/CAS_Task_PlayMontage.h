@@ -14,12 +14,13 @@ class CAS_API UCAS_Task_PlayMontage : public UCAS_AbilityTask
 {
 	GENERATED_BODY()
 public:
-	static UCAS_Task_PlayMontage* Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
+	static UCAS_Task_PlayMontage* Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f , bool bNotifyReady = false);
 protected:
 	virtual void Activate() override;
 	virtual void OnDestroy(bool bInOwnerFinished)override;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	TObjectPtr<UAnimMontage> Montage;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* Montage;
 	UPROPERTY()
 	float PlayRate = 1.0f;
+	bool bNotifyReady = false;
 };

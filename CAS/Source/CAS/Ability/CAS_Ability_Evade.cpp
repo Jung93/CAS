@@ -22,18 +22,19 @@ void UCAS_Ability_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	//if (!AttackMontage) {
-	//	return;
-	//}
+	if (!AttackMontage) {
+		return;
+	}
 
-	auto Task = UCAS_Task_Evade::Task_Evade(this, "Evade", AttackMontage, 1.5f);
-	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
-		Task->ReadyForActivation();
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "Evade", AttackMontage, 1.5f,true);
+	if (PlayMontageTask->IsValidLowLevel()) {
+		PlayMontageTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
+		PlayMontageTask->ReadyForActivation();
 	}
 }
 
 void UCAS_Ability_Evade::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	PlayMontageTask->EndTask();
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

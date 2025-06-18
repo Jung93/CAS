@@ -34,7 +34,7 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 		AttackTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
 	}
 	
-	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", AttackMontage, 1.5f);
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", AttackMontage, 1.5f,true);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
 	}

@@ -17,8 +17,6 @@ class CAS_API UCAS_Task_SuperJump : public UCAS_AbilityTask
 public:
 	static UCAS_Task_SuperJump* Task_SuperJump(UGameplayAbility* OwningAbility, FName TaskName);
 
-	FAbilityEndEvent OnAbilityEnd;
-
 protected:
 	virtual void Activate() override;
 };

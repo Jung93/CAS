@@ -17,8 +17,6 @@ class CAS_API UCAS_Task_SuperSpeed : public UCAS_AbilityTask
 public:
 	static UCAS_Task_SuperSpeed* Task_SuperSpeed(UGameplayAbility* OwningAbility, FName TaskName);
 
-	FAbilityEndEvent OnAbilityEnd;
-
 protected:
 	virtual void Activate() override;
 

@@ -18,7 +18,7 @@ void UCAS_Task_SuperSpeed::Activate()
 	auto ActorInfo = Ability->GetCurrentActorInfo();
 	auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
-	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
+	AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 }
 
 

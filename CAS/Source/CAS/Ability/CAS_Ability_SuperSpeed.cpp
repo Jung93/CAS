@@ -23,7 +23,7 @@ void UCAS_Ability_SuperSpeed::ActivateAbility(const FGameplayAbilitySpecHandle H
 
 	auto Task = UCAS_Task_SuperSpeed::Task_SuperSpeed(this, "SuperSpeed");
 	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 
 		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));

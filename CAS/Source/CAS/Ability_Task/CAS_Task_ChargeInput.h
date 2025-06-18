@@ -13,7 +13,7 @@ class CAS_API UCAS_Task_ChargeInput : public UCAS_AbilityTask
 {
 	GENERATED_BODY()
 public:
-	static UCAS_Task_ChargeInput* CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float MaxChargeTime,float Rate = 1.0f);
+	static UCAS_Task_ChargeInput* CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName,float MaxChargeTime);
 	FChargeReleaseEvent ChargeReleaseEvent;
 protected:
 	virtual void Activate() override;

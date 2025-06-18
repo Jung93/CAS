@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Ability_Task/CAS_Task_PlayMontage.h"
 #include "CAS_Ability_Evade.generated.h"
 
 /**
@@ -25,6 +26,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	TObjectPtr<UAnimMontage> AttackMontage;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	TSubclassOf<UGameplayEffect> DamageEffectClass;
+
+protected:
+	UPROPERTY()
+	UCAS_Task_PlayMontage* PlayMontageTask;
+
+public:
+
 };

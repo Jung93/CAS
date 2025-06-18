@@ -22,7 +22,7 @@ void UCAS_Ability_SuperJump::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 
 	auto Task = UCAS_Task_SuperJump::Task_SuperJump(this, "SuperJump");
 	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 
 		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));

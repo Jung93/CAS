@@ -3,15 +3,10 @@
 
 #include "Ability_Task/CAS_Task_ChargeInput.h"
 
-UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float MaxChargeTime,float Rate)
+UCAS_Task_ChargeInput* UCAS_Task_ChargeInput::CAS_Task_ChargeInput(UGameplayAbility* OwningAbility, FName TaskName, float MaxChargeTime)
 {
-	if (!MontageToPlay) {
-		return nullptr;
-	}
 	UCAS_Task_ChargeInput* Task = NewAbilityTask<UCAS_Task_ChargeInput>(OwningAbility, TaskName);
 
-	Task->Montage = MontageToPlay;
-	Task->PlayRate = Rate;
 	Task->MaxChargeTime = MaxChargeTime;
 	Task->StartTime = 0.0f;
 	return Task;

@@ -18,7 +18,7 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 	auto Task = UCAS_Task_Capture::Task_Capture(this, "Capture");
 	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 	}
 }
