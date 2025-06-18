@@ -11,12 +11,6 @@ void ACAS_EnemyCapt_ChargeAttack::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
 
-	auto mesh = GetMesh();
-	auto material = mesh->CreateDynamicMaterialInstance(0);
-	auto material2 = mesh->CreateDynamicMaterialInstance(1);
-
-	mesh->CreateDynamicMaterialInstance(0)->SetVectorParameterValue("Tint", FVector4(0.5f, 0.0f, 0.5f, 1.0f));
-	mesh->CreateDynamicMaterialInstance(1)->SetVectorParameterValue("Tint", FVector4(0.5f, 0.0f, 0.5f, 1.0f));
 }
 void ACAS_EnemyCapt_ChargeAttack::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
