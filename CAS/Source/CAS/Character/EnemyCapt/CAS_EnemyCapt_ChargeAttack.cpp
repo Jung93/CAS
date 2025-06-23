@@ -21,6 +21,7 @@ void ACAS_EnemyCapt_ChargeAttack::AddDefaultAbilites()
 	//DefaultAbilities.Add(EnemyAbility);
 	ASC->AddCharacterAbilities(DefaultAbilities);
 	FGameplayAbilitySpec Spec(EnemyAbility, 1, static_cast<int32>(EAbilityInputID::ChargeAttack));
+	auto temp = ASC->GetActivatableAbilities();
 	ASC->GiveAbility(Spec);
 }
 void ACAS_EnemyCapt_ChargeAttack::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

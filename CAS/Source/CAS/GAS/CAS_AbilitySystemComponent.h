@@ -17,6 +17,7 @@ class CAS_API UCAS_AbilitySystemComponent : public UAbilitySystemComponent
 public:
 	void AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& Abilities);
 	void RemoveAbility(const FGameplayTag& Tag);
+	void ClearAbilities();
 	void ActivateAbility(const FGameplayTag& Tag);
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<class UCAS_GameplayAbility*>& Abilities);
 

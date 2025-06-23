@@ -31,6 +31,24 @@ void UCAS_AbilitySystemComponent::RemoveAbility(const FGameplayTag& Tag)
 	}
 }
 
+void UCAS_AbilitySystemComponent::ClearAbilities()
+{
+	TArray<FGameplayAbilitySpecHandle> HandlesToRemove;
+
+	for (const FGameplayAbilitySpec& Spec : ActivatableAbilities.Items)
+	{
+		HandlesToRemove.Add(Spec.Handle);
+	}
+
+	for (const FGameplayAbilitySpecHandle& Handle : HandlesToRemove)
+	{
+		ClearAbility(Handle);
+	}
+
+	SpecHandles.Empty();
+}
+
+
 void UCAS_AbilitySystemComponent::ActivateAbility(const FGameplayTag& Tag)
 {
 	if (FGameplayAbilitySpec* Spec = FindAbilitySpecByTag(Tag))
