@@ -51,7 +51,7 @@ public:
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
 	virtual void AddDefaultAbilites() override;
 	void AddPlayerAbility(AActor* actor);
-private:
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 

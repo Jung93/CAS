@@ -129,7 +129,7 @@ void ACAS_Character::InitAbilitySystemComponent(AController* controller)
 	}
 	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
+	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 void ACAS_Character::SetHp(int32 value)

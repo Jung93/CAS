@@ -8,6 +8,7 @@
 #include "GAS/CAS_GamePlayTag.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
+#include "GAS/CAS_AbilityInputID.h"
 #include "CAS_Character.generated.h"
 
 class USpringArmComponent;

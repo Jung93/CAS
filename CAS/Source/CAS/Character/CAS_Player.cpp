@@ -333,7 +333,7 @@ void ACAS_Player::InitAbilitySystemComponent(AController* controller)
 	AbilitySystemComponent->InitAbilityActorInfo(playerState, this);
 	AttributeSet = playerState->GetAttributeSet();
 
-	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
+	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 UAbilitySystemComponent* ACAS_Player::GetAbilitySystemComponent() const
