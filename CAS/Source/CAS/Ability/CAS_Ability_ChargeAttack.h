@@ -33,6 +33,9 @@ protected:
 	UAnimMontage* ChargeAttackMontage;
 
 protected:
-	UCAS_Task_ChargeInput* ChargeInputTask;
+	//UCAS_Task_ChargeInput* ChargeInputTask;
 	
+	float StartTime = 0.0f; 
+	float EndTime = 0.0f;
+	float ChargedTime = 0.0f;
 };
