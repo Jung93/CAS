@@ -37,7 +37,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const;
-	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Player::GetAttributeSet, return nullptr;);}
+	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Character::GetAttributeSet, return nullptr;);}
 
 	virtual void AddDefaultAbilites();
 	virtual void InitAbilitySystemComponent(AController* controller);

@@ -18,18 +18,23 @@ void ACAS_EnemyCapt_SuperJump::BeginPlay()
 
 }
 
-void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void ACAS_EnemyCapt_SuperJump::ActivateEnemyAbility()
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-
-		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::Jump);
-
-	}
+	//ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
 }
 
-void ACAS_EnemyCapt_SuperJump::ActivateAbility(const FInputActionValue& Value)
-{
-	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
-}
+//void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+//
+//		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::Jump);
+//
+//	}
+//}
+//
+//void ACAS_EnemyCapt_SuperJump::ActivateAbility(const FInputActionValue& Value)
+//{
+//	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
+//}

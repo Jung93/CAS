@@ -20,12 +20,10 @@ public:
 	virtual void PostInitializeComponents() override;
 
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void ActivateAbility(const FInputActionValue& Value);
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AbilityAction;
-
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//void ActivateAbility(const FInputActionValue& Value);
+	virtual void ActivateEnemyAbility() override;
+	
 
 	UPROPERTY(EditAnywhere, Category = "Color")
 	FVector4 _color;
