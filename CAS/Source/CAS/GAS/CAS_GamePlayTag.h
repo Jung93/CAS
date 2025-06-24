@@ -12,6 +12,7 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Capture);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_DeCapture);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_FireBreath);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_ChargeAttack);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_Evade);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_SuperJump);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_SuperSpeed);
@@ -35,7 +36,7 @@ namespace CAS_GamePlayTag {
 
 
 	//StateState_TakeDamage
-	UE_DECLARE_GAMEPLAY_TAG_EXTERN();
+	//UE_DECLARE_GAMEPLAY_TAG_EXTERN();
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Nomal);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dead);

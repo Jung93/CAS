@@ -21,7 +21,7 @@ void ACAS_EnemyCapt_Evade::PostInitializeComponents()
 
 void ACAS_EnemyCapt_Evade::ActivateEnemyAbility()
 {
-	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.Evade"));
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.Evade"));
 }
 
 //void ACAS_EnemyCapt_Evade::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

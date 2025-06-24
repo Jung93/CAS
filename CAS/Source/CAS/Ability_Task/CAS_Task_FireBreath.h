@@ -21,5 +21,4 @@ public:
 protected:
 	virtual void Activate() override;
 
-	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
 };

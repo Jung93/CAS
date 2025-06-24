@@ -19,8 +19,6 @@ public:
 	ACAS_EnemyCapt_FireBreath();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void ActivateAbility(const FInputActionValue& Value);
+	virtual void ActivateEnemyAbility() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AbilityAction;
 };

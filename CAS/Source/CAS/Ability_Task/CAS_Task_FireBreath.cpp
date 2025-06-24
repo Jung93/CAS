@@ -57,9 +57,6 @@ void UCAS_Task_FireBreath::Activate()
 	auto ActorInfo = Ability->GetCurrentActorInfo();
 	auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
-	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
+	AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 }
 
-void UCAS_Task_FireBreath::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
-{
-}

@@ -13,11 +13,10 @@ void ACAS_EnemyCapt_FireBreath::SetupPlayerInputComponent(UInputComponent* Playe
 
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
-		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
 	}
 }
 
-void ACAS_EnemyCapt_FireBreath::ActivateAbility(const FInputActionValue& Value)
+void ACAS_EnemyCapt_FireBreath::ActivateEnemyAbility()
 {
-	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.FireBreath"));
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.FireBreath"));
 }

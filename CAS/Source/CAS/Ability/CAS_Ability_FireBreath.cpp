@@ -24,16 +24,12 @@ void UCAS_Ability_FireBreath::ActivateAbility(const FGameplayAbilitySpecHandle H
 	if (Task->IsValidLowLevel())
 	{
 		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 
 		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));
 
 		ReceiveTarget(owner, 1);
-
-		//auto controller = Cast<ACAS_PlayerController>(owner->GetController());
-
-		//owner->DisableInput(controller);
 
 	}
 
@@ -42,12 +38,6 @@ void UCAS_Ability_FireBreath::ActivateAbility(const FGameplayAbilitySpecHandle H
 void UCAS_Ability_FireBreath::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-
-	//auto owner = Cast<ACAS_Character>(ActorInfo->AvatarActor);
-
-	//auto controller = Cast<ACAS_PlayerController>(owner->GetController());
-
-	//owner->EnableInput(controller);
 
 }
 
@@ -67,7 +57,6 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(A
 		{
 			TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
 		}
-
 
 		return Handle;
 	}

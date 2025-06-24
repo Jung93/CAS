@@ -9,6 +9,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_Capture, "Ability.Attack.Capture")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_DeCapture, "Ability.Attack.DeCapture")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_FireBreath, "Ability.Attack.FireBreath")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_Attack_ChargeAttack, "Ability.Attack.ChargeAttack")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_Evade, "Ability.Move.Evade")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Dead, "Ability.State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Invincible, "Ability.State.Invincible")
