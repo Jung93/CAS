@@ -23,26 +23,32 @@ void UCAS_Ability_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	if (!DeadMontage) {
 		return;
 	}
-	auto Task = UCAS_Task_Dead::Task_Dead(this, "TEST_Attack", DeadMontage, 1.0f);
-	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
-		Task->ReadyForActivation();
+
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "Dead", DeadMontage, 1.0f,true);
+	if (PlayMontageTask->IsValidLowLevel()) {
+		PlayMontageTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
+		PlayMontageTask->ReadyForActivation();
 	}
 }
 
 void UCAS_Ability_Dead::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	PlayMontageTask->EndTask();
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
 }
+void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	auto Character = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
 
-/*
-Todo
-체력이 0되면 델리게이트로 플레이어의 데드어빌리티 실행
-데드어빌리티 -> 즉시 데드 태그를 달고
-->태스크실행 ->애님노티파이로 사라지게처리->어빌리티 종료
+	Character->SetActorHiddenInGame(true);
+	Character->SetActorEnableCollision(false);
 
-데드태그 -> 행동트리에서 막아야함 , 데드태그를 달면 하던공격취소 및 데미지 x
+	auto ASC = Character->GetAbilitySystemComponent();
+	ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
+	Character->Controller->UnPossess();
 
-*/
+	PlayMontageTask->TaskEndEvent.Broadcast();
+}

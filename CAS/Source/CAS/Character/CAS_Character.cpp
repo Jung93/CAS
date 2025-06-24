@@ -84,6 +84,12 @@ void ACAS_Character::PossessedBy(AController* NewController)
 	AddDefaultAbilites();
 }
 
+void ACAS_Character::UnPossessed()
+{
+	Super::UnPossessed();
+	AbilitySystemComponent->ClearAbilities();
+}
+
 void ACAS_Character::DeadEvent()
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
@@ -129,7 +135,7 @@ void ACAS_Character::InitAbilitySystemComponent(AController* controller)
 	}
 	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
+	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 void ACAS_Character::SetHp(int32 value)

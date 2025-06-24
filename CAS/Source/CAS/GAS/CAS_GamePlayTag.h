@@ -11,6 +11,7 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_TEST);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Capture);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_DeCapture);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_ChargeAttack);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_Evade);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_SuperJump);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_SuperSpeed);

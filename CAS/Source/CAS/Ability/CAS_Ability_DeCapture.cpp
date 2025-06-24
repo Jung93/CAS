@@ -3,6 +3,8 @@
 
 #include "Ability/CAS_Ability_DeCapture.h"
 #include "Ability_Task/CAS_Task_DeCapture.h"
+#include "Ability_Task/CAS_Task_StealAbility.h"
+
 UCAS_Ability_DeCapture::UCAS_Ability_DeCapture()
 {
 	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
@@ -22,13 +24,16 @@ void UCAS_Ability_DeCapture::ActivateAbility(const FGameplayAbilitySpecHandle Ha
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 
-	auto Task = UCAS_Task_DeCapture::Task_DeCapture(this, "DeCapture");
-	if (Task->IsValidLowLevel()) {
-		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
-		Task->ReadyForActivation();
+	auto Task_DeCapture = UCAS_Task_DeCapture::Task_DeCapture(this, "DeCapture");
+	auto Task_StealAbility = UCAS_Task_StealAbility::Task_StealAbility(this, "StealAbility");
+	
+	if (Task_DeCapture&& Task_StealAbility) {
+		Task_DeCapture->TaskEndEvent.AddUObject(Task_StealAbility, &UCAS_Task_StealAbility::ReadyForActivation);
+		Task_StealAbility->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
+		Task_DeCapture->ReadyForActivation();
 	}
-
-	auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));
+	
+	auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task_DeCapture));
 
 	StunTarget(owner, 1);
 

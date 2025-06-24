@@ -56,7 +56,13 @@ ACAS_EnemyCapt::ACAS_EnemyCapt()
 	{
 		DefaultAbilities.Add(DecaptureAbilityClass.Class);
 	}
+	static ConstructorHelpers::FObjectFinder<UInputAction> EnemyAbilityInput(TEXT("/Script/EnhancedInput.InputAction'/Game/CAS/Input/Actions/IA_RightClick.IA_RightClick'"));
 
+	if (EnemyAbilityInput.Succeeded())
+	{
+		AbilityAction = EnemyAbilityInput.Object;
+	}
+	
 }
 
 void ACAS_EnemyCapt::BeginPlay()
@@ -93,6 +99,8 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Move);
 		EnhancedInputComponent->BindAction(DeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Look);
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateEnemyAbility);
+
 	}
 
 }
@@ -189,15 +197,21 @@ void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 	}
 }
 
+void ACAS_EnemyCapt::RightClickAction(const FInputActionValue& Value)
+{
+	ActivateEnemyAbility();
+}
+
 void ACAS_EnemyCapt::AddDefaultAbilites()
 {
 	UCAS_AbilitySystemComponent* ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
 	if (!ASC) {
 		return;
 	}
-	DefaultAbilities.Add(EnemyAbility);
+	//DefaultAbilities.Add(EnemyAbility);
 	ASC->AddCharacterAbilities(DefaultAbilities);
-
+	FGameplayAbilitySpec Spec(EnemyAbility, 1,static_cast<int32>(EAbilityInputID::None));
+	ASC->GiveAbility(Spec);
 }
 
 void ACAS_EnemyCapt::AddPlayerAbility(AActor* actor)

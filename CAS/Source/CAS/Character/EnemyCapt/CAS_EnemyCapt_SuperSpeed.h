@@ -18,11 +18,9 @@ public:
 
 	ACAS_EnemyCapt_SuperSpeed();
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	//void ActivateAbility(const FInputActionValue& Value);
 
 	virtual void BeginPlay() override;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	//UInputAction* AbilityAction;
+	virtual void ActivateEnemyAbility() override;
 };

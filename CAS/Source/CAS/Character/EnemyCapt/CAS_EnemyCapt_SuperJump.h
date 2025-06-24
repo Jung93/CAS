@@ -20,9 +20,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	void ActivateAbility(const FInputActionValue& Value);
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* AbilityAction;
+	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	//void ActivateAbility(const FInputActionValue& Value);
+	virtual void ActivateEnemyAbility() override;
 };

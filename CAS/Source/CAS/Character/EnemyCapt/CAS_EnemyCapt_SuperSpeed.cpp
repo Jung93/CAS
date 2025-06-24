@@ -7,16 +7,16 @@ ACAS_EnemyCapt_SuperSpeed::ACAS_EnemyCapt_SuperSpeed()
 {
 }
 
-void ACAS_EnemyCapt_SuperSpeed::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-	//if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-
-	//	EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
-	//}
-
-}
+//void ACAS_EnemyCapt_SuperSpeed::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//	//if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+//
+//	//	EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
+//	//}
+//
+//}
 
 //void ACAS_EnemyCapt_SuperSpeed::ActivateAbility(const FInputActionValue& Value)
 //{
@@ -29,4 +29,8 @@ void ACAS_EnemyCapt_SuperSpeed::BeginPlay()
 
 	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperSpeed"));
 
+}
+
+void ACAS_EnemyCapt_SuperSpeed::ActivateEnemyAbility()
+{
 }

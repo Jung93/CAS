@@ -20,8 +20,16 @@ class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 
 public:
 	UCAS_GameplayAbility();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	UTexture2D* AbilityIcon;
+
+	void CAS_EndAbility();
+public:
+	UFUNCTION()
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
+	
 protected:
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 };

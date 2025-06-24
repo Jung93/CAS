@@ -7,7 +7,6 @@
 #include "CAS_Task_DeCapture.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE_FiveParams(FAbilityEndEvent, FGameplayAbilitySpecHandle, const FGameplayAbilityActorInfo*, FGameplayAbilityActivationInfo, bool, bool);
 
 UCLASS()
 class CAS_API UCAS_Task_DeCapture : public UCAS_AbilityTask
@@ -16,8 +15,6 @@ class CAS_API UCAS_Task_DeCapture : public UCAS_AbilityTask
 
 public:
 	static UCAS_Task_DeCapture* Task_DeCapture(UGameplayAbility* OwningAbility, FName TaskName);
-
-	FAbilityEndEvent OnAbilityEnd;
 
 protected:
 	virtual void Activate() override;

@@ -7,9 +7,8 @@ void UCAS_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 {
 	for (auto& AbilityClass : Abilities) {
 		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		FGameplayAbilitySpecHandle specHandle = GiveAbility(AbilitySpec); // 스킬을 배우는 단계 
-		//게임플레이어빌리티스펙핸들 을 반환
-		// 핸들 : 식별을 위해 달아놓은 포인터
+		FGameplayAbilitySpecHandle specHandle = GiveAbility(AbilitySpec);
+
 		SpecHandles.Add(specHandle);
 	}
 }
@@ -31,6 +30,24 @@ void UCAS_AbilitySystemComponent::RemoveAbility(const FGameplayTag& Tag)
 		ClearAbility(Handle);
 	}
 }
+
+void UCAS_AbilitySystemComponent::ClearAbilities()
+{
+	TArray<FGameplayAbilitySpecHandle> HandlesToRemove;
+
+	for (const FGameplayAbilitySpec& Spec : ActivatableAbilities.Items)
+	{
+		HandlesToRemove.Add(Spec.Handle);
+	}
+
+	for (const FGameplayAbilitySpecHandle& Handle : HandlesToRemove)
+	{
+		ClearAbility(Handle);
+	}
+
+	SpecHandles.Empty();
+}
+
 
 void UCAS_AbilitySystemComponent::ActivateAbility(const FGameplayTag& Tag)
 {
