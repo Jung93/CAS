@@ -14,6 +14,44 @@ void UCAS_Task_FireBreath::Activate()
 {
 	Super::Activate();
 
+	FHitResult hitResult;
+	FCollisionQueryParams params(FName("Task_FireBreath"), false, GetAvatarActor());
+
+	FVector forward = GetAvatarActor()->GetActorForwardVector();
+	FQuat quat = FQuat::FindBetweenVectors(FVector(0, 0, 1), forward);
+
+	float attackRadius = 60.0f;
+	float attackRange = 300.0f;
+
+	FVector Center = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
+	FVector Start = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
+	FVector End = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
+
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		OUT hitResult,
+		Start,
+		End,
+		quat,
+		ECC_GameTraceChannel4,
+		FCollisionShape::MakeCapsule(attackRadius, attackRange * 0.5f),
+		params
+	);
+
+
+	if (bResult && hitResult.GetActor()->IsValidLowLevel())
+	{
+		ACAS_Character* victim = Cast<ACAS_Character>(hitResult.GetActor());
+		if (victim) {
+
+			//FVector hitPoint = hitResult.ImpactPoint;			
+			OnAttackHit.Broadcast(victim, 1);
+
+		}
+	}
+
+
+
+
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();

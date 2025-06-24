@@ -44,6 +44,7 @@ public:
 
 	void SetJumpForce(float value);
 	void OnJumpForceChanged(const FOnAttributeChangeData& Data);
+	void OnWalkSpeedChanged(const FOnAttributeChangeData& Data);
 
 	virtual void ActivateAbility(const FGameplayTag tag);
 	UFUNCTION(BlueprintCallable, Category = "Abilities")

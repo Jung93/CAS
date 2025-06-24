@@ -22,6 +22,7 @@ namespace CAS_GamePlayTag {
 
 	//Effect
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Attack_TEST);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Attack_FireBreath);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Move_Evade);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Move_SuperJump);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Effect_Move_SuperSpeed);
@@ -30,6 +31,7 @@ namespace CAS_GamePlayTag {
 
 	//GameplayCue
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_FireBreath);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_OnFire);
 
 
 	//StateState_TakeDamage

@@ -16,6 +16,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperSpeed, "Ability.Move.SuperSpeed")
 
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Attack_TEST, "Effect.Attack.TEST")
+	UE_DEFINE_GAMEPLAY_TAG(Effect_Attack_FireBreath, "Effect.Attack.FireBreath")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_Evade, "Effect.Move.Evade")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_SuperJump, "Effect.Move.SuperJump")
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Move_SuperSpeed, "Effect.Move.SuperSpeed")
@@ -23,6 +24,7 @@ namespace CAS_GamePlayTag {
 
 
 	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_FireBreath, "GameplayCue.FireBreath")
+	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_OnFire, "GameplayCue.OnFire")
 
 
 	UE_DEFINE_GAMEPLAY_TAG(State_TakeDamage, "State.TakeDamage")

@@ -73,6 +73,8 @@ void ACAS_Character::BeginPlay()
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
 		AttributeSet->GetJumpForceAttribute()).AddUObject(this, &ACAS_Character::OnJumpForceChanged);
 
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(
+		AttributeSet->GetWalkSpeedAttribute()).AddUObject(this, &ACAS_Character::OnWalkSpeedChanged);
 
 	//AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetJumpForceAttribute().AddUObject(this, &ACAS_Character::SetJumpForce));
 }
@@ -153,6 +155,11 @@ void ACAS_Character::SetJumpForce(float value)
 void ACAS_Character::OnJumpForceChanged(const FOnAttributeChangeData& Data)
 {
 	SetJumpForce(Data.NewValue); // JumpZVelocity 반영
+}
+
+void ACAS_Character::OnWalkSpeedChanged(const FOnAttributeChangeData& Data)
+{
+	SetWalkSpeed(Data.NewValue);
 }
 
 

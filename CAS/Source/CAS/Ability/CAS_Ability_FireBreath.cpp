@@ -3,6 +3,7 @@
 
 #include "Ability/CAS_Ability_FireBreath.h"
 #include "Ability_Task/CAS_Task_FireBreath.h"
+#include "Controller/CAS_PlayerController.h"
 
 UCAS_Ability_FireBreath::UCAS_Ability_FireBreath()
 {
@@ -22,12 +23,18 @@ void UCAS_Ability_FireBreath::ActivateAbility(const FGameplayAbilitySpecHandle H
 
 	if (Task->IsValidLowLevel())
 	{
+		Task->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
 		Task->OnAbilityEnd.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 
 		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));
 
 		ReceiveTarget(owner, 1);
+
+		//auto controller = Cast<ACAS_PlayerController>(owner->GetController());
+
+		//owner->DisableInput(controller);
+
 	}
 
 }
@@ -35,22 +42,53 @@ void UCAS_Ability_FireBreath::ActivateAbility(const FGameplayAbilitySpecHandle H
 void UCAS_Ability_FireBreath::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+	//auto owner = Cast<ACAS_Character>(ActorInfo->AvatarActor);
+
+	//auto controller = Cast<ACAS_PlayerController>(owner->GetController());
+
+	//owner->EnableInput(controller);
+
 }
 
-FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
 {
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
 	if (SpecHandle.IsValid())
 	{
-		//SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperSpeed")), 2.0f);
 		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 
 		FGameplayCueParameters params;
 		params.Location = TargetAbilitySystemComp->GetOwnerActor()->GetActorLocation();
 
-		//TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
+		if (!TargetAbilitySystemComp->IsGameplayCueActive(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath")))
+		{
+			TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
+		}
+
+
+		return Handle;
+	}
+
+	return FActiveGameplayEffectHandle();
+}
+
+FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToTarget(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+{
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
+	if (SpecHandle.IsValid())
+	{
+		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.FireBreath")), -1.0f);
+		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+
+		FGameplayCueParameters params;
+		params.Location = TargetAbilitySystemComp->GetOwnerActor()->GetActorLocation();
+
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.OnFire"));
 
 		return Handle;
 	}
@@ -77,6 +115,16 @@ void UCAS_Ability_FireBreath::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 	EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
-	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	auto owner = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
+
+	if (owner == Target)
+	{
+		ApplyGamePlayEffectToSelf(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+		//ApplyGamePlayEffectToSelf(Target, MoveEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	}
+	else
+	{
+		ApplyGamePlayEffectToTarget(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	}
 
 }
