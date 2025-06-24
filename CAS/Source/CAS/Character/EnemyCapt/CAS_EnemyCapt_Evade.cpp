@@ -19,19 +19,24 @@ void ACAS_EnemyCapt_Evade::PostInitializeComponents()
 	mesh->CreateDynamicMaterialInstance(1)->SetVectorParameterValue("Tint", FVector4(1, 0, 0, 1));
 }
 
-void ACAS_EnemyCapt_Evade::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-
-	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-
-		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
-
-	}
-}
-
-void ACAS_EnemyCapt_Evade::ActivateAbility(const FInputActionValue& Value)
+void ACAS_EnemyCapt_Evade::ActivateEnemyAbility()
 {
 	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.Evade"));
 }
+
+//void ACAS_EnemyCapt_Evade::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+//{
+//	Super::SetupPlayerInputComponent(PlayerInputComponent);
+//
+//
+//	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+//
+//		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateAbility);
+//
+//	}
+//}
+//
+//void ACAS_EnemyCapt_Evade::ActivateAbility(const FInputActionValue& Value)
+//{
+//	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.Evade"));
+//}

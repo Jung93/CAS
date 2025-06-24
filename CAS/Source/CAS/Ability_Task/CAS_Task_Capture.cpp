@@ -13,6 +13,8 @@ UCAS_Task_Capture* UCAS_Task_Capture::Task_Capture(UGameplayAbility* OwningAbili
 
 void UCAS_Task_Capture::Activate()
 {
+	Super::Activate();
+
 	auto player = Cast<ACAS_Player>((GetAvatarActor()));
 	if (player->IsValidLowLevel()) {
 
@@ -28,7 +30,7 @@ void UCAS_Task_Capture::Activate()
 		auto ActorInfo = Ability->GetCurrentActorInfo();
 		auto ActivationInfo = Ability->GetCurrentActivationInfo();
 
-		OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
+		AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
 
 	}
 }

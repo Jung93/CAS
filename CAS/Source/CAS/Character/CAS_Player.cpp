@@ -54,6 +54,7 @@ ACAS_Player::ACAS_Player()
 	AttributeSet = nullptr;
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> CaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Capture.GA_Ability_Capture_C'"));
 
+
 	if (CaptureAbilityClass.Succeeded())
 	{
 		DefaultAbilities.Add(CaptureAbilityClass.Class);
@@ -332,7 +333,7 @@ void ACAS_Player::InitAbilitySystemComponent(AController* controller)
 	AbilitySystemComponent->InitAbilityActorInfo(playerState, this);
 	AttributeSet = playerState->GetAttributeSet();
 
-	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
+	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 UAbilitySystemComponent* ACAS_Player::GetAbilitySystemComponent() const

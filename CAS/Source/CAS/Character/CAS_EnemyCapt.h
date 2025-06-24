@@ -49,9 +49,13 @@ public:
 	bool IsStunned() { return _isStun; }
 
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
-	virtual void AddDefaultAbilites() override;
+	
 	void AddPlayerAbility(AActor* actor);
-private:
+protected:
+	virtual void ActivateEnemyAbility() PURE_VIRTUAL(ThisClass::ActivateEnemyAbility, );
+	void RightClickAction(const FInputActionValue& Value);
+	virtual void AddDefaultAbilites() override;
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
 
@@ -69,6 +73,8 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AbilityAction;
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;

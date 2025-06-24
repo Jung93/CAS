@@ -18,6 +18,7 @@ UCAS_Task_DeCapture* UCAS_Task_DeCapture::Task_DeCapture(UGameplayAbility* Ownin
 
 void UCAS_Task_DeCapture::Activate()
 {
+	Super::Activate();
 
 	auto owner = Cast<ACAS_EnemyCapt>(GetAvatarActor());
 
@@ -73,10 +74,5 @@ void UCAS_Task_DeCapture::Activate()
 	owner->ClearHat();
 	//owner->BeStunned();
 
-	auto Handle = Ability->GetCurrentAbilitySpecHandle();
-	auto ActorInfo = Ability->GetCurrentActorInfo();
-	auto ActivationInfo = Ability->GetCurrentActivationInfo();
-
-	OnAbilityEnd.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
-
+	TaskEndEvent.Broadcast();
 }

@@ -8,6 +8,7 @@
 #include "GAS/CAS_GamePlayTag.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
+#include "GAS/CAS_AbilityInputID.h"
 #include "CAS_Character.generated.h"
 
 class USpringArmComponent;
@@ -29,13 +30,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
 	virtual void DeadEvent();
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 public:
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const;
-	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Player::GetAttributeSet, return nullptr;);}
+	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Character::GetAttributeSet, return nullptr;);}
 
 	virtual void AddDefaultAbilites();
 	virtual void InitAbilitySystemComponent(AController* controller);
