@@ -27,7 +27,7 @@ void ACAS_EnemyCapt_SuperSpeed::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperSpeed"));
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperSpeed"));
 
 }
 

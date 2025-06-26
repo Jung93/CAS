@@ -17,12 +17,10 @@ class CAS_API ACAS_EnemyCapt_ChargeAttack : public ACAS_EnemyCapt
 public:
 
 	ACAS_EnemyCapt_ChargeAttack();
-
 	virtual void PostInitializeComponents() override;
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	//void ActivateAbility(const FInputActionValue& Value);
+
 protected:
 	virtual void AddDefaultAbilites() override;
 	virtual void ActivateEnemyAbility() override;
-	void ChargeReleased(const FInputActionValue& Value);
+	virtual void InputReleased(const FInputActionValue& Value) override;
 };
