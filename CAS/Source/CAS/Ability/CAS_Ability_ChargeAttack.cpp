@@ -6,7 +6,7 @@
 
 UCAS_Ability_ChargeAttack::UCAS_Ability_ChargeAttack()
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
 }
 
 void UCAS_Ability_ChargeAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
