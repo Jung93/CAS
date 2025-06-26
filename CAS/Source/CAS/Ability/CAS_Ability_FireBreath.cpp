@@ -46,17 +46,17 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(A
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
-	if (SpecHandle.IsValid())
+	FGameplayEffectSpecHandle TagSpecHandle = AbilitySystemComponent->MakeOutgoingSpec(TagEffectClass, 1.0f, EffectContext);
+
+	if (SpecHandle.IsValid() && TagSpecHandle.IsValid())
 	{
 		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*TagSpecHandle.Data);
 
 		FGameplayCueParameters params;
 		params.Location = TargetAbilitySystemComp->GetOwnerActor()->GetActorLocation();
-
-		if (!TargetAbilitySystemComp->IsGameplayCueActive(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath")))
-		{
-			TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
-		}
+	
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
 
 		return Handle;
 	}
@@ -69,6 +69,7 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToTarget
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
+
 	if (SpecHandle.IsValid())
 	{
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.FireBreath")), -1.0f);
@@ -91,6 +92,7 @@ void UCAS_Ability_FireBreath::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	UAbilitySystemComponent* AbilitySystemComp = nullptr;
 	if (PlayerState->IsValidLowLevel()) {
 		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
@@ -109,11 +111,9 @@ void UCAS_Ability_FireBreath::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	if (owner == Target)
 	{
 		ApplyGamePlayEffectToSelf(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
-		//ApplyGamePlayEffectToSelf(Target, MoveEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	}
 	else
 	{
 		ApplyGamePlayEffectToTarget(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	}
-
 }

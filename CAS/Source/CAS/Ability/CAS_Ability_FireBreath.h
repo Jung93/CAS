@@ -29,7 +29,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 
-	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	//TSubclassOf<UGameplayEffect> MoveEffectClass;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> TagEffectClass;
 };

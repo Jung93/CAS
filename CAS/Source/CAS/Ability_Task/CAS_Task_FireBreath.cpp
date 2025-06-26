@@ -50,9 +50,6 @@ void UCAS_Task_FireBreath::Activate()
 	}
 
 
-
-
-
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();
 	auto ActivationInfo = Ability->GetCurrentActivationInfo();
