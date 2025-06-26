@@ -14,7 +14,7 @@ void ACAS_EnemyCapt_SuperJump::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
 
 }
 

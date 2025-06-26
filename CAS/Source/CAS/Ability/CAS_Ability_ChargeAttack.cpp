@@ -6,25 +6,26 @@
 
 UCAS_Ability_ChargeAttack::UCAS_Ability_ChargeAttack()
 {
+	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
 void UCAS_Ability_ChargeAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
 	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
+	
 
 	StartTime = GetWorld()->GetTimeSeconds();
-
 }
 
 void UCAS_Ability_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
 	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
-
 	EndTime = GetWorld()->GetTimeSeconds();
 	ChargedTime = EndTime - StartTime;
 
-	FString DebugMessage = FString::Printf(TEXT("ChargeTime : %d"), ChargedTime);
+	FString DebugMessage = FString::Printf(TEXT("ChargeTime : %f"), ChargedTime);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
+	CAS_EndAbility();
 	//ChargeInputTask->ChargeReleased(chargeTime);
 }
 
@@ -38,6 +39,7 @@ void UCAS_Ability_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle
 	//	ChargeInputTask->ChargeReleaseEvent.AddUObject(this, &ThisClass::OnChargeReleased);
 	//	ChargeInputTask->ReadyForActivation();
 	//}
+
 }
 
 void UCAS_Ability_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)

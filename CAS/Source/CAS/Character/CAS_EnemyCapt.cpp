@@ -99,7 +99,8 @@ void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Move);
 		EnhancedInputComponent->BindAction(DeCaptureAction, ETriggerEvent::Started, this, &ACAS_EnemyCapt::DeCaptureAbility);
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_EnemyCapt::Look);
-		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::ActivateEnemyAbility);
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::RightClickAction);
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Completed, this, &ThisClass::InputReleased);
 
 	}
 
@@ -195,6 +196,10 @@ void ACAS_EnemyCapt::CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult)
 	{
 		FollowCamera->GetCameraView(DeltaTime, OutResult);
 	}
+}
+
+void ACAS_EnemyCapt::InputReleased(const FInputActionValue& Value)
+{
 }
 
 void ACAS_EnemyCapt::RightClickAction(const FInputActionValue& Value)

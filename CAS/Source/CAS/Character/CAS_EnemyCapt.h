@@ -53,6 +53,7 @@ public:
 	void AddPlayerAbility(AActor* actor);
 protected:
 	virtual void ActivateEnemyAbility() PURE_VIRTUAL(ThisClass::ActivateEnemyAbility, );
+	virtual void InputReleased(const FInputActionValue& Value);
 	void RightClickAction(const FInputActionValue& Value);
 	virtual void AddDefaultAbilites() override;
 protected:
