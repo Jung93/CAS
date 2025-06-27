@@ -31,11 +31,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ChargeAttack")
 	float MaxChargeTime = 4.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ChargeAttack")
-	UAnimMontage* ChargeAttackMontage;
-
 protected:
-	//UCAS_Task_ChargeInput* ChargeInputTask;
+	UCAS_Task_ChargeInput* ChargeInputTask;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* ChargeMontage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
