@@ -78,7 +78,7 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
 		}
 	}
-	if (!AbilitySystemComp->IsValidLowLevel()) {
+	if (!AbilitySystemComp) {
 		return;
 	}
 	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
