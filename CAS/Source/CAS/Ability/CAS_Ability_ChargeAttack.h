@@ -53,4 +53,7 @@ protected:
 	float StartTime = 0.0f; 
 	float EndTime = 0.0f;
 	float ChargedTime = 0.0f;
+
+protected:
+	//FTimerHandle MontageLoopTimerHandle;
 };
