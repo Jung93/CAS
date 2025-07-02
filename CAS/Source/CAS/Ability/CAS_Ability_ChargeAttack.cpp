@@ -29,7 +29,7 @@ void UCAS_Ability_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle H
 	FString DebugMessage = FString::Printf(TEXT("ChargeTime : %f"), ChargedTime);
 	
 	AttackMontageTask->ReadyForActivation();
-	//CAS_EndAbility();	
+	CAS_EndAbility();	
 	//ChargeInputTask->ChargeReleased(chargeTime);
 }
 
@@ -37,9 +37,9 @@ void UCAS_Ability_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	ChargeMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this,"Charge", ChargeMontage);
+	ChargeMontageTask = UCAS_Task_LoopMontage::Task_LoopMontage(this,"Charge", ChargeMontage);
 	AttackMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this,"Attack", AttackMontage,1.0f,true);
-	
+
 }
 
 void UCAS_Ability_ChargeAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)

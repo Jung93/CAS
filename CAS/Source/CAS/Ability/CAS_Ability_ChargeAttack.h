@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "Ability_Task/CAS_Task_Attack.h"
+#include "Ability_Task/CAS_Task_LoopMontage.h"
 #include "Ability_Task/CAS_Task_PlayMontage.h"
-#include "Ability_Task/CAS_Task_ChargeInput.h"
 #include "CAS_Ability_ChargeAttack.generated.h"
 
 /**
@@ -32,8 +32,7 @@ protected:
 	float MaxChargeTime = 4.0f;
 
 protected:
-	UCAS_Task_ChargeInput* ChargeInputTask;
-
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* ChargeMontage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
@@ -45,7 +44,7 @@ protected:
 	UPROPERTY()
 	UCAS_Task_Attack* AttackTask;
 	UPROPERTY()
-	UCAS_Task_PlayMontage* ChargeMontageTask;
+	UCAS_Task_LoopMontage* ChargeMontageTask;
 	UPROPERTY()
 	UCAS_Task_PlayMontage* AttackMontageTask;
 protected:

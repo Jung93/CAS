@@ -27,7 +27,7 @@ void UCAS_Task_DeCapture::Activate()
 
 	if (!owner->IsCaptured())
 		return;
-
+	
 	owner->ActivateCapture(false);
 	auto player = owner->GetHat()->GetPlayer();
 
@@ -35,6 +35,8 @@ void UCAS_Task_DeCapture::Activate()
 	controller->UnPossess();
 
 	controller->Possess(player);
+
+	owner->AddPlayerAbility(player);
 
 	int32 curHp = owner->GetAttributeSet()->GetHealth();
 
