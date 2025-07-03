@@ -5,6 +5,11 @@
 #include "UI/CAS_SkillSlot.h"
 #include "Components/HorizontalBox.h"
 #include "Components/HorizontalBoxSlot.h"
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/Border.h"
+#include "Components/Image.h"
+
 void UCAS_QuickSlotWidget::InitSetting(int32 count)
 {
     SlotCount = count;
@@ -23,6 +28,33 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
 
             slot->SetSlotData(Data);
 
+            if (i != 0)
+            {
+                FLinearColor initColor = slot->GetColorAndOpacity();
+                initColor.A = 0.0f;
+                slot->SetColorAndOpacity(initColor);
+            }
+            else
+            {
+                auto slotBorder = Cast<UBorder>(slot->GetRootWidget());
+                auto imageBox = Cast<UImage>(slotBorder->GetContent());
+
+                auto panelBorder = Cast<UBorder>(SlotBox->GetParent());
+                auto panelSlot = Cast<UCanvasPanelSlot>(panelBorder->Slot);
+              
+                FVector2D Size = imageBox->Brush.GetImageSize();
+                Size.X += slotBorder->Padding.Right + 2.0f;
+                panelSlot->SetSize(Size);
+
+                FVector2D Pos = panelSlot->GetPosition();
+                Pos.X = 200.f;
+                panelSlot->SetPosition(Pos);
+
+                BorderSizeX = Size.X;
+                BorderPosX = Pos.X;
+
+            }
+
             SkillSlots[i] = slot;
             if (SlotBox->IsValidLowLevel())
             {
@@ -30,7 +62,6 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             }
         }
     }
-
 }
 
 void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* DropSlot)
@@ -68,4 +99,123 @@ void UCAS_QuickSlotWidget::RemoveSlotData(int32 index)
     Data.AbilityTag = FName(TEXT("None"));
 
     SkillSlots[index]->SetSlotData(Data);
+}
+
+void UCAS_QuickSlotWidget::OpenSlot()
+{
+    UCanvasPanel* RootCanvas = Cast<UCanvasPanel>(GetRootWidget());
+
+    if (RootCanvas->IsValidLowLevel())
+    {
+        UBorder* Border = Cast<UBorder>(RootCanvas->GetChildAt(0));
+
+        if (Border->IsValidLowLevel())
+        {
+            UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(Border->Slot);
+
+            if (CanvasSlot->IsValidLowLevel())
+            {
+                // 위치 변경
+                FVector2D Pos = CanvasSlot->GetPosition();
+                Pos.X = 0.0f;
+                CanvasSlot->SetPosition(Pos);
+
+                // 크기 변경
+                FVector2D Size = CanvasSlot->GetSize();
+                Size.X = 550.f;
+                CanvasSlot->SetSize(Size);
+
+                for (int i = 1; i < SlotCount; i++)
+                {
+                    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
+
+                    FLinearColor initColor = slot->GetColorAndOpacity();
+                    initColor.A = 0.3f;
+                    slot->SetColorAndOpacity(initColor);
+
+                }
+
+
+            }
+        }
+    }
+}
+
+void UCAS_QuickSlotWidget::CloseSlot()
+{
+    UCanvasPanel* RootCanvas = Cast<UCanvasPanel>(GetRootWidget());
+
+    if (RootCanvas->IsValidLowLevel())
+    {
+        UBorder* Border = Cast<UBorder>(RootCanvas->GetChildAt(0));
+
+        if (Border->IsValidLowLevel())
+        {
+            UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(Border->Slot);
+
+            if (CanvasSlot->IsValidLowLevel())
+            {
+                // 위치 변경
+                FVector2D Pos = CanvasSlot->GetPosition();
+                Pos.X = BorderPosX;
+                CanvasSlot->SetPosition(Pos);
+
+                // 크기 변경
+                FVector2D Size = CanvasSlot->GetSize();
+                Size.X = BorderSizeX;
+                CanvasSlot->SetSize(Size);
+
+                for (int i = 1; i < SlotCount; i++)
+                {
+                    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
+
+                    FLinearColor initColor = slot->GetColorAndOpacity();
+                    initColor.A = 0.0f;
+                    slot->SetColorAndOpacity(initColor);
+
+                }
+            }
+        }
+    }
+}
+
+
+
+void UCAS_QuickSlotWidget::ChangeSlotToLeft()
+{
+
+    int32 num = SkillSlots.Num() - 1;
+    UCAS_SkillSlot* slot = SkillSlots[0];
+    FCAS_SlotData data = slot->GetSlotData();
+    data.SlotIndex = SkillSlots[num]->GetSlotIndex();
+
+    for (int32 i = 0; i < num; i++)
+    {
+        FCAS_SlotData targetData = SkillSlots[i + 1]->GetSlotData();
+        targetData.SlotIndex = SkillSlots[i]->GetSlotIndex();
+
+        SkillSlots[i]->SetSlotData(targetData);
+    }
+
+    SkillSlots[num]->SetSlotData(data);
+}
+
+
+void UCAS_QuickSlotWidget::ChangeSlotToRight()
+{
+
+    int32 num = SkillSlots.Num() - 1;
+    UCAS_SkillSlot* slot = SkillSlots[num];
+    FCAS_SlotData data = slot->GetSlotData();
+    data.SlotIndex = SkillSlots[0]->GetSlotIndex();
+
+    for (int32 i = num; i > 0; i--)
+    {
+        FCAS_SlotData targetData = SkillSlots[i - 1]->GetSlotData();
+        targetData.SlotIndex = SkillSlots[i]->GetSlotIndex();
+
+        SkillSlots[i]->SetSlotData(targetData);
+    }
+
+    SkillSlots[0]->SetSlotData(data);
 }

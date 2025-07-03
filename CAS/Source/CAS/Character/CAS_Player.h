@@ -41,6 +41,13 @@ protected:
 	void QuickSlotFunction03(const FInputActionValue& Value);
 	void QuickSlotFunction04(const FInputActionValue& Value);
 
+
+	void OpenSlot(const FInputActionValue& Value);
+	void CloseSlot(const FInputActionValue& Value);
+	void ChangeSlot01(const FInputActionValue& Value);
+	void ChangeSlot02(const FInputActionValue& Value);
+
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -83,6 +90,16 @@ protected:
 	UInputAction* QuickSlot03;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* QuickSlot04;
+
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* OpenSlotAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ChangeSlotAction01;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ChangeSlotAction02;
+
 
 protected:
 	// Called when the game starts or when spawned

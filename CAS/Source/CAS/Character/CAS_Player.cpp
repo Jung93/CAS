@@ -205,6 +205,7 @@ void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
 	}
 	FName name = SlotData.AbilityTag;
 	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+
 }
 
 void ACAS_Player::QuickSlotFunction02(const FInputActionValue& Value)
@@ -235,6 +236,53 @@ void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
 	}
 	FName name = SlotData.AbilityTag;
 	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
+}
+
+void ACAS_Player::OpenSlot(const FInputActionValue& Value)
+{
+	QuickSlotWidget->OpenSlot();
+
+}
+
+void ACAS_Player::CloseSlot(const FInputActionValue& Value)
+{
+	QuickSlotWidget->CloseSlot();
+
+}
+
+void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
+{
+
+	QuickSlotWidget->ChangeSlotToLeft();
+
+	int32 num = PlayerAbilityCount - 1;
+	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	FCAS_SlotData data = abilities[0];
+
+	for (int32 i = 0; i < num; i++)
+	{
+		abilities[i] = abilities[i + 1];
+	}
+
+	abilities[num] = data;
+
+}
+
+void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
+{
+	QuickSlotWidget->ChangeSlotToRight();
+
+	int32 num = PlayerAbilityCount - 1;
+	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	FCAS_SlotData data = abilities[num];
+
+	for (int32 i = num; i > 0; i--)
+	{
+		abilities[i] = abilities[i - 1];
+	}
+
+	abilities[0] = data;
+
 }
 
 // Called when the game starts or when spawned
@@ -312,9 +360,19 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
 
 		EnhancedInputComponent->BindAction(QuickSlot01, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction01);
-		EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
-		EnhancedInputComponent->BindAction(QuickSlot03, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction03);
-		EnhancedInputComponent->BindAction(QuickSlot04, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction04);
+		//EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
+		//EnhancedInputComponent->BindAction(QuickSlot03, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction03);
+		//EnhancedInputComponent->BindAction(QuickSlot04, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction04);
+
+
+
+
+		EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Started, this, &ACAS_Player::OpenSlot);
+		EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Completed, this, &ACAS_Player::CloseSlot);
+
+		EnhancedInputComponent->BindAction(ChangeSlotAction01, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot01);
+		EnhancedInputComponent->BindAction(ChangeSlotAction02, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot02);
+
 
 	}
 	

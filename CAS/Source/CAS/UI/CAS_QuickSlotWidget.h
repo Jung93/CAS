@@ -10,6 +10,7 @@
 DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
 DECLARE_MULTICAST_DELEGATE_OneParam(FRemoveAbilityEvent, int32);
 
+
 UCLASS()
 class CAS_API UCAS_QuickSlotWidget : public UUserWidget
 {
@@ -21,8 +22,16 @@ public:
 	void SetSlotData(int32 index, const FCAS_SlotData& AbilityData);
 	void RemoveSlotData(int32 index);
 
+	void OpenSlot();
+	void CloseSlot();
+
+	void ChangeSlotToLeft();
+	void ChangeSlotToRight();
+
+
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;
+
 
 protected:
 	int32 SlotCount;
@@ -34,4 +43,6 @@ protected:
 	UPROPERTY()
 	TArray<UCAS_SkillSlot*> SkillSlots;
 	
+	float BorderPosX = 0.0f;
+	float BorderSizeX = 350.0f;
 };

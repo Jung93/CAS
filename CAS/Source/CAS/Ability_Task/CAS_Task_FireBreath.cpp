@@ -20,11 +20,11 @@ void UCAS_Task_FireBreath::Activate()
 	FVector forward = GetAvatarActor()->GetActorForwardVector();
 	FQuat quat = FQuat::FindBetweenVectors(FVector(0, 0, 1), forward);
 
-	float attackRadius = 60.0f;
+	float attackRadius = 40.0f;
 	float attackRange = 300.0f;
 
 	FVector Center = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
-	FVector Start = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
+	FVector Start = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.8f);
 	FVector End = GetAvatarActor()->GetActorLocation() + forward * (attackRange * 0.5f);
 
 	bool bResult = GetWorld()->SweepSingleByChannel(
@@ -37,7 +37,6 @@ void UCAS_Task_FireBreath::Activate()
 		params
 	);
 
-
 	if (bResult && hitResult.GetActor()->IsValidLowLevel())
 	{
 		ACAS_Character* victim = Cast<ACAS_Character>(hitResult.GetActor());
@@ -45,10 +44,8 @@ void UCAS_Task_FireBreath::Activate()
 
 			//FVector hitPoint = hitResult.ImpactPoint;			
 			OnAttackHit.Broadcast(victim, 1);
-
 		}
 	}
-
 
 	auto Handle = Ability->GetCurrentAbilitySpecHandle();
 	auto ActorInfo = Ability->GetCurrentActorInfo();
