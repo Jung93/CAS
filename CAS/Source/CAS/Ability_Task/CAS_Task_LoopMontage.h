@@ -4,17 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_AbilityTask.h"
-#include "CAS_Task_PlayMontage.generated.h"
+#include "CAS_Task_LoopMontage.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class CAS_API UCAS_Task_PlayMontage : public UCAS_AbilityTask
+class CAS_API UCAS_Task_LoopMontage : public UCAS_AbilityTask
 {
 	GENERATED_BODY()
 public:
-	static UCAS_Task_PlayMontage* Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f , bool bNotifyReady = false);
+	static UCAS_Task_LoopMontage* Task_LoopMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f);
+
 protected:
 	virtual void Activate() override;
 	virtual void OnDestroy(bool bInOwnerFinished)override;
@@ -22,5 +21,11 @@ protected:
 	UAnimMontage* Montage;
 	UPROPERTY()
 	float PlayRate = 1.0f;
-	bool bNotifyReady = false;
+
+protected:
+	void CheckMontageLoop();
+
+	FTimerHandle MontageLoopTimerHandle;
+
+	bool bStopRequested = false;
 };

@@ -29,10 +29,12 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 	auto player = Cast<ACAS_Player>(GetOwner());
 	if (player->IsValidLowLevel()) {
 		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
+		
 		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
-			auto AbilitySpec = FGameplayAbilitySpec(newAbility);
+			auto AbilitySpec = FGameplayAbilitySpec(newAbility,1);
 			ASC->GiveAbility(AbilitySpec);
 			
+			auto temp = ASC->GetActivatableAbilities();	
 			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
 			if (DefaultObj->IsValidLowLevel()) {

@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
-#include "Ability_Task/CAS_Task_ChargeInput.h"
+#include "Ability_Task/CAS_Task_Attack.h"
+#include "Ability_Task/CAS_Task_LoopMontage.h"
+#include "Ability_Task/CAS_Task_PlayMontage.h"
 #include "CAS_Ability_ChargeAttack.generated.h"
 
 /**
@@ -29,13 +31,28 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "ChargeAttack")
 	float MaxChargeTime = 4.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ChargeAttack")
-	UAnimMontage* ChargeAttackMontage;
-
 protected:
-	//UCAS_Task_ChargeInput* ChargeInputTask;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
+	UAnimMontage* ChargeMontage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
+	UAnimMontage* AttackMontage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> TagEffectClass;
+	UPROPERTY()
+	UCAS_Task_Attack* AttackTask;
+	UPROPERTY()
+	UCAS_Task_LoopMontage* ChargeMontageTask;
+	UPROPERTY()
+	UCAS_Task_PlayMontage* AttackMontageTask;
+protected:
+
 	float StartTime = 0.0f; 
 	float EndTime = 0.0f;
 	float ChargedTime = 0.0f;
+
+protected:
+	//FTimerHandle MontageLoopTimerHandle;
 };

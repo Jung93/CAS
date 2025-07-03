@@ -6,7 +6,7 @@
 
 UCAS_Ability_ChargeAttack::UCAS_Ability_ChargeAttack()
 {
-	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
 }
 
 void UCAS_Ability_ChargeAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
@@ -15,17 +15,21 @@ void UCAS_Ability_ChargeAttack::InputPressed(const FGameplayAbilitySpecHandle Ha
 	
 
 	StartTime = GetWorld()->GetTimeSeconds();
+	ChargeMontageTask->ReadyForActivation();
 }
 
 void UCAS_Ability_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
 {
 	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
+	ChargeMontageTask->EndTask();
+
 	EndTime = GetWorld()->GetTimeSeconds();
 	ChargedTime = EndTime - StartTime;
 
 	FString DebugMessage = FString::Printf(TEXT("ChargeTime : %f"), ChargedTime);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
-	CAS_EndAbility();
+	
+	AttackMontageTask->ReadyForActivation();
+	CAS_EndAbility();	
 	//ChargeInputTask->ChargeReleased(chargeTime);
 }
 
@@ -33,12 +37,8 @@ void UCAS_Ability_ChargeAttack::ActivateAbility(const FGameplayAbilitySpecHandle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	//ChargeInputTask = UCAS_Task_ChargeInput::CAS_Task_ChargeInput(this, "ChargeInput",4.0f );
-	//
-	//if (ChargeInputTask) {
-	//	ChargeInputTask->ChargeReleaseEvent.AddUObject(this, &ThisClass::OnChargeReleased);
-	//	ChargeInputTask->ReadyForActivation();
-	//}
+	ChargeMontageTask = UCAS_Task_LoopMontage::Task_LoopMontage(this,"Charge", ChargeMontage);
+	AttackMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this,"Attack", AttackMontage,1.0f,true);
 
 }
 

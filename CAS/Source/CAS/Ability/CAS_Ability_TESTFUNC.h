@@ -27,13 +27,13 @@ protected:
 	virtual void ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
 
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
-	TObjectPtr<UAnimMontage> AttackMontage;
+	UAnimMontage* AttackMontage;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> DamageEffectClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> TagEffectClass;
-protected:
 	UPROPERTY()
 	UCAS_Task_Attack* AttackTask;
 	UPROPERTY()
