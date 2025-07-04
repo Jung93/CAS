@@ -77,19 +77,22 @@ void ACAS_Character::BeginPlay()
 		AttributeSet->GetWalkSpeedAttribute()).AddUObject(this, &ACAS_Character::OnWalkSpeedChanged);
 
 	//AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetJumpForceAttribute().AddUObject(this, &ACAS_Character::SetJumpForce));
+
+	AddDefaultAbilites();
+
+
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	InitAbilitySystemComponent(NewController);
-	AddDefaultAbilites();
 }
 
 void ACAS_Character::UnPossessed()
 {
 	Super::UnPossessed();
-	AbilitySystemComponent->ClearAbilities();
+	//AbilitySystemComponent->ClearAbilities();
 }
 
 void ACAS_Character::DeadEvent()

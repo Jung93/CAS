@@ -31,4 +31,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Abilities)
 	TArray<FCAS_SlotData> PlayerAbilities;
+
+	UPROPERTY()
+	class ACAS_Player* testaaa;
+
+	UPROPERTY()
+	class ACAS_Player* testaaa2;
+
 };

@@ -26,14 +26,20 @@ void UCAS_QuickSlotWidgetComponent::InitSetting(int32 count)
 
 bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclassOf<class UGameplayAbility>& newAbility)
 {
+	auto owner = GetOwner();
 	auto player = Cast<ACAS_Player>(GetOwner());
 	if (player->IsValidLowLevel()) {
 		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
-		
+
+
 		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
 			auto AbilitySpec = FGameplayAbilitySpec(newAbility,1);
-			ASC->GiveAbility(AbilitySpec);
+			auto testhandle = ASC->GiveAbility(AbilitySpec);
 			
+
+
+
+			testaaa2 = player;
 			auto temp = ASC->GetActivatableAbilities();	
 			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
@@ -52,6 +58,7 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 			}
 			
 		}
+
 	}
 	return false;
 }
