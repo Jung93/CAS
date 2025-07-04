@@ -138,7 +138,7 @@ void ACAS_Character::InitAbilitySystemComponent(AController* controller)
 		int32 curHp = playerState->GetAttributeSet()->GetHealth();
 		SetHp(curHp);
 	}
-	
+	//여기 변경
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
 	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
