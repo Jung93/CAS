@@ -15,11 +15,21 @@ bool UCAS_Ability_TakeDamage::CanActivateAbility(const FGameplayAbilitySpecHandl
 void UCAS_Ability_TakeDamage::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", TakeDamageMontage, 1.0f, false);
+	if (PlayMontageTask) {
+		PlayMontageTask->ReadyForActivation();
+	}
 }
 
 void UCAS_Ability_TakeDamage::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	PlayMontageTask->EndTask();
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
+}
+
+void UCAS_Ability_TakeDamage::MontageEndEvent(UAnimMontage* Montage, bool bInterrupted)
+{
+	CAS_EndAbility();
 }

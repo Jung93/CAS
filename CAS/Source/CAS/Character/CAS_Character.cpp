@@ -105,7 +105,8 @@ void ACAS_Character::DeadEvent()
 
 void ACAS_Character::TakeDamageEvent()
 {
-	//플레이어 - 무적 1 초  , 몽타주 재생 
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
+
 }
 
 // Called every frame

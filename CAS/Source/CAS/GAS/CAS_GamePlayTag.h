@@ -18,6 +18,7 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Move_SuperSpeed);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Invincible);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_TakeDamage);
 	
 
 
@@ -38,10 +39,9 @@ namespace CAS_GamePlayTag {
 	//StateState_TakeDamage
 	//UE_DECLARE_GAMEPLAY_TAG_EXTERN();
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Nomal);
-	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);	
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Invincible);
 	
-	//UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);
 
 }

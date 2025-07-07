@@ -40,7 +40,7 @@ void UCAS_Task_PlayMontage::Activate()
 			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);
 		}
 		AnimInstance->Montage_Play(Montage, PlayRate);
-		
+		AnimInstance->OnMontageEnded.AddDynamic(ability,&UCAS_GameplayAbility::MontageEndEvent);
 		
 	}
 }
@@ -54,6 +54,8 @@ void UCAS_Task_PlayMontage::OnDestroy(bool bInOwnerFinished)
 			UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
 			UCAS_GameplayAbility* ability = Cast<UCAS_GameplayAbility>(Ability);
 			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);
+			AnimInstance->OnMontageEnded.RemoveDynamic(ability, &UCAS_GameplayAbility::MontageEndEvent);
+
 		}
 	}
 	Super::OnDestroy(bInOwnerFinished);

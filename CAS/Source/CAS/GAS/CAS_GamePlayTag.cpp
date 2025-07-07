@@ -13,6 +13,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_Evade, "Ability.Move.Evade")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Dead, "Ability.State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Invincible, "Ability.State.Invincible")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_State_TakeDamage, "Ability.State.TakeDamage")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperJump, "Ability.Move.SuperJump")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperSpeed, "Ability.Move.SuperSpeed")
 

@@ -28,7 +28,8 @@ public:
 public:
 	UFUNCTION()
 	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
-	
+	UFUNCTION()
+	virtual void MontageEndEvent(UAnimMontage* Montage, bool bInterrupted);
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
