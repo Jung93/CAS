@@ -65,6 +65,7 @@ void ACAS_Character::BeginPlay()
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
 		if (widget) {
 			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
+			AttributeSet->TakeDamageEvent.AddUObject(this, &ThisClass::TakeDamageEvent);
 		}		
 
 		AttributeSet->SpeedChanged.AddUObject(this, &ThisClass::SetWalkSpeed);
@@ -100,6 +101,11 @@ void ACAS_Character::DeadEvent()
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
 
+}
+
+void ACAS_Character::TakeDamageEvent()
+{
+	//플레이어 - 무적 1 초  , 몽타주 재생 
 }
 
 // Called every frame

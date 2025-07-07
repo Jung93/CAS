@@ -32,6 +32,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 	virtual void DeadEvent();
+	virtual void TakeDamageEvent();
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -71,5 +72,6 @@ protected:
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	int32 HpCount = 3;
+
 };
 
