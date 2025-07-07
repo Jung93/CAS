@@ -40,7 +40,7 @@ public:
 	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Character::GetAttributeSet, return nullptr;);}
 
 	virtual void AddDefaultAbilites();
-	virtual void InitAbilitySystemComponent(AController* controller);
+	virtual void InitAbilitySystemComponent();
 	void SetHp(int32 value);
 	void SetWalkSpeed(int32 value);
 

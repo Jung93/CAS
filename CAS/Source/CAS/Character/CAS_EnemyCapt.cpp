@@ -213,7 +213,6 @@ void ACAS_EnemyCapt::AddDefaultAbilites()
 	if (!ASC) {
 		return;
 	}
-	//DefaultAbilities.Add(EnemyAbility);
 	ASC->AddCharacterAbilities(DefaultAbilities);
 	FGameplayAbilitySpec Spec(EnemyAbility, 1,static_cast<int32>(EAbilityInputID::None));
 	ASC->GiveAbility(Spec);

@@ -119,7 +119,7 @@ public:
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
 
 public:	
-	virtual void InitAbilitySystemComponent(AController* controller) override;
+	virtual void InitAbilitySystemComponent() override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
