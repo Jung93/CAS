@@ -39,8 +39,8 @@ void UCAS_Task_PlayMontage::Activate()
 		if(bNotifyReady){
 			AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);
 		}
-		AnimInstance->Montage_Play(Montage, PlayRate);
 		AnimInstance->OnMontageEnded.AddDynamic(ability,&UCAS_GameplayAbility::MontageEndEvent);
+		AnimInstance->Montage_Play(Montage, PlayRate);
 		
 	}
 }

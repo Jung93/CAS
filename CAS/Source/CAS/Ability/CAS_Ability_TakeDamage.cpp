@@ -15,7 +15,7 @@ bool UCAS_Ability_TakeDamage::CanActivateAbility(const FGameplayAbilitySpecHandl
 void UCAS_Ability_TakeDamage::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", TakeDamageMontage, 1.0f, false);
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", TakeDamageMontage, 0.5f, false);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
 	}
