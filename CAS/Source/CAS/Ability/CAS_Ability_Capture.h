@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Ability_Task/CAS_Task_PlayMontage.h"
 #include "CAS_Ability_Capture.generated.h"
 
 /**
@@ -20,6 +21,11 @@ protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
+protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
-	TObjectPtr<UAnimMontage> AttackMontage;
+	UAnimMontage* CaptureMontage;
+
+	UPROPERTY()
+	UCAS_Task_PlayMontage* PlayMontageTask;
 };

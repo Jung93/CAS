@@ -238,17 +238,17 @@ void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
 	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
 }
 
-void ACAS_Player::OpenSlot(const FInputActionValue& Value)
-{
-	QuickSlotWidget->OpenSlot();
-
-}
-
-void ACAS_Player::CloseSlot(const FInputActionValue& Value)
-{
-	QuickSlotWidget->CloseSlot();
-
-}
+//void ACAS_Player::OpenSlot(const FInputActionValue& Value)
+//{
+//	QuickSlotWidget->OpenSlot();
+//
+//}
+//
+//void ACAS_Player::CloseSlot(const FInputActionValue& Value)
+//{
+//	QuickSlotWidget->CloseSlot();
+//
+//}
 
 void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 {
@@ -367,8 +367,8 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 
 
-		EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Started, this, &ACAS_Player::OpenSlot);
-		EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Completed, this, &ACAS_Player::CloseSlot);
+		//EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Started, this, &ACAS_Player::OpenSlot);
+		//EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Completed, this, &ACAS_Player::CloseSlot);
 
 		EnhancedInputComponent->BindAction(ChangeSlotAction01, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot01);
 		EnhancedInputComponent->BindAction(ChangeSlotAction02, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot02);

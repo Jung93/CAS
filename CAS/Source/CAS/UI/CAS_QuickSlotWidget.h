@@ -36,8 +36,8 @@ public:
 protected:
 	int32 SlotCount;
 protected:
-	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
-	class UHorizontalBox* SlotBox;
+	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	//class UHorizontalBox* SlotBox;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slots")
 	TSubclassOf<UCAS_SkillSlot> SlotWidgetClass;
 	UPROPERTY()

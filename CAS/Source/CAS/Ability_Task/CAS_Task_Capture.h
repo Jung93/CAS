@@ -15,4 +15,6 @@ public:
 protected:
 	virtual void Activate() override;
 
+	void OnNotifyReceived(FName NotifyName, const FBranchingPointNotifyPayload& Payload);
+
 };

@@ -16,8 +16,16 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
 
     SkillSlots.SetNum(SlotCount);
 
+
+
     for (int32 i = 0; i < SlotCount;i++)
     {
+        UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+
+        UBorder* rootBorder = Cast<UBorder>(root->GetChildAt(i));
+
+
+
         if (SlotWidgetClass)
         {
             UCAS_SkillSlot* slot = CreateWidget<UCAS_SkillSlot>(GetWorld(), SlotWidgetClass);
@@ -31,34 +39,38 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             if (i != 0)
             {
                 FLinearColor initColor = slot->GetColorAndOpacity();
-                initColor.A = 0.0f;
+                initColor.A = 0.3f;
                 slot->SetColorAndOpacity(initColor);
             }
-            else
-            {
-                auto slotBorder = Cast<UBorder>(slot->GetRootWidget());
-                auto imageBox = Cast<UImage>(slotBorder->GetContent());
+            //else
+            //{
+            //    auto slotBorder = Cast<UBorder>(slot->GetRootWidget());
+            //    auto imageBox = Cast<UImage>(slotBorder->GetContent());
 
-                auto panelBorder = Cast<UBorder>(SlotBox->GetParent());
-                auto panelSlot = Cast<UCanvasPanelSlot>(panelBorder->Slot);
-              
-                FVector2D Size = imageBox->Brush.GetImageSize();
-                Size.X += slotBorder->Padding.Right + 2.0f;
-                panelSlot->SetSize(Size);
+            //    auto panelBorder = Cast<UBorder>(SlotBox->GetParent());
+            //    auto panelSlot = Cast<UCanvasPanelSlot>(panelBorder->Slot);
+            //  
+            //    FVector2D Size = imageBox->Brush.GetImageSize();
+            //    Size.X += slotBorder->Padding.Right + 2.0f;
+            //    panelSlot->SetSize(Size);
 
-                FVector2D Pos = panelSlot->GetPosition();
-                Pos.X = 200.f;
-                panelSlot->SetPosition(Pos);
+            //    FVector2D Pos = panelSlot->GetPosition();
+            //    Pos.X = 200.f;
+            //    panelSlot->SetPosition(Pos);
 
-                BorderSizeX = Size.X;
-                BorderPosX = Pos.X;
+            //    BorderSizeX = Size.X;
+            //    BorderPosX = Pos.X;
 
-            }
+            //}
 
             SkillSlots[i] = slot;
-            if (SlotBox->IsValidLowLevel())
+            if (rootBorder->IsValidLowLevel())
             {
-                SlotBox->AddChildToHorizontalBox(slot);
+                auto box = Cast<UHorizontalBox>(rootBorder->GetContent());
+                box->AddChildToHorizontalBox(slot);
+
+
+                //SlotBox->AddChildToHorizontalBox(slot);
             }
         }
     }
@@ -125,15 +137,15 @@ void UCAS_QuickSlotWidget::OpenSlot()
                 Size.X = 550.f;
                 CanvasSlot->SetSize(Size);
 
-                for (int i = 1; i < SlotCount; i++)
-                {
-                    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
+                //for (int i = 1; i < SlotCount; i++)
+                //{
+                //    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
 
-                    FLinearColor initColor = slot->GetColorAndOpacity();
-                    initColor.A = 0.3f;
-                    slot->SetColorAndOpacity(initColor);
+                //    FLinearColor initColor = slot->GetColorAndOpacity();
+                //    initColor.A = 0.3f;
+                //    slot->SetColorAndOpacity(initColor);
 
-                }
+                //}
 
 
             }
@@ -165,15 +177,15 @@ void UCAS_QuickSlotWidget::CloseSlot()
                 Size.X = BorderSizeX;
                 CanvasSlot->SetSize(Size);
 
-                for (int i = 1; i < SlotCount; i++)
-                {
-                    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
+                //for (int i = 1; i < SlotCount; i++)
+                //{
+                //    auto slot = Cast<UCAS_SkillSlot>(SlotBox->GetChildAt(i));
 
-                    FLinearColor initColor = slot->GetColorAndOpacity();
-                    initColor.A = 0.0f;
-                    slot->SetColorAndOpacity(initColor);
+                //    FLinearColor initColor = slot->GetColorAndOpacity();
+                //    initColor.A = 0.0f;
+                //    slot->SetColorAndOpacity(initColor);
 
-                }
+                //}
             }
         }
     }

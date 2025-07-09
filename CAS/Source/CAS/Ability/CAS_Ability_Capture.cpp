@@ -21,10 +21,37 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
 		Task->ReadyForActivation();
 	}
+
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", CaptureMontage, 0.5f, true);
+	if (PlayMontageTask) {
+		PlayMontageTask->ReadyForActivation();
+	}
+
+
 }
 
 void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
+}
+
+void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+
+	if (NotifyName.IsEqual(FName("Capture1")))
+	{
+		//모자를 플레이어 손에 부착
+
+
+	}
+	else if (NotifyName.IsEqual(FName("Capture2")))
+	{
+		//손에서 떨어져서 날아감
+
+
+	
+	}
+
+	PlayMontageTask->ReadyForActivation();
 }
