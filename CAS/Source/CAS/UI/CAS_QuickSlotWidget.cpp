@@ -22,7 +22,9 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
     {
         UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
 
-        UBorder* rootBorder = Cast<UBorder>(root->GetChildAt(i));
+        UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+
+        UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(i));
 
 
 
