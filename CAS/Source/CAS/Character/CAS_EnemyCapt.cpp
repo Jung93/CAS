@@ -114,9 +114,15 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 	_hat = hat;
 	_isCaptured = true;
 
+	auto player = _hat->GetPlayer();
+	auto playerHP = player->GetAttributeSet()->GetHealth();
+
 	auto controller = GetController();
 
 	controller->UnPossess();
+
+	this->AttributeSet->SetHealth(playerHP);
+	this->AttributeSet->HpChanged.Broadcast(playerHP);
 
 	ACAS_PlayerController* playerController = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
 	if (playerController)
