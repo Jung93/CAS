@@ -3,6 +3,9 @@
 
 #include "Ability/CAS_Ability_Capture.h"
 #include "Ability_Task/CAS_Task_Capture.h"
+#include "Character/CAS_Player.h"
+#include "Character/CAS_Hat.h"
+
 UCAS_Ability_Capture::UCAS_Ability_Capture()
 {
 }
@@ -39,19 +42,28 @@ void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, c
 void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 
-	if (NotifyName.IsEqual(FName("Capture1")))
+	auto player = Cast<ACAS_Player>(GetActorInfo().AvatarActor);
+
+	if (!player->IsValidLowLevel())
+		return;
+
+	ACAS_Hat* Hat = player->GetHat();
+
+
+	if (NotifyName == "Capture1")
 	{
-		//모자를 플레이어 손에 부착
+		Hat->Ready();
 
 
 	}
-	else if (NotifyName.IsEqual(FName("Capture2")))
+	else if (NotifyName == "Capture2")
 	{
-		//손에서 떨어져서 날아감
+		auto dir = player->GetActorForwardVector();
 
-
-	
+		Hat->Throw(dir);
+		Hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	}
+
 
 	PlayMontageTask->ReadyForActivation();
 }

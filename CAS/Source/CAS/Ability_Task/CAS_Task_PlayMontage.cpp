@@ -41,7 +41,6 @@ void UCAS_Task_PlayMontage::Activate()
 		}
 		AnimInstance->OnMontageEnded.AddDynamic(ability,&UCAS_GameplayAbility::MontageEndEvent);
 		AnimInstance->Montage_Play(Montage, PlayRate);
-		
 	}
 }
 

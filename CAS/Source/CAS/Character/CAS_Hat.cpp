@@ -53,6 +53,11 @@ void ACAS_Hat::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ACAS_Hat::Ready()
+{
+	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r")); // 소켓 이름 "head" 예시
+}
+
 void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
 {
 	if (!_isThrowing)
