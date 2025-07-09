@@ -48,6 +48,7 @@ ACAS_Character::ACAS_Character()
 void ACAS_Character::BeginPlay()
 {
 	Super::BeginPlay();
+	InitAbilitySystemComponent();
 	if(HpBarWidgetClass){
 	
 		HpBarWidgetComponent->SetWidgetClass(HpBarWidgetClass);
@@ -64,6 +65,7 @@ void ACAS_Character::BeginPlay()
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
 		if (widget) {
 			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
+			AttributeSet->TakeDamageEvent.AddUObject(this, &ThisClass::TakeDamageEvent);
 		}		
 
 		AttributeSet->SpeedChanged.AddUObject(this, &ThisClass::SetWalkSpeed);
@@ -86,7 +88,7 @@ void ACAS_Character::BeginPlay()
 void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
-	InitAbilitySystemComponent(NewController);
+
 }
 
 void ACAS_Character::UnPossessed()
@@ -98,6 +100,12 @@ void ACAS_Character::UnPossessed()
 void ACAS_Character::DeadEvent()
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
+
+}
+
+void ACAS_Character::TakeDamageEvent()
+{
+	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
 
 }
 
@@ -131,16 +139,14 @@ void ACAS_Character::AddDefaultAbilites()
 	ASC->AddCharacterAbilities(DefaultAbilities);
 }
 
-void ACAS_Character::InitAbilitySystemComponent(AController* controller)
+void ACAS_Character::InitAbilitySystemComponent()
 {
-	if (auto curController = Cast<ACAS_PlayerController>(controller)) {
-		auto playerState = Cast<ACAS_PlayerState>(GetPlayerState());
-		int32 curHp = playerState->GetAttributeSet()->GetHealth();
+	if (AttributeSet) {
+		
+		int32 curHp = GetAttributeSet()->GetHealth();
 		SetHp(curHp);
 	}
-	
 	AbilitySystemComponent->InitAbilityActorInfo(this, this);
-	//AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Nomal"));
 }
 
 void ACAS_Character::SetHp(int32 value)

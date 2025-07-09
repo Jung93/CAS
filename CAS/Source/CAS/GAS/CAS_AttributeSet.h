@@ -16,6 +16,7 @@ DECLARE_MULTICAST_DELEGATE_OneParam(FHpChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FSpeedChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE_OneParam(FJumpForceChangedEvent, int32);
 DECLARE_MULTICAST_DELEGATE(FDeadEvent);
+DECLARE_MULTICAST_DELEGATE(FTakeDamageEvent);
 
 UCLASS()
 class CAS_API UCAS_AttributeSet : public UAttributeSet
@@ -36,7 +37,7 @@ public:
 	FSpeedChangedEvent SpeedChanged;
 	FJumpForceChangedEvent JumpForceChanged;
 	FDeadEvent DeadEvent;
-
+	FTakeDamageEvent TakeDamageEvent;
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))

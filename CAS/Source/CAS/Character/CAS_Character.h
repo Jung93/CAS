@@ -32,6 +32,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 	virtual void DeadEvent();
+	virtual void TakeDamageEvent();
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -40,7 +41,7 @@ public:
 	virtual UCAS_AttributeSet* GetAttributeSet() const	{PURE_VIRTUAL(ACAS_Character::GetAttributeSet, return nullptr;);}
 
 	virtual void AddDefaultAbilites();
-	virtual void InitAbilitySystemComponent(AController* controller);
+	virtual void InitAbilitySystemComponent();
 	void SetHp(int32 value);
 	void SetWalkSpeed(int32 value);
 
@@ -71,5 +72,6 @@ protected:
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	int32 HpCount = 3;
+
 };
 

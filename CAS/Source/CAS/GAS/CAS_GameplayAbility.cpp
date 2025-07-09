@@ -23,6 +23,10 @@ void UCAS_GameplayAbility::PlayAnimNotify(FName NotifyName, const FBranchingPoin
 {
 }
 
+void UCAS_GameplayAbility::MontageEndEvent(UAnimMontage* Montage, bool bInterrupted)
+{
+}
+
 void UCAS_GameplayAbility::CAS_EndAbility()
 {
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, true, false);

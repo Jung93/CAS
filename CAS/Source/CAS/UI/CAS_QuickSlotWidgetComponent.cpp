@@ -34,13 +34,9 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 
 		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
 			auto AbilitySpec = FGameplayAbilitySpec(newAbility,1);
-			auto testhandle = ASC->GiveAbility(AbilitySpec);
+			ASC->GiveAbility(AbilitySpec);
 			
-
-
-
-			testaaa2 = player;
-			auto temp = ASC->GetActivatableAbilities();	
+			//auto temp = ASC->GetActivatableAbilities();	
 			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
 			if (DefaultObj->IsValidLowLevel()) {

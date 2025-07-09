@@ -6,10 +6,17 @@
 void UCAS_AbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& Abilities)
 {
 	for (auto& AbilityClass : Abilities) {
-		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
-		FGameplayAbilitySpecHandle specHandle = GiveAbility(AbilitySpec);
+		if (FindAbilitySpecFromClass(AbilityClass) == nullptr) {
+			FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, 1);
+			FGameplayAbilitySpecHandle specHandle = GiveAbility(AbilitySpec);
 
-		SpecHandles.Add(specHandle);
+			SpecHandles.Add(specHandle);
+		}
+		else {
+			FString DebugMessage = FString::Printf(TEXT("ERRORRRRR"));
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DebugMessage);
+
+		}
 	}
 }
 
