@@ -9,7 +9,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Blueprint/DragDropOperation.h"
 
-void UCAS_SkillSlot::SetSlotData(const FCAS_SlotData& Data)
+void UCAS_SkillSlot::SetSlotData(const FCAS_SkillData& Data)
 {
 	DragSlotData = Data;
 	UpdateIcon();

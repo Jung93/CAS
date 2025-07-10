@@ -10,9 +10,22 @@
 #include "CAS_AttributeSet.h"
 #include "CAS_GameplayAbility.generated.h"
 
-/**
- * 
- */
+
+USTRUCT(BlueprintType)
+struct FCAS_SkillData
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UTexture2D* SlotTexture;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SlotIndex;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName AbilityTag;
+};
+
 UCLASS()
 class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 {

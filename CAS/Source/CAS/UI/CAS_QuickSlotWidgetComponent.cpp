@@ -3,7 +3,6 @@
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "Character/CAS_Player.h"
-#include "GAS/CAS_GameplayAbility.h"
 
 // Sets default values for this component's properties
 UCAS_QuickSlotWidgetComponent::UCAS_QuickSlotWidgetComponent()
@@ -16,7 +15,7 @@ void UCAS_QuickSlotWidgetComponent::InitSetting(int32 count)
 	PlayerAbilities.SetNum(count);
 
 	for (int32 i = 0; i < count; i++) {
-		FCAS_SlotData Data;
+		FCAS_SkillData Data;
 		Data.SlotIndex = i;
 		Data.SlotTexture = nullptr;
 		Data.AbilityTag = FName(TEXT("None"));
@@ -36,14 +35,14 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 			auto AbilitySpec = FGameplayAbilitySpec(newAbility,1);
 			ASC->GiveAbility(AbilitySpec);
 			
-			//auto temp = ASC->GetActivatableAbilities();	
+			//여기
 			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
 			if (DefaultObj->IsValidLowLevel()) {
 				UTexture2D* TextureData = DefaultObj->AbilityIcon;
 				FName TagData = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
 
-				FCAS_SlotData Data;
+				FCAS_SkillData Data;
 				Data.SlotIndex = index;
 
 				Data.SlotTexture = TextureData;
@@ -61,7 +60,8 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 
 void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)
 {
-	FCAS_SlotData slotData = PlayerAbilities[index];
+	//여기
+	FCAS_SkillData slotData = PlayerAbilities[index];
 	if (slotData.SlotTexture == nullptr) {
 		return;
 	}
@@ -82,12 +82,12 @@ void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)
 	}
 }
 
-FCAS_SlotData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)
+FCAS_SkillData UCAS_QuickSlotWidgetComponent::GetAbilityData(int32 index)
 {
 	return PlayerAbilities[index];
 }
 
-void UCAS_QuickSlotWidgetComponent::UpdateQuickSlot(int32 index, FCAS_SlotData slotData)
+void UCAS_QuickSlotWidgetComponent::UpdateQuickSlot(int32 index, FCAS_SkillData slotData)
 {
 	PlayerAbilities[index] = slotData;
 }

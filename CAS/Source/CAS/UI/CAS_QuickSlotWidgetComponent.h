@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "UI/CAS_SkillSlot.h"
+#include "GAS/CAS_GameplayAbility.h"
 #include "CAS_QuickSlotWidgetComponent.generated.h"
 
 
@@ -23,12 +24,12 @@ public:
 
 	int32 FindEmptyPlayerAbilityIndex();
 
-	FCAS_SlotData GetAbilityData(int32 index);
-	TArray<FCAS_SlotData>& GetPlayerAbilities() { return PlayerAbilities; }
+	FCAS_SkillData GetAbilityData(int32 index);
+	TArray<FCAS_SkillData>& GetPlayerAbilities() { return PlayerAbilities; }
 
-	void UpdateQuickSlot(int32 index, FCAS_SlotData slotData);
+	void UpdateQuickSlot(int32 index, FCAS_SkillData slotData);
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Abilities)
-	TArray<FCAS_SlotData> PlayerAbilities;
+	TArray<FCAS_SkillData> PlayerAbilities;
 };
