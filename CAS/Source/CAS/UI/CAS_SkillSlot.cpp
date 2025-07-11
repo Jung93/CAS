@@ -9,7 +9,7 @@
 #include "Blueprint/WidgetTree.h"
 #include "Blueprint/DragDropOperation.h"
 
-void UCAS_SkillSlot::SetSlotData(const FCAS_SkillData& Data)
+void UCAS_SkillSlot::SetSlotData(const FCAS_SlotData& Data)
 {
 	DragSlotData = Data;
 	UpdateIcon();
@@ -18,7 +18,7 @@ void UCAS_SkillSlot::SetSlotData(const FCAS_SkillData& Data)
 void UCAS_SkillSlot::UpdateIcon()
 {
 	UTexture2D* Texture;
-	if (DragSlotData.SlotTexture->IsValidLowLevel())
+	if (DragSlotData.SkillData.AbilityIconTexture->IsValidLowLevel())
 	{
 		Texture = DragSlotData.SlotTexture;
 	}
@@ -26,6 +26,7 @@ void UCAS_SkillSlot::UpdateIcon()
 		Texture = DefaultTexture;
 	}
 	CAS_Image->SetBrushFromTexture(Texture);
+	
 }
 
 FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

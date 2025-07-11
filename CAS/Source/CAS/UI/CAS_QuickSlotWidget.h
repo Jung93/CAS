@@ -8,7 +8,7 @@
 #include "GAS/CAS_GameplayAbility.h"
 #include "CAS_QuickSlotWidget.generated.h"
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SkillData );
+DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
 DECLARE_MULTICAST_DELEGATE_OneParam(FRemoveAbilityEvent, int32);
 
 
@@ -19,8 +19,8 @@ class CAS_API UCAS_QuickSlotWidget : public UUserWidget
 public:
 	void InitSetting(int32 count);
 	void SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* DropSlot);
-	const FCAS_SkillData& GetSlotData(int32 SlotIndex) const { return SkillSlots[SlotIndex]->GetSlotData(); }
-	void SetSlotData(int32 index, const FCAS_SkillData& AbilityData);
+	const FCAS_SlotData& GetSlotData(int32 SlotIndex) const { return SkillSlots[SlotIndex]->GetSlotData(); }
+	void SetSlotData(int32 index, const FCAS_SlotData& AbilityData);
 	void RemoveSlotData(int32 index);
 
 	void OpenSlot();

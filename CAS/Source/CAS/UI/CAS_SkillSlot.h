@@ -7,13 +7,24 @@
 #include "GAS/CAS_GameplayAbility.h"
 #include "CAS_SkillSlot.generated.h"
 
+USTRUCT(BlueprintType)
+struct FCAS_SlotData
+{
+    GENERATED_BODY()
+
+    UPROPERTY()
+    int32 SlotIndex;
+    UPROPERTY()
+    FCAS_SkillData* SkillData;
+};
+
 UCLASS()
 class CAS_API UCAS_SkillSlot : public UUserWidget
 {
 	GENERATED_BODY()
 public:
-    void SetSlotData(const FCAS_SkillData& InitData);
-    const FCAS_SkillData& GetSlotData() const { return DragSlotData; }
+    void SetSlotData(const FCAS_SlotData& InitData);
+    const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
     int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
 
 protected:
@@ -33,5 +44,5 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "QuickSlot")
     TSubclassOf<UCAS_SkillSlot> SkillSlotWidgetClass;
 protected:
-    FCAS_SkillData DragSlotData;
+    FCAS_SlotData DragSlotData;
 };

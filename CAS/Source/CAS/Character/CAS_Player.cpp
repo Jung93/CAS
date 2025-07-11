@@ -199,8 +199,8 @@ void ACAS_Player::HideMouse(const FInputActionValue& Value)
 
 void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
 {
-	FCAS_SkillData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
-	if (SlotData.SlotTexture == nullptr) {
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
+	if (SlotData.SkillData->AbilityIconTexture == nullptr) {
 		return;
 	}
 	FName name = SlotData.AbilityTag;
@@ -210,7 +210,7 @@ void ACAS_Player::QuickSlotFunction01(const FInputActionValue& Value)
 
 void ACAS_Player::QuickSlotFunction02(const FInputActionValue& Value)
 {
-	FCAS_SkillData SlotData = QuickSlotWidgetComponent->GetAbilityData(1);
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(1);
 	if (SlotData.SlotTexture == nullptr) {
 		return;
 	}
@@ -220,7 +220,7 @@ void ACAS_Player::QuickSlotFunction02(const FInputActionValue& Value)
 
 void ACAS_Player::QuickSlotFunction03(const FInputActionValue& Value)
 {
-	FCAS_SkillData SlotData = QuickSlotWidgetComponent->GetAbilityData(2);
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(2);
 	if (SlotData.SlotTexture == nullptr) {
 		return;
 	}
@@ -230,7 +230,7 @@ void ACAS_Player::QuickSlotFunction03(const FInputActionValue& Value)
 
 void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
 {
-	FCAS_SkillData SlotData = QuickSlotWidgetComponent->GetAbilityData(3);
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(3);
 	if (SlotData.SlotTexture == nullptr) {
 		return;
 	}
@@ -256,8 +256,8 @@ void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 	QuickSlotWidget->ChangeSlotToLeft();
 
 	int32 num = PlayerAbilityCount - 1;
-	TArray<FCAS_SkillData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
-	FCAS_SkillData data = abilities[0];
+	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	FCAS_SlotData data = abilities[0];
 
 	for (int32 i = 0; i < num; i++)
 	{
@@ -273,8 +273,8 @@ void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 	QuickSlotWidget->ChangeSlotToRight();
 
 	int32 num = PlayerAbilityCount - 1;
-	TArray<FCAS_SkillData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
-	FCAS_SkillData data = abilities[num];
+	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	FCAS_SlotData data = abilities[num];
 
 	for (int32 i = num; i > 0; i--)
 	{

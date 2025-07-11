@@ -31,7 +31,7 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
         if (SlotWidgetClass)
         {
             UCAS_SkillSlot* slot = CreateWidget<UCAS_SkillSlot>(GetWorld(), SlotWidgetClass);
-            FCAS_SkillData Data;
+            FCAS_SlotData Data;
             Data.SlotIndex = i;
             Data.SlotTexture = nullptr;
             Data.AbilityTag = FName(TEXT("None"));
@@ -86,8 +86,8 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
     if (DragIndex == DropIndex) {
         return;
     }
-    FCAS_SkillData DragSlotData = DragSlot->GetSlotData();
-    FCAS_SkillData DropSlotData = DropSlot->GetSlotData();
+    FCAS_SlotData DragSlotData = DragSlot->GetSlotData();
+    FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
 
     DragSlotData.SlotIndex = DropIndex;
     DropSlotData.SlotIndex = DragIndex;
@@ -100,14 +100,14 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
 
 }
 
-void UCAS_QuickSlotWidget::SetSlotData(int32 index, const FCAS_SkillData& AbilityData)
+void UCAS_QuickSlotWidget::SetSlotData(int32 index, const FCAS_SlotData& AbilityData)
 {
     SkillSlots[index]->SetSlotData(AbilityData);
 }
 
 void UCAS_QuickSlotWidget::RemoveSlotData(int32 index)
 {
-    FCAS_SkillData Data;
+    FCAS_SlotData Data;
     Data.SlotIndex = index;
     Data.SlotTexture = nullptr;
     Data.AbilityTag = FName(TEXT("None"));
@@ -200,12 +200,12 @@ void UCAS_QuickSlotWidget::ChangeSlotToLeft()
 
     int32 num = SkillSlots.Num() - 1;
     UCAS_SkillSlot* slot = SkillSlots[0];
-    FCAS_SkillData data = slot->GetSlotData();
+    FCAS_SlotData data = slot->GetSlotData();
     data.SlotIndex = SkillSlots[num]->GetSlotIndex();
 
     for (int32 i = 0; i < num; i++)
     {
-        FCAS_SkillData targetData = SkillSlots[i + 1]->GetSlotData();
+        FCAS_SlotData targetData = SkillSlots[i + 1]->GetSlotData();
         targetData.SlotIndex = SkillSlots[i]->GetSlotIndex();
 
         SkillSlots[i]->SetSlotData(targetData);
@@ -220,12 +220,12 @@ void UCAS_QuickSlotWidget::ChangeSlotToRight()
 
     int32 num = SkillSlots.Num() - 1;
     UCAS_SkillSlot* slot = SkillSlots[num];
-    FCAS_SkillData data = slot->GetSlotData();
+    FCAS_SlotData data = slot->GetSlotData();
     data.SlotIndex = SkillSlots[0]->GetSlotIndex();
 
     for (int32 i = num; i > 0; i--)
     {
-        FCAS_SkillData targetData = SkillSlots[i - 1]->GetSlotData();
+        FCAS_SlotData targetData = SkillSlots[i - 1]->GetSlotData();
         targetData.SlotIndex = SkillSlots[i]->GetSlotIndex();
 
         SkillSlots[i]->SetSlotData(targetData);

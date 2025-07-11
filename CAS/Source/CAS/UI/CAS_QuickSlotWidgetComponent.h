@@ -24,12 +24,12 @@ public:
 
 	int32 FindEmptyPlayerAbilityIndex();
 
-	FCAS_SkillData GetAbilityData(int32 index);
-	TArray<FCAS_SkillData>& GetPlayerAbilities() { return PlayerAbilities; }
+	FCAS_SlotData GetAbilityData(int32 index);
+	TArray<FCAS_SlotData>& GetPlayerAbilities() { return PlayerAbilities; }
 
-	void UpdateQuickSlot(int32 index, FCAS_SkillData slotData);
+	void UpdateQuickSlot(int32 index, FCAS_SlotData slotData);
 protected:
 
 	UPROPERTY(VisibleAnywhere, Category = Abilities)
-	TArray<FCAS_SkillData> PlayerAbilities;
+	TArray<FCAS_SlotData> PlayerAbilities;
 };
