@@ -35,7 +35,7 @@ class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 public:
 	UCAS_GameplayAbility();
 
-	FCAS_SkillData* GetSkillData() { return SkillData; }
+	const FCAS_SkillData& GetSkillData() { return SkillData; }
 
 	void CAS_EndAbility();
 public:
@@ -51,5 +51,6 @@ protected:
 	UTexture2D* AbilityIcon;
 	EAbilityInputID InputID = EAbilityInputID::None;
 
-	FCAS_SkillData* SkillData;
+	UPROPERTY()
+	FCAS_SkillData SkillData;
 };

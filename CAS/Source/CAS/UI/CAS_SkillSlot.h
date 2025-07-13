@@ -13,9 +13,9 @@ struct FCAS_SlotData
     GENERATED_BODY()
 
     UPROPERTY()
-    int32 SlotIndex;
+    int32 SlotIndex = -1;
     UPROPERTY()
-    FCAS_SkillData* SkillData;
+    FCAS_SkillData SkillData;
 };
 
 UCLASS()

@@ -20,7 +20,7 @@ void UCAS_SkillSlot::UpdateIcon()
 	UTexture2D* Texture;
 	if (DragSlotData.SkillData.AbilityIconTexture->IsValidLowLevel())
 	{
-		Texture = DragSlotData.SlotTexture;
+		Texture = DragSlotData.SkillData.AbilityIconTexture;
 	}
 	else {
 		Texture = DefaultTexture;
