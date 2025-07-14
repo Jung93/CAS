@@ -30,17 +30,11 @@ bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 	if (player->IsValidLowLevel()) {
 		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
 
-
 		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
 			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 			if (DefaultObj->IsValidLowLevel()) {
 				
-				//FCAS_SkillData SkillData = DefaultObj->GetSkillData();
-
-				FCAS_SkillData SkillData;
-				SkillData.AbilityIconTexture = DefaultObj->AbilityIcon;
-				SkillData.AbilityTag = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
-				SkillData.InputID = DefaultObj->InputID;
+				FCAS_SkillData SkillData = DefaultObj->GetSkillData();
 
 				auto AbilitySpec = FGameplayAbilitySpec(newAbility, 1, static_cast<int32>(SkillData.InputID));
 				ASC->GiveAbility(AbilitySpec);

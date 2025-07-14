@@ -35,12 +35,7 @@ class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 public:
 	UCAS_GameplayAbility();
 
-	//const FCAS_SkillData& GetSkillData() { return SkillData; }
-	//FCAS_SkillData SkillData;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	UTexture2D* AbilityIcon;
-	EAbilityInputID InputID = EAbilityInputID::None;
+	const FCAS_SkillData& GetSkillData();
 
 	void CAS_EndAbility();
 public:
@@ -52,4 +47,9 @@ public:
 protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
+	FCAS_SkillData SkillData;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	UTexture2D* AbilityIcon;
+	EAbilityInputID InputID = EAbilityInputID::None;
 };

@@ -6,19 +6,25 @@
 UCAS_GameplayAbility::UCAS_GameplayAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	//auto DefaultObj = GetClass()->GetDefaultObject<UCAS_GameplayAbility>();
-	//
-	//UTexture2D* TextureData = DefaultObj->AbilityIcon;
-	//EAbilityInputID InputID_Data = DefaultObj->InputID;
-	//FName TagData = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
-	//
-	//FCAS_SkillData Data;
-	//
-	//Data.AbilityIconTexture = TextureData;
-	//Data.AbilityTag = TagData;
-	//Data.InputID = InputID_Data;
-	//
-	//SkillData = Data;
+
+}
+
+const FCAS_SkillData& UCAS_GameplayAbility::GetSkillData()
+{
+	if (SkillData.AbilityIconTexture == nullptr) {
+		FCAS_SkillData Data;
+
+		UTexture2D* TextureData = AbilityIcon;
+		EAbilityInputID InputID_Data = InputID;
+		FName TagData = AbilityTags.GetByIndex(0).GetTagName();
+
+		Data.AbilityIconTexture = TextureData;
+		Data.AbilityTag = TagData;
+		Data.InputID = InputID_Data;
+
+		SkillData = Data;
+	}
+	return SkillData;
 }
 
 void UCAS_GameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
