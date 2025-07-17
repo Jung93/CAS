@@ -19,14 +19,15 @@ void UCAS_SkillSlot::SetSlotData(const FCAS_SlotData& Data)
 void UCAS_SkillSlot::UpdateIcon()
 {
 	UTexture2D* Texture;
-	if (DragSlotData.SlotTexture->IsValidLowLevel())
+	if (DragSlotData.SkillData.AbilityIconTexture->IsValidLowLevel())
 	{
-		Texture = DragSlotData.SlotTexture;
+		Texture = DragSlotData.SkillData.AbilityIconTexture;
 	}
 	else {
 		Texture = DefaultTexture;
 	}
 	CAS_Image->SetBrushFromTexture(Texture);
+	
 }
 
 FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

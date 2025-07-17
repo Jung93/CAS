@@ -33,9 +33,8 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             UCAS_SkillSlot* slot = CreateWidget<UCAS_SkillSlot>(GetWorld(), SlotWidgetClass);
             FCAS_SlotData Data;
             Data.SlotIndex = i;
-            Data.SlotTexture = nullptr;
-            Data.AbilityTag = FName(TEXT("None"));
-
+            Data.SkillData.AbilityIconTexture = nullptr;
+            Data.SkillData.AbilityTag = FName(TEXT("None"));
             slot->SetSlotData(Data);
 
             if (i != 0)
@@ -130,9 +129,9 @@ void UCAS_QuickSlotWidget::RemoveSlotData(int32 index)
 {
     FCAS_SlotData Data;
     Data.SlotIndex = index;
-    Data.SlotTexture = nullptr;
-    Data.AbilityTag = FName(TEXT("None"));
-
+    Data.SkillData.AbilityIconTexture = nullptr;
+    Data.SkillData.AbilityTag = FName(TEXT("None"));
+   
     SkillSlots[index]->SetSlotData(Data);
 }
 

@@ -42,6 +42,7 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Ability_Attacking);	
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Invincible);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Detectable);
 	
 
 }

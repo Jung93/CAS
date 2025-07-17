@@ -29,12 +29,14 @@ void UCAS_AttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
 		int32 Hp = FMath::RoundToInt(GetHealth());
+		HpChanged.Broadcast(Hp);
+
 		if (Hp <= 0)
 		{
 			DeadEvent.Broadcast();
 		}
 		else{
-			HpChanged.Broadcast(Hp);
+			
 			TakeDamageEvent.Broadcast();
 		}
 	}

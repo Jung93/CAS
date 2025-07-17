@@ -4,23 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "GAS/CAS_GameplayAbility.h"
 #include "CAS_SkillSlot.generated.h"
-
 
 USTRUCT(BlueprintType)
 struct FCAS_SlotData
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    class UTexture2D* SlotTexture;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    int32 SlotIndex;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName AbilityTag;
+    UPROPERTY()
+    int32 SlotIndex = -1;
+    UPROPERTY()
+    FCAS_SkillData SkillData;
 };
+
 UCLASS()
 class CAS_API UCAS_SkillSlot : public UUserWidget
 {

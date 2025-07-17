@@ -36,14 +36,10 @@ protected:
 	void ShowMouse(const FInputActionValue& Value);
 	void HideMouse(const FInputActionValue& Value);
 
-	void QuickSlotFunction01(const FInputActionValue& Value);
-	void QuickSlotFunction02(const FInputActionValue& Value);
-	void QuickSlotFunction03(const FInputActionValue& Value);
-	void QuickSlotFunction04(const FInputActionValue& Value);
-
-
-	void OpenSlot(const FInputActionValue& Value);
-	void CloseSlot(const FInputActionValue& Value);
+	void QuickSlotFunction(const FInputActionValue& Value);
+	void InputReleased(const FInputActionValue& Value);
+	//void OpenSlot(const FInputActionValue& Value);
+	//void CloseSlot(const FInputActionValue& Value);
 	void ChangeSlot01(const FInputActionValue& Value);
 	void ChangeSlot02(const FInputActionValue& Value);
 
@@ -83,15 +79,7 @@ protected:
 	UInputAction* ShowMouseAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* QuickSlot01;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* QuickSlot02;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* QuickSlot03;
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* QuickSlot04;
-
-
+	UInputAction* QuickSlotAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* OpenSlotAction;

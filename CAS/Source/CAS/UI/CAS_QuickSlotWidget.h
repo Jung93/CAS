@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/CAS_SkillSlot.h"
+#include "GAS/CAS_GameplayAbility.h"
 #include "CAS_QuickSlotWidget.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
