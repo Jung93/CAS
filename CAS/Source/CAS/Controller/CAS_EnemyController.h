@@ -25,13 +25,13 @@ public:
 	virtual void BeginPlay() override;
 	UFUNCTION()
 	void RandMove();
-
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlackboardData* BlackboardData;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBehaviorTree* BehaviorTree;
-protected:
+	UPROPERTY()
+	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
 protected:

@@ -3,6 +3,7 @@
 
 #include "Controller/CAS_EnemyController.h"
 #include "Controller/CAS_PlayerController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Character/CAS_Character.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
@@ -24,8 +25,8 @@ ACAS_EnemyController::ACAS_EnemyController()
 void ACAS_EnemyController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
-	UBlackboardComponent* BlackBoardComp = Blackboard;
-	UseBlackboard(BlackboardData, BlackBoardComp);
+	BlackBoardComponent = Blackboard;
+	UseBlackboard(BlackboardData, BlackBoardComponent);
 	RunBehaviorTree(BehaviorTree);
 }
 
@@ -59,11 +60,10 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 	auto CharacterController = character->GetController();
 
 	if (auto playerController = Cast<ACAS_PlayerController>(CharacterController)) {
-		//character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
-		/*
-		1.플레이어 자체인경우 
-		2.빙의된 enemy인 경우
-
-		*/
+		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+		
+		if (bDetected) {
+			BlackBoardComponent->SetValueAsObject("Target", Actor);
+		}
 	}
 }
