@@ -25,7 +25,7 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		Task->ReadyForActivation();
 	}
 
-	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", CaptureMontage, 0.5f, true);
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", CaptureMontage, 1.0f, true);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
 	}
@@ -35,6 +35,8 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 
 void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	PlayMontageTask->EndTask();
+
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
 }
@@ -63,7 +65,16 @@ void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPoin
 		Hat->Throw(dir);
 		Hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	}
+	else if (NotifyName == "Capture3")
+	{
+	}
+
 
 
 	PlayMontageTask->ReadyForActivation();
+}
+
+void UCAS_Ability_Capture::MontageEndEvent(UAnimMontage* Montage, bool bInterrupted)
+{
+	CAS_EndAbility();
 }

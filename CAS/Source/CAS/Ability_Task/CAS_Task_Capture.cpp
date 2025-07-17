@@ -15,27 +15,6 @@ void UCAS_Task_Capture::Activate()
 {
 	Super::Activate();
 
-	auto player = Cast<ACAS_Player>((GetAvatarActor()));
-	if (player->IsValidLowLevel()) {
-
-		//ACAS_Hat* Hat =  player->GetHat();
-
-		//auto dir = player->GetActorForwardVector();
-
-		//Hat->Throw(dir);
-		//Hat->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-
-
-		auto Handle = Ability->GetCurrentAbilitySpecHandle();
-		auto ActorInfo = Ability->GetCurrentActorInfo();
-		auto ActivationInfo = Ability->GetCurrentActivationInfo();
-
-		AbilityEndEvent.Broadcast(Handle, ActorInfo, ActivationInfo, true, false);
-	}
 }
 
-void UCAS_Task_Capture::OnNotifyReceived(FName NotifyName, const FBranchingPointNotifyPayload& Payload)
-{
 
-
-}

@@ -86,6 +86,27 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
     if (DragIndex == DropIndex) {
         return;
     }
+
+    if (DropIndex == 4)
+        return;
+
+    if (DragIndex == 4)
+    {
+        FCAS_SlotData DragSlotData = DragSlot->GetSlotData();
+        FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
+
+        DragSlotData.SlotIndex = DropIndex;
+        //DropSlotData.SlotIndex = DragIndex;
+
+        //DragSlot->SetSlotData(DropSlotData);
+        DropSlot->SetSlotData(DragSlotData);
+
+        //QuickSlotSwapEvent.Broadcast(DragIndex, DropSlotData);
+        //QuickSlotSwapEvent.Broadcast(DropIndex, DragSlotData);
+
+        return;
+    }
+
     FCAS_SlotData DragSlotData = DragSlot->GetSlotData();
     FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
 
@@ -232,4 +253,13 @@ void UCAS_QuickSlotWidget::ChangeSlotToRight()
     }
 
     SkillSlots[0]->SetSlotData(data);
+}
+
+void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots)
+{
+    for (int32 i = 0; i < SlotCount;i++)
+    {
+        SelectSkillSlots[i]->SwitchDragable();
+    }
+
 }

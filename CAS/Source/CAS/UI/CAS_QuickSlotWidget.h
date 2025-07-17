@@ -22,11 +22,15 @@ public:
 	void SetSlotData(int32 index, const FCAS_SlotData& AbilityData);
 	void RemoveSlotData(int32 index);
 
+	const TArray<UCAS_SkillSlot*> GetSkillSlots() { return SkillSlots; }
+
 	void OpenSlot();
 	void CloseSlot();
 
 	void ChangeSlotToLeft();
 	void ChangeSlotToRight();
+
+	void BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots);
 
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;

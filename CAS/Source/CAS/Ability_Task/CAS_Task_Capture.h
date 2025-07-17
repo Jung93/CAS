@@ -12,7 +12,7 @@ class CAS_API UCAS_Task_Capture : public UCAS_AbilityTask
 	GENERATED_BODY()
 public:
 	static UCAS_Task_Capture* Task_Capture(UGameplayAbility* OwningAbility, FName TaskName);
-	void OnNotifyReceived(FName NotifyName, const FBranchingPointNotifyPayload& Payload);
+
 protected:
 	virtual void Activate() override;
 

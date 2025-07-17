@@ -3,6 +3,7 @@
 
 #include "UI/CAS_SkillSlot.h"
 #include "UI/CAS_QuickSlotWidget.h"
+#include "UI/CAS_SelectSkillWidget.h"
 #include "Components/Image.h"
 #include "Character/CAS_Player.h"
 #include "Blueprint/WidgetBlueprintLibrary.h"
@@ -49,9 +50,15 @@ FReply UCAS_SkillSlot::NativeOnMouseButtonDown(const FGeometry& InGeometry, cons
 void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
 {
 	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
+
+	if (isDragable == false)
+		return;
+
 	UDragDropOperation* DragOp = NewObject<UDragDropOperation>();
 
 	UCAS_SkillSlot* DragVisual = CreateWidget<UCAS_SkillSlot>(GetOwningPlayer(), SkillSlotWidgetClass);
+
+
 
 	DragVisual->SetRenderOpacity(0.7f);
 
@@ -83,6 +90,27 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 			result = true;
 			quickSlotWidget->SwapSlots(otherSlot, this);
 		}
+
+		if (otherSlot->GetSlotIndex() == 4)
+		{
+			//어빌리티랑 스킬슬롯 변경하면서 스킬 선택창 닫기
+			if (otherSlot->GetSlotIndex() == this->GetSlotIndex())
+				return false;
+
+			UCAS_SelectSkillWidget* selectSkillWidget = Cast<UCAS_SelectSkillWidget>(player->GetSelectSkillWidget());
+
+
+
+			if (selectSkillWidget->IsValidLowLevel())
+			{
+				selectSkillWidget->SetSlots(this->GetSlotIndex(), quickSlotWidget->GetSkillSlots());
+				selectSkillWidget->RemoveFromParent();
+
+			}
+
+		}
+
+
 	}
 	return result;
 }

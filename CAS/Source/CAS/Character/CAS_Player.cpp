@@ -19,6 +19,11 @@
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "UI/CAS_QuickSlotWidget.h"
+#include "UI/CAS_SelectSkillWidget.h"
+
+
+
+
 
 // Sets default values
 ACAS_Player::ACAS_Player()
@@ -253,35 +258,38 @@ void ACAS_Player::QuickSlotFunction04(const FInputActionValue& Value)
 void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 {
 
-	QuickSlotWidget->ChangeSlotToLeft();
+	//QuickSlotWidget->ChangeSlotToLeft();
 
-	int32 num = PlayerAbilityCount - 1;
-	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
-	FCAS_SlotData data = abilities[0];
+	//int32 num = PlayerAbilityCount - 1;
+	//TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	//FCAS_SlotData data = abilities[0];
 
-	for (int32 i = 0; i < num; i++)
-	{
-		abilities[i] = abilities[i + 1];
-	}
+	//for (int32 i = 0; i < num; i++)
+	//{
+	//	abilities[i] = abilities[i + 1];
+	//}
 
-	abilities[num] = data;
+	//abilities[num] = data;
+
+	SelectSkillWidget->RemoveFromParent();
 
 }
 
 void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 {
-	QuickSlotWidget->ChangeSlotToRight();
+	//QuickSlotWidget->ChangeSlotToRight();
 
-	int32 num = PlayerAbilityCount - 1;
-	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
-	FCAS_SlotData data = abilities[num];
+	//int32 num = PlayerAbilityCount - 1;
+	//TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
+	//FCAS_SlotData data = abilities[num];
 
-	for (int32 i = num; i > 0; i--)
-	{
-		abilities[i] = abilities[i - 1];
-	}
+	//for (int32 i = num; i > 0; i--)
+	//{
+	//	abilities[i] = abilities[i - 1];
+	//}
 
-	abilities[0] = data;
+	//abilities[0] = data;
+
 
 }
 
@@ -319,6 +327,18 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::RemovePlayerAbility);
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
+
+	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
+
+	SelectSkillWidget = NewSelectSkillWidget;
+
+	if (SelectSkillWidget->IsValidLowLevel())
+	{
+		SelectSkillWidget->InitSetting();
+	}
+
+
+
 
 }
 
@@ -412,6 +432,10 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 {
 	int32 Index = QuickSlotWidgetComponent->FindEmptyPlayerAbilityIndex();
 	if (Index < 0) {
+		SelectSkillWidget->SetSlots(QuickSlotWidget->GetSkillSlots(), newAbility);
+		SelectSkillWidget->AddToViewport();
+		QuickSlotWidget->BlockSlotSwap(SelectSkillWidget->GetSkillSlots());
+
 		return;
 	}
 

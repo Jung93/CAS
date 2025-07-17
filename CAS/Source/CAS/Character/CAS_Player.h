@@ -124,6 +124,8 @@ public:
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override;
 
 	class UCAS_QuickSlotWidget* GetQuickSlotWidget() { return QuickSlotWidget; }
+	class UCAS_SelectSkillWidget* GetSelectSkillWidget() { return SelectSkillWidget; }
+	class UCAS_QuickSlotWidgetComponent* GetQuickSlotWidgetComponent() { return QuickSlotWidgetComponent; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 protected:
 	
@@ -139,6 +141,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Abilities)
 	int32 PlayerAbilityCount = 4;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerAblilties|SelectSKill")
+	TSubclassOf<class UCAS_SelectSkillWidget> SelectSkillWidgetClass;
+
+
 	class UCAS_QuickSlotWidget* QuickSlotWidget;
 	class UCAS_QuickSlotWidgetComponent* QuickSlotWidgetComponent;
+	class UCAS_SelectSkillWidget* SelectSkillWidget;
+
 };

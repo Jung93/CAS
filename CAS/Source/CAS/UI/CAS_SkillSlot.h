@@ -29,6 +29,7 @@ public:
     void SetSlotData(const FCAS_SlotData& InitData);
     const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
     int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
+    void SwitchDragable() { isDragable = !isDragable; }
 
 protected:
     void UpdateIcon();
@@ -37,6 +38,7 @@ protected:
     virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
     virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
+
 
     UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
     class UImage* CAS_Image;
@@ -48,4 +50,7 @@ protected:
     TSubclassOf<UCAS_SkillSlot> SkillSlotWidgetClass;
 protected:
     FCAS_SlotData DragSlotData;
+
+    bool isDragable = true;
+
 };
