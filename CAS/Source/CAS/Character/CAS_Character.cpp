@@ -42,6 +42,12 @@ ACAS_Character::ACAS_Character()
 	{
 		DefaultAbilities.Add(DeadAbilityClass.Class);
 	}
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> TakeDamageAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ablity_TakeDamage.GA_Ablity_TakeDamage_C'"));
+
+	if (TakeDamageAbilityClass.Succeeded())
+	{
+		DefaultAbilities.Add(TakeDamageAbilityClass.Class);
+	}
 }
 
 // Called when the game starts or when spawned

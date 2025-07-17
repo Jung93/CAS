@@ -53,13 +53,11 @@ ACAS_Player::ACAS_Player()
 	AbilitySystemComponent = nullptr;
 	AttributeSet = nullptr;
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> CaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Capture.GA_Ability_Capture_C'"));
-
-
 	if (CaptureAbilityClass.Succeeded())
 	{
 		DefaultAbilities.Add(CaptureAbilityClass.Class);
 	}
-
+	
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
 
 
