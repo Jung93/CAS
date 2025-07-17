@@ -50,8 +50,8 @@ void UCAS_SelectSkillWidget::InitSetting()
             UCAS_SkillSlot* slot = CreateWidget<UCAS_SkillSlot>(GetWorld(), SlotWidgetClass);
             FCAS_SlotData Data;
             Data.SlotIndex = i;
-            Data.SlotTexture = nullptr;
-            Data.AbilityTag = FName(TEXT("None"));
+            Data.SkillData.AbilityIconTexture = nullptr;
+            Data.SkillData.AbilityTag = FName(TEXT("None"));
 
             slot->SetSlotData(Data);
 
@@ -91,14 +91,13 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
     auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
     if (DefaultObj->IsValidLowLevel()) {
-        UTexture2D* TextureData = DefaultObj->AbilityIcon;
+        FCAS_SkillData SkillData = DefaultObj->GetSkillData();
         FName TagData = DefaultObj->AbilityTags.GetByIndex(0).GetTagName();
 
         FCAS_SlotData Data;
         Data.SlotIndex = SkillSlots.Num() - 1;
 
-        Data.SlotTexture = TextureData;
-        Data.AbilityTag = TagData;
+        Data.SkillData = SkillData;
 
         SkillSlots[SkillSlots.Num() - 1]->SetSlotData(Data);
 
@@ -126,9 +125,7 @@ void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*>
             quickSlotWidgetComponent->RemovePlayerAbility(TargetIndex);
             quickSlotWidgetComponent->AddPlayerAbility(TargetIndex, TargetAbility);
         }
-
     }
-    
 
     TargetAbility = nullptr;
 

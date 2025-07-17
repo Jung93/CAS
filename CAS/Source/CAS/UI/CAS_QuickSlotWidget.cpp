@@ -95,13 +95,8 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
         FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
 
         DragSlotData.SlotIndex = DropIndex;
-        //DropSlotData.SlotIndex = DragIndex;
 
-        //DragSlot->SetSlotData(DropSlotData);
         DropSlot->SetSlotData(DragSlotData);
-
-        //QuickSlotSwapEvent.Broadcast(DragIndex, DropSlotData);
-        //QuickSlotSwapEvent.Broadcast(DropIndex, DragSlotData);
 
         return;
     }
