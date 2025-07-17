@@ -33,6 +33,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(State_Nomal, "State.Nomal")
 	UE_DEFINE_GAMEPLAY_TAG(State_Dead, "State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(State_Invincible, "State.Invincible")
+	UE_DEFINE_GAMEPLAY_TAG(State_Detectable, "State.Detectable")
 	UE_DEFINE_GAMEPLAY_TAG(State_Ability_Attacking, "State.Ability.Attacking")
 
 
