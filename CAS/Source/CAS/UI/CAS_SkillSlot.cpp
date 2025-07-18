@@ -105,7 +105,7 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 			if (selectSkillWidget->IsValidLowLevel())
 			{
 				selectSkillWidget->SetSlots(this->GetSlotIndex(), quickSlotWidget->GetSkillSlots());
-				selectSkillWidget->RemoveFromParent();
+				//selectSkillWidget->RemoveFromParent();
 
 			}
 

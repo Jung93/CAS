@@ -16,6 +16,8 @@
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void UCAS_SelectSkillWidget::InitSetting()
 {
     SkillSlots.SetNum(5);
@@ -104,10 +106,26 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         TargetAbility = newAbility;
     }
 
+    AddToViewport();
+
+    APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+    PC->bShowMouseCursor = true;
+    PC->bEnableClickEvents = true;
+    PC->bEnableMouseOverEvents = true;
 }
 
 void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*> TargetSkillSlots)
 {
+    RemoveFromParent();
+
+    UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+    APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
+    PC->bShowMouseCursor = false;
+    PC->bEnableClickEvents = false;
+    PC->bEnableMouseOverEvents = false;
 
     for (int32 i = 0; i < TargetSkillSlots.Num();i++)
     {
@@ -128,5 +146,6 @@ void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*>
     }
 
     TargetAbility = nullptr;
+
 
 }

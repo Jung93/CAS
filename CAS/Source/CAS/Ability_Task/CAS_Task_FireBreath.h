@@ -21,4 +21,12 @@ public:
 protected:
 	virtual void Activate() override;
 
+	virtual void TickTask(float DeltaTime) override;
+
+private:
+	float TotalTime = 0.0f;
+	float MaxDuration = 2.0f;
+
+	UPROPERTY()
+	TArray<ACAS_Character*> AlreadyHitActors;
 };

@@ -395,21 +395,24 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
 {
+	bool CanAddAbility = QuickSlotWidgetComponent->CheckPlayerAbility(newAbility);
+
+	if (!CanAddAbility)
+		return;
+
 	int32 Index = QuickSlotWidgetComponent->FindEmptyPlayerAbilityIndex();
 	if (Index < 0) {
 		SelectSkillWidget->SetSlots(QuickSlotWidget->GetSkillSlots(), newAbility);
-		SelectSkillWidget->AddToViewport();
+		//SelectSkillWidget->AddToViewport();
 		QuickSlotWidget->BlockSlotSwap(SelectSkillWidget->GetSkillSlots());
 
 		return;
 	}
 
-	bool bAddPlayerAbility = QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
+	QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
 
-	if (bAddPlayerAbility) {
-		auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
-		QuickSlotWidget->SetSlotData(Index, SlotData);
-	}
+	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+	QuickSlotWidget->SetSlotData(Index, SlotData);
 	//이번에 들어온 어빌리티가 이미 있을경우 
 	
 }

@@ -19,7 +19,8 @@ public:
 public:
 	void InitSetting(int32 count);
 	
-	bool AddPlayerAbility(int32 index, const TSubclassOf<class UGameplayAbility>& newAbility);
+	bool CheckPlayerAbility(const TSubclassOf<class UGameplayAbility>& newAbility);
+	void AddPlayerAbility(int32 index, const TSubclassOf<class UGameplayAbility>& newAbility);
 	void RemovePlayerAbility(int32 index);
 
 	int32 FindEmptyPlayerAbilityIndex();

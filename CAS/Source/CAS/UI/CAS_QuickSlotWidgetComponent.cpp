@@ -23,36 +23,43 @@ void UCAS_QuickSlotWidgetComponent::InitSetting(int32 count)
 	}
 }
 
-bool UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclassOf<class UGameplayAbility>& newAbility)
+bool UCAS_QuickSlotWidgetComponent::CheckPlayerAbility(const TSubclassOf<class UGameplayAbility>& newAbility)
+{
+	auto owner = GetOwner();
+	auto player = Cast<ACAS_Player>(GetOwner());
+	if (player->IsValidLowLevel()) 
+	{
+		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
+
+		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr)
+			return true;
+	}
+
+	return false;
+}
+
+void UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclassOf<class UGameplayAbility>& newAbility)
 {
 	auto owner = GetOwner();
 	auto player = Cast<ACAS_Player>(GetOwner());
 	if (player->IsValidLowLevel()) {
 		auto ASC = Cast<UCAS_AbilitySystemComponent>(player->GetAbilitySystemComponent());
 
-		if (ASC->FindAbilitySpecFromClass(newAbility) == nullptr) {
-			auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
-			if (DefaultObj->IsValidLowLevel()) {
-				
-				FCAS_SkillData SkillData = DefaultObj->GetSkillData();
-
-				auto AbilitySpec = FGameplayAbilitySpec(newAbility, 1, static_cast<int32>(SkillData.InputID));
-				ASC->GiveAbility(AbilitySpec);
-
-				FCAS_SlotData SlotData;
-				SlotData.SlotIndex = index;
-				SlotData.SkillData = SkillData;
-
-				PlayerAbilities[index] = SlotData;
-
-				return true;
-			}
+		auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
+		if (DefaultObj->IsValidLowLevel()) {
 			
-			
+			FCAS_SkillData SkillData = DefaultObj->GetSkillData();
+
+			auto AbilitySpec = FGameplayAbilitySpec(newAbility, 1, static_cast<int32>(SkillData.InputID));
+			ASC->GiveAbility(AbilitySpec);
+
+			FCAS_SlotData SlotData;
+			SlotData.SlotIndex = index;
+			SlotData.SkillData = SkillData;
+
+			PlayerAbilities[index] = SlotData;
 		}
-
 	}
-	return false;
 }
 
 void UCAS_QuickSlotWidgetComponent::RemovePlayerAbility(int32 index)

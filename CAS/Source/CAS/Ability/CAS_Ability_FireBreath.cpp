@@ -50,15 +50,12 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(A
 
 	if (SpecHandle.IsValid() && TagSpecHandle.IsValid())
 	{
-		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 		AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*TagSpecHandle.Data);
 
-		FGameplayCueParameters params;
-		params.Location = TargetAbilitySystemComp->GetOwnerActor()->GetActorLocation();
 	
 		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
 
-		return Handle;
+		return FActiveGameplayEffectHandle();
 	}
 
 	return FActiveGameplayEffectHandle();
