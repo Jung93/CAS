@@ -94,24 +94,16 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 
 		if (otherSlot->GetSlotIndex() == 4)
 		{
-			//어빌리티랑 스킬슬롯 변경하면서 스킬 선택창 닫기
 			if (otherSlot->GetSlotIndex() == this->GetSlotIndex())
 				return false;
 
 			UCAS_SelectSkillWidget* selectSkillWidget = Cast<UCAS_SelectSkillWidget>(player->GetSelectSkillWidget());
 
-
-
 			if (selectSkillWidget->IsValidLowLevel())
 			{
 				selectSkillWidget->SetSlots(this->GetSlotIndex(), quickSlotWidget->GetSkillSlots());
-				//selectSkillWidget->RemoveFromParent();
-
 			}
-
 		}
-
-
 	}
 	return result;
 }

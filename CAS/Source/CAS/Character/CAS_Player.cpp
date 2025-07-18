@@ -414,19 +414,20 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
 {
+	bool CanAddable = QuickSlotWidgetComponent->CheckPlayerAbility(newAbility);
+
+	if (!CanAddable)
+		return;
+
 	int32 Index = QuickSlotWidgetComponent->FindEmptyPlayerAbilityIndex();
 	if (Index < 0) {
 		SelectSkillWidget->SetSlots(QuickSlotWidget->GetSkillSlots(), newAbility);
-		SelectSkillWidget->AddToViewport();
 		QuickSlotWidget->BlockSlotSwap(SelectSkillWidget->GetSkillSlots());
 
 		return;
 	}
 
-	bool bAddPlayerAbility = QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
-
-	if (bAddPlayerAbility) {
-		auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
-		QuickSlotWidget->SetSlotData(Index, SlotData);
-	}
+	QuickSlotWidgetComponent->AddPlayerAbility(Index, newAbility);
+	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
+	QuickSlotWidget->SetSlotData(Index, SlotData);
 }
