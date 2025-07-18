@@ -37,7 +37,7 @@ protected:
 	void HideMouse(const FInputActionValue& Value);
 
 	void QuickSlotFunction(const FInputActionValue& Value);
-	void InputReleased(const FInputActionValue& Value);
+	void QuickSlotInputReleased(const FInputActionValue& Value);
 	//void OpenSlot(const FInputActionValue& Value);
 	//void CloseSlot(const FInputActionValue& Value);
 	void ChangeSlot01(const FInputActionValue& Value);
