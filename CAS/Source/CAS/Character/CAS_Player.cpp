@@ -205,12 +205,36 @@ void ACAS_Player::HideMouse(const FInputActionValue& Value)
 void ACAS_Player::QuickSlotFunction(const FInputActionValue& Value)
 {
 	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
-	if (SlotData.SkillData.AbilityIconTexture == nullptr) {
-		return;
-	}
+
+	EAbilityInputID InputID = SlotData.SkillData.InputID;
 	FName name = SlotData.SkillData.AbilityTag;
+
 	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
 
+	switch (InputID) {
+	case EAbilityInputID::None:
+		break;
+	case EAbilityInputID::ChargeAttack:
+		AbilitySystemComponent->AbilityLocalInputPressed(static_cast<int32>(InputID));
+		break;
+	}
+	
+}
+
+void ACAS_Player::QuickSlotInputReleased(const FInputActionValue& Value)
+{
+	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
+
+	EAbilityInputID InputID = SlotData.SkillData.InputID;
+
+	switch (InputID) {
+	case EAbilityInputID::None:
+		break;
+	case EAbilityInputID::ChargeAttack:
+		AbilitySystemComponent->AbilityLocalInputReleased(static_cast<int32>(InputID));
+		break;
+	}
+	
 }
 
 
@@ -345,13 +369,8 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
 
 		EnhancedInputComponent->BindAction(QuickSlotAction, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction);
-		//EnhancedInputComponent->BindAction(QuickSlot02, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction02);
-		//EnhancedInputComponent->BindAction(QuickSlot03, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction03);
-		//EnhancedInputComponent->BindAction(QuickSlot04, ETriggerEvent::Started, this, &ACAS_Player::QuickSlotFunction04);
-
-
-
-
+		EnhancedInputComponent->BindAction(QuickSlotAction, ETriggerEvent::Completed, this, &ACAS_Player::QuickSlotInputReleased);
+		
 		//EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Started, this, &ACAS_Player::OpenSlot);
 		//EnhancedInputComponent->BindAction(OpenSlotAction, ETriggerEvent::Completed, this, &ACAS_Player::CloseSlot);
 
@@ -410,6 +429,4 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 		auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
 		QuickSlotWidget->SetSlotData(Index, SlotData);
 	}
-	//이번에 들어온 어빌리티가 이미 있을경우 
-	
 }
