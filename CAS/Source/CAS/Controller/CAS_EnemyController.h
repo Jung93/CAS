@@ -34,6 +34,7 @@ protected:
 	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
+	void StopTrackingPlayer();
 protected:
 	UPROPERTY()
 	FTimerHandle TimerHandle;
@@ -41,5 +42,7 @@ protected:
 	UAIPerceptionComponent* AIPerceptionComponent;
 	UPROPERTY()
 	UAISenseConfig_Sight* SightConfig;
+	FTimerHandle TrackingTimerHandle;
 
+	float TrackingTime = 5.0f;
 };

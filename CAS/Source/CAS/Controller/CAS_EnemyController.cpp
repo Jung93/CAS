@@ -46,12 +46,7 @@ void ACAS_EnemyController::RandMove()
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
-{
-	/*
-	어빌리티 사용시 몇초간 태그가 붙음(state.detectable)
-	태그가 붙은 상태면 인식가능
-	
-	*/
+{	
 	if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
 		return;
 	}
@@ -63,7 +58,19 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 		
 		if (bDetected) {
-			BlackBoardComponent->SetValueAsObject("Target", Actor);
+			BlackBoardComponent->SetValueAsBool("bPlayerDetected", true);
+			BlackBoardComponent->SetValueAsObject("Player", Actor);
+			BlackBoardComponent->SetValueAsVector("MovePosition", Actor->GetActorLocation());
+			GetWorld()->GetTimerManager().SetTimer(TrackingTimerHandle, this, &ThisClass::StopTrackingPlayer, TrackingTime, false);
 		}
+				
 	}
+	
+}
+
+void ACAS_EnemyController::StopTrackingPlayer()
+{
+	BlackBoardComponent->SetValueAsBool("bPlayerDetected", false);
+	BlackBoardComponent->SetValueAsObject("Player", nullptr);
+	GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 }
