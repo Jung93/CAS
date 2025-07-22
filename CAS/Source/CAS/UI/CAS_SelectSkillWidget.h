@@ -20,6 +20,7 @@ public:
 
 	void SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkillSlots, const TSubclassOf<class UGameplayAbility>& newAbility);
 	void SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*> TargetSkillSlots);
+	FString GetSkillDescription(FName AbilityTagName);
 
 	TArray<UCAS_SkillSlot*>& GetSkillSlots() { return SkillSlots; }
 
@@ -29,6 +30,9 @@ protected:
 	TSubclassOf<UCAS_SkillSlot> SlotWidgetClass;
 	UPROPERTY()
 	TArray<UCAS_SkillSlot*> SkillSlots;
+	UPROPERTY()
+	TArray<class UTextBlock*> TextBlocks;
+
 
 	UPROPERTY()
 	TSubclassOf<class UGameplayAbility> TargetAbility;

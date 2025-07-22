@@ -4,6 +4,7 @@
 #include "Ability/CAS_Ability_SuperSpeed.h"
 #include "Ability_Task/CAS_Task_SuperSpeed.h"
 #include "Character/CAS_Character.h"
+#include "Character/CAS_Player.h"
 
 UCAS_Ability_SuperSpeed::UCAS_Ability_SuperSpeed()
 {
@@ -68,6 +69,10 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 		EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
+		auto player = Cast<ACAS_Player>(Target);
+
+		player->SwitchSlotChangable();
+
 		// Delay 타이머 설정
 		FTimerHandle TimerHandle;
 		FTimerDelegate TimerDelegate;
@@ -75,10 +80,12 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 		ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 		FActiveGameplayEffectHandle Handle = ApplyGamePlayEffect(Target, TagEffectClassEnemy, TaskLevel, EffectContextHandle, AbilitySystemComp);
 
-		TimerDelegate.BindLambda([this, Target, TaskLevel, EffectContextHandle, AbilitySystemComp, Handle]()
+		TimerDelegate.BindLambda([this, Target, TaskLevel, EffectContextHandle, AbilitySystemComp, Handle, player]()
 		{
 			ApplyGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
 			AbilitySystemComp->RemoveActiveGameplayEffect(Handle);
+			player->SwitchSlotChangable();
+
 		});
 
 		Target->GetWorldTimerManager().SetTimer(TimerHandle, TimerDelegate, 5.0f, false);

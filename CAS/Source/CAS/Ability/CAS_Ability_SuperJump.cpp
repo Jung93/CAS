@@ -3,7 +3,7 @@
 
 #include "Ability/CAS_Ability_SuperJump.h"
 #include "Ability_Task/CAS_Task_SuperJump.h"
-
+#include "Character/CAS_Player.h"
 UCAS_Ability_SuperJump::UCAS_Ability_SuperJump()
 {
 	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
@@ -66,15 +66,22 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 		EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
+		auto player = Cast<ACAS_Player>(Target);
+
 		if (AbilitySystemComp->GetActiveGameplayEffect(ActiveEffectHandle) == nullptr)
 		{
 			FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(TagEffectClassJump, GetAbilityLevel());
 			ActiveEffectHandle = ApplyGamePlayEffect(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+			player->SwitchSlotChangable();
+			//SwitchSlotChangable
 		}
 		else
 		{
 			AbilitySystemComp->RemoveActiveGameplayEffect(ActiveEffectHandle);
 			ActiveEffectHandle = FActiveGameplayEffectHandle();
+			player->SwitchSlotChangable();
+
 		}
 	}
 	else {

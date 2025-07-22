@@ -252,6 +252,8 @@ void ACAS_Player::QuickSlotInputReleased(const FInputActionValue& Value)
 
 void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 {
+	if (!isSlotChangable)
+		return;
 
 	QuickSlotWidget->ChangeSlotToLeft();
 
@@ -270,6 +272,9 @@ void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 
 void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 {
+	if (!isSlotChangable)
+		return;
+
 	QuickSlotWidget->ChangeSlotToRight();
 
 	int32 num = PlayerAbilityCount - 1;

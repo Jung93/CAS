@@ -105,7 +105,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
-
+	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
 public:	
 	virtual void InitAbilitySystemComponent() override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
@@ -115,6 +115,8 @@ public:
 	class UCAS_SelectSkillWidget* GetSelectSkillWidget() { return SelectSkillWidget; }
 	class UCAS_QuickSlotWidgetComponent* GetQuickSlotWidgetComponent() { return QuickSlotWidgetComponent; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
+
+	bool isSlotChangable = true;
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")

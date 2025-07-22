@@ -9,6 +9,11 @@
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "GAS/CAS_GameplayAbility.h"
 
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
+
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
 #include "Components/Border.h"
@@ -17,6 +22,9 @@
 #include "Components/TextBlock.h"
 
 #include "Kismet/GameplayStatics.h"
+
+
+
 
 void UCAS_SelectSkillWidget::InitSetting()
 {
@@ -64,14 +72,9 @@ void UCAS_SelectSkillWidget::InitSetting()
                 hbox->AddChildToHorizontalBox(slot);
 
             }
+
+            TextBlocks.Add(text);
         }
-
-        //테스트용 코드
-        FString a = "aaa" + FString::FromInt(i + 1);
-        FText aaa = FText::FromString(a);
-
-        text->SetText(aaa);
-
 
 	}
 
@@ -86,6 +89,13 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
     for (int32 i = 0; i < CurrentSkillSlots.Num(); i++)
     {
         SkillSlots[i]->SetSlotData(CurrentSkillSlots[i]->GetSlotData());
+
+        auto text = TextBlocks[i];
+
+        FName AbilityTagName = SkillSlots[i]->GetSlotData().SkillData.AbilityTag;
+        FText TagName = FText::FromString(GetSkillDescription(AbilityTagName));
+
+        text->SetText(TagName);
     }
 
 
@@ -103,6 +113,11 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
 
         SkillSlots[SkillSlots.Num() - 1]->SetSlotData(Data);
 
+        FName AbilityTagName = Data.SkillData.AbilityTag;
+        FText TagName = FText::FromString(GetSkillDescription(AbilityTagName));
+
+
+        TextBlocks[SkillSlots.Num() - 1]->SetText(TagName);
         TargetAbility = newAbility;
     }
 
@@ -148,4 +163,32 @@ void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*>
     TargetAbility = nullptr;
 
 
+}
+
+FString UCAS_SelectSkillWidget::GetSkillDescription(FName AbilityTagName)
+{
+    FString Result = TEXT("None");
+
+    FString FilePath = FPaths::ProjectContentDir() / TEXT("CAS/Resource/SkillDescription.json");
+    FString JsonStr;
+
+    if (!FFileHelper::LoadFileToString(JsonStr, *FilePath))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to load JSON file: %s"), *FilePath);
+        return Result;
+    }
+
+    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
+    TSharedPtr<FJsonObject> JsonObject;
+
+    if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
+    {
+        FString Value;
+        if (JsonObject->TryGetStringField(AbilityTagName.ToString(), Value))
+        {
+            return Value;
+        }
+    }
+
+    return Result;
 }
