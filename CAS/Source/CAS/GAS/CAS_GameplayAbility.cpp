@@ -18,6 +18,7 @@ const FCAS_SkillData& UCAS_GameplayAbility::GetSkillData()
 		EAbilityInputID InputID_Data = InputID;
 		FName TagData = AbilityTags.GetByIndex(0).GetTagName();
 
+
 		Data.AbilityIconTexture = TextureData;
 		Data.AbilityTag = TagData;
 		Data.InputID = InputID_Data;

@@ -137,6 +137,8 @@ protected:
 
 	class UCAS_QuickSlotWidget* QuickSlotWidget;
 	class UCAS_QuickSlotWidgetComponent* QuickSlotWidgetComponent;
+
+	UPROPERTY()
 	class UCAS_SelectSkillWidget* SelectSkillWidget;
 
 };

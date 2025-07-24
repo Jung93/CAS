@@ -44,7 +44,6 @@ void UCAS_SelectSkillWidget::InitSetting()
 
 	slot2->SetSize(ViewportSize);
 
-
 	auto borderPanel = Cast<UCanvasPanel>(border->GetContent());
 
 	for (int32 i = 0; i < 5; i++)
@@ -53,7 +52,6 @@ void UCAS_SelectSkillWidget::InitSetting()
 
 		auto hbox = Cast<UHorizontalBox>(panel->GetChildAt(0));
 		auto text = Cast<UTextBlock>(panel->GetChildAt(1));
-
 
         if (SlotWidgetClass)
         {
@@ -65,27 +63,18 @@ void UCAS_SelectSkillWidget::InitSetting()
 
             slot->SetSlotData(Data);
 
-
             SkillSlots[i] = slot;
             if (hbox->IsValidLowLevel())
             {
                 hbox->AddChildToHorizontalBox(slot);
-
             }
-
             TextBlocks.Add(text);
         }
-
 	}
-
-
 }
 
 void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkillSlots, const TSubclassOf<class UGameplayAbility>& newAbility)
 {
-
-    //SkillSlots에 있는 정보를 바탕으로 SelectSkillWidget의 정보를 덧씌우기
-
     for (int32 i = 0; i < CurrentSkillSlots.Num(); i++)
     {
         SkillSlots[i]->SetSlotData(CurrentSkillSlots[i]->GetSlotData());
@@ -93,13 +82,12 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         auto text = TextBlocks[i];
 
         FName AbilityTagName = SkillSlots[i]->GetSlotData().SkillData.AbilityTag;
-        FText TagName = FText::FromString(GetSkillDescription(AbilityTagName));
+        FString AbilityStr = GetSkillDescription(AbilityTagName);
+        FText AbilityDesc = FText::FromString(AbilityStr);
 
-        text->SetText(TagName);
+        text->SetText(AbilityDesc);
     }
 
-
-    //새 어빌리티는 마지막 인덱스에 넣기
     auto DefaultObj = newAbility->GetDefaultObject<UCAS_GameplayAbility>();
 
     if (DefaultObj->IsValidLowLevel()) {
@@ -132,9 +120,9 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
 
 void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*> TargetSkillSlots)
 {
-    RemoveFromParent();
 
     UGameplayStatics::SetGamePaused(GetWorld(), false);
+    RemoveFromParent();
 
     APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
