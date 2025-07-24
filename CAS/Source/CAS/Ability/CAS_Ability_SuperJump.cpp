@@ -71,7 +71,10 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 		if (AbilitySystemComp->GetActiveGameplayEffect(ActiveEffectHandle) == nullptr)
 		{
 			FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(TagEffectClassJump, GetAbilityLevel());
+			SpecHandle.Data->DynamicGrantedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperJump")));
 			ActiveEffectHandle = ApplyGamePlayEffect(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperJump")));
 
 			player->SwitchSlotChangable();
 			//SwitchSlotChangable
@@ -80,6 +83,8 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 		{
 			AbilitySystemComp->RemoveActiveGameplayEffect(ActiveEffectHandle);
 			ActiveEffectHandle = FActiveGameplayEffectHandle();
+			AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperJump")));
+
 			player->SwitchSlotChangable();
 
 		}

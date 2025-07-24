@@ -312,26 +312,22 @@ void ACAS_Player::BeginPlay()
 		}
 	}
 	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
+	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
+
 
 	QuickSlotWidget = NewQuickSlotWidget;
+	SelectSkillWidget = NewSelectSkillWidget;
 
-	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel()) {
+	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel() && SelectSkillWidget->IsValidLowLevel()) {
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->AddToViewport();
 		QuickSlotWidget->InitSetting(PlayerAbilityCount);
+		SelectSkillWidget->InitSetting();
 		QuickSlotWidget->QuickSlotSwapEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::UpdateQuickSlot);
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidgetComponent, &UCAS_QuickSlotWidgetComponent::RemovePlayerAbility);
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
 
-	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
-
-	SelectSkillWidget = NewSelectSkillWidget;
-
-	if (SelectSkillWidget->IsValidLowLevel())
-	{
-		SelectSkillWidget->InitSetting();
-	}
 
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 }

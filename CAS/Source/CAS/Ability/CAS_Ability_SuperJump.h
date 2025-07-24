@@ -24,6 +24,7 @@ protected:
 
 	virtual FActiveGameplayEffectHandle  ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void JumpTarget(ACAS_Character* Target, int32 TaskLevel);
+	FActiveGameplayEffectHandle GetActiveEffectHandle() { return ActiveEffectHandle; }
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> TagEffectClassJump;

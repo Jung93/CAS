@@ -25,6 +25,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Effect_Status_Stun, "Effect.Status.Stun")
 
 
+
 	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_FireBreath, "GameplayCue.FireBreath")
 	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_OnFire, "GameplayCue.OnFire")
 
