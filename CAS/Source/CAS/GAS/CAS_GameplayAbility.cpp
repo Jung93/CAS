@@ -6,7 +6,12 @@
 UCAS_GameplayAbility::UCAS_GameplayAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> EffectClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/GamePlayEffect/GE_Detectable_Tag.GE_Detectable_Tag_C'"));
 
+	if (EffectClass.Succeeded())
+	{
+		DetectableTagEffectClass = EffectClass.Class;
+	}
 }
 
 const FCAS_SkillData& UCAS_GameplayAbility::GetSkillData()
@@ -37,7 +42,11 @@ void UCAS_GameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
 		return;
 	}
-	
+	FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(DetectableTagEffectClass, 1);
+	if (EffectSpecHandle.IsValid())
+	{
+		ApplyGameplayEffectSpecToOwner(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle);
+	}
 }
 
 void UCAS_GameplayAbility::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
