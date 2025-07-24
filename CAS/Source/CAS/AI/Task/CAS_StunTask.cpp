@@ -37,6 +37,7 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	CurrTime += DeltaSeconds;
 
 	if (CurrTime >= PlayTime) {
+		CurrTime = 0.0f;
 		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
 	}
 }
