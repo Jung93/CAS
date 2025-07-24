@@ -44,7 +44,6 @@ public:
 	bool IsCaptured() { return _isCaptured; }
 	void ActivateCapture(bool value) { _isCaptured = value; }
 	void DeCaptureAbility(const FInputActionValue& Value);
-	void Stunning(float DeltaTime);
 	void BeStunned() { _isStun = true; };
 	bool IsStunned() { return _isStun; }
 

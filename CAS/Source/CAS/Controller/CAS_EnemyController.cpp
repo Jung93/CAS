@@ -15,8 +15,8 @@ ACAS_EnemyController::ACAS_EnemyController()
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 1800.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 30.0f;
-    SightConfig->SetMaxAge(3.0f);
+    SightConfig->PeripheralVisionAngleDegrees = 60.0f;
+    SightConfig->SetMaxAge(5.0f);
 
     AIPerceptionComponent->ConfigureSense(*SightConfig);
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
@@ -72,5 +72,6 @@ void ACAS_EnemyController::StopTrackingPlayer()
 {
 	BlackBoardComponent->SetValueAsBool("bPlayerDetected", false);
 	BlackBoardComponent->SetValueAsObject("Player", nullptr);
+	BlackBoardComponent->SetValueAsVector("MovePosition", GetPawn()->GetActorLocation());
 	GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 }
