@@ -35,7 +35,10 @@ protected:
 	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
 	void StopTrackingPlayer();
+
+	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:
+	FVector OriginalColorVector = FVector(1,1,1);
 	UPROPERTY()
 	FTimerHandle TimerHandle;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
