@@ -116,7 +116,11 @@ public:
 	class UCAS_QuickSlotWidgetComponent* GetQuickSlotWidgetComponent() { return QuickSlotWidgetComponent; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 
+	UFUNCTION(BlueprintCallable)
+	void ToggleSkill();
+
 	bool isSlotChangable = true;
+
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")

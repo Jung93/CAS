@@ -32,7 +32,7 @@ public:
 	void ChangeSlotToRight();
 
 	void BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots);
-	void SetWidgetColor(const bool isActive);
+	void SwitchToggle() { isToggled = !isToggled; }
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;
@@ -52,4 +52,6 @@ protected:
 	
 	float BorderPosX = 0.0f;
 	float BorderSizeX = 350.0f;
+
+	bool isToggled = false;
 };

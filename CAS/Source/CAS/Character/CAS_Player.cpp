@@ -431,3 +431,9 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 	auto SlotData = QuickSlotWidgetComponent->GetAbilityData(Index);
 	QuickSlotWidget->SetSlotData(Index, SlotData);
 }
+
+void ACAS_Player::ToggleSkill()
+{
+	QuickSlotWidget->SwitchToggle();
+
+}

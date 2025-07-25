@@ -67,6 +67,12 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	if (enemy->IsValidLowLevel())
 	{
+		auto asc = enemy->GetAbilitySystemComponent();
+		auto tag = FGameplayTag::RequestGameplayTag(FName("Effect.Status.Stun"));
+
+		if (asc->HasMatchingGameplayTag(tag))
+			return;
+
 		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected!!"));
 
 		_testCaptureTarget = enemy;

@@ -116,35 +116,6 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 	return result;
 }
 
-void UCAS_SkillSlot::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
-{
-	Super::NativeTick(MyGeometry, DeltaTime);
-
-	auto s = this->GetSlotData().SkillData.AbilityTag;
-
-	if (s != "None" && GetSlotIndex() == 0)
-	{
-		auto player = Cast<ACAS_Player>(GetOwningPlayerPawn());
-		FName TagName = this->GetSlotData().SkillData.AbilityTag;
-		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(player->GetQuickSlotWidget());
-
-		if (CheckActivation(player, TagName))
-		{
-			quickSlotWidget->SetWidgetColor(true);
-		}
-		else
-		{
-			quickSlotWidget->SetWidgetColor(false);
-
-		}
-
-
-	}
-
-
-
-
-}
 
 
 bool UCAS_SkillSlot::CheckActivation(ACAS_Player* player, FName TagName)

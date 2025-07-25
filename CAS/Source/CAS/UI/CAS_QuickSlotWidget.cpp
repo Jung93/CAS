@@ -244,28 +244,25 @@ void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlot
     }
 }
 
-void UCAS_QuickSlotWidget::SetWidgetColor(const bool isActive)
-{
-    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
-    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-    UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(0));
-
-    if (isActive)
-    {
-        rootBorder->BrushColor = FLinearColor(0,0,0,1);
-
-    }
-    else
-    {
-        rootBorder->BrushColor = FLinearColor(1, 1, 1, 1);
-
-    }
-
-
-}
 
 void UCAS_QuickSlotWidget::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
 {
     Super::NativeTick(MyGeometry, DeltaTime);
+
+    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+    UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(0));
+
+    if (isToggled)
+    {
+        rootBorder->SetBrushColor(FLinearColor(0, 0, 0, 1));
+
+    }
+    else
+    {
+        rootBorder->SetBrushColor(FLinearColor(1, 1, 1, 1));
+
+
+    }
 
 }

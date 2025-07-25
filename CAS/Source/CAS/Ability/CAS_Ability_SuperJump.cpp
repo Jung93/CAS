@@ -77,7 +77,7 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperJump")));
 
 			player->SwitchSlotChangable();
-			//SwitchSlotChangable
+			player->ToggleSkill();
 		}
 		else
 		{
@@ -86,6 +86,7 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 			AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperJump")));
 
 			player->SwitchSlotChangable();
+			player->ToggleSkill();
 
 		}
 	}

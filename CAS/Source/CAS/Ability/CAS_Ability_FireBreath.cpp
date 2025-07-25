@@ -4,6 +4,7 @@
 #include "Ability/CAS_Ability_FireBreath.h"
 #include "Ability_Task/CAS_Task_FireBreath.h"
 #include "Controller/CAS_PlayerController.h"
+#include "Character/CAS_Player.h"
 
 UCAS_Ability_FireBreath::UCAS_Ability_FireBreath()
 {
@@ -104,6 +105,11 @@ void UCAS_Ability_FireBreath::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
 	auto owner = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
+	auto player = Cast<ACAS_Player>(Target);
+
+	if(player->IsValidLowLevel())
+		player->ToggleSkill();
+
 
 	if (owner == Target)
 	{

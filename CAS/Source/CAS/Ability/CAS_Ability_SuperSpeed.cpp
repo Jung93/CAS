@@ -72,6 +72,7 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 		auto player = Cast<ACAS_Player>(Target);
 
 		player->SwitchSlotChangable();
+		player->ToggleSkill();
 
 		// Delay 타이머 설정
 		FTimerHandle TimerHandle;
@@ -85,6 +86,7 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 			ApplyGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
 			AbilitySystemComp->RemoveActiveGameplayEffect(Handle);
 			player->SwitchSlotChangable();
+			player->ToggleSkill();
 
 		});
 
