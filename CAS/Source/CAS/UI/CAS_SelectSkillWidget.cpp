@@ -49,7 +49,6 @@ void UCAS_SelectSkillWidget::InitSetting()
 	for (int32 i = 0; i < 5; i++)
 	{
 		auto panel = Cast<UCanvasPanel>(borderPanel->GetChildAt(i));
-
 		auto hbox = Cast<UHorizontalBox>(panel->GetChildAt(0));
 		auto text = Cast<UTextBlock>(panel->GetChildAt(1));
 

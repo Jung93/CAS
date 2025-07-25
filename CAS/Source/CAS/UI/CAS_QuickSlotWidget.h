@@ -32,13 +32,15 @@ public:
 	void ChangeSlotToRight();
 
 	void BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots);
-
+	void SetWidgetColor(const bool isActive);
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;
 
 
 protected:
+	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
+
 	int32 SlotCount;
 protected:
 	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))

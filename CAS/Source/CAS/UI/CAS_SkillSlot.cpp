@@ -64,8 +64,6 @@ void UCAS_SkillSlot::NativeOnDragDetected(const FGeometry& InGeometry, const FPo
 
 	UCAS_SkillSlot* DragVisual = CreateWidget<UCAS_SkillSlot>(GetOwningPlayer(), SkillSlotWidgetClass);
 
-
-
 	DragVisual->SetRenderOpacity(0.7f);
 
 	if (CAS_Image && CAS_Image->Brush.GetResourceObject())
@@ -116,6 +114,36 @@ bool UCAS_SkillSlot::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEv
 		}
 	}
 	return result;
+}
+
+void UCAS_SkillSlot::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+	Super::NativeTick(MyGeometry, DeltaTime);
+
+	auto s = this->GetSlotData().SkillData.AbilityTag;
+
+	if (s != "None" && GetSlotIndex() == 0)
+	{
+		auto player = Cast<ACAS_Player>(GetOwningPlayerPawn());
+		FName TagName = this->GetSlotData().SkillData.AbilityTag;
+		UCAS_QuickSlotWidget* quickSlotWidget = Cast<UCAS_QuickSlotWidget>(player->GetQuickSlotWidget());
+
+		if (CheckActivation(player, TagName))
+		{
+			quickSlotWidget->SetWidgetColor(true);
+		}
+		else
+		{
+			quickSlotWidget->SetWidgetColor(false);
+
+		}
+
+
+	}
+
+
+
+
 }
 
 

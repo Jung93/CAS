@@ -27,6 +27,7 @@ public:
     const FCAS_SlotData& GetSlotData() const { return DragSlotData; }
     int32 GetSlotIndex() const { return DragSlotData.SlotIndex; }
     void SwitchDragable() { isDragable = !isDragable; }
+    bool CheckActivation(class ACAS_Player* player, FName TagName);
 
 protected:
     void UpdateIcon();
@@ -35,7 +36,7 @@ protected:
     virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
     virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
-    bool CheckActivation(class ACAS_Player* player, FName TagName);
+    virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
 
 
     UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))

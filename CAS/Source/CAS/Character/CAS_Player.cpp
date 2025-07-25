@@ -218,7 +218,6 @@ void ACAS_Player::QuickSlotFunction(const FInputActionValue& Value)
 		AbilitySystemComponent->AbilityLocalInputPressed(static_cast<int32>(InputID));
 		break;
 	}
-	
 }
 
 void ACAS_Player::QuickSlotInputReleased(const FInputActionValue& Value)

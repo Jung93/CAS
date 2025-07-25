@@ -16,17 +16,11 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
 
     SkillSlots.SetNum(SlotCount);
 
-
-
     for (int32 i = 0; i < SlotCount;i++)
     {
         UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
-
         UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-
         UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(i));
-
-
 
         if (SlotWidgetClass)
         {
@@ -69,9 +63,6 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             {
                 auto box = Cast<UHorizontalBox>(rootBorder->GetContent());
                 box->AddChildToHorizontalBox(slot);
-
-
-                //SlotBox->AddChildToHorizontalBox(slot);
             }
         }
     }
@@ -95,7 +86,6 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
         FCAS_SlotData DropSlotData = DropSlot->GetSlotData();
 
         DragSlotData.SlotIndex = DropIndex;
-
         DropSlot->SetSlotData(DragSlotData);
 
         return;
@@ -112,7 +102,6 @@ void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* D
 
     QuickSlotSwapEvent.Broadcast(DragIndex, DropSlotData);
     QuickSlotSwapEvent.Broadcast(DropIndex, DragSlotData);
-
 }
 
 void UCAS_QuickSlotWidget::SetSlotData(int32 index, const FCAS_SlotData& AbilityData)
@@ -212,7 +201,6 @@ void UCAS_QuickSlotWidget::CloseSlot()
 
 void UCAS_QuickSlotWidget::ChangeSlotToLeft()
 {
-
     int32 num = SkillSlots.Num() - 1;
     UCAS_SkillSlot* slot = SkillSlots[0];
     FCAS_SlotData data = slot->GetSlotData();
@@ -232,7 +220,6 @@ void UCAS_QuickSlotWidget::ChangeSlotToLeft()
 
 void UCAS_QuickSlotWidget::ChangeSlotToRight()
 {
-
     int32 num = SkillSlots.Num() - 1;
     UCAS_SkillSlot* slot = SkillSlots[num];
     FCAS_SlotData data = slot->GetSlotData();
@@ -255,5 +242,30 @@ void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlot
     {
         SelectSkillSlots[i]->SwitchDragable();
     }
+}
+
+void UCAS_QuickSlotWidget::SetWidgetColor(const bool isActive)
+{
+    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+    UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(0));
+
+    if (isActive)
+    {
+        rootBorder->BrushColor = FLinearColor(0,0,0,1);
+
+    }
+    else
+    {
+        rootBorder->BrushColor = FLinearColor(1, 1, 1, 1);
+
+    }
+
+
+}
+
+void UCAS_QuickSlotWidget::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+{
+    Super::NativeTick(MyGeometry, DeltaTime);
 
 }

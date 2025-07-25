@@ -110,6 +110,4 @@ void UCAS_Ability_SuperJump::JumpTarget(ACAS_Character* Target, int32 TaskLevel)
 		}
 	}
 
-
-
 }
