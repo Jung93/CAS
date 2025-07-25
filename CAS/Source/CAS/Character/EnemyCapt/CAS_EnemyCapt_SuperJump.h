@@ -20,7 +20,7 @@ public:
 
 	virtual void BeginPlay() override;
 
-	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	//void ActivateAbility(const FInputActionValue& Value);
 	virtual void ActivateEnemyAbility() override;
 };

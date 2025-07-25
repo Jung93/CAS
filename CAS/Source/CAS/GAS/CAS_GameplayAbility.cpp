@@ -6,7 +6,7 @@
 UCAS_GameplayAbility::UCAS_GameplayAbility()
 {
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
-	static ConstructorHelpers::FClassFinder<UGameplayAbility> EffectClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/GamePlayEffect/GE_Detectable_Tag.GE_Detectable_Tag_C'"));
+	static ConstructorHelpers::FClassFinder<UGameplayEffect> EffectClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/GamePlayEffect/GE_Detectable_Tag.GE_Detectable_Tag_C'"));
 
 	if (EffectClass.Succeeded())
 	{
