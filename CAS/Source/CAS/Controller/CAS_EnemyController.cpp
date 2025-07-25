@@ -72,6 +72,8 @@ void ACAS_EnemyController::StopTrackingPlayer()
 {
 	BlackBoardComponent->SetValueAsBool("bPlayerDetected", false);
 	BlackBoardComponent->SetValueAsObject("Player", nullptr);
-	BlackBoardComponent->SetValueAsVector("MovePosition", GetPawn()->GetActorLocation());
+	if (GetPawn()) {
+		BlackBoardComponent->SetValueAsVector("MovePosition", GetPawn()->GetActorLocation());
+	}
 	GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 }

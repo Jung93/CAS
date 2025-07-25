@@ -23,16 +23,16 @@ void ACAS_EnemyCapt_SuperJump::ActivateEnemyAbility()
 	//ACAS_Character::ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperJump"));
 }
 
-//void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-//{
-//	Super::SetupPlayerInputComponent(PlayerInputComponent);
-//
-//	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-//
-//		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::Jump);
-//
-//	}
-//}
+void ACAS_EnemyCapt_SuperJump::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+
+		EnhancedInputComponent->BindAction(AbilityAction, ETriggerEvent::Started, this, &ThisClass::Jump);
+
+	}
+}
 //
 //void ACAS_EnemyCapt_SuperJump::ActivateAbility(const FInputActionValue& Value)
 //{

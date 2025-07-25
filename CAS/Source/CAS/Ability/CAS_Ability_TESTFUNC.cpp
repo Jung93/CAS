@@ -50,7 +50,6 @@ void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 
 void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
 {
-	
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);

@@ -49,7 +49,10 @@ protected:
 	
 	FCAS_SkillData SkillData;
 
+	UPROPERTY()
+	TSubclassOf<UGameplayEffect> DetectableTagEffectClass;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	UTexture2D* AbilityIcon;
 	EAbilityInputID InputID = EAbilityInputID::None;
+
 };
