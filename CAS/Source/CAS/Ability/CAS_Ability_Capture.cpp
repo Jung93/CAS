@@ -51,12 +51,9 @@ void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPoin
 
 	ACAS_Hat* Hat = player->GetHat();
 
-
 	if (NotifyName == "Capture1")
 	{
 		Hat->Ready();
-
-
 	}
 	else if (NotifyName == "Capture2")
 	{

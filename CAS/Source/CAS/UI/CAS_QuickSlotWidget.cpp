@@ -244,25 +244,23 @@ void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlot
     }
 }
 
-
-void UCAS_QuickSlotWidget::NativeTick(const FGeometry& MyGeometry, float DeltaTime)
+void UCAS_QuickSlotWidget::SwitchToggle()
 {
-    Super::NativeTick(MyGeometry, DeltaTime);
-
     UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
     UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-    UBorder* rootBorder = Cast<UBorder>(panel->GetChildAt(0));
+    UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
+    UBorder* toggleBorder = Cast<UBorder>(imagePanel->GetChildAt(2));
+
+    isToggled = !isToggled;
 
     if (isToggled)
     {
-        rootBorder->SetBrushColor(FLinearColor(0, 0, 0, 1));
-
+        toggleBorder->SetBrushFromMaterial(ToggleBorderMaterial);
+        toggleBorder->SetRenderOpacity(1);
     }
     else
     {
-        rootBorder->SetBrushColor(FLinearColor(1, 1, 1, 1));
-
-
+        toggleBorder->SetBrushFromMaterial(nullptr);
+        toggleBorder->SetRenderOpacity(0);
     }
-
 }

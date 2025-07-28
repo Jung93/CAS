@@ -209,6 +209,12 @@ void ACAS_Player::QuickSlotFunction(const FInputActionValue& Value)
 	EAbilityInputID InputID = SlotData.SkillData.InputID;
 	FName name = SlotData.SkillData.AbilityTag;
 
+	if (name == "None")
+		return;
+
+	if (_hatSpawn->GetIsReady())
+		return;
+
 	ActivateAbility(FGameplayTag::RequestGameplayTag(name));
 
 	switch (InputID) {

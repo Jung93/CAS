@@ -48,6 +48,8 @@ public:
 	UFUNCTION()
 	class ACAS_Player* GetPlayer() { return _player; }
 
+	bool GetIsReady() { return IsReady; }
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* _mesh;
@@ -65,6 +67,7 @@ private:
 	FVector TargetLocation;
 	FVector MoveDirection;
 
+	bool IsReady = false;
 	bool _isThrowing = false;
 	bool _isReturning = false;
 	float _capturingTime = 0.0f;
