@@ -32,15 +32,13 @@ public:
 	void ChangeSlotToRight();
 
 	void BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots);
-	void SwitchToggle() { isToggled = !isToggled; }
+	void SwitchToggle();// { isToggled = !isToggled; }
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;
 
 
 protected:
-	virtual void NativeTick(const FGeometry& MyGeometry, float DeltaTime) override;
-
 	int32 SlotCount;
 protected:
 	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
@@ -50,6 +48,9 @@ protected:
 	UPROPERTY()
 	TArray<UCAS_SkillSlot*> SkillSlots;
 	
+	UPROPERTY(EditAnywhere, Category = "UI")
+	UMaterialInterface* ToggleBorderMaterial;
+
 	float BorderPosX = 0.0f;
 	float BorderSizeX = 350.0f;
 

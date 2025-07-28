@@ -55,6 +55,7 @@ void ACAS_Hat::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ACAS_Hat::Ready()
 {
+	IsReady = true;
 	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r")); // 소켓 이름 "head" 예시
 }
 
@@ -65,6 +66,9 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	auto enemy = Cast<ACAS_EnemyCapt>(OtherActor);
 
+	// 스킬 아이콘 몇개 만들기
+
+
 	if (enemy->IsValidLowLevel())
 	{
 		auto asc = enemy->GetAbilitySystemComponent();
@@ -73,16 +77,12 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		if (asc->HasMatchingGameplayTag(tag))
 			return;
 
-		UE_LOG(LogTemp, Warning, TEXT("Enemy Detected!!"));
-
 		_testCaptureTarget = enemy;
 		_testCaptureTarget->BeCaptured(this);
 
 		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		_isThrowing = false;
 		_isReturning = false;
-		//SetActorHiddenInGame(true);
-		//SetActorEnableCollision(false);
 
 		_player->SetActorHiddenInGame(true);
 		_player->SetActorEnableCollision(false);
@@ -99,7 +99,6 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 			_isThrowing = false;
 			_isReturning = false;
-
 		}
 	}
 
@@ -107,8 +106,8 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 void ACAS_Hat::Throw(const FVector& direction)
 {
-	if (_isThrowing)
-		return;
+	//if (_isThrowing)
+	//	return;
 
 	if (_testCaptureTarget->IsValidLowLevel())
 		return;
@@ -117,6 +116,7 @@ void ACAS_Hat::Throw(const FVector& direction)
 	MoveDirection = direction.GetSafeNormal();
 	TargetLocation = StartLocation + MoveDirection * 600.0f;
 
+	IsReady = false;
 	_isThrowing = true;
 	_capturingTime = 0.0f;
 	_isReturning = false;

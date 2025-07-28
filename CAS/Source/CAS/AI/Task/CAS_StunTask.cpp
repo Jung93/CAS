@@ -35,16 +35,26 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	CurrTime += DeltaSeconds;
-	
+
 	if (CurrTime >= PlayTime) {
 		CurrTime = 0.0f;
+
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 
 		auto Character = Cast<ACAS_Character>(CurPawn);
+		if (!Character) {
+			return;
+		}
 
 		auto AnimInstance = Character->GetMesh()->GetAnimInstance();
 
-		AnimInstance->Montage_Stop(0.2f,Montage);
+		if (!AnimInstance) {
+			return;
+		}
+
+		float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
+		AnimInstance->Montage_Stop(blendtime, Montage);
+
 		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
 	}
 }

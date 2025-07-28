@@ -123,10 +123,11 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 	if (playerController)
 	{
 		playerController->SetViewTargetWithBlend(this, 1.0f, EViewTargetBlendFunction::VTBlend_Cubic);
-
+		player->DisableInput(playerController);
 		FTimerHandle TimerHandle;
 
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([playerController, this]() {
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([player, playerController, this]() {
+			player->EnableInput(playerController);
 			playerController->Possess(this);
 			}), 1.0f, false);
 
