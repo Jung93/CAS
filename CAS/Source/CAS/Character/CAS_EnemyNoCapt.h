@@ -29,4 +29,5 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override { return AttributeSet; }
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
+
 };

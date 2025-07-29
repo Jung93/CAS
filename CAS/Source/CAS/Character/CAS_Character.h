@@ -9,6 +9,7 @@
 #include "GAS/CAS_AbilityInputID.h"
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
+#include "AI/CAS_PatrolPath.h"
 #include "CAS_Character.generated.h"
 
 class USpringArmComponent;
@@ -72,6 +73,10 @@ protected:
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	int32 HpCount = 3;
-
+protected:
+	UPROPERTY(EditAnywhere)
+	ACAS_PatrolPath* PatrolPath;
+public:
+	ACAS_PatrolPath* GetPatrolPath() { return PatrolPath; }
 };
 
