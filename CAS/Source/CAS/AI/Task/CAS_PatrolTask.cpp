@@ -8,7 +8,7 @@
 
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
-	bNotifyTick = true;
+
 }
 
 EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -19,36 +19,31 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if (!Character || !Character->GetPatrolPath()) {
 		return EBTNodeResult::Failed;
 	}
-	
-	auto BlackBoard = AIController->GetBlackboardComponent();
-	BlackBoard->SetValueAsVector("MovePosition", Character->GetActorLocation());
 
-	return EBTNodeResult::InProgress;
-}
-
-void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
-{
-	//플레이어 위치를 틱으로 체크
-	//플레이어가 배열의 벡터에 근접하면 인덱스를 올림
-	//패트롤패스[인덱스] 는 다음 무브포지션으로 블랙보드에 set
-	//move to 로 이동
-	auto AIController = Cast<ACAS_EnemyController>(OwnerComp.GetAIOwner());
 	auto BlackBoard = AIController->GetBlackboardComponent();
-	auto Character = Cast<ACAS_Character>(AIController->GetPawn());
+
 	FVector CurrentPosition = Character->GetActorLocation();
 
 	auto PatrolPath = Character->GetPatrolPath();
 	int32 PatrolIndex = PatrolPath->GetPathIndex();
-	FVector PatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
-	int32 PatrolLength = PatrolPath->GetPatrolLength();
+	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
 
-	if (FVector::DistSquared(CurrentPosition, PatrolPosition) < FMath::Square(10.0f)) {
+	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
+
+	auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
+	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 100.0f) {
 		PatrolPath->IncreasePathIndex();
-		auto NextPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
-		BlackBoard->SetValueAsVector("MovePosition",NextPatrolPosition);
+		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
+		
+		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);
+		BlackBoard->SetValueAsVector("MovePosition", PatrolPosition);
+
 	}
 	else {
+		
 		BlackBoard->SetValueAsVector("MovePosition", PatrolPosition);
 	}
 
+	return EBTNodeResult::Succeeded;
 }
+
