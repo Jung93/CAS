@@ -91,5 +91,4 @@ protected:
 	float _stunTime = 0.0f;
 	float _maxStunTime = 5.0f;
 
-
 };
