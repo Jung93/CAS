@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Ability_Task/CAS_Task_PlayMontage.h"
 #include "CAS_Ability_FireBreath.generated.h"
 
 /**
@@ -22,6 +23,9 @@ protected:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
+	virtual void PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload) override;
+	virtual void MontageEndEvent(UAnimMontage* Montage, bool bInterrupted) override;
+
 	FActiveGameplayEffectHandle  ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	FActiveGameplayEffectHandle  ApplyGamePlayEffectToTarget(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
@@ -31,4 +35,11 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> TagEffectClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
+	UAnimMontage* CaptureMontage;
+
+	UPROPERTY()
+	UCAS_Task_PlayMontage* PlayMontageTask;
+
 };

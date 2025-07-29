@@ -34,12 +34,27 @@ void UCAS_Ability_FireBreath::ActivateAbility(const FGameplayAbilitySpecHandle H
 
 	}
 
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", CaptureMontage, 1.0f, true);
+	if (PlayMontageTask) {
+		PlayMontageTask->ReadyForActivation();
+	}
+
 }
 
 void UCAS_Ability_FireBreath::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 
+}
+
+void UCAS_Ability_FireBreath::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	PlayMontageTask->ReadyForActivation();
+}
+
+void UCAS_Ability_FireBreath::MontageEndEvent(UAnimMontage* Montage, bool bInterrupted)
+{
+	CAS_EndAbility();
 }
 
 FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)

@@ -30,7 +30,6 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		PlayMontageTask->ReadyForActivation();
 	}
 
-
 }
 
 void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
@@ -43,7 +42,6 @@ void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, c
 
 void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
-
 	auto player = Cast<ACAS_Player>(GetActorInfo().AvatarActor);
 
 	if (!player->IsValidLowLevel())
