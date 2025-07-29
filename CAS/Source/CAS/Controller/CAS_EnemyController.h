@@ -34,7 +34,7 @@ protected:
 	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
-	void StopTrackingPlayer();
+	void LostPlayerInfo();
 
 	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:
@@ -45,7 +45,4 @@ protected:
 	UAIPerceptionComponent* AIPerceptionComponent;
 	UPROPERTY()
 	UAISenseConfig_Sight* SightConfig;
-	FTimerHandle TrackingTimerHandle;
-
-	float TrackingTime = 5.0f;
 };
