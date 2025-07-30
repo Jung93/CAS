@@ -77,24 +77,20 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 			FVector ColorVector(1, 0, 1);
 			SetMeshColor(character, ColorVector);
 
-			GetWorld()->GetTimerManager().SetTimer(TrackingTimerHandle, this, &ThisClass::StopTrackingPlayer, TrackingTime, false);
 		}
 	}
 	else {
 		FVector ColorVector(0, 0, 0);
 		SetMeshColor(character, ColorVector);
+		LostPlayerInfo();
 	}
 
 }
 
-void ACAS_EnemyController::StopTrackingPlayer()
+void ACAS_EnemyController::LostPlayerInfo()
 {
 	BlackBoardComponent->SetValueAsBool("bPlayerDetected", false);
 	BlackBoardComponent->SetValueAsObject("Player", nullptr);
-	if (GetPawn()) {
-		BlackBoardComponent->SetValueAsVector("MovePosition", GetPawn()->GetActorLocation());
-	}
-	GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 }
 
 
