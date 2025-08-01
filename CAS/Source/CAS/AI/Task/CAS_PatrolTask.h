@@ -17,4 +17,7 @@ public:
 	UCAS_PatrolTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector MovePositionKey;
 };

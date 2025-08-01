@@ -73,6 +73,7 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 			BlackBoardComponent->SetValueAsBool("bPlayerDetected", true);
 			BlackBoardComponent->SetValueAsObject("Player", Actor);
 			BlackBoardComponent->SetValueAsVector("MovePosition", Actor->GetActorLocation());
+			BlackBoardComponent->SetValueAsBool("bPlayerLost", false);
 
 			FVector ColorVector(1, 0, 1);
 			SetMeshColor(character, ColorVector);
@@ -82,17 +83,10 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 	else {
 		FVector ColorVector(0, 0, 0);
 		SetMeshColor(character, ColorVector);
-		LostPlayerInfo();
+		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
 	}
 
 }
-
-void ACAS_EnemyController::LostPlayerInfo()
-{
-	BlackBoardComponent->SetValueAsBool("bPlayerDetected", false);
-	BlackBoardComponent->SetValueAsObject("Player", nullptr);
-}
-
 
 void ACAS_EnemyController::SetMeshColor(APawn* pawn, FVector colorVector, FName name)
 {

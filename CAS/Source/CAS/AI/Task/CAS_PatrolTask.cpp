@@ -36,12 +36,12 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
 		
 		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);
-		BlackBoard->SetValueAsVector("MovePosition", PatrolPosition);
+		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
 
 	}
 	else {
 		
-		BlackBoard->SetValueAsVector("MovePosition", PatrolPosition);
+		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
 	}
 
 	return EBTNodeResult::Succeeded;
