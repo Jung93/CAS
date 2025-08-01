@@ -15,3 +15,4 @@ void UCAS_PerceptionService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 }
 //GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 //GetWorld()->GetTimerManager().SetTimer(TrackingTimerHandle, this, &ThisClass::StopTrackingPlayer, TrackingTime, false);
+							
