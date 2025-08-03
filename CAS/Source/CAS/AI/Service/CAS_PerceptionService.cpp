@@ -16,22 +16,26 @@ void UCAS_PerceptionService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 	if (BlackBoard->GetValueAsBool(PlayerLostKey.SelectedKeyName) == true) {
 		
 		//플레이어가 적을 발견해서 인지는 하고있지만 시야에서 놓친경우
-		auto player = BlackBoard->GetValueAsObject(TargetKey.SelectedKeyName);
-		//새로운 태스크로 만들어서 플레이어의 마지막 위치를 기록해두고 이동해서 스캔
-		BlackBoard->SetValueAsVector(MovePosition.SelectedKeyName,player)
+		//컨트롤러에서 마지막 시야에 포착된 플레이어의 위치정보를 입력
+		//두리번거리는 애니메이션 + 5초간 재탐색 -> 플레이어 놓침
+
 	}
 	else {
+		auto ThisPawn = OwnerComp.GetOwner();
+		FVector TargetPoint = Cast<AActor>(BlackBoard->GetValueAsObject(TargetKey.SelectedKeyName))->GetActorLocation();
+		FVector TargetRotation = TargetPoint - ThisPawn->GetActorLocation();
+		FRotator LookAtRot = FRotationMatrix::MakeFromX(TargetRotation).Rotator();
+
+		ThisPawn->SetActorRotation(LookAtRot);
 
 		GetWorld()->GetTimerManager().SetTimer(TrackingTimerHandle, this, &ThisClass::LostPlayerInfo, TrackingTime, false);
+	
 	}
-
-
 
 }
 void UCAS_PerceptionService::LostPlayerInfo()
 {
-	BlackBoard->SetValueAsBool("bPlayerDetected", false);
-	BlackBoard->SetValueAsObject("Player", nullptr);
+	BlackBoard->SetValueAsBool(PlayerDetectedKey.SelectedKeyName, false);
+	BlackBoard->SetValueAsObject(TargetKey.SelectedKeyName, nullptr);
 
-	GetWorld()->GetTimerManager().ClearTimer(TrackingTimerHandle);
 }

@@ -4,31 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_ScanLostTargetTask.generated.h"
+#include "CAS_SetNextMovePoint.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_ScanLostTargetTask : public UBTTaskNode
+class CAS_API UCAS_SetNextMovePoint : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UCAS_ScanLostTargetTask();
+	UCAS_SetNextMovePoint();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector MovePositionKey;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector TargetKey;
-
-protected:
-	UPROPERTY(EditAnywhere)
-	float PlayTime = 5.0f;
-	float CurrTime = 0.0f;
-	UPROPERTY(EditAnywhere)
-	UAnimMontage* Montage;
-
+	
 };

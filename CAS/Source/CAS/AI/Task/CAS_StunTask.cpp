@@ -13,7 +13,7 @@ UCAS_StunTask::UCAS_StunTask()
 }
 
 EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
-{
+{	
 	APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 	
 	auto Character = Cast<ACAS_Character>(CurPawn);
@@ -34,6 +34,8 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 
 void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
 	CurrTime += DeltaSeconds;
 
 	if (CurrTime >= PlayTime) {
