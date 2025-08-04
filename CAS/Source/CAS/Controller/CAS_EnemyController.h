@@ -34,7 +34,6 @@ protected:
 	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
 	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
-	void LostPlayerInfo();
 
 	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:

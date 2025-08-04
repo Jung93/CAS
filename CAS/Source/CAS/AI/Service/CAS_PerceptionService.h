@@ -17,8 +17,25 @@ public:
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 protected:
+	void LostPlayerInfo();
+protected:
 	FTimerHandle TrackingTimerHandle;
 
+	UPROPERTY(EditAnywhere)
 	float TrackingTime = 5.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector MovePosition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector PlayerLostKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector PlayerDetectedKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector TargetKey;
+
+	class UBlackboardComponent* BlackBoard;
 
 };

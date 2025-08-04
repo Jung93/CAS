@@ -1,21 +1,21 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "AI/Task/CAS_StunTask.h"
+#include "AI/Task/CAS_ScanLostTargetTask.h"
 #include "Controller/CAS_EnemyController.h"
 #include "Character/CAS_Character.h"
-#include "CAS_StunTask.h"
+#include "BehaviorTree/BlackboardComponent.h"
 
-UCAS_StunTask::UCAS_StunTask()
+
+UCAS_ScanLostTargetTask::UCAS_ScanLostTargetTask()
 {
-	NodeName = TEXT("StunTask");
 	bNotifyTick = true;
 }
 
-EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
-{	
+EBTNodeResult::Type UCAS_ScanLostTargetTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
+{
 	APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
-	
+
 	auto Character = Cast<ACAS_Character>(CurPawn);
 	if (!Character) {
 		return EBTNodeResult::Failed;
@@ -26,21 +26,27 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	if (!AnimInstance) {
 		return EBTNodeResult::Failed;
 	}
+	auto BlackBoard = OwnerComp.GetBlackboardComponent();
+
+	if (BlackBoard->GetValueAsBool("bPlayerLost") == false)
+	{
+		return EBTNodeResult::Failed;
+	}
+	CurrTime = 0.0f;
 
 	AnimInstance->Montage_Play(Montage);
 
 	return EBTNodeResult::InProgress;
 }
 
-void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
-
+		
 	CurrTime += DeltaSeconds;
 
 	if (CurrTime >= PlayTime) {
-		CurrTime = 0.0f;
-
+		
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 
 		auto Character = Cast<ACAS_Character>(CurPawn);
@@ -53,10 +59,10 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		if (!AnimInstance) {
 			return;
 		}
+				
+		AnimInstance->Montage_Stop(0, Montage);
 
-		float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
-		AnimInstance->Montage_Stop(blendtime, Montage);
 
-		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

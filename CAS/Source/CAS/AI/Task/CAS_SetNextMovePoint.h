@@ -4,20 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_PatrolTask.generated.h"
+#include "CAS_SetNextMovePoint.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_PatrolTask : public UBTTaskNode
+class CAS_API UCAS_SetNextMovePoint : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UCAS_PatrolTask();
+	UCAS_SetNextMovePoint();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector MovePositionKey;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector TargetKey;
+	
 };
