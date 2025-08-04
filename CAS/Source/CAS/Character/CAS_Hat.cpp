@@ -66,8 +66,6 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	auto enemy = Cast<ACAS_EnemyCapt>(OtherActor);
 
-	// 스킬 아이콘 몇개 만들기
-
 
 	if (enemy->IsValidLowLevel())
 	{
@@ -81,8 +79,6 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		_testCaptureTarget->BeCaptured(this);
 
 		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
-		//SetActorRelativeRotation(FRotator(-90.f, 0, 0.f)); // Yaw -90 회전
-		//SetActorRelativeLocation(FVector(-5.f, -3.f, 0.f));
 
 		_isThrowing = false;
 		_isReturning = false;
@@ -100,10 +96,6 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		{
 
 			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
-			//SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f)); // Yaw -90 회전
-			//SetActorRelativeLocation(FVector(-5.f, -3.f, 0.f));
-
-
 
 			_isThrowing = false;
 			_isReturning = false;
