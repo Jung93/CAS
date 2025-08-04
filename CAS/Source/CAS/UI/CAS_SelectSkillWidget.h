@@ -25,7 +25,10 @@ public:
 	TArray<UCAS_SkillSlot*>& GetSkillSlots() { return SkillSlots; }
 
 
+
 protected:
+	//virtual void NativeTick(const FGeometry& MyGeometery, float InDeltaTime) override;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slots")
 	TSubclassOf<UCAS_SkillSlot> SlotWidgetClass;
 	UPROPERTY()
@@ -33,6 +36,7 @@ protected:
 	UPROPERTY()
 	TArray<class UTextBlock*> TextBlocks;
 
+	FVector2D WidgetSize;
 
 	UPROPERTY()
 	TSubclassOf<class UGameplayAbility> TargetAbility;

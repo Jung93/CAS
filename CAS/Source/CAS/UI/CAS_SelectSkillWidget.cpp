@@ -31,18 +31,15 @@ void UCAS_SelectSkillWidget::InitSetting()
     SkillSlots.SetNum(5);
 
 	auto root = Cast<UCanvasPanel>(GetRootWidget());
-
 	auto border = Cast<UBorder>(root->GetChildAt(0));
+	//auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
 
-	auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
+	//GEngine->GameViewport->GetViewportSize(WidgetSize);
 
-	FVector2D ViewportSize;
-	GEngine->GameViewport->GetViewportSize(ViewportSize);
+	//float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
+ //   WidgetSize /= Scale; // DPI 보정 적용
 
-	float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
-	ViewportSize /= Scale; // DPI 보정 적용
-
-	slot2->SetSize(ViewportSize);
+	//slot2->SetSize(WidgetSize);
 
 	auto borderPanel = Cast<UCanvasPanel>(border->GetContent());
 
@@ -107,6 +104,18 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         TextBlocks[SkillSlots.Num() - 1]->SetText(TagName);
         TargetAbility = newAbility;
     }
+
+
+    auto root = Cast<UCanvasPanel>(GetRootWidget());
+    auto border = Cast<UBorder>(root->GetChildAt(0));
+    auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
+
+    GEngine->GameViewport->GetViewportSize(WidgetSize);
+
+    float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
+    WidgetSize /= Scale; // DPI 보정 적용
+
+    slot2->SetSize(WidgetSize);
 
     AddToViewport();
 
@@ -179,3 +188,20 @@ FString UCAS_SelectSkillWidget::GetSkillDescription(FName AbilityTagName)
 
     return Result;
 }
+
+//void UCAS_SelectSkillWidget::NativeTick(const FGeometry& MyGeometery, float DeltaTime)
+//{
+//    //Super::NativeTick(MyGeometery, DeltaTime);
+//
+//    //auto root = Cast<UCanvasPanel>(GetRootWidget());
+//    //auto border = Cast<UBorder>(root->GetChildAt(0));
+//    //auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
+//
+//    //GEngine->GameViewport->GetViewportSize(WidgetSize);
+//
+//    //float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
+//    //WidgetSize /= Scale; // DPI 보정 적용
+//
+//    //slot2->SetSize(WidgetSize);
+//
+//}

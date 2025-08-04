@@ -81,6 +81,9 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		_testCaptureTarget->BeCaptured(this);
 
 		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+		//SetActorRelativeRotation(FRotator(-90.f, 0, 0.f)); // Yaw -90 회전
+		//SetActorRelativeLocation(FVector(-5.f, -3.f, 0.f));
+
 		_isThrowing = false;
 		_isReturning = false;
 
@@ -97,6 +100,11 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		{
 
 			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+			//SetActorRelativeRotation(FRotator(-90.f, 0.f, 0.f)); // Yaw -90 회전
+			//SetActorRelativeLocation(FVector(-5.f, -3.f, 0.f));
+
+
+
 			_isThrowing = false;
 			_isReturning = false;
 		}
@@ -130,6 +138,12 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	float halfTime = _isReturning? _totalMoveTime * 0.8f : _totalMoveTime * 0.4f;
 	float lerpValue = (_capturingTime / halfTime);
 
+	FRotator CurrentRotator = GetActorRotation();
+	FRotator AddRotator = FRotator(180.f * DeltaTime, 360.f * DeltaTime, 0); // 각축 회전
+	FRotator NewRotator = CurrentRotator + AddRotator;
+	SetActorRotation(NewRotator);
+
+
 	if (!_isReturning)
 	{
 		FVector NewLocation = FMath::Lerp(StartLocation, TargetLocation, lerpValue);
@@ -158,7 +172,6 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 
 			SetActorLocation(playerLocation);
 
-			//AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
 }
