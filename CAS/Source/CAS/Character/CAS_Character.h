@@ -78,5 +78,9 @@ protected:
 	ACAS_PatrolPath* PatrolPath;
 public:
 	ACAS_PatrolPath* GetPatrolPath() { return PatrolPath; }
+
+public:
+	virtual void SaveCharacterData();
+	virtual void LoadCharacterData();
 };
 

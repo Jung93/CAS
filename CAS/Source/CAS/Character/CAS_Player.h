@@ -144,5 +144,8 @@ protected:
 
 	UPROPERTY()
 	class UCAS_SelectSkillWidget* SelectSkillWidget;
+public:
+	virtual void SaveCharacterData() override;
+	virtual void LoadCharacterData() override;
 
 };

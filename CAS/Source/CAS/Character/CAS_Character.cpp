@@ -208,5 +208,14 @@ bool ACAS_Character::CanActivateAbilitiesWithTags(FGameplayTagContainer AbilityT
 	return false;
 }
 
+void ACAS_Character::SaveCharacterData()
+{
+	//레벨 변경 전에 저장할 데이터 
+}
+
+void ACAS_Character::LoadCharacterData()
+{
+}
+
 
 

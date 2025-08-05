@@ -443,3 +443,14 @@ void ACAS_Player::ToggleSkill()
 	QuickSlotWidget->SwitchToggle();
 
 }
+
+void ACAS_Player::SaveCharacterData()
+{
+	Super::SaveCharacterData();
+
+}
+
+void ACAS_Player::LoadCharacterData()
+{
+	Super::LoadCharacterData();
+}
