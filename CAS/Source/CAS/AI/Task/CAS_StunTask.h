@@ -9,6 +9,15 @@
 /**
  * 
  */
+USTRUCT()
+struct FStunTimeMemory
+{
+	GENERATED_BODY()
+
+public:
+	float CurTime = 0.0f;
+};
+
 UCLASS()
 class CAS_API UCAS_StunTask : public UBTTaskNode
 {
@@ -18,10 +27,13 @@ public:
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
+	virtual uint16 GetInstanceMemorySize() const override{ return sizeof(FStunTimeMemory);}
+
+
 protected:
 	UPROPERTY(EditAnywhere)
 	float PlayTime = 5.0f;
-	float CurrTime = 0.0f;
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* Montage;
+
 };

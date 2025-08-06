@@ -36,10 +36,12 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	CurrTime += DeltaSeconds;
 
-	if (CurrTime >= PlayTime) {
-		CurrTime = 0.0f;
+	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
+	memory->CurTime += DeltaSeconds;
+
+	if (memory->CurTime >= PlayTime) {
+		memory->CurTime = 0.0f;
 
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 

@@ -32,7 +32,9 @@ EBTNodeResult::Type UCAS_ScanLostTargetTask::ExecuteTask(UBehaviorTreeComponent&
 	{
 		return EBTNodeResult::Failed;
 	}
-	CurrTime = 0.0f;
+
+	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
+	memory->CurTime = 0.0f;
 
 	AnimInstance->Montage_Play(Montage);
 
@@ -43,9 +45,11 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 		
-	CurrTime += DeltaSeconds;
+	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
+	memory->CurTime += DeltaSeconds;
 
-	if (CurrTime >= PlayTime) {
+
+	if (memory->CurTime >= PlayTime) {
 		
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 
