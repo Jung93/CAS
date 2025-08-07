@@ -18,17 +18,12 @@ public:
 
 	virtual void Init() override;
 
-	UFUNCTION()
-	FString GetConfig(const FString& key, const FString& value) const;
-	UFUNCTION()
-	void SetConfig(const FString& key, FString& value);
-	UFUNCTION()
-	void LoadSettingFromINI();	
-	UFUNCTION()
-	void SaveSettingToINI();						
-
-	FString GetSettingPath()const;
-
+	FString GetSettingPath(const FString& FileName)const;
+	void GetAssetsFromPaths(const FString& Path, const FString& HeaderName, TMap<FString, FString>& OutGameAssets);
+	void SaveSettingsToINI(const FString& FileName);
+	void LoadSettingsFromINI(const FString& FileName);
+public:
 	UPROPERTY(VisibleAnywhere, Category = "Setting")
-	TMap<FString, FString> GameSetting;
+	TMap<FString, FString> GameAssets;
+
 };
