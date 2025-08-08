@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "UI/CAS_SkillSlot.h"
 #include "GAS/CAS_GameplayAbility.h"
+#include "Controller/CAS_PlayerController.h"
 #include "CAS_QuickSlotWidget.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FQuickSlotSwapEvent,int32,FCAS_SlotData );
@@ -33,6 +34,8 @@ public:
 
 	void BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlots);
 	void SwitchToggle();// { isToggled = !isToggled; }
+
+	void ChangeInputDeviceUI(EInputDeviceType InputDevice);
 
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;

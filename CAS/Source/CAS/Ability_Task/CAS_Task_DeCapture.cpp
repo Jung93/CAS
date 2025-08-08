@@ -79,7 +79,7 @@ void UCAS_Task_DeCapture::Activate()
 
 	for (int i = 0; i < MaxAttempts; ++i)
 	{
-		FVector randomOffset = FMath::VRand() * FMath::FRandRange(200.0f, dropRadius);
+		FVector randomOffset = FMath::VRand() * FMath::FRandRange(100.0f, dropRadius);
 		FVector candidateLocation = actorLocation + randomOffset;
 		candidateLocation.Z = actorLocation.Z;
 

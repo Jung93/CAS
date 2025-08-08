@@ -4,24 +4,44 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "InputActionValue.h"
+#include "InputAction.h"
 #include "CAS_PlayerController.generated.h"
 
 /**
  * 
  */
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnInputDeviceChanged, EInputDeviceType);
+
+UENUM(BlueprintType)
+enum class EInputDeviceType : uint8
+{
+	KeyboardMouse,
+	Gamepad
+};
+
+
 UCLASS()
 class CAS_API ACAS_PlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
+public:
+	FOnInputDeviceChanged OnInputDeviceChanged;
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
+	virtual bool InputKey(const FInputKeyParams& Params) override;
 
+	void OnLastInputDeviceChanged(EInputDeviceType DeviceType);
 	void PrintDebugMessage(const FInputActionValue& Value);
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DebugAction;
+
+	UPROPERTY()
+	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
 };
