@@ -2,6 +2,7 @@
 
 
 #include "UI/CAS_QuickSlotWidget.h"
+#include "Controller/CAS_PlayerController.h"
 #include "UI/CAS_SkillSlot.h"
 #include "Components/HorizontalBox.h"
 #include "Components/HorizontalBoxSlot.h"
@@ -66,6 +67,15 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
             }
         }
     }
+
+    auto controller = Cast<ACAS_PlayerController>(GetOwningPlayer());
+
+    if (controller->IsValidLowLevel())
+    {
+        controller->OnInputDeviceChanged.AddUObject(this, &UCAS_QuickSlotWidget::ChangeInputDeviceUI);
+
+    }
+
 }
 
 void UCAS_QuickSlotWidget::SwapSlots(UCAS_SkillSlot* DragSlot, UCAS_SkillSlot* DropSlot)
@@ -263,4 +273,46 @@ void UCAS_QuickSlotWidget::SwitchToggle()
         toggleBorder->SetBrushFromMaterial(nullptr);
         toggleBorder->SetRenderOpacity(0);
     }
+}
+
+void UCAS_QuickSlotWidget::ChangeInputDeviceUI(EInputDeviceType InputDevice)
+{
+
+    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+    UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
+
+    if (InputDevice == EInputDeviceType::KeyboardMouse)
+    {
+        for (int32 i = 0; i < 2;i++)
+        {
+            UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
+            Image->SetColorAndOpacity(FLinearColor(1,1,1,1));
+
+
+            UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
+            HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+        }
+    }
+    else 
+    {
+        for (int32 i = 0; i < 2;i++)
+        {
+            UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
+            Image->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+
+
+            UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
+            HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+        }
+    }
+
+
+
+
+
+
+
+
+
 }

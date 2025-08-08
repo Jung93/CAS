@@ -49,6 +49,7 @@ public:
 	class ACAS_Player* GetPlayer() { return _player; }
 
 	bool GetIsReady() { return IsReady; }
+	bool GetIsThrowing() { return _isThrowing; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")

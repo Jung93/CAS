@@ -204,6 +204,10 @@ void ACAS_Player::HideMouse(const FInputActionValue& Value)
 
 void ACAS_Player::QuickSlotFunction(const FInputActionValue& Value)
 {
+	if (_hatSpawn->GetIsThrowing())
+		return;
+
+
 	FCAS_SlotData SlotData = QuickSlotWidgetComponent->GetAbilityData(0);
 
 	EAbilityInputID InputID = SlotData.SkillData.InputID;

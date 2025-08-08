@@ -35,6 +35,38 @@ void ACAS_PlayerController::SetupInputComponent()
 	}
 }
 
+bool ACAS_PlayerController::InputKey(const FInputKeyParams& Params)
+{
+    Super::InputKey(Params);
+
+    if (Params.IsGamepad())
+    {
+        OnLastInputDeviceChanged(EInputDeviceType::Gamepad);
+    }
+    else
+    {
+        OnLastInputDeviceChanged(EInputDeviceType::KeyboardMouse);
+    }
+
+    return false;
+}
+
+void ACAS_PlayerController::OnLastInputDeviceChanged(EInputDeviceType DeviceType)
+{
+    if (CurrentDevice != DeviceType)
+    {
+        CurrentDevice = DeviceType;
+
+        FString DeviceName = StaticEnum<EInputDeviceType>()->GetNameStringByValue((int64)DeviceType);
+
+        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DeviceName);
+
+        // 예: UI 위젯에 델리게이트 호출
+        OnInputDeviceChanged.Broadcast(CurrentDevice);
+    }
+
+}
+
 void ACAS_PlayerController::PrintDebugMessage(const FInputActionValue& Value)
 {
     if (IsLocalController())
