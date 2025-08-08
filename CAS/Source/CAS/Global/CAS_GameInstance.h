@@ -22,8 +22,15 @@ public:
 	void GetAssetsFromPaths(const FString& Path, const FString& HeaderName, TMap<FString, FString>& OutGameAssets);
 	void SaveSettingsToINI(const FString& FileName);
 	void LoadSettingsFromINI(const FString& FileName);
-public:
-	UPROPERTY(VisibleAnywhere, Category = "Setting")
+
+	void SetQuickSlotSize(int32 size) { QuickSlotAbilities.SetNum(size); }
+	void SetQuickSlotAbilityData(int32 index, TSubclassOf<class UGameplayAbility> Ability) { QuickSlotAbilities[index] = Ability; }
+	TSubclassOf<class UGameplayAbility> GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
+	UPROPERTY(VisibleAnywhere, Category = "LevelConversion")
+	TArray<TSubclassOf<class UGameplayAbility>> QuickSlotAbilities;
+
 
 };

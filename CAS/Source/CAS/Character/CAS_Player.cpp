@@ -21,6 +21,7 @@
 #include "UI/CAS_QuickSlotWidget.h"
 #include "UI/CAS_SelectSkillWidget.h"
 
+#include "Global/CAS_GameInstance.h"
 
 
 
@@ -323,6 +324,7 @@ void ACAS_Player::BeginPlay()
 	QuickSlotWidget = NewQuickSlotWidget;
 	SelectSkillWidget = NewSelectSkillWidget;
 
+	
 	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel() && SelectSkillWidget->IsValidLowLevel()) {
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->AddToViewport();
@@ -333,6 +335,10 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
 
+	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	if (GameInstance) {
+		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
+	}
 
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 }
@@ -420,6 +426,9 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
 {
+	if (newAbility == nullptr) {
+		return;
+	}
 	bool CanAddable = QuickSlotWidgetComponent->CheckPlayerAbility(newAbility);
 
 	if (!CanAddable)
