@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "UI/CAS_SkillSlot.h"
 #include "CAS_GameInstance.generated.h"
 
 /**
@@ -24,13 +25,14 @@ public:
 	void LoadSettingsFromINI(const FString& FileName);
 
 	void SetQuickSlotSize(int32 size) { QuickSlotAbilities.SetNum(size); }
-	void SetQuickSlotAbilityData(int32 index, TSubclassOf<class UGameplayAbility> Ability) { QuickSlotAbilities[index] = Ability; }
-	TSubclassOf<class UGameplayAbility> GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
+	void SetQuickSlotAbilityData(int32 index, struct FCAS_SlotData data) { QuickSlotAbilities[index] = data; }
+	struct FCAS_SlotData GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
+	
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
 	UPROPERTY(VisibleAnywhere, Category = "LevelConversion")
-	TArray<TSubclassOf<class UGameplayAbility>> QuickSlotAbilities;
+	TArray<struct FCAS_SlotData> QuickSlotAbilities;
 
 
 };

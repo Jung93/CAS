@@ -56,6 +56,7 @@ void UCAS_QuickSlotWidgetComponent::AddPlayerAbility(int32 index,const TSubclass
 			FCAS_SlotData SlotData;
 			SlotData.SlotIndex = index;
 			SlotData.SkillData = SkillData;
+			SlotData.AbilityClass = newAbility;
 
 			PlayerAbilities[index] = SlotData;
 		}
