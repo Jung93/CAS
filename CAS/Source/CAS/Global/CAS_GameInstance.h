@@ -28,6 +28,8 @@ public:
 	void SetQuickSlotAbilityData(int32 index, struct FCAS_SlotData data) { QuickSlotAbilities[index] = data; }
 	struct FCAS_SlotData GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
 	
+	void SaveGameData_Sync(ACAS_Player* player);
+	void LoadGameData_Sync();
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;

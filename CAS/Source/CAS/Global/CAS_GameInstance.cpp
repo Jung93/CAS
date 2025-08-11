@@ -2,8 +2,12 @@
 
 
 #include "Global/CAS_GameInstance.h"
+#include "Global/CAS_SaveGame.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "Kismet/GameplayStatics.h"
 #include "Modules/ModuleManager.h"
+
+#include "Character/CAS_Player.h"
 
 UCAS_GameInstance::UCAS_GameInstance()
 {
@@ -79,5 +83,16 @@ void UCAS_GameInstance::LoadSettingsFromINI(const FString& FileName)
 		}
 	}
 
+}
+
+void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player)
+{
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::CreateSaveGameObject(UCAS_SaveGame::StaticClass()));
+	
+	SaveGameData->PlayerHP = player->
+}
+
+void UCAS_GameInstance::LoadGameData_Sync()
+{
 }
 
