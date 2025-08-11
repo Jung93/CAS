@@ -6,8 +6,8 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/GameplayStatics.h"
 #include "Modules/ModuleManager.h"
-
 #include "Character/CAS_Player.h"
+
 
 UCAS_GameInstance::UCAS_GameInstance()
 {
@@ -85,14 +85,32 @@ void UCAS_GameInstance::LoadSettingsFromINI(const FString& FileName)
 
 }
 
-void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player)
+void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 {
 	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::CreateSaveGameObject(UCAS_SaveGame::StaticClass()));
 	
-	SaveGameData->PlayerHP = player->
+	if (!player) {
+		return;
+	}
+	player->SaveCharacterData();
+
+	SaveGameData->PlayerHP = player->GetAttributeSet()->GetHealth();
+	SaveGameData->PlayerLocation = player->GetActorLocation();
+	SaveGameData->QuickSlotData = QuickSlotAbilities;
+
+	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT : %d"), index), index);
 }
 
-void UCAS_GameInstance::LoadGameData_Sync()
+void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
 {
+	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT : %d"), index), index)) {
+		return;
+	}
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT : %d"), index), index));
+	
+	player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
+	player->SetActorLocation(SaveGameData->PlayerLocation);
+	player->LoadCharacterData();
+	
 }
 
