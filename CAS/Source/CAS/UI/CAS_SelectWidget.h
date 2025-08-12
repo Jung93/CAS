@@ -14,4 +14,14 @@ class CAS_API UCAS_SelectWidget : public UUserWidget
 {
 	GENERATED_BODY()
 	
+	//실행시킬 슬롯의 인덱스 , 버튼 두개 
+public:
+	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
+protected:
+	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	//UButton* YES_Button;
+	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	//UButton* NO_Button;
+
+	int32 SellectedIndex = -1;
 };

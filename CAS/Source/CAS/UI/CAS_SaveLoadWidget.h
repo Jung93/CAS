@@ -19,8 +19,7 @@ class CAS_API UCAS_SaveLoadWidget : public UUserWidget
 	
 public:
 	virtual void NativeConstruct() override;
-	void InitSetting();
-
+	
 	UFUNCTION()
 	void DisplaySelectionWidget();
 	UFUNCTION()
@@ -28,8 +27,9 @@ public:
 	UFUNCTION()
 	void DisplaySaveLoadWidget();
 	UFUNCTION()
-	void CloseDisplaySaveLoadWidget();
+	void CloseSaveLoadWidget();
 	
+	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
 	int32 SlotCount = 0;
@@ -49,4 +49,5 @@ protected:
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* CAS_VerticalBox;
 
+	int32 SellectedIndex = -1;
 };

@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "InputActionValue.h"
 #include "InputAction.h"
+#include "UI/CAS_SaveLoadWidget.h"
 #include "CAS_PlayerController.generated.h"
 
 /**
@@ -36,12 +37,19 @@ protected:
 
 	void OnLastInputDeviceChanged(EInputDeviceType DeviceType);
 	void PrintDebugMessage(const FInputActionValue& Value);
+	void ControlSaveLoadWidget(const FInputActionValue& Value);
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DebugAction;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SaveLoad", meta = (AllowPrivateAccess = "true"))
+	UInputAction* ControlSaveLoadAction;
 	UPROPERTY()
 	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCAS_SaveLoadWidget> SaveLoadWidgetClass;
+	UPROPERTY()
+	UCAS_SaveLoadWidget* SaveLoadWidget;
 };

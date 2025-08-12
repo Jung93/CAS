@@ -10,6 +10,11 @@
 void ACAS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+   
+    SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
+    SaveLoadWidget->CloseSaveLoadWidget();
+    SaveLoadWidget->AddToViewport();
+
 #if WITH_EDITOR
     if (IsLocalController())
     {
@@ -31,6 +36,7 @@ void ACAS_PlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
 
 		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ThisClass::PrintDebugMessage);
+		EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
 
 	}
 }
@@ -72,5 +78,16 @@ void ACAS_PlayerController::PrintDebugMessage(const FInputActionValue& Value)
     if (IsLocalController())
     {
         ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
+    }
+}
+
+void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value)
+{
+    auto result = SaveLoadWidget->GetVisibility();
+    if (result == ESlateVisibility::Visible) {
+        SaveLoadWidget->CloseSaveLoadWidget();
+    }
+    else {
+        SaveLoadWidget->DisplaySaveLoadWidget();
     }
 }

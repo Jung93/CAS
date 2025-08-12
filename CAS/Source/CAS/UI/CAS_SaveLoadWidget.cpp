@@ -18,20 +18,15 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 		if (SlotWidgetClass) {
 			UCAS_SaveLoadSlot* slot = CreateWidget<UCAS_SaveLoadSlot>(GetWorld(), SlotWidgetClass);
 			slot->SetSlotIndex(i);
-			auto Button = slot->GetSlotButton();
-			Button->OnClicked.AddDynamic(this,&ThisClass::DisplaySelectionWidget);
-
+			slot->BindOnClickedEvent(this, FName("DisplaySelectionWidget"));
+			slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSellectedIndex);
 			CAS_VerticalBox->AddChild(slot);
 			SaveLoadSlots[i] = slot;
 		}
 	}
 	
-	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseDisplaySaveLoadWidget);
+	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
 	
-}
-
-void UCAS_SaveLoadWidget::InitSetting()
-{
 }
 
 void UCAS_SaveLoadWidget::DisplaySelectionWidget()
@@ -55,7 +50,7 @@ void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
 	SetVisibility(ESlateVisibility::Visible);
 }
 
-void UCAS_SaveLoadWidget::CloseDisplaySaveLoadWidget()
+void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
 }
