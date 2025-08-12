@@ -1,8 +1,8 @@
 {
-	"Ability.Attack.TEST": "발차기",
-	"Ability.Move.Evade" : "회피",
-	"Ability.Attack.ChargeAttack": "차지어택",
-	"Ability.Attack.FireBreath": "화염 브레스",
-	"Ability.Move.SuperJump": "슈퍼점프",
-	"Ability.Move.SuperSpeed": "슈퍼 스피드"
+	"Ability.Attack.TEST": "돌려차기로 적을 공격한다",
+	"Ability.Move.Evade" : "적의 공격을 회피한다",
+	"Ability.Attack.ChargeAttack": "누르는 동안 차지하고 떼는 순간 공격한다",
+	"Ability.Attack.FireBreath": "2초동안 전방에 불을 뿜는다",
+	"Ability.Move.SuperJump": "활성화되어있는 동안 점프력이 올라간다",
+	"Ability.Move.SuperSpeed": "5초동안 이동속도가 2배가 된다"
 }
