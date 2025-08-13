@@ -30,6 +30,8 @@ public:
 	UFUNCTION()
 	void CloseSaveLoadWidget();
 	
+	void 
+
 	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")

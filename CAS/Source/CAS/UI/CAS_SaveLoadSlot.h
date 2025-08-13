@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Button.h"
+#include "Components/Button.h"	
+#include "Components/TextBlock.h"
 #include "CAS_SaveLoadSlot.generated.h"
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FSendSlotIndex, int32);
@@ -20,14 +21,19 @@ public:
 	void SetSlotIndex(int32 index) { SlotIndex = index; }
 	int32 GetSlotIndex() { return SlotIndex; }
 
-	void BindOnClickedEvent(UObject* Object, FName name);
 
+	void SetButtonText(FText text);
+	void SetButtonText(FString string);
+
+	void BindOnClickedEvent(UObject* Object, FName name);
 	FSendSlotIndex SendSlotIndex;
 protected:
 	UFUNCTION()
-	void OnClikcedEvent();
+	void OnClickedEvent();
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* CAS_SaveLoadButton;
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* CAS_TextBlock;
 
 	int32 SlotIndex;
 };

@@ -3,25 +3,33 @@
 
 #include "UI/CAS_SaveLoadWidget.h"
 #include "Components/VerticalBox.h"
+#include "Components/VerticalBoxSlot.h"
 #include "Controller/CAS_PlayerController.h"
 
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
-	Super::NativeConstruct();
-		
+	Super::NativeConstruct();	
+
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 	if (SelectionWidget) {
+		SelectionWidget->AddToViewport();
 		CloseSelectionWidget();
+
+		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));
+		SelectionWidget->YES_OnClickedEvent(this, FName("CloseSelectionWidget"));
 	}
 	
 	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
-	
+
+	for (auto slot : SaveLoadSlots) {
+		slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSellectedIndex);
+	}
 }
 
 void UCAS_SaveLoadWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-
+		
 	SaveLoadSlots.SetNum(SlotCount);
 
 	for (int32 i = 0; i < SlotCount; i++) {
@@ -34,6 +42,7 @@ void UCAS_SaveLoadWidget::NativePreConstruct()
 			SaveLoadSlots[i] = slot;
 		}
 	}
+
 }
 
 void UCAS_SaveLoadWidget::DisplaySelectionWidget()
