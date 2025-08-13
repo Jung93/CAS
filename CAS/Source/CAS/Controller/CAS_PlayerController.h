@@ -28,8 +28,10 @@ class CAS_API ACAS_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	FOnInputDeviceChanged OnInputDeviceChanged;
+	void EnterUIMode();
+	void ExitUIMode();
 
+	FOnInputDeviceChanged OnInputDeviceChanged;
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -38,6 +40,7 @@ protected:
 	void OnLastInputDeviceChanged(EInputDeviceType DeviceType);
 	void PrintDebugMessage(const FInputActionValue& Value);
 	void ControlSaveLoadWidget(const FInputActionValue& Value);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;

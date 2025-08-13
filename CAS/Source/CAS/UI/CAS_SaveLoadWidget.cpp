@@ -3,6 +3,7 @@
 
 #include "UI/CAS_SaveLoadWidget.h"
 #include "Components/VerticalBox.h"
+#include "Controller/CAS_PlayerController.h"
 
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
@@ -45,12 +46,18 @@ void UCAS_SaveLoadWidget::CloseSelectionWidget()
 	SelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
+void UCAS_SaveLoadWidget::DisplaySaveLoadWidget(APlayerController* controller)
 {	
-	SetVisibility(ESlateVisibility::Visible);
+	SetVisibility(ESlateVisibility::Visible);	
+
+	auto playerController = Cast<ACAS_PlayerController>(controller);
+	playerController->EnterUIMode();
 }
 
-void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
+void UCAS_SaveLoadWidget::CloseSaveLoadWidget(APlayerController* controller)
 {
 	SetVisibility(ESlateVisibility::Collapsed);
+
+	auto playerController = Cast<ACAS_PlayerController>(controller);
+	playerController->ExitUIMode();
 }

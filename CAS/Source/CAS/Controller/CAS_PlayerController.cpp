@@ -2,7 +2,7 @@
 
 
 #include "Controller/CAS_PlayerController.h"
-
+#include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
@@ -12,8 +12,8 @@ void ACAS_PlayerController::BeginPlay()
 	Super::BeginPlay();
    
     SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
-    SaveLoadWidget->CloseSaveLoadWidget();
     SaveLoadWidget->AddToViewport();
+    SaveLoadWidget->CloseSaveLoadWidget(this);
 
 #if WITH_EDITOR
     if (IsLocalController())
@@ -85,9 +85,25 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
 {
     auto result = SaveLoadWidget->GetVisibility();
     if (result == ESlateVisibility::Visible) {
-        SaveLoadWidget->CloseSaveLoadWidget();
+        SaveLoadWidget->CloseSaveLoadWidget(this);
     }
     else {
-        SaveLoadWidget->DisplaySaveLoadWidget();
+        SaveLoadWidget->DisplaySaveLoadWidget(this);
     }
+}
+
+void ACAS_PlayerController::EnterUIMode()
+{
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+    bShowMouseCursor = true;
+    bEnableClickEvents = true;
+    bEnableMouseOverEvents = true;
+}
+
+void ACAS_PlayerController::ExitUIMode()
+{
+    UGameplayStatics::SetGamePaused(GetWorld(), false);
+    bShowMouseCursor = false;
+    bEnableClickEvents = false;
+    bEnableMouseOverEvents = false;
 }
