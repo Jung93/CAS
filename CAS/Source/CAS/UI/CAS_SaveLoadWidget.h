@@ -25,9 +25,9 @@ public:
 	UFUNCTION()
 	void CloseSelectionWidget();
 	UFUNCTION()
-	void DisplaySaveLoadWidget(APlayerController* controller);
+	void DisplaySaveLoadWidget();
 	UFUNCTION()
-	void CloseSaveLoadWidget(APlayerController* controller);
+	void CloseSaveLoadWidget();
 	
 	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
 protected:

@@ -46,18 +46,18 @@ void UCAS_SaveLoadWidget::CloseSelectionWidget()
 	SelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
-void UCAS_SaveLoadWidget::DisplaySaveLoadWidget(APlayerController* controller)
+void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
 {	
 	SetVisibility(ESlateVisibility::Visible);	
-
+	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 	playerController->EnterUIMode();
 }
 
-void UCAS_SaveLoadWidget::CloseSaveLoadWidget(APlayerController* controller)
+void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
-
+	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 	playerController->ExitUIMode();
 }

@@ -13,7 +13,7 @@ void ACAS_PlayerController::BeginPlay()
    
     SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
     SaveLoadWidget->AddToViewport();
-    SaveLoadWidget->CloseSaveLoadWidget(this);
+    SaveLoadWidget->CloseSaveLoadWidget();
 
 #if WITH_EDITOR
     if (IsLocalController())
@@ -85,10 +85,10 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
 {
     auto result = SaveLoadWidget->GetVisibility();
     if (result == ESlateVisibility::Visible) {
-        SaveLoadWidget->CloseSaveLoadWidget(this);
+        SaveLoadWidget->CloseSaveLoadWidget();
     }
     else {
-        SaveLoadWidget->DisplaySaveLoadWidget(this);
+        SaveLoadWidget->DisplaySaveLoadWidget();
     }
 }
 
