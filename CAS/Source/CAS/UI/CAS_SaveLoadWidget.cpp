@@ -8,13 +8,22 @@
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-
-	SaveLoadSlots.SetNum(SlotCount);
-
+		
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 	if (SelectionWidget) {
 		CloseSelectionWidget();
 	}
+	
+	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
+	
+}
+
+void UCAS_SaveLoadWidget::NativePreConstruct()
+{
+	Super::NativePreConstruct();
+
+	SaveLoadSlots.SetNum(SlotCount);
+
 	for (int32 i = 0; i < SlotCount; i++) {
 		if (SlotWidgetClass) {
 			UCAS_SaveLoadSlot* slot = CreateWidget<UCAS_SaveLoadSlot>(GetWorld(), SlotWidgetClass);
@@ -25,9 +34,6 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 			SaveLoadSlots[i] = slot;
 		}
 	}
-	
-	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
-	
 }
 
 void UCAS_SaveLoadWidget::DisplaySelectionWidget()

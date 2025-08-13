@@ -3,12 +3,14 @@
 
 #include "UI/CAS_SaveLoadSlot.h"
 #include "UI/CAS_SaveLoadWidget.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 
 void UCAS_SaveLoadSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 
 	CAS_SaveLoadButton->OnClicked.AddDynamic(this, &ThisClass::OnClikcedEvent);
+	
 }
 
 void UCAS_SaveLoadSlot::BindOnClickedEvent(UObject* Object, FName name)
