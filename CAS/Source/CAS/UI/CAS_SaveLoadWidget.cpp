@@ -5,6 +5,7 @@
 #include "Components/VerticalBox.h"
 #include "Components/VerticalBoxSlot.h"
 #include "Controller/CAS_PlayerController.h"
+#include "Global/CAS_GameInstance.h"
 
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
@@ -12,17 +13,22 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 	if (SelectionWidget) {
-		SelectionWidget->AddToViewport();
+		SelectionWidget->AddToViewport(10);
 		CloseSelectionWidget();
 
 		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));
-		SelectionWidget->YES_OnClickedEvent(this, FName("CloseSelectionWidget"));
+		SelectionWidget->YES_OnClickedEvent(this, FName("LoadFromSlot"));
 	}
 	
 	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
 
 	for (auto slot : SaveLoadSlots) {
-		slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSellectedIndex);
+		slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSelectedIndex);
+	}
+	for (int32 i = 0; i < SlotCount; i++) {
+
+		SaveLoadSlots[i]->BindOnClickedEvent(this, FName("DisplaySelectionWidget"));
+		SaveLoadSlots[i]->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSelectedIndex);
 	}
 }
 
@@ -36,8 +42,6 @@ void UCAS_SaveLoadWidget::NativePreConstruct()
 		if (SlotWidgetClass) {
 			UCAS_SaveLoadSlot* slot = CreateWidget<UCAS_SaveLoadSlot>(GetWorld(), SlotWidgetClass);
 			slot->SetSlotIndex(i);
-			slot->BindOnClickedEvent(this, FName("DisplaySelectionWidget"));
-			slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSellectedIndex);
 			CAS_VerticalBox->AddChild(slot);
 			SaveLoadSlots[i] = slot;
 		}
@@ -75,4 +79,10 @@ void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 	playerController->ExitUIMode();
+}
+
+void UCAS_SaveLoadWidget::LoadFromSlot()
+{
+	int32 index = SelectionWidget->GetSelectedIndex();
+
 }

@@ -3,6 +3,17 @@
 
 #include "UI/CAS_SelectWidget.h"
 
+void UCAS_SelectWidget::SetWidgetText(FText text)
+{
+	CAS_TextBlock->SetText(text);
+}
+
+void UCAS_SelectWidget::SetWidgetText(FString string)
+{
+	FText text = FText::FromString(string);
+	CAS_TextBlock->SetText(text);
+}
+
 void UCAS_SelectWidget::YES_OnClickedEvent(UObject* Object, FName name)
 {
 	FScriptDelegate Delegate;

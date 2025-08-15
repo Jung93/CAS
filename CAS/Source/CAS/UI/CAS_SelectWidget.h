@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "Components/TextBlock.h"
 #include "CAS_SelectWidget.generated.h"
 
 /**
@@ -17,8 +18,12 @@ class CAS_API UCAS_SelectWidget : public UUserWidget
 	
 	//실행시킬 슬롯의 인덱스 , 버튼 두개 
 public:
-	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
-	
+	void SetSelectedIndex(int32 index) { SelectedIndex = index; }
+	int32 GetSelectedIndex() { return SelectedIndex; }
+
+	void SetWidgetText(FText text);
+	void SetWidgetText(FString string);
+
 	void YES_OnClickedEvent(UObject* Object, FName name);
 	void NO_OnClickedEvent(UObject* Object, FName name);
 protected:
@@ -26,6 +31,8 @@ protected:
 	UButton* YES_Button;
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* NO_Button;
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* CAS_TextBlock;
 
-	int32 SellectedIndex = -1;
+	int32 SelectedIndex = -1;
 };

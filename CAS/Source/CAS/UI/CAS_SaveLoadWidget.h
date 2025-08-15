@@ -29,10 +29,9 @@ public:
 	void DisplaySaveLoadWidget();
 	UFUNCTION()
 	void CloseSaveLoadWidget();
-	
-	void 
+	UFUNCTION()
+	void LoadFromSlot();
 
-	void SetSellectedIndex(int32 index) { SellectedIndex = index; }
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
 	int32 SlotCount = 0;
@@ -52,5 +51,4 @@ protected:
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* CAS_VerticalBox;
 
-	int32 SellectedIndex = -1;
 };

@@ -27,6 +27,7 @@ public:
 
 	void BindOnClickedEvent(UObject* Object, FName name);
 	FSendSlotIndex SendSlotIndex;
+
 protected:
 	UFUNCTION()
 	void OnClickedEvent();
@@ -36,4 +37,5 @@ protected:
 	UTextBlock* CAS_TextBlock;
 
 	int32 SlotIndex;
+
 };

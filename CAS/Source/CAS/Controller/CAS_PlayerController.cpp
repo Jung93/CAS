@@ -12,7 +12,7 @@ void ACAS_PlayerController::BeginPlay()
 	Super::BeginPlay();
    
     SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
-    SaveLoadWidget->AddToViewport();
+    SaveLoadWidget->AddToViewport(5);
     SaveLoadWidget->CloseSaveLoadWidget();
 
 #if WITH_EDITOR
