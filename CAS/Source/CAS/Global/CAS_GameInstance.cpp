@@ -5,7 +5,6 @@
 #include "Global/CAS_SaveGame.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/GameplayStatics.h"
-#include "Modules/ModuleManager.h"
 #include "Character/CAS_Player.h"
 
 
@@ -97,20 +96,24 @@ void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 	SaveGameData->PlayerHP = player->GetAttributeSet()->GetHealth();
 	SaveGameData->PlayerLocation = player->GetActorLocation();
 	SaveGameData->QuickSlotData = QuickSlotAbilities;
+	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
 
-	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT : %d"), index), index);
+	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT_%d"), index), 0);
 }
 
 void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
 {
-	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT : %d"), index), index)) {
+	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 		return;
 	}
-	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT : %d"), index), index));
-	
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
+	if (!SaveGameData) { 
+		return;
+	}
 	player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
 	player->SetActorLocation(SaveGameData->PlayerLocation);
 	player->LoadCharacterData();
 	
+	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
 }
 

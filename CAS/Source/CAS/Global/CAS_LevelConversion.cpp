@@ -24,7 +24,7 @@ void ACAS_LevelConversion::LoadLevel(FName levelName)
 		return;
 	}
 
-	UGameplayStatics::OpenLevel(this, levelName);
+	UGameplayStatics::OpenLevel(GetWorld(), levelName);
 }
 
 // Called when the game starts or when spawned

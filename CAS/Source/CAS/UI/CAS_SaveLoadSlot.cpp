@@ -8,6 +8,7 @@
 void UCAS_SaveLoadSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 	CAS_SaveLoadButton->OnClicked.Clear();
 	CAS_SaveLoadButton->OnClicked.AddDynamic(this, &ThisClass::OnClickedEvent);
 	

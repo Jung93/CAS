@@ -17,10 +17,12 @@ class CAS_API UCAS_SaveGame : public USaveGame
 	
 public:
 	UPROPERTY(VisibleAnywhere)
-	int32 PlayerHP = 0;
+	float PlayerHP = 0;
 	UPROPERTY(VisibleAnywhere)
 	FVector PlayerLocation;
 	UPROPERTY(VisibleAnywhere)
 	TArray<FCAS_SlotData> QuickSlotData;
+	UPROPERTY(VisibleAnywhere)
+	FName Level;
 };
 									

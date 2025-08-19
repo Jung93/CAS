@@ -6,25 +6,23 @@
 #include "Components/VerticalBoxSlot.h"
 #include "Controller/CAS_PlayerController.h"
 #include "Global/CAS_GameInstance.h"
+#include "Character/CAS_Player.h"
 
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
 	Super::NativeConstruct();	
-
+					
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 	if (SelectionWidget) {
-		SelectionWidget->AddToViewport(10);
+		SelectionWidget->AddToViewport(6);
 		CloseSelectionWidget();
 
 		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));
-		SelectionWidget->YES_OnClickedEvent(this, FName("LoadFromSlot"));
+		SelectionWidget->YES_OnClickedEvent(this, FName("SaveLoadFromSlot"));
 	}
 	
 	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
-
-	for (auto slot : SaveLoadSlots) {
-		slot->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSelectedIndex);
-	}
+	
 	for (int32 i = 0; i < SlotCount; i++) {
 
 		SaveLoadSlots[i]->BindOnClickedEvent(this, FName("DisplaySelectionWidget"));
@@ -81,8 +79,23 @@ void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 	playerController->ExitUIMode();
 }
 
-void UCAS_SaveLoadWidget::LoadFromSlot()
+void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 {
-	int32 index = SelectionWidget->GetSelectedIndex();
+	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	if (bSaveMode) {
 
+	}
+	else {
+		auto pawn = GetOwningPlayer()->GetPawn();
+		if (!pawn || !GameInstance) {
+			return;
+		}
+		auto player = Cast<ACAS_Player>(pawn);
+		if (!player) {
+			return;
+		}
+
+		int32 index = SelectionWidget->GetSelectedIndex();
+		GameInstance->LoadGameData_Sync(player, index);
+	}
 }

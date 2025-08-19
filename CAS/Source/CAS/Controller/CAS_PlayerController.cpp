@@ -95,6 +95,7 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
 void ACAS_PlayerController::EnterUIMode()
 {
     UGameplayStatics::SetGamePaused(GetWorld(), true);
+
     bShowMouseCursor = true;
     bEnableClickEvents = true;
     bEnableMouseOverEvents = true;
@@ -103,6 +104,7 @@ void ACAS_PlayerController::EnterUIMode()
 void ACAS_PlayerController::ExitUIMode()
 {
     UGameplayStatics::SetGamePaused(GetWorld(), false);
+
     bShowMouseCursor = false;
     bEnableClickEvents = false;
     bEnableMouseOverEvents = false;

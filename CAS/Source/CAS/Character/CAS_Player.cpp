@@ -20,9 +20,10 @@
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "UI/CAS_QuickSlotWidget.h"
 #include "UI/CAS_SelectSkillWidget.h"
+#include "UI/CAS_TitleWidget.h"
 
 #include "Global/CAS_GameInstance.h"
-
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -323,8 +324,8 @@ void ACAS_Player::BeginPlay()
 	}
 	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
 	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
-
-
+	
+	
 	QuickSlotWidget = NewQuickSlotWidget;
 	SelectSkillWidget = NewSelectSkillWidget;
 
@@ -345,6 +346,16 @@ void ACAS_Player::BeginPlay()
 		LoadCharacterData();			
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
+	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+
+	if (CurrentLevelName == FName("Title")) {
+		auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
+		TitleWidget = titleWidget;
+		TitleWidget->AddToViewport(5);
+		TitleWidget->SetVisibility(ESlateVisibility::Visible);
+	}
+
 }
 
 // Called every frame

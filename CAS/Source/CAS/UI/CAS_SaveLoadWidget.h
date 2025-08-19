@@ -30,8 +30,9 @@ public:
 	UFUNCTION()
 	void CloseSaveLoadWidget();
 	UFUNCTION()
-	void LoadFromSlot();
+	void SaveLoadFromSlot();
 
+	bool bSaveMode = false;
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
 	int32 SlotCount = 0;
