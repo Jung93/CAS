@@ -50,6 +50,11 @@ public:
 	virtual void CalcCamera(float DeltaTime, FMinimalViewInfo& OutResult) override;
 	
 	void AddPlayerAbility(AActor* actor);
+
+	TSubclassOf<class UGameplayAbility> GetEnemyAbility() {return EnemyAbility;};
+
+
+
 protected:
 	virtual void ActivateEnemyAbility() PURE_VIRTUAL(ThisClass::ActivateEnemyAbility, );
 	virtual void InputReleased(const FInputActionValue& Value);

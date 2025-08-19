@@ -49,6 +49,7 @@ FActiveGameplayEffectHandle  UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_C
 	{
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperSpeed")), 2.0f);
 		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.SuperSpeed"));
 
 		return Handle;
 	}

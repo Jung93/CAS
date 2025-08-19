@@ -28,6 +28,8 @@ namespace CAS_GamePlayTag {
 
 	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_FireBreath, "GameplayCue.FireBreath")
 	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_OnFire, "GameplayCue.OnFire")
+	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_Sound_FireBreath, "GameplayCue.Sound.FireBreath")
+	UE_DEFINE_GAMEPLAY_TAG(GameplayCue_Sound_SuperSpeed, "GameplayCue.Sound.SuperSpeed")
 
 
 	UE_DEFINE_GAMEPLAY_TAG(State_TakeDamage, "State.TakeDamage")

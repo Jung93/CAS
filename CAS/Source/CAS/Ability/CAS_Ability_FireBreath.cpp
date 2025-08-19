@@ -70,6 +70,7 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(A
 
 	
 		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.FireBreath"));
 
 		return FActiveGameplayEffectHandle();
 	}

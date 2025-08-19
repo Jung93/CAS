@@ -34,6 +34,8 @@ namespace CAS_GamePlayTag {
 	//GameplayCue
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_FireBreath);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_OnFire);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Sound_FireBreath);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Sound_SuperSpeed);
 
 
 	//StateState_TakeDamage
