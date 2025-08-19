@@ -145,11 +145,6 @@ protected:
 	UPROPERTY()
 	class UCAS_SelectSkillWidget* SelectSkillWidget;
 
-	UPROPERTY()
-	class UCAS_TitleWidget* TitleWidget;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class UCAS_TitleWidget> TitleWidgetClass;
 public:
 	virtual void SaveCharacterData() override;
 	virtual void LoadCharacterData() override;

@@ -347,15 +347,6 @@ void ACAS_Player::BeginPlay()
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
-	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
-
-	if (CurrentLevelName == FName("Title")) {
-		auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
-		TitleWidget = titleWidget;
-		TitleWidget->AddToViewport(5);
-		TitleWidget->SetVisibility(ESlateVisibility::Visible);
-	}
-
 }
 
 // Called every frame

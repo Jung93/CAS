@@ -6,14 +6,28 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "UI/CAS_TitleWidget.h"
 
 void ACAS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
    
+
     SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
-    SaveLoadWidget->AddToViewport(5);
+    SaveLoadWidget->AddToViewport(3);
     SaveLoadWidget->CloseSaveLoadWidget();
+
+    ExitUIMode();
+
+    FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+
+    if (CurrentLevelName == FName("Title")) {
+        auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
+        TitleWidget = titleWidget;
+        TitleWidget->AddToViewport(2);
+        TitleWidget->SetVisibility(ESlateVisibility::Visible);
+        EnterUIMode();
+    }
 
 #if WITH_EDITOR
     if (IsLocalController())

@@ -14,7 +14,7 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 					
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 	if (SelectionWidget) {
-		SelectionWidget->AddToViewport(6);
+		SelectionWidget->AddToViewport(10);
 		CloseSelectionWidget();
 
 		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));

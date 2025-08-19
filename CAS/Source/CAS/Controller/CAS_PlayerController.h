@@ -55,4 +55,10 @@ protected:
 	TSubclassOf<UCAS_SaveLoadWidget> SaveLoadWidgetClass;
 	UPROPERTY()
 	UCAS_SaveLoadWidget* SaveLoadWidget;
+
+	UPROPERTY()
+	class UCAS_TitleWidget* TitleWidget;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCAS_TitleWidget> TitleWidgetClass;
 };

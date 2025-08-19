@@ -12,8 +12,12 @@ void UCAS_TitleWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	if (SaveLoadWidgetClass) {
-		ContinueWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
-		ContinueWidget->bSaveMode = false;		
+        auto controller = GetWorld()->GetFirstPlayerController();
+        auto playerController = Cast<ACAS_PlayerController>(controller);
+		ContinueWidget = CreateWidget<UCAS_SaveLoadWidget>(playerController, SaveLoadWidgetClass);
+		ContinueWidget->bSaveMode = false;	
+        ContinueWidget->AddToViewport(3);
+        ContinueWidget->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	CAS_ContinueSlot->BindOnClickedEvent(this, "DisplayContinueWidget");
@@ -23,21 +27,32 @@ void UCAS_TitleWidget::NativeConstruct()
 }
 
 void UCAS_TitleWidget::DisplayContinueWidget()
-{	
-	ContinueWidget->DisplaySaveLoadWidget();
-	ContinueWidget->SetVisibility(ESlateVisibility::Visible);
+{
+    if (ContinueWidget)
+    {
+        ContinueWidget->SetVisibility(ESlateVisibility::Visible);
+    }
 }
 
 void UCAS_TitleWidget::CloseContinueWidget()
 {
-	ContinueWidget->SetVisibility(ESlateVisibility::Collapsed);
+    if (ContinueWidget)
+    {
+        ContinueWidget->SetVisibility(ESlateVisibility::Collapsed);
+    }
 }
+
 void UCAS_TitleWidget::StartNewGame()
 {
-	ContinueWidget->CloseSaveLoadWidget();
-	UWorld* World = GetWorld();
-	if (World)
-	{
-		UGameplayStatics::OpenLevel(World, StartLevel); 
-	}
+    UWorld* World = GetWorld();
+    if (World)
+    {
+        if (ContinueWidget)
+        {
+            ContinueWidget->RemoveFromParent();
+            ContinueWidget = nullptr;
+        }
+        RemoveFromParent();
+        UGameplayStatics::OpenLevel(World, StartLevel);
+    }
 }
