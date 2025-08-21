@@ -2,14 +2,33 @@
 
 
 #include "Controller/CAS_PlayerController.h"
-
+#include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
+#include "UI/CAS_TitleWidget.h"
 
 void ACAS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+   
+
+    SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
+    SaveLoadWidget->AddToViewport(3);
+    SaveLoadWidget->CloseSaveLoadWidget();
+
+    ExitUIMode();
+
+    FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+
+    if (CurrentLevelName == FName("Title")) {
+        auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
+        TitleWidget = titleWidget;
+        TitleWidget->AddToViewport(2);
+        TitleWidget->SetVisibility(ESlateVisibility::Visible);
+        EnterUIMode();
+    }
+
 #if WITH_EDITOR
     if (IsLocalController())
     {
@@ -31,6 +50,7 @@ void ACAS_PlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
 
 		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ThisClass::PrintDebugMessage);
+		EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
 
 	}
 }
@@ -73,4 +93,33 @@ void ACAS_PlayerController::PrintDebugMessage(const FInputActionValue& Value)
     {
         ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
     }
+}
+
+void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value)
+{
+    auto result = SaveLoadWidget->GetVisibility();
+    if (result == ESlateVisibility::Visible) {
+        SaveLoadWidget->CloseSaveLoadWidget();
+    }
+    else {
+        SaveLoadWidget->DisplaySaveLoadWidget();
+    }
+}
+
+void ACAS_PlayerController::EnterUIMode()
+{
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+
+    bShowMouseCursor = true;
+    bEnableClickEvents = true;
+    bEnableMouseOverEvents = true;
+}
+
+void ACAS_PlayerController::ExitUIMode()
+{
+    UGameplayStatics::SetGamePaused(GetWorld(), false);
+
+    bShowMouseCursor = false;
+    bEnableClickEvents = false;
+    bEnableMouseOverEvents = false;
 }

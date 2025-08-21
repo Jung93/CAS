@@ -7,6 +7,7 @@
 #include "UI/CAS_Hpbar.h"
 #include "Controller/CAS_PlayerController.h"
 #include "Controller/CAS_EnemyController.h"
+#include "Global/CAS_GameInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -88,7 +89,9 @@ void ACAS_Character::BeginPlay()
 
 	AddDefaultAbilites();
 
-
+	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	//GameInstance->SaveSettingsToINI(TEXT("Ability Texture Icon"));
+	GameInstance->LoadSettingsFromINI(TEXT("Ability Texture Icon"));
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
@@ -206,6 +209,15 @@ bool ACAS_Character::CanActivateAbilitiesWithTags(FGameplayTagContainer AbilityT
 	}
 
 	return false;
+}
+
+void ACAS_Character::SaveCharacterData()
+{
+	//레벨 변경 전에 저장할 데이터 
+}
+
+void ACAS_Character::LoadCharacterData()
+{
 }
 
 

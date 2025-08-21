@@ -13,6 +13,8 @@ struct FCAS_SlotData
     GENERATED_BODY()
 
     UPROPERTY()
+    TSubclassOf<UGameplayAbility> AbilityClass = nullptr;
+    UPROPERTY()
     int32 SlotIndex = -1;
     UPROPERTY()
     FCAS_SkillData SkillData;

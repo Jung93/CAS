@@ -20,8 +20,10 @@
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "UI/CAS_QuickSlotWidget.h"
 #include "UI/CAS_SelectSkillWidget.h"
+#include "UI/CAS_TitleWidget.h"
 
-
+#include "Global/CAS_GameInstance.h"
+#include "Kismet/GameplayStatics.h"
 
 
 
@@ -322,11 +324,12 @@ void ACAS_Player::BeginPlay()
 	}
 	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
 	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
-
-
+	
+	
 	QuickSlotWidget = NewQuickSlotWidget;
 	SelectSkillWidget = NewSelectSkillWidget;
 
+	
 	if (QuickSlotWidgetComponent->IsValidLowLevel() && QuickSlotWidget->IsValidLowLevel() && SelectSkillWidget->IsValidLowLevel()) {
 		QuickSlotWidgetComponent->InitSetting(PlayerAbilityCount);
 		QuickSlotWidget->AddToViewport();
@@ -337,8 +340,13 @@ void ACAS_Player::BeginPlay()
 		QuickSlotWidget->RemoveAbilityEvent.AddUObject(QuickSlotWidget, &UCAS_QuickSlotWidget::RemoveSlotData);
 	}
 
-
+	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	if (GameInstance) {
+		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
+		LoadCharacterData();			
+	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
 }
 
 // Called every frame
@@ -424,6 +432,9 @@ UCAS_AttributeSet* ACAS_Player::GetAttributeSet() const
 
 void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility)
 {
+	if (newAbility == nullptr) {
+		return;
+	}
 	bool CanAddable = QuickSlotWidgetComponent->CheckPlayerAbility(newAbility);
 
 	if (!CanAddable)
@@ -446,4 +457,25 @@ void ACAS_Player::ToggleSkill()
 {
 	QuickSlotWidget->SwitchToggle();
 
+}
+
+void ACAS_Player::SaveCharacterData()
+{
+	Super::SaveCharacterData();
+
+	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	for(int32 i = 0; i<PlayerAbilityCount;i++){
+		GameInstance->SetQuickSlotAbilityData(i, QuickSlotWidgetComponent->GetAbilityData(i));
+	}
+}
+
+void ACAS_Player::LoadCharacterData()
+{
+	Super::LoadCharacterData();
+	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	for (int32 i = 0; i < PlayerAbilityCount; i++) {
+		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);		
+		TSubclassOf<UGameplayAbility> AbilityClass = AbilityData.AbilityClass;
+		AddPlayerAbility(AbilityClass);
+	}
 }
