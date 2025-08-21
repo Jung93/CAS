@@ -6,6 +6,7 @@
 #include "Global/CAS_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
 #include "Controller/CAS_PlayerController.h"
+#include "Engine/LevelStreamingDynamic.h"
 
 void UCAS_TitleWidget::NativeConstruct()
 {
@@ -47,12 +48,17 @@ void UCAS_TitleWidget::StartNewGame()
     UWorld* World = GetWorld();
     if (World)
     {
-        if (ContinueWidget)
+        bool bSuccess = false;
+        ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(World, StartLevel.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
+
+        if (StreamingLevel)
         {
-            ContinueWidget->RemoveFromParent();
-            ContinueWidget = nullptr;
+            StreamingLevel->OnLevelLoaded.AddDynamic(this, &ThisClass::LoadLevelEvent);
         }
-        RemoveFromParent();
-        UGameplayStatics::OpenLevel(World, StartLevel);
     }
+}
+
+void UCAS_TitleWidget::LoadLevelEvent()
+{
+    UGameplayStatics::OpenLevel(this, StartLevel);
 }
