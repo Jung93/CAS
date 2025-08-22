@@ -29,12 +29,17 @@ public:
 	struct FCAS_SlotData GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
 	
 	void SaveGameData_Sync(class ACAS_Player* player, int32 index);
+	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
 	void LoadGameData_Sync(class ACAS_Player* player, int32 index);
+	void LoadGameData_ASync(class ACAS_Player* player, int32 index);
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
 	UPROPERTY(VisibleAnywhere, Category = "LevelConversion")
 	TArray<struct FCAS_SlotData> QuickSlotAbilities;
 
+	UFUNCTION()
+	void LoadLevelEvent();
 
+	int32 tempIndex = -1;
 };

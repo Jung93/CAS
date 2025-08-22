@@ -43,4 +43,7 @@ private:
 	UCAS_SaveLoadWidget* ContinueWidget;
 	
 	FName StartLevel = "Test";
+
+	UFUNCTION()
+	void LoadLevelEvent();
 };

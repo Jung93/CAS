@@ -6,6 +6,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/GameplayStatics.h"
 #include "Character/CAS_Player.h"
+#include "Engine/LevelStreamingDynamic.h"
 
 
 UCAS_GameInstance::UCAS_GameInstance()
@@ -101,6 +102,10 @@ void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT_%d"), index), 0);
 }
 
+void UCAS_GameInstance::SaveGameData_ASync(ACAS_Player* player, int32 index)
+{
+}
+
 void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
 {
 	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
@@ -115,5 +120,36 @@ void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
 	player->LoadCharacterData();
 	
 	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+}
+
+void UCAS_GameInstance::LoadGameData_ASync(ACAS_Player* player, int32 index)
+{
+	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+		return;
+	}
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
+	if (!SaveGameData) {
+		return;
+	}
+	tempIndex = index;
+	bool bSuccess = false;
+
+	player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
+	player->SetActorLocation(SaveGameData->PlayerLocation);
+	player->LoadCharacterData();
+
+	ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), SaveGameData->Level.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
+	if (StreamingLevel)
+	{	
+		StreamingLevel->OnLevelLoaded.AddDynamic(this, &UCAS_GameInstance::LoadLevelEvent);		
+	}
+}
+
+void UCAS_GameInstance::LoadLevelEvent()
+{
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), tempIndex), 0));
+	
+	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+
 }
 
