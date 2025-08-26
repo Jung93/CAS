@@ -23,8 +23,10 @@ public:
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void OnUnPossess() override;
 	virtual void BeginPlay() override;
-	UFUNCTION()
-	void RandMove();
+	
+	float GetSightRange() { return SightConfig->SightRadius; }
+	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlackboardData* BlackboardData;
@@ -33,8 +35,11 @@ protected:
 	UPROPERTY()
 	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
-	void OnPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
-
+	void OnTargetPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
+	UFUNCTION()
+	void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
+	UFUNCTION()
+	void OnTargetPerceptionForgotten(AActor* Actor);
 	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:
 	FVector OriginalColorVector = FVector(1,1,1);
@@ -44,4 +49,9 @@ protected:
 	UAIPerceptionComponent* AIPerceptionComponent;
 	UPROPERTY()
 	UAISenseConfig_Sight* SightConfig;
+
+	UPROPERTY(EditAnywhere)
+	class UCAS_BehaviorComponent* BehaviorComponent;
+
+
 };

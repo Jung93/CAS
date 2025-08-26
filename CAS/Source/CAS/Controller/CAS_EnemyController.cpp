@@ -3,6 +3,7 @@
 
 #include "Controller/CAS_EnemyController.h"
 #include "Controller/CAS_PlayerController.h"
+#include "AI/CAS_BehaviorComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/CAS_Character.h"
 #include "Character/CAS_Player.h"
@@ -11,6 +12,7 @@
 ACAS_EnemyController::ACAS_EnemyController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
+	BehaviorComponent = CreateDefaultSubobject<UCAS_BehaviorComponent>(TEXT("BehaviorComponent"));
 
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
     SightConfig->SightRadius = 1500.0f;
@@ -25,9 +27,12 @@ ACAS_EnemyController::ACAS_EnemyController()
 void ACAS_EnemyController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
+
 	SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
+
 	BlackBoardComponent = Blackboard;
 	UseBlackboard(BlackboardData, BlackBoardComponent);
+	BehaviorComponent->SetBlackBoard(BlackBoardComponent);
 	RunBehaviorTree(BehaviorTree);
 }
 
@@ -40,14 +45,12 @@ void ACAS_EnemyController::OnUnPossess()
 void ACAS_EnemyController::BeginPlay()
 {
 	Super::BeginPlay();
-	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
+	AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
+
 }
 
-void ACAS_EnemyController::RandMove()
-{
-}
-
-void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
+void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
 	if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
 		return;
@@ -86,6 +89,34 @@ void ACAS_EnemyController::OnPerceptionUpdated(AActor* Actor, FAIStimulus Stimul
 		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
 	}
 
+}
+
+void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
+{
+	ACAS_Player* Player = nullptr;
+	TArray<AActor*> Actors;
+
+	AIPerceptionComponent->GetCurrentlyPerceivedActors(nullptr, Actors);
+
+	for (AActor* Actor : Actors)
+	{
+		Player = Cast<ACAS_Player>(Actor);
+		if (Player) {
+			break;
+		}
+	}
+	Blackboard->SetValueAsObject("Player", Player);
+
+}
+
+void ACAS_EnemyController::OnTargetPerceptionForgotten(AActor* Actor)
+{
+	auto Player = Cast<ACAS_Player>(Actor);
+	if (!Player) {
+		return;
+	}
+	Blackboard->SetValueAsEnum("BehaviorType", static_cast<uint8>(EBehaviorType::Missed));
+	Blackboard->SetValueAsObject("Player", nullptr);
 }
 
 void ACAS_EnemyController::SetMeshColor(APawn* pawn, FVector colorVector, FName name)
