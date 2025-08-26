@@ -29,11 +29,10 @@ protected:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 	virtual uint16 GetInstanceMemorySize() const override { return sizeof(FScanTimeMemory); }
 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector MovePositionKey;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector TargetKey;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector BehaviorTypeKey;
 
 protected:
 	UPROPERTY(EditAnywhere)
