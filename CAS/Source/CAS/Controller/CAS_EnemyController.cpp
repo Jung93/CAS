@@ -13,22 +13,27 @@ ACAS_EnemyController::ACAS_EnemyController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 	BehaviorComponent = CreateDefaultSubobject<UCAS_BehaviorComponent>(TEXT("BehaviorComponent"));
+    SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sense_Sight"));
 
-    SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("SightConfig"));
-    SightConfig->SightRadius = 1500.0f;
-    SightConfig->LoseSightRadius = 1500.0f;
+    SightConfig->SightRadius = 600.0f;
+    SightConfig->LoseSightRadius = 900.0f;
     SightConfig->PeripheralVisionAngleDegrees = 75.0f;
     SightConfig->SetMaxAge(5.0f);
 
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
     AIPerceptionComponent->ConfigureSense(*SightConfig);
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
+
 }
 
 void ACAS_EnemyController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
 
-	SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
+	//SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
 
 	BlackBoardComponent = Blackboard;
 	UseBlackboard(BlackboardData, BlackBoardComponent);
@@ -38,7 +43,7 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 
 void ACAS_EnemyController::OnUnPossess()
 {
-	SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
+	//SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
 	Super::OnUnPossess();
 }
 
@@ -52,7 +57,7 @@ void ACAS_EnemyController::BeginPlay()
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
+	/*if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
 		return;
 	}
 	auto NPCpawn = GetPawn();
@@ -87,7 +92,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		FVector ColorVector(0, 0, 0);
 		SetMeshColor(character, ColorVector);
 		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
-	}
+	}*/
 
 }
 
@@ -105,7 +110,7 @@ void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedAct
 			break;
 		}
 	}
-	Blackboard->SetValueAsObject("Player", Player);
+	Blackboard->SetValueAsObject("player", Player);
 
 }
 
@@ -116,7 +121,7 @@ void ACAS_EnemyController::OnTargetPerceptionForgotten(AActor* Actor)
 		return;
 	}
 	Blackboard->SetValueAsEnum("BehaviorType", static_cast<uint8>(EBehaviorType::Missed));
-	Blackboard->SetValueAsObject("Player", nullptr);
+	Blackboard->SetValueAsObject("player", nullptr);
 }
 
 void ACAS_EnemyController::SetMeshColor(APawn* pawn, FVector colorVector, FName name)

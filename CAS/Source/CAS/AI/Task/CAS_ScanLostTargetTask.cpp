@@ -4,6 +4,7 @@
 #include "AI/Task/CAS_ScanLostTargetTask.h"
 #include "Controller/CAS_EnemyController.h"
 #include "Character/CAS_Character.h"
+#include "AI/CAS_BehaviorComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
 
@@ -26,12 +27,6 @@ EBTNodeResult::Type UCAS_ScanLostTargetTask::ExecuteTask(UBehaviorTreeComponent&
 	if (!AnimInstance) {
 		return EBTNodeResult::Failed;
 	}
-	auto BlackBoard = OwnerComp.GetBlackboardComponent();
-
-	if (BlackBoard->GetValueAsBool("bPlayerLost") == false)
-	{
-		return EBTNodeResult::Failed;
-	}
 
 	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
 	memory->CurTime = 0.0f;
@@ -45,10 +40,16 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 		
+	auto BlackBoard = OwnerComp.GetBlackboardComponent();
+	EBehaviorType curType = static_cast<EBehaviorType>(BlackBoard->GetValueAsEnum(BehaviorTypeKey.SelectedKeyName));
+	
 	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
 
-
+	if (curType != EBehaviorType::Missed) {
+		FinishLatentTask(OwnerComp, EBTNodeResult::Aborted);
+		return;
+	}
 	if (memory->CurTime >= PlayTime) {
 		
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
@@ -64,9 +65,10 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 			return;
 		}
 				
-		AnimInstance->Montage_Stop(0, Montage);
+		AnimInstance->Montage_Stop(0.25f, Montage);
 
 
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		return;
 	}
 }

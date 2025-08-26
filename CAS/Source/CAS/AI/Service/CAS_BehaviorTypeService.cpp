@@ -42,6 +42,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		
 		return;
 	}
+
 	if (Distance <= EnemyController->GetSightRange()) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
 		

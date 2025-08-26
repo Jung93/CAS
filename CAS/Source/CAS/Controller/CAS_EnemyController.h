@@ -27,6 +27,7 @@ public:
 	float GetSightRange() { return SightConfig->SightRadius; }
 	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
 	
+	UAISenseConfig_Sight* TEMPF() { return SightConfig; }
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlackboardData* BlackboardData;
@@ -43,11 +44,10 @@ protected:
 	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:
 	FVector OriginalColorVector = FVector(1,1,1);
-	UPROPERTY()
-	FTimerHandle TimerHandle;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	UAIPerceptionComponent* AIPerceptionComponent;
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	UAISenseConfig_Sight* SightConfig;
 
 	UPROPERTY(EditAnywhere)

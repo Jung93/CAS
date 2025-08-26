@@ -15,16 +15,16 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 {
 	auto AIController = Cast<ACAS_EnemyController>(OwnerComp.GetAIOwner());
 	auto Character = Cast<ACAS_Character>(AIController->GetPawn());
+	auto PatrolPath = Character->GetPatrolPath();
+	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 
-	if (!Character || !Character->GetPatrolPath()) {
+	if (!Character || !PatrolPath) {
 		return EBTNodeResult::Failed;
 	}
 
-	auto BlackBoard = AIController->GetBlackboardComponent();
 
 	FVector CurrentPosition = Character->GetActorLocation();
-
-	auto PatrolPath = Character->GetPatrolPath();
+	
 	int32 PatrolIndex = PatrolPath->GetPathIndex();
 	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
 
