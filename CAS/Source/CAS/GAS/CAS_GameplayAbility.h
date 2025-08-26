@@ -18,13 +18,13 @@ struct FCAS_SkillData
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UTexture2D* AbilityIconTexture;
+	class UTexture2D* AbilityIconTexture = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FName AbilityTag;
+	FName AbilityTag = FName("NONE");
 
 	UPROPERTY()
-	EAbilityInputID InputID;
+	EAbilityInputID InputID = EAbilityInputID::None;
 };
 
 UCLASS()
