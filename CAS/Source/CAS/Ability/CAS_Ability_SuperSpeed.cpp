@@ -49,7 +49,34 @@ FActiveGameplayEffectHandle  UCAS_Ability_SuperSpeed::ApplyGamePlayEffect(ACAS_C
 	{
 		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Move.SuperSpeed")), 2.0f);
 		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
-		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.SuperSpeed"));
+
+		auto player = Cast<ACAS_Player>(Target);
+
+		if (player->IsValidLowLevel())
+		{
+			TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+		}
+		else
+		{
+			TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+
+		}
+
+
+		return Handle;
+	}
+
+	return FActiveGameplayEffectHandle();
+}
+
+FActiveGameplayEffectHandle UCAS_Ability_SuperSpeed::RemoveGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+{
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
+	if (SpecHandle.IsValid())
+	{
+		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 
 		return Handle;
 	}
@@ -84,7 +111,7 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 
 		TimerDelegate.BindLambda([this, Target, TaskLevel, EffectContextHandle, AbilitySystemComp, Handle, player]()
 		{
-			ApplyGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
+			RemoveGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
 			AbilitySystemComp->RemoveActiveGameplayEffect(Handle);
 			player->SwitchSlotChangable();
 			player->ToggleSkill();

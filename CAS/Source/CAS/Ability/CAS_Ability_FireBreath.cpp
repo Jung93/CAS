@@ -69,10 +69,21 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToSelf(A
 		TargetAbilitySystemComp->ApplyGameplayEffectSpecToSelf(*TagSpecHandle.Data);
 
 	
+		auto player = Cast<ACAS_Player>(Target);
 
+		if (player->IsValidLowLevel())
+		{
+			AbilitySystemComponent->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+
+		}
+		else
+		{
+			AbilitySystemComponent->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+
+
+		}
 
 		AbilitySystemComponent->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.FireBreath"));
-		AbilitySystemComponent->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.FireBreath"));
 
 		return FActiveGameplayEffectHandle();
 	}

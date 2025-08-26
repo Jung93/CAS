@@ -68,8 +68,11 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 	}
 	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
 	UAbilitySystemComponent* AbilitySystemComp = nullptr;
+
+
 	if (PlayerState->IsValidLowLevel()) {
 		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+
 	}
 	else {
 		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
@@ -85,6 +88,34 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 
 	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
+	auto AttackTag = FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST"));
+	AbilitySystemComp->AddLooseGameplayTag(AttackTag);
+
+	FTimerHandle TimerHandle;
+	FTimerDelegate TimerDelegate;
+
+	TimerDelegate.BindLambda([AbilitySystemComp, AttackTag]()
+		{
+			AbilitySystemComp->RemoveLooseGameplayTag(AttackTag);
+		});
+
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.7f, false);
+
+	if (PlayerState->IsValidLowLevel())
+	{
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+	}
+	else
+	{
+		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+	};
+
+
 
 }
 
