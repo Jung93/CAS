@@ -78,10 +78,10 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		_testCaptureTarget = enemy;
 		_testCaptureTarget->BeCaptured(this);
 
-		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
-
 		_isThrowing = false;
 		_isReturning = false;
+
+		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 
 		_player->SetActorHiddenInGame(true);
 		_player->SetActorEnableCollision(false);
@@ -95,10 +95,11 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		if (player->IsValidLowLevel())
 		{
 
-			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
-
 			_isThrowing = false;
 			_isReturning = false;
+
+			AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
+
 		}
 	}
 
@@ -130,10 +131,10 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	float halfTime = _isReturning? _totalMoveTime * 0.8f : _totalMoveTime * 0.4f;
 	float lerpValue = (_capturingTime / halfTime);
 
-	FRotator CurrentRotator = GetActorRotation();
-	FRotator AddRotator = FRotator(180.f * DeltaTime, 360.f * DeltaTime, 0); // 각축 회전
-	FRotator NewRotator = CurrentRotator + AddRotator;
-	SetActorRotation(NewRotator);
+	//FRotator CurrentRotator = GetActorRotation();
+	//FRotator AddRotator = FRotator(180.f * DeltaTime, 360.f * DeltaTime, 0); // 각축 회전
+	//FRotator NewRotator = CurrentRotator + AddRotator;
+	//SetActorRotation(NewRotator);
 
 
 	if (!_isReturning)
@@ -153,16 +154,18 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	{
 		FVector playerLocation = _player->GetMesh()->GetSocketTransform(FName("tophead")).GetLocation();
 
-		FVector NewLocation = FMath::Lerp(TargetLocation, playerLocation, lerpValue);
-		SetActorLocation(NewLocation);
+		if (_isThrowing == true)
+		{
+			FVector NewLocation = FMath::Lerp(TargetLocation, playerLocation, lerpValue);
+			SetActorLocation(NewLocation);
+		}
 
 		if (_capturingTime >= halfTime)
 		{
+			SetActorLocation(playerLocation);
 			_isThrowing = false;
 			_isReturning = false;
 			_capturingTime = 0.0f;
-
-			SetActorLocation(playerLocation);
 
 		}
 	}
