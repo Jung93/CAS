@@ -39,7 +39,6 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
 
-	//SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
 
 	BlackBoardComponent = Blackboard;
 	UseBlackboard(BlackboardData, BlackBoardComponent);
@@ -49,15 +48,15 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 
 void ACAS_EnemyController::OnUnPossess()
 {
-	//SetMeshColor(GetPawn(), OriginalColorVector, "Tint");
 	Super::OnUnPossess();
 }
 
 void ACAS_EnemyController::BeginPlay()
 {
 	Super::BeginPlay();
-	AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
+	//AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
 	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
+	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ThisClass::OnTargetPerceptionUpdated);
 
 }
 
@@ -104,7 +103,7 @@ void ACAS_EnemyController::Tick(float DeltaSeconds)
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	/*if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
+	if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
 		return;
 	}
 	auto NPCpawn = GetPawn();
@@ -135,11 +134,9 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 
 		}
 	}
-	else {
-		FVector ColorVector(0, 0, 0);
-		SetMeshColor(character, ColorVector);
+	else if(!Stimulus.WasSuccessfullySensed()){
 		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
-	}*/
+	}
 
 }
 
