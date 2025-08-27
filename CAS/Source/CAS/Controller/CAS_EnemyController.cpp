@@ -15,10 +15,10 @@ ACAS_EnemyController::ACAS_EnemyController()
 	BehaviorComponent = CreateDefaultSubobject<UCAS_BehaviorComponent>(TEXT("BehaviorComponent"));
     SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sense_Sight"));
 
-    SightConfig->SightRadius = 600.0f;
-    SightConfig->LoseSightRadius = 900.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 75.0f;
-    SightConfig->SetMaxAge(5.0f);
+    SightConfig->SightRadius = 1500.0f;
+    SightConfig->LoseSightRadius = 7500.0f;
+    SightConfig->PeripheralVisionAngleDegrees = 60.0f;
+    SightConfig->SetMaxAge(1.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -27,6 +27,12 @@ ACAS_EnemyController::ACAS_EnemyController()
     AIPerceptionComponent->ConfigureSense(*SightConfig);
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
+	if (bUseDebug) {
+		PrimaryActorTick.bCanEverTick = true;
+	}
+	else {
+		PrimaryActorTick.bCanEverTick = false;
+	}
 }
 
 void ACAS_EnemyController::OnPossess(APawn* pawn)
@@ -53,6 +59,47 @@ void ACAS_EnemyController::BeginPlay()
 	AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
 	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
 
+}
+
+void ACAS_EnemyController::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	auto world = GetWorld();
+
+	if (bUseDebug||!GetPawn()||world)
+	{
+		auto ThisPawn = GetPawn();
+		FVector center = ThisPawn->GetActorLocation();
+		center.Z += 50.0f; 
+		DrawDebugCone(
+			world,
+			center,                    
+			ThisPawn->GetActorForwardVector(),
+			SightConfig->SightRadius,   
+			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
+			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
+			36,
+			FColor::Green,
+			false,
+			-1,
+			1,
+			1
+		);
+		DrawDebugCone(
+			world,
+			center,
+			ThisPawn->GetActorForwardVector(),
+			SightConfig->LoseSightRadius,
+			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
+			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
+			36,
+			FColor::Red,
+			false,
+			-1,
+			0,
+			1
+		);
+	}
 }
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
@@ -107,6 +154,7 @@ void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedAct
 	{
 		Player = Cast<ACAS_Player>(Actor);
 		if (Player) {
+			int32 temp = 1;
 			break;
 		}
 	}

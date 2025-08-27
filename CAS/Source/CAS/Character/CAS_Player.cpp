@@ -69,7 +69,8 @@ ACAS_Player::ACAS_Player()
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
 
-
+	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	GetCharacterMovement()->MaxAcceleration = 2000.0f;
 }
 
 void ACAS_Player::Move(const FInputActionValue& Value)

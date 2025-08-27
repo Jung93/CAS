@@ -46,10 +46,7 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		return;
 	}
 
-	if (!Character->GetVelocity().IsNearlyZero()) {
-		FinishLatentAbort(OwnerComp);
-		return;
-	}
+	
 
 	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
@@ -61,7 +58,13 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		if (!AnimInstance) {
 			return;
 		}
+		if (!Character->GetVelocity().IsNearlyZero()) {
 
+			float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
+			AnimInstance->Montage_Stop(blendtime, Montage);
+			FinishLatentAbort(OwnerComp);
+			return;
+		}
 		float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
 		AnimInstance->Montage_Stop(blendtime, Montage);
 
