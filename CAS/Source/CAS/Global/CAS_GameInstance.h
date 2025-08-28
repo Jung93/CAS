@@ -32,6 +32,7 @@ public:
 	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
 	void LoadGameData_Sync(class ACAS_Player* player, int32 index);
 	void LoadGameData_ASync(class ACAS_Player* player, int32 index);
+	void PlayBgm();
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
@@ -41,5 +42,12 @@ protected:
 	UFUNCTION()
 	void LoadLevelEvent();
 
+
+
 	int32 tempIndex = -1;
+
+	UPROPERTY()
+	class USoundBase* BackgroundMusic;
+
+
 };
