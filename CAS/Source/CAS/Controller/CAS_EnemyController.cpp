@@ -103,12 +103,11 @@ void ACAS_EnemyController::Tick(float DeltaSeconds)
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	if (Actor == nullptr || Cast<ACAS_Character>(Actor) == nullptr) {
+	auto NPC = Cast<ACAS_Character>(GetPawn());
+	if (NPC == nullptr) {
 		return;
 	}
-	auto NPCpawn = GetPawn();
-	auto NPC = Cast<ACAS_Character>(NPCpawn);
-	if (NPCpawn == nullptr || NPC->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
+	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Stun)) {
 		return;
 	}
 	auto character = Cast<ACAS_Character>(Actor);
@@ -124,20 +123,14 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
 		if (bDetected) {
-			BlackBoardComponent->SetValueAsBool("bPlayerDetected", true);
-			BlackBoardComponent->SetValueAsObject("Player", Actor);
-			BlackBoardComponent->SetValueAsVector("MovePosition", Actor->GetActorLocation());
-			BlackBoardComponent->SetValueAsBool("bPlayerLost", false);
-
-			FVector ColorVector(1, 0, 1);
-			SetMeshColor(character, ColorVector);
-
+			Player = Actor;
+			
 		}
 	}
 	else if(!Stimulus.WasSuccessfullySensed()){
 		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
 	}
-
+	Blackboard->SetValueAsObject("player", Actor);
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
