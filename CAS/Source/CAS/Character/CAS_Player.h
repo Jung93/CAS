@@ -89,6 +89,7 @@ protected:
 	UInputAction* ChangeSlotAction02;
 
 
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -128,6 +129,12 @@ protected:
 
 	UPROPERTY()
 	class ACAS_Hat* _hatSpawn = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "HitScan")
+	TSubclassOf<class ACAS_HitScan> _hitScanBP;
+
+	UPROPERTY()
+	class ACAS_HitScan* _hitScan = nullptr;
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "PlayerAblilties|QuickSlots")

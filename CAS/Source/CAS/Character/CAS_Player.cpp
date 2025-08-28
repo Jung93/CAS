@@ -5,6 +5,7 @@
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/Controller.h"
@@ -15,6 +16,7 @@
 
 #include "Character/CAS_EnemyCapt.h"
 #include "Character/CAS_Hat.h"
+#include "Character/CAS_HitScan.h"
 #include "Character/CAS_PlayerState.h"
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
@@ -322,6 +324,24 @@ void ACAS_Player::BeginPlay()
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
 	}
+
+	if (_hitScanBP->IsValidLowLevel())
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+
+		FVector Location = GetActorLocation();
+		FRotator Rotation = FRotator::ZeroRotator;
+
+		_hitScan = GetWorld()->SpawnActor<ACAS_HitScan>(_hitScanBP, Location, FRotator::ZeroRotator, SpawnParams);
+
+		if (_hitScan)
+		{
+			_hitScan->SetOwnerClass(this);
+			_hitScan->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_r_Socket")); // 소켓 이름 "head" 예시
+		}
+	}
+
 	auto NewQuickSlotWidget = CreateWidget<UCAS_QuickSlotWidget>(GetWorld(), QuickSlotWidgetClass);
 	auto NewSelectSkillWidget = CreateWidget<UCAS_SelectSkillWidget>(GetWorld(), SelectSkillWidgetClass);
 	
@@ -343,9 +363,13 @@ void ACAS_Player::BeginPlay()
 	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	if (GameInstance) {
 		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
-		LoadCharacterData();			
+		LoadCharacterData();		
+		GameInstance->PlayBgm();
+
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
+
 
 }
 

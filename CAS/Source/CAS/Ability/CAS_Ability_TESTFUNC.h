@@ -26,6 +26,7 @@ protected:
 
 	virtual void ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
+	void PlaySound();
 
 protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
