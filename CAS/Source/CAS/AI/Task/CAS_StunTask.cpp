@@ -26,7 +26,6 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	if (!AnimInstance) {
 		return EBTNodeResult::Failed;
 	}
-
 	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
 	memory->CurTime = 0.0f;
 

@@ -28,7 +28,8 @@ public:
 	float GetSightRange() { return SightConfig->SightRadius; }
 	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
 	
-	bool bUseDebug = true;
+	bool bUseDebug = false;
+	bool bDebugOn = false;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlackboardData* BlackboardData;

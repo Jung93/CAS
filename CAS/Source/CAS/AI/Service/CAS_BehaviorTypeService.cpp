@@ -21,7 +21,11 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 	auto Player = Cast<ACAS_Player>(BlackBoard->GetValueAsObject(PlayerKey.SelectedKeyName));
 	auto Enemy = Cast<ACAS_Character>(EnemyController->GetPawn());
-
+	if (EnemyController->bDebugOn) {
+		auto curType = BehaviorComponent->GetBehaviorType();
+		FString EnumName = UEnum::GetValueAsString(curType);
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, EnumName);
+	}
 	if (Enemy->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
 
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Stun);
@@ -29,8 +33,9 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 	if (!Player) {
-
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
+		if(!BehaviorComponent->IsBehaviorType(EBehaviorType::Missed)){
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
+		}
 
 		return;
 	}
@@ -48,5 +53,5 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		
 		return;
 	}
-
+	
 }

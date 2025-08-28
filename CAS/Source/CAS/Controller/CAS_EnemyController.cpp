@@ -17,8 +17,8 @@ ACAS_EnemyController::ACAS_EnemyController()
 
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 7500.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 60.0f;
-    SightConfig->SetMaxAge(1.0f);
+    SightConfig->PeripheralVisionAngleDegrees = 90.0f;
+    SightConfig->SetMaxAge(5.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -55,8 +55,8 @@ void ACAS_EnemyController::BeginPlay()
 {
 	Super::BeginPlay();
 	//AIPerceptionComponent->OnPerceptionUpdated.AddDynamic(this, &ThisClass::OnPerceptionUpdated);
-	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ThisClass::OnTargetPerceptionUpdated);
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
 
 }
 
@@ -65,7 +65,7 @@ void ACAS_EnemyController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	auto world = GetWorld();
 
-	if (bUseDebug||!GetPawn()||world)
+	if (bUseDebug && GetPawn() && world)
 	{
 		auto ThisPawn = GetPawn();
 		FVector center = ThisPawn->GetActorLocation();
@@ -103,34 +103,37 @@ void ACAS_EnemyController::Tick(float DeltaSeconds)
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
 {
-	auto NPC = Cast<ACAS_Character>(GetPawn());
-	if (NPC == nullptr) {
-		return;
-	}
 	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Stun)) {
 		return;
 	}
+
 	auto character = Cast<ACAS_Character>(Actor);
 
-	auto CharacterController = character->GetController();
-	auto playerController = Cast<ACAS_PlayerController>(CharacterController);
+	if (!character) {
+		return;
+	}
+
+	auto playerController = Cast<ACAS_PlayerController>(character->GetController());
 
 	if (!playerController) {
 		return;
 	}
+	bDebugOn = true;
+	AActor* Player = nullptr;
 
 	if (Stimulus.WasSuccessfullySensed()) {
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
 		if (bDetected) {
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
 			Player = Actor;
-			
 		}
 	}
 	else if(!Stimulus.WasSuccessfullySensed()){
-		BlackBoardComponent->SetValueAsBool("bPlayerLost", true);
+		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+		Player = nullptr;
 	}
-	Blackboard->SetValueAsObject("player", Actor);
+	Blackboard->SetValueAsObject("player", Player);
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
@@ -158,7 +161,7 @@ void ACAS_EnemyController::OnTargetPerceptionForgotten(AActor* Actor)
 	if (!Player) {
 		return;
 	}
-	Blackboard->SetValueAsEnum("BehaviorType", static_cast<uint8>(EBehaviorType::Missed));
+	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 	Blackboard->SetValueAsObject("player", nullptr);
 }
 
