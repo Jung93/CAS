@@ -40,9 +40,16 @@ void ACAS_HitScan::Tick(float DeltaTime)
 
 void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (OtherActor == OwnerClass)
+		return;
 
+	auto character = Cast<ACAS_Character>(OtherActor);
 
-	auto a = 1;
+	if (character->IsValidLowLevel())
+		return;
+
+	character->ActivateAbility(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
+
 
 }
 
