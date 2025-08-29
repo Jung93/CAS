@@ -26,6 +26,9 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		FString EnumName = UEnum::GetValueAsString(curType);
 		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, EnumName);
 	}
+	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Stun) || BehaviorComponent->IsBehaviorType(EBehaviorType::Missed)) {
+		return;
+	}
 	if (Enemy->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
 
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Stun);

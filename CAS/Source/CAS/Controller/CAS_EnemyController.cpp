@@ -17,12 +17,14 @@ ACAS_EnemyController::ACAS_EnemyController()
 
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 7500.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 90.0f;
-    SightConfig->SetMaxAge(5.0f);
+    SightConfig->PeripheralVisionAngleDegrees = 75.0f;
+    SightConfig->SetMaxAge(1.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
+	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
 
     AIPerceptionComponent->ConfigureSense(*SightConfig);
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
@@ -65,39 +67,23 @@ void ACAS_EnemyController::Tick(float DeltaSeconds)
 	Super::Tick(DeltaSeconds);
 	auto world = GetWorld();
 
-	if (bUseDebug && GetPawn() && world)
+	if (bUseDebug && world && GetPawn())
 	{
 		auto ThisPawn = GetPawn();
 		FVector center = ThisPawn->GetActorLocation();
 		center.Z += 50.0f; 
-		DrawDebugCone(
-			world,
-			center,                    
-			ThisPawn->GetActorForwardVector(),
-			SightConfig->SightRadius,   
-			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
-			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
-			36,
+		
+		DrawDebugCircle(GetWorld(), // 월드
+			center,					// 중심
+			SightConfig->SightRadius,		// 시야 범위
+			300,
 			FColor::Green,
 			false,
 			-1,
-			1,
-			1
-		);
-		DrawDebugCone(
-			world,
-			center,
-			ThisPawn->GetActorForwardVector(),
-			SightConfig->LoseSightRadius,
-			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
-			FMath::DegreesToRadians(SightConfig->PeripheralVisionAngleDegrees),
-			36,
-			FColor::Red,
-			false,
-			-1,
 			0,
-			1
-		);
+			0,
+			FVector::RightVector,
+			FVector::ForwardVector);
 	}
 }
 
@@ -125,7 +111,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
 		if (bDetected) {
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 			Player = Actor;
 		}
 	}

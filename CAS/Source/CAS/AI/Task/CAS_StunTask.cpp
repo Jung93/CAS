@@ -26,10 +26,11 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	if (!AnimInstance) {
 		return EBTNodeResult::Failed;
 	}
+
 	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
 	memory->CurTime = 0.0f;
 
-	AnimInstance->Montage_Play(Montage);
+	AnimInstance->Montage_Play(Montage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
 
 	return EBTNodeResult::InProgress;
 }
@@ -57,13 +58,7 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		if (!AnimInstance) {
 			return;
 		}
-		if (!Character->GetVelocity().IsNearlyZero()) {
-
-			float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
-			AnimInstance->Montage_Stop(blendtime, Montage);
-			FinishLatentAbort(OwnerComp);
-			return;
-		}
+		
 		float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
 		AnimInstance->Montage_Stop(blendtime, Montage);
 
