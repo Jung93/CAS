@@ -39,18 +39,23 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
+	APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
+
+	auto Character = Cast<ACAS_Character>(CurPawn);
+	if (!Character) {
+		return;
+	}
+
+	if (!Character->GetVelocity().IsNearlyZero()) {
+		FinishLatentAbort(OwnerComp);
+		return;
+	}
+
 	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
 
 	if (memory->CurTime >= PlayTime) {
 		
-		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
-
-		auto Character = Cast<ACAS_Character>(CurPawn);
-		if (!Character) {
-			return;
-		}
-
 		auto AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 		if (!AnimInstance) {
