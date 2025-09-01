@@ -27,6 +27,7 @@ public:
 	class ACAS_Character* GetOwnerClass() { return OwnerClass; }
 	class USphereComponent* GetCollision() { return Collision; }
 
+
 private:
 	UPROPERTY()
 	class ACAS_Character* OwnerClass = nullptr;

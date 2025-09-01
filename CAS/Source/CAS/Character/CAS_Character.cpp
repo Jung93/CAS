@@ -72,7 +72,7 @@ void ACAS_Character::BeginPlay()
 		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
 		if (widget) {
 			AttributeSet->HpChanged.AddUObject(widget,&UCAS_Hpbar::UpdateHp);
-			AttributeSet->TakeDamageEvent.AddUObject(this, &ThisClass::TakeDamageEvent);
+			//AttributeSet->TakeDamageEvent.AddUObject(this, &ThisClass::TakeDamageEvent);
 		}		
 
 		AttributeSet->SpeedChanged.AddUObject(this, &ThisClass::SetWalkSpeed);

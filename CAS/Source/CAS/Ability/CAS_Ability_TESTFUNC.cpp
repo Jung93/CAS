@@ -29,11 +29,16 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 	}
 
 	AttackTask = UCAS_Task_Attack::Task_Attack(this, "Attack", 150.0f, 150.0f);
-	if (AttackTask) {
-		AttackTask->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
-		AttackTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
+	//if (AttackTask) {
+	//	AttackTask->OnAttackHit.AddUObject(this, &ThisClass::ReceiveTarget);
+	//	AttackTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
+	//}
+	if (AttackTask->IsValidLowLevel()) {
+		AttackTask->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
+		AttackTask->ReadyForActivation();
 	}
-	
+
+
 	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", AttackMontage, 1.5f,true);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
@@ -58,7 +63,7 @@ void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclas
 	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
 	if (SpecHandle.IsValid())
 	{
-		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -1.0f);
+		//SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST")), -1.0f);
 		AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 	}
 
@@ -66,7 +71,7 @@ void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclas
 
 void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
-	if (!DamageEffectClass || !TagEffectClass) {
+	if (!DamageEffectClass) {
 		CAS_EndAbility();
 	}
 	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
@@ -90,7 +95,7 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 	EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
 	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
-	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	//ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 
 	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
 
@@ -165,5 +170,6 @@ void UCAS_Ability_TESTFUNC::PlaySound()
 
 void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
-	AttackTask->ReadyForActivation();
+	//AttackTask->ReadyForActivation();
+	CAS_EndAbility();
 }

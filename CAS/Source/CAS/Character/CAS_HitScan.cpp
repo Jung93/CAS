@@ -6,6 +6,7 @@
 #include "CAS/Character/CAS_Character.h"
 #include "CAS/Character/CAS_EnemyCapt.h"
 #include "CAS/Character/CAS_Player.h"
+#include "CAS/Character/CAS_PlayerState.h"
 
 
 // Sets default values
@@ -38,6 +39,7 @@ void ACAS_HitScan::Tick(float DeltaTime)
 
 }
 
+
 void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	if (OtherActor == OwnerClass)
@@ -45,11 +47,25 @@ void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* 
 
 	auto character = Cast<ACAS_Character>(OtherActor);
 
-	if (character->IsValidLowLevel())
+	if (!character->IsValidLowLevel() || character == nullptr)
 		return;
 
-	character->ActivateAbility(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
+	auto player = Cast<ACAS_Player>(OwnerClass);
+	UAbilitySystemComponent* ASC = nullptr;
 
+	if (player != nullptr)
+		ASC = Cast<ACAS_PlayerState>(player->GetPlayerState())->GetAbilitySystemComponent();
+	else
+		ASC = OwnerClass->GetAbilitySystemComponent();
+
+	if (!ASC->IsValidLowLevel())
+		return;
+
+	if (!ASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Attack.Test")))
+		return;
+
+
+	character->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
 
 }
 

@@ -17,7 +17,7 @@ void UCAS_Task_Attack::Activate()
 {
 	Super::Activate();
 
-	FHitResult hitResult;
+	/*FHitResult hitResult;
 	FCollisionQueryParams params(FName("Task_Attack"), false, GetAvatarActor());
 
 	FVector forward = GetAvatarActor()->GetActorForwardVector();
@@ -58,7 +58,7 @@ void UCAS_Task_Attack::Activate()
 		drawColor,
 		false,
 		1.0f
-	);
+	);*/
 
 	TaskEndEvent.Broadcast();
 }

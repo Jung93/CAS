@@ -106,6 +106,7 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
+	class ACAS_HitScan* GetHitScan() { return _hitScan; }
 	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
 public:	
 	virtual void InitAbilitySystemComponent() override;

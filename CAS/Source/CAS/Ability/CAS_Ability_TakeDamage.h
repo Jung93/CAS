@@ -22,9 +22,16 @@ protected:
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 
 	virtual void MontageEndEvent(UAnimMontage* Montage, bool bInterrupted) override;
+
+	virtual void ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
+	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
 protected:
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
 	UAnimMontage* TakeDamageMontage;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> TagEffectClass;
 };
