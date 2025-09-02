@@ -19,7 +19,7 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	auto AIController = Cast<ACAS_EnemyController>(OwnerComp.GetAIOwner());
 	auto Character = Cast<ACAS_Character>(AIController->GetPawn());
 	auto PatrolPath = Character->GetPatrolPath();
-	
+
 	if (!Character || !PatrolPath) {
 		return EBTNodeResult::Failed;
 	}

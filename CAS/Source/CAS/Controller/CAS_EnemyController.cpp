@@ -114,6 +114,9 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 			Player = Actor;
 		}
+		else {
+			return;
+		}
 	}
 	else if(!Stimulus.WasSuccessfullySensed()){
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
@@ -133,7 +136,6 @@ void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedAct
 	{
 		Player = Cast<ACAS_Player>(Actor);
 		if (Player) {
-			int32 temp = 1;
 			break;
 		}
 	}
