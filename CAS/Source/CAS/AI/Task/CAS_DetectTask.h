@@ -4,21 +4,25 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_PatrolTask.generated.h"
+#include "CAS_DetectTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_PatrolTask : public UBTTaskNode
+class CAS_API UCAS_DetectTask : public UBTTaskNode
 {
 	GENERATED_BODY()
+	
 public:
-	UCAS_PatrolTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector MovePositionKey;
+protected:
+	UFUNCTION()
+	void MontageEnd(UAnimMontage* Montage, bool bInterrupted);
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* DetectMontage;
+private:
+	UBehaviorTreeComponent* CachedOwnerComp;
 };

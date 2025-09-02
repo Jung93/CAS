@@ -23,11 +23,13 @@ public:
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void OnUnPossess() override;
 	virtual void BeginPlay() override;
-	
+	virtual void Tick(float DeltaSeconds) override;
+
 	float GetSightRange() { return SightConfig->SightRadius; }
 	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
 	
-	UAISenseConfig_Sight* TEMPF() { return SightConfig; }
+	bool bUseDebug = true;
+	bool bDebugOn = false;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UBlackboardData* BlackboardData;
