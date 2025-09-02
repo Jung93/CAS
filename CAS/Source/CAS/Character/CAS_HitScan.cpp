@@ -35,7 +35,7 @@ void ACAS_HitScan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	DrawDebugSphere(GetWorld(), GetActorLocation(), Collision->GetScaledSphereRadius(), 10, FColor::Green, false, 0.1f);
+	//DrawDebugSphere(GetWorld(), GetActorLocation(), Collision->GetScaledSphereRadius(), 10, FColor::Green, false, 0.1f);
 
 }
 
