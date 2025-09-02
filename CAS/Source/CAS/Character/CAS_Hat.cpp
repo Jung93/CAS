@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "CAS/Character/CAS_EnemyCapt.h"
 #include "CAS/Character/CAS_Player.h"
+#include "CAS/Character/CAS_HitScan.h"
 
 // Sets default values
 ACAS_Hat::ACAS_Hat()
@@ -85,6 +86,8 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 		_player->SetActorHiddenInGame(true);
 		_player->SetActorEnableCollision(false);
+		_player->GetHitScan()->SetActorEnableCollision(false);
+
 		return;
 	}
 
@@ -180,6 +183,7 @@ void ACAS_Hat::Return()
 	_capturingTime = 0.0f;*/
 	_player->SetActorHiddenInGame(false);
 	_player->SetActorEnableCollision(true);
+	_player->GetHitScan()->SetActorEnableCollision(true);
 
 	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 

@@ -42,13 +42,25 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 {
 	auto Character = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
 
-	Character->SetActorHiddenInGame(true);
-	Character->SetActorEnableCollision(false);
+
 
 	auto ASC = Character->GetAbilitySystemComponent();
-	ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
-	Character->Controller->UnPossess();
+	if (NotifyName == "DeadSound")
+	{
+		ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
+		ASC->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+	}
+	else if(NotifyName == "DeadMontage")
+	{
+		Character->SetActorHiddenInGame(true);
+		Character->SetActorEnableCollision(false);
 
-	PlayMontageTask->TaskEndEvent.Broadcast();
+		Character->Controller->UnPossess();
+
+		PlayMontageTask->TaskEndEvent.Broadcast();
+	}
+
+
+
 }

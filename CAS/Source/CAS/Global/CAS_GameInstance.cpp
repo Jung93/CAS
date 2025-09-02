@@ -11,12 +11,19 @@
 
 UCAS_GameInstance::UCAS_GameInstance()
 {
+	ConstructorHelpers::FObjectFinder<USoundBase> bgm(TEXT("/Game/CAS/Resource/Sound/sound_Henesys.sound_Henesys"));
+	if (bgm.Succeeded())
+	{
+		BackgroundMusic = bgm.Object;
+	}
+
 }
 
 void UCAS_GameInstance::Init()
 {
 	Super::Init();
 	GetAssetsFromPaths(TEXT("/Game/CAS/Resource/Texture"), TEXT("[TEXTURE ICON]"), GameAssets);
+
 
 }
 
@@ -150,6 +157,15 @@ void UCAS_GameInstance::LoadLevelEvent()
 	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), tempIndex), 0));
 	
 	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+
+}
+
+void UCAS_GameInstance::PlayBgm()
+{
+	if (BackgroundMusic->IsValidLowLevel())
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), BackgroundMusic, FVector(0, 0, 0));
+	}
 
 }
 

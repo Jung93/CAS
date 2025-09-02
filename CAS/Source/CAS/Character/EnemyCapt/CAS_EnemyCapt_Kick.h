@@ -20,4 +20,15 @@ public:
 	//virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	//void ActivateAbility(const FInputActionValue& Value);
 	virtual void ActivateEnemyAbility() override;
+
+protected:
+	virtual void BeginPlay() override;
+
+
+private:
+	UPROPERTY(EditAnywhere, Category = "HitScan")
+	TSubclassOf<class ACAS_HitScan> _hitScanBP;
+
+	UPROPERTY()
+	class ACAS_HitScan* _hitScan = nullptr;
 };
