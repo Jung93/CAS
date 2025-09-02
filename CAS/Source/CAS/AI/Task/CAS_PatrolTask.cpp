@@ -9,7 +9,7 @@
 
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
-
+	bNotifyTick = true;
 }
 
 EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
