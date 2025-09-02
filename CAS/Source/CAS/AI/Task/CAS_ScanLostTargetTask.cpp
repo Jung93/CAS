@@ -28,10 +28,10 @@ EBTNodeResult::Type UCAS_ScanLostTargetTask::ExecuteTask(UBehaviorTreeComponent&
 		return EBTNodeResult::Failed;
 	}
 
+	AnimInstance->Montage_Play(Montage);
+
 	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
 	memory->CurTime = 0.0f;
-
-	AnimInstance->Montage_Play(Montage);
 
 	return EBTNodeResult::InProgress;
 }
@@ -46,10 +46,6 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
 
-	if (curType != EBehaviorType::Missed) {
-		FinishLatentTask(OwnerComp, EBTNodeResult::Aborted);
-		return;
-	}
 	if (memory->CurTime >= PlayTime) {
 		
 		APawn* CurPawn = OwnerComp.GetAIOwner()->GetPawn();
@@ -67,6 +63,7 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 				
 		AnimInstance->Montage_Stop(0.25f, Montage);
 
+		BlackBoard->SetValueAsEnum("BehaviorType", static_cast<int8>(EBehaviorType::Patrol));
 
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;

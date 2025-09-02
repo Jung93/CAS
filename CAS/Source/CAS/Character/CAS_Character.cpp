@@ -49,6 +49,10 @@ ACAS_Character::ACAS_Character()
 	{
 		DefaultAbilities.Add(TakeDamageAbilityClass.Class);
 	}
+	
+	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+	GetCharacterMovement()->MaxAcceleration = 1800.0f;
+
 }
 
 // Called when the game starts or when spawned

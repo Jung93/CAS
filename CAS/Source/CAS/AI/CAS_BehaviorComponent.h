@@ -12,6 +12,7 @@ enum class EBehaviorType : uint8
 {
 	Wait,
 	Patrol,
+	Detect,
 	Trace,
 	Missed,
 	Stun,
