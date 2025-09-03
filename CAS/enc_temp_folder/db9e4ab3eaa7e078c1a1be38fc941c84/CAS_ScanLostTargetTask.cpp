@@ -43,9 +43,6 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 	EBehaviorType curType = static_cast<EBehaviorType>(BlackBoard->GetValueAsEnum(BehaviorTypeKey.SelectedKeyName));
 	
-	auto AIController = OwnerComp.GetAIOwner();
-	AIController->StopMovement();
-
 	FScanTimeMemory* memory = (FScanTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
 
@@ -64,8 +61,6 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 			return;
 		}
 				
-		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
-
 		AnimInstance->Montage_Stop(0.25f, Montage);
 
 		BlackBoard->SetValueAsEnum("BehaviorType", static_cast<int8>(EBehaviorType::Patrol));

@@ -17,7 +17,7 @@ ACAS_EnemyController::ACAS_EnemyController()
 
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 7500.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 95.0f;
+    SightConfig->PeripheralVisionAngleDegrees = 75.0f;
     SightConfig->SetMaxAge(1.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
@@ -111,7 +111,6 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
 		if (bDetected) {
-			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 			Player = Actor;
 		}
@@ -120,7 +119,6 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		}
 	}
 	else if(!Stimulus.WasSuccessfullySensed()){
-		Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 	}
 	Blackboard->SetValueAsObject("player", Player);
@@ -150,7 +148,6 @@ void ACAS_EnemyController::OnTargetPerceptionForgotten(AActor* Actor)
 	if (!Player) {
 		return;
 	}
-	Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 	Blackboard->SetValueAsObject("player", nullptr);
 }

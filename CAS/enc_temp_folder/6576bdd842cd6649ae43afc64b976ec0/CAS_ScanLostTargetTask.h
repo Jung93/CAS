@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_StunTask.generated.h"
+#include "CAS_ScanLostTargetTask.generated.h"
 
 /**
  * 
  */
 USTRUCT()
-struct FStunTimeMemory
+struct FScanTimeMemory
 {
 	GENERATED_BODY()
 
@@ -19,22 +19,25 @@ public:
 };
 
 UCLASS()
-class CAS_API UCAS_StunTask : public UBTTaskNode
+class CAS_API UCAS_ScanLostTargetTask : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UCAS_StunTask();
+	UCAS_ScanLostTargetTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
-	virtual uint16 GetInstanceMemorySize() const override{ return sizeof(FStunTimeMemory);}
+	virtual uint16 GetInstanceMemorySize() const override { return sizeof(FScanTimeMemory); }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector TargetKey;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector BehaviorTypeKey;
 
 protected:
 	UPROPERTY(EditAnywhere)
 	float PlayTime = 5.0f;
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* Montage;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector IsMontagePlayingKey;
+
 };

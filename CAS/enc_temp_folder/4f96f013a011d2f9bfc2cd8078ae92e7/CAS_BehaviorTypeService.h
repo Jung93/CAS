@@ -24,6 +24,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector PlayerKey;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector IsMontagePlayingKey;
+
 };
