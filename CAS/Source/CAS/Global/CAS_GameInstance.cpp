@@ -3,19 +3,23 @@
 
 #include "Global/CAS_GameInstance.h"
 #include "Global/CAS_SaveGame.h"
+#include "Sound/SoundCue.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/GameplayStatics.h"
 #include "Character/CAS_Player.h"
 #include "Engine/LevelStreamingDynamic.h"
+#include "Components/AudioComponent.h"
 
 
 UCAS_GameInstance::UCAS_GameInstance()
 {
-	ConstructorHelpers::FObjectFinder<USoundBase> bgm(TEXT("/Game/CAS/Resource/Sound/sound_Henesys.sound_Henesys"));
-	if (bgm.Succeeded())
-	{
-		BackgroundMusic = bgm.Object;
-	}
+	//ConstructorHelpers::FObjectFinder<USoundBase> bgm(TEXT("/Game/CAS/Resource/Sound/sound_Henesys.sound_Henesys"));
+	//if (bgm.Succeeded())
+	//{
+	//	BackgroundMusic = bgm.Object;
+	//}
+
+	BgmComponent = nullptr;
 
 }
 
@@ -160,11 +164,21 @@ void UCAS_GameInstance::LoadLevelEvent()
 
 }
 
-void UCAS_GameInstance::PlayBgm()
+void UCAS_GameInstance::PlayBgm(int32 bgmIndex)
 {
-	if (BackgroundMusic->IsValidLowLevel())
+	if (BgmComponent != nullptr && BgmComponent->IsPlaying())
+		BgmComponent->Stop();
+
+
+	if (Bgms.IsValidIndex(bgmIndex) && Bgms[bgmIndex] != nullptr)
 	{
-		UGameplayStatics::PlaySoundAtLocation(GetWorld(), BackgroundMusic, FVector(0, 0, 0));
+		USoundCue* bgm = Bgms[bgmIndex];
+			
+		BgmComponent = UGameplayStatics::SpawnSound2D(	// 사운드 생성, 2D로
+			GetWorld(),									// 위치(세계)는 로딩된 현재 세계로
+			bgm											// 재생할 소리 큐는 가져온 큐로
+		);
+
 	}
 
 }

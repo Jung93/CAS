@@ -365,7 +365,6 @@ void ACAS_Player::BeginPlay()
 	if (GameInstance) {
 		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
 		LoadCharacterData();		
-		GameInstance->PlayBgm();
 
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));

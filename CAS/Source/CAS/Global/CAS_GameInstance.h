@@ -32,7 +32,7 @@ public:
 	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
 	void LoadGameData_Sync(class ACAS_Player* player, int32 index);
 	void LoadGameData_ASync(class ACAS_Player* player, int32 index);
-	void PlayBgm();
+	void PlayBgm(int32 bgmIndex = 0);
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
@@ -46,8 +46,11 @@ protected:
 
 	int32 tempIndex = -1;
 
-	UPROPERTY()
-	class USoundBase* BackgroundMusic;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	TArray<class USoundCue*> Bgms;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	class UAudioComponent* BgmComponent;
 
 
 };
