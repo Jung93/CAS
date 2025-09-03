@@ -4,7 +4,7 @@
 #include "AI/Task/CAS_StunTask.h"
 #include "Controller/CAS_EnemyController.h"
 #include "Character/CAS_Character.h"
-
+#include "BehaviorTree/BlackboardComponent.h"
 
 UCAS_StunTask::UCAS_StunTask()
 {
@@ -31,7 +31,7 @@ EBTNodeResult::Type UCAS_StunTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp
 	memory->CurTime = 0.0f;
 
 	AnimInstance->Montage_Play(Montage, 1.0f, EMontagePlayReturnType::MontageLength, 0.0f, true);
-
+	
 	return EBTNodeResult::InProgress;
 }
 
@@ -45,8 +45,8 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 	if (!Character) {
 		return;
 	}
-
-	
+	auto AIController = OwnerComp.GetAIOwner();
+	AIController->StopMovement();
 
 	FStunTimeMemory* memory = (FStunTimeMemory*)NodeMemory;
 	memory->CurTime += DeltaSeconds;
@@ -58,10 +58,11 @@ void UCAS_StunTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemor
 		if (!AnimInstance) {
 			return;
 		}
-		
+		auto BlackBoard = OwnerComp.GetBlackboardComponent();
+		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
+
 		float blendtime = AnimInstance->Montage_GetBlendTime(Montage);
 		AnimInstance->Montage_Stop(blendtime, Montage);
-
 		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
 		return;
 	}

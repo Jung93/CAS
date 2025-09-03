@@ -23,6 +23,9 @@ protected:
 	void MontageEnd(UAnimMontage* Montage, bool bInterrupted);
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* DetectMontage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector IsMontagePlayingKey;
 private:
 	UBehaviorTreeComponent* CachedOwnerComp;
 };

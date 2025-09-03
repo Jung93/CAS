@@ -40,4 +40,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* Montage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector IsMontagePlayingKey;
 };

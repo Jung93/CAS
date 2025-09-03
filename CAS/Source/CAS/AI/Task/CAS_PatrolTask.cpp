@@ -6,10 +6,11 @@
 #include "Character/CAS_Character.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AI/CAS_BehaviorComponent.h"
+#include "Navigation/PathFollowingComponent.h"
 
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
-
+	bNotifyTick = true;
 }
 
 EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -32,14 +33,6 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 
 	auto AIController = Cast<ACAS_EnemyController>(OwnerComp.GetAIOwner());
 	auto BehaviorTypeComponent = AIController->GetBehaviorComponent();
-
-	if (!BehaviorTypeComponent->IsBehaviorType(EBehaviorType::Patrol)) {
-		//auto CurrType = BehaviorTypeComponent->GetBehaviorType();
-		//BehaviorTypeComponent->ChangeBehaviorType(CurrType);
-
-		FinishLatentAbort(OwnerComp);
-		return;
-	}
 	auto Character = Cast<ACAS_Character>(AIController->GetPawn());
 	auto PatrolPath = Character->GetPatrolPath();
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
@@ -50,9 +43,9 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
 
 	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
+	//auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
 
-	auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
-	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 100.0f) {
+	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
 		PatrolPath->IncreasePathIndex();
 		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
 
@@ -64,6 +57,9 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 
 		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
 	}
+
+	AIController->MoveToLocation(PatrolPosition, 50.0f, false);
+
 	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	return;
 }

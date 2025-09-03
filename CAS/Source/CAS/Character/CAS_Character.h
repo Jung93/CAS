@@ -74,7 +74,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	int32 HpCount = 3;
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ACAS_PatrolPath* PatrolPath;
 public:
 	ACAS_PatrolPath* GetPatrolPath() { return PatrolPath; }

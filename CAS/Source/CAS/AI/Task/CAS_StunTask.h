@@ -35,5 +35,6 @@ protected:
 	float PlayTime = 5.0f;
 	UPROPERTY(EditAnywhere)
 	UAnimMontage* Montage;
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FBlackboardKeySelector IsMontagePlayingKey;
 };
