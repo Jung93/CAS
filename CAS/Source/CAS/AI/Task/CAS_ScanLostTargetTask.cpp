@@ -67,9 +67,6 @@ void UCAS_ScanLostTargetTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8*
 		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
 
 		AnimInstance->Montage_Stop(0.25f, Montage);
-
-		BlackBoard->SetValueAsEnum("BehaviorType", static_cast<int8>(EBehaviorType::Patrol));
-
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
 	}

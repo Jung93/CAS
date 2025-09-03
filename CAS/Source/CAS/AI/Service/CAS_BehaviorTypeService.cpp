@@ -31,6 +31,10 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		
 		return;
 	}
+	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Missed)) {
+		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
+		return;
+	}
 	if (Enemy->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
 
 		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, true);
