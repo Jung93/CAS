@@ -61,7 +61,13 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 
 void ACAS_EnemyController::OnUnPossess()
 {
+	auto ThisCharacter = Cast<ACharacter>(GetPawn());
+	auto AnimInstance = ThisCharacter->GetMesh()->GetAnimInstance();
+	
+	AnimInstance->StopAllMontages(0.1f);
+	
 	Super::OnUnPossess();
+
 }
 
 void ACAS_EnemyController::BeginPlay()
@@ -121,24 +127,23 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	bDebugOn = true;
 	AActor* Player = nullptr;
 	
-	if (Stimulus.WasSuccessfullySensed()) {
-		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+	bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
-		if (bDetected) {
+	if (bDetectable) {
+		if (Stimulus.WasSuccessfullySensed()) {
 			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 			Player = Actor;
 		}
-		else {
-			return;
+		else if (!Stimulus.WasSuccessfullySensed()) {
+			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 		}
 	}
-	else if(!Stimulus.WasSuccessfullySensed()){
-		Blackboard->SetValueAsBool("bIsMontagePlaying", true);
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+	else {
+		return;
 	}
 	Blackboard->SetValueAsObject("player", Player);
-	SetFocus(Player);
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
