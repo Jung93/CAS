@@ -27,6 +27,17 @@ ACAS_EnemyController::ACAS_EnemyController()
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
 
     AIPerceptionComponent->ConfigureSense(*SightConfig);
+
+	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing");
+	HearingConfig->HearingRange = 1000.0f;
+	HearingConfig->SetMaxAge(1);
+	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
+	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
+
+	AIPerceptionComponent->ConfigureSense(*HearingConfig); // 청각 등록
+
+
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
 	if (bUseDebug) {
@@ -104,9 +115,12 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	if (!playerController) {
 		return;
 	}
+
+	FAISenseID StimulusID = Stimulus.Type;
+
 	bDebugOn = true;
 	AActor* Player = nullptr;
-
+	
 	if (Stimulus.WasSuccessfullySensed()) {
 		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
@@ -124,6 +138,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 	}
 	Blackboard->SetValueAsObject("player", Player);
+	SetFocus(Player);
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
