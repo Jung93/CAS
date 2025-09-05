@@ -17,11 +17,12 @@ void ACAS_BgmManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(GetGameInstance());
 
-	if (GameInstance)
+	if (gi)
 	{
-		GameInstance->PlayBgm(BgmIndex);
+		//gi->PlayBgm(BgmIndex);
+		gi->PlayNormalBgm(true);
 	}
 	
 }
@@ -30,6 +31,11 @@ void ACAS_BgmManager::BeginPlay()
 void ACAS_BgmManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(GetGameInstance());
+
+	if(gi)
+		gi->ManageTick(DeltaTime);
 
 }
 
