@@ -25,4 +25,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int32 BgmIndex;
+
+private:
+	//class UCAS_GameInstance* gi = nullptr;
 };

@@ -30,4 +30,8 @@ protected:
 
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;
+
+
+	//bgm 교체 테스트용
+	bool testBool = true;
 };

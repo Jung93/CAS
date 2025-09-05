@@ -32,7 +32,18 @@ public:
 	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
 	void LoadGameData_Sync(class ACAS_Player* player, int32 index);
 	void LoadGameData_ASync(class ACAS_Player* player, int32 index);
+
 	void PlayBgm(int32 bgmIndex = 0);
+
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+	void PlayNormalBgm(bool isNormal = true);
+
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+	void CrossFadeMusic(bool isDetected); // 음악 버전 교체 함수
+
+	UFUNCTION(BlueprintCallable, Category = "Audio")
+	void ManageTick(float DeltaSecond);
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
@@ -46,11 +57,34 @@ protected:
 
 	int32 tempIndex = -1;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-	TArray<class USoundCue*> Bgms;
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	//TArray<class USoundCue*> Bgms;
+
+	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	//class UAudioComponent* BgmComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
-	class UAudioComponent* BgmComponent;
+	class USoundCue* BgmNormal;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	class USoundCue* BgmDetected;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	class UAudioComponent* BgmNormalComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	class UAudioComponent* BgmDetectedComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	float BgmTargetVolume;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
+	float BgmFadeSpeed;
+
+private:
+	float NextNormalVolume;
+	float NextDetectedVolume;
+
+	bool ChangeVolume;
 
 };

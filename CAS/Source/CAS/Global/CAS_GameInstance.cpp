@@ -10,6 +10,8 @@
 #include "Engine/LevelStreamingDynamic.h"
 #include "Components/AudioComponent.h"
 
+#include "Math/UnrealMathUtility.h"
+
 
 UCAS_GameInstance::UCAS_GameInstance()
 {
@@ -19,7 +21,7 @@ UCAS_GameInstance::UCAS_GameInstance()
 	//	BackgroundMusic = bgm.Object;
 	//}
 
-	BgmComponent = nullptr;
+	//BgmComponent = nullptr;
 
 }
 
@@ -166,20 +168,95 @@ void UCAS_GameInstance::LoadLevelEvent()
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)
 {
-	if (BgmComponent != nullptr && BgmComponent->IsPlaying())
-		BgmComponent->Stop();
+	//if (BgmComponent != nullptr && BgmComponent->IsPlaying())
+	//	BgmComponent->Stop();
 
 
-	if (Bgms.IsValidIndex(bgmIndex) && Bgms[bgmIndex] != nullptr)
+	//if (Bgms.IsValidIndex(bgmIndex) && Bgms[bgmIndex] != nullptr)
+	//{
+	//	USoundCue* bgm = Bgms[bgmIndex];
+	//		
+	//	BgmComponent = UGameplayStatics::SpawnSound2D(	// 사운드 생성, 2D로
+	//		GetWorld(),									// 위치(세계)는 로딩된 현재 세계로
+	//		bgm											// 재생할 소리 큐는 가져온 큐로
+	//	);
+
+	//}
+
+}
+
+void UCAS_GameInstance::PlayNormalBgm(bool isDetected)
+{
+	NextNormalVolume = BgmTargetVolume * ((float)isDetected); // 참이면 x1, 거짓이면 x0
+	NextDetectedVolume = BgmTargetVolume * (1 - (float)isDetected); // 참이면 x0, 거짓일 때 x1
+
+	// 사운드 큐가 제대로 설정되었는지 확인
+	//if (BgmNormal && BgmDetected)
+	if(BgmNormal && BgmDetected)
 	{
-		USoundCue* bgm = Bgms[bgmIndex];
-			
-		BgmComponent = UGameplayStatics::SpawnSound2D(	// 사운드 생성, 2D로
-			GetWorld(),									// 위치(세계)는 로딩된 현재 세계로
-			bgm											// 재생할 소리 큐는 가져온 큐로
-		);
+		// 각 음악을 생성하고 재생
 
+		BgmNormalComponent = UGameplayStatics::SpawnSound2D(GetWorld(),
+			BgmNormal);					//  일단 생성 (흔히 사용됨)
+		//bgmCalm, nextCalmVolume);		// 옵션 세부 적용 (잘 안 씀)
+
+	// 옵션이 많은 컴포넌트면 만들고 나서 옵션을 적용하는 편이 더 좋다
+		if (BgmNormalComponent)
+			BgmNormalComponent->SetVolumeMultiplier(NextNormalVolume);
+
+		BgmDetectedComponent = UGameplayStatics::SpawnSound2D(GetWorld(),
+			BgmDetected);
+
+		if (BgmDetectedComponent)
+			BgmDetectedComponent->SetVolumeMultiplier(NextDetectedVolume);
 	}
 
 }
 
+void UCAS_GameInstance::CrossFadeMusic(bool isDetected)
+{
+	if (isDetected)
+	{
+		NextDetectedVolume = BgmTargetVolume;
+		NextNormalVolume = 0;
+	}
+	else
+	{
+		NextNormalVolume = BgmTargetVolume;
+		NextDetectedVolume = 0;
+	}
+
+	ChangeVolume = true;
+}
+
+void UCAS_GameInstance::ManageTick(float DeltaSecond)
+{
+	if (ChangeVolume)
+	{
+		if (BgmNormalComponent && BgmDetectedComponent)
+		{
+			float lerpNormalVolume = FMath::FInterpTo(		// 고급 선형보간
+				BgmNormalComponent->VolumeMultiplier,			// 처음
+				NextNormalVolume,								// 끝
+				DeltaSecond,								// 틱 간격 (보간 정도)
+				BgmFadeSpeed								// 보간 속도 (기간에 영향)
+			);
+
+			float lerpDetectedVolume = FMath::FInterpTo(
+				BgmDetectedComponent->VolumeMultiplier,
+				NextDetectedVolume,
+				DeltaSecond,
+				BgmFadeSpeed
+			);
+
+			BgmNormalComponent->SetVolumeMultiplier(lerpNormalVolume);
+			BgmDetectedComponent->SetVolumeMultiplier(lerpDetectedVolume);
+
+			if (BgmNormalComponent->VolumeMultiplier == NextNormalVolume ||
+				BgmDetectedComponent->VolumeMultiplier == NextDetectedVolume)
+			{
+				ChangeVolume = false;
+			}
+		}
+	}
+}
