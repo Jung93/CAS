@@ -131,12 +131,10 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 
 	if (bDetectable) {
 		if (Stimulus.WasSuccessfullySensed()) {
-			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 			Player = Actor;
 		}
 		else if (!Stimulus.WasSuccessfullySensed()) {
-			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 		}
 	}
