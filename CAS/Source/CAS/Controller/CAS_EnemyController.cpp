@@ -18,7 +18,7 @@ ACAS_EnemyController::ACAS_EnemyController()
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 7500.0f;
     SightConfig->PeripheralVisionAngleDegrees = 95.0f;
-    SightConfig->SetMaxAge(1.0f);
+    SightConfig->SetMaxAge(3.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -30,7 +30,7 @@ ACAS_EnemyController::ACAS_EnemyController()
 
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing");
 	HearingConfig->HearingRange = 1000.0f;
-	HearingConfig->SetMaxAge(1);
+	HearingConfig->SetMaxAge(3.0f);
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
@@ -125,23 +125,38 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	FAISenseID StimulusID = Stimulus.Type;
 
 	bDebugOn = true;
-	AActor* Player = nullptr;
-	
-	bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
-	if (bDetectable) {
+	if (StimulusID == HearingConfig->GetSenseID()) {
 		if (Stimulus.WasSuccessfullySensed()) {
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
-			Player = Actor;
+			Blackboard->SetValueAsVector("LastHeardLocation", Stimulus.StimulusLocation);
 		}
 		else if (!Stimulus.WasSuccessfullySensed()) {
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+			Blackboard->ClearValue("LastHeardLocation");
 		}
 	}
-	else {
+	else if (StimulusID == SightConfig->GetSenseID()) {
+
+		bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
+		AActor* Player = nullptr;
+
+		if (bDetectable) {
+			if (Stimulus.WasSuccessfullySensed()) {
+				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
+				Player = Actor;
+				Blackboard->SetValueAsBool("bPlayerMissing", false);
+			}
+			else if (!Stimulus.WasSuccessfullySensed()) {
+				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+				Blackboard->SetValueAsBool("bPlayerMissing", true);
+			}
+		}
+		else {
+			return;
+		}
+		Blackboard->SetValueAsObject("player", Player);
 		return;
 	}
-	Blackboard->SetValueAsObject("player", Player);
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)

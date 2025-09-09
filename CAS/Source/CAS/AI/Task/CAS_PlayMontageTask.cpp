@@ -42,11 +42,11 @@ EBTNodeResult::Type UCAS_PlayMontageTask::ExecuteTask(UBehaviorTreeComponent& Ow
 
 		OwnerComp.GetAIOwner()->StopMovement();
 
-		AnimInstance->Montage_Play(CAS_Montage);
-
 		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, true);
 
 		CurrentTime = 0.0f;
+
+		AnimInstance->Montage_Play(CAS_Montage);
 
 		return EBTNodeResult::InProgress;
 	}
