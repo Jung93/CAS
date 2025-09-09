@@ -59,29 +59,35 @@ void UCAS_PlayMontageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	CurrentTime += DeltaSeconds;
 
 	if (CurrentTime >= LoopTime) {
+
+		auto CurPawn = CachedOwnerComp->GetAIOwner()->GetPawn();
+		auto CurCharacter = Cast<ACAS_Character>(CurPawn);
+		auto AnimInstance = CurCharacter->GetMesh()->GetAnimInstance();
+		auto BlackBoard = OwnerComp.GetBlackboardComponent();
+
+		BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
+		AnimInstance->Montage_Stop(0.2f, CAS_Montage);
+
 		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
 		return;
 	}
 }
 
-void UCAS_PlayMontageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
-{
-	auto CurPawn = CachedOwnerComp->GetAIOwner()->GetPawn();
-	auto CurCharacter = Cast<ACAS_Character>(CurPawn);
-	auto AnimInstance = CurCharacter->GetMesh()->GetAnimInstance();
-	auto BlackBoard = OwnerComp.GetBlackboardComponent();
-
-	BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
-	AnimInstance->Montage_Stop(0.2f, CAS_Montage);
-}
 
 void UCAS_PlayMontageTask::MontageEnd(UAnimMontage* Montage, bool bInterrupted)
 {
 	auto CurPawn = CachedOwnerComp->GetAIOwner()->GetPawn();
+	if (!CurPawn) {
+		return;
+	}
 	auto CurCharacter = Cast<ACAS_Character>(CurPawn);
 	auto AnimInstance = CurCharacter->GetMesh()->GetAnimInstance();
+	auto BlackBoard = CachedOwnerComp->GetBlackboardComponent();
 	
 	AnimInstance->OnMontageEnded.RemoveDynamic(this, &ThisClass::MontageEnd);
+
+	BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
+	AnimInstance->Montage_Stop(0.2f, CAS_Montage);
 	FinishLatentTask(*CachedOwnerComp, EBTNodeResult::Succeeded);
 	
 	return;

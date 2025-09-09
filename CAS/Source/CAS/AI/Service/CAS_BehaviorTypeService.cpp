@@ -19,7 +19,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	auto EnemyController = Cast<ACAS_EnemyController>(OwnerComp.GetOwner());
 	auto BehaviorComponent = EnemyController->GetBehaviorComponent();
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
-	auto Player = Cast<ACAS_Player>(BlackBoard->GetValueAsObject(PlayerKey.SelectedKeyName));
+	auto Player = Cast<ACAS_Character>(BlackBoard->GetValueAsObject(PlayerKey.SelectedKeyName));
 	auto Enemy = Cast<ACAS_Character>(EnemyController->GetPawn());
 
 	if (EnemyController->bDebugOn) {
@@ -31,6 +31,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 		return;
 	}
+	auto temp = BlackBoard->GetValueAsBool(IsMontagePlayingKey.SelectedKeyName);
 	//몽타주가 재생중이면 state 재평가 x 
 	if (BlackBoard->GetValueAsBool(IsMontagePlayingKey.SelectedKeyName)) {
 
@@ -39,11 +40,6 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	//idle 상태 -> patrol
 	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Wait)) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
-		return;
-	}
-	//반드시 플레이어 시야안에 들어왔다가 나간 경우 -> look around 몽타주 재생 -> wait
-	if (BlackBoard->GetValueAsBool("bPlayerMissing")) {
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 		return;
 	}
 
@@ -58,6 +54,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Alert);
 		return;
 	}
+	
 	//플레이어를 감지하지 못한 경우 -> 순찰
 	if (!Player) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
@@ -65,6 +62,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 	}
 	//플레이어를 감지 한 경우
+	
 	float Distance = Enemy->GetDistanceTo(Player);
 
 	if (Distance < AttackRange) {
