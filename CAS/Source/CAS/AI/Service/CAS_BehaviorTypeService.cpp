@@ -77,7 +77,8 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-
+	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
+	return;
 
 	//if (BlackBoard->GetValueAsBool(IsMontagePlayingKey.SelectedKeyName)) {
 	//	
