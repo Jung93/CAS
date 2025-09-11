@@ -145,18 +145,18 @@ void UCAS_GameInstance::LoadGameData_Sync(int32 index)
 
 	FTempSaveGameData TempSaveGameData;
 
-	TempSaveGameData.Level = SaveGameData->Level;
 	TempSaveGameData.PlayerHP = SaveGameData->PlayerHP;
 	TempSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
 	TempSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
+	TempSaveGameData.bDataLoadingReady = true;
 
 
+	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
 
 	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
 	//player->SetActorLocation(SaveGameData->PlayerLocation);
 	//player->LoadCharacterData();
 	
-	//UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
 }
 
 void UCAS_GameInstance::LoadGameData_ASync(int32 index)
