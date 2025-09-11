@@ -122,6 +122,11 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		return;
 	}
 
+	bool bStunState = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"));
+	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Stun) || bStunState) {
+		return;
+	}
+
 	auto playerController = Cast<ACAS_PlayerController>(character->GetController());
 
 	if (!playerController) {

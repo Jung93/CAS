@@ -51,7 +51,10 @@ protected:
 	TArray<struct FCAS_SlotData> QuickSlotAbilities;
 
 	UFUNCTION()
-	void LoadLevelEvent();
+	void OnLoadFinished(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedGame);
+
+	UFUNCTION()
+	void OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess);
 
 
 

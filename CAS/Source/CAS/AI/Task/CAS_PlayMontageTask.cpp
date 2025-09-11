@@ -10,6 +10,7 @@
 UCAS_PlayMontageTask::UCAS_PlayMontageTask()
 {
 	bNotifyTick = false;
+	bNotifyTaskFinished = true;
 }
 
 EBTNodeResult::Type UCAS_PlayMontageTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -71,6 +72,24 @@ void UCAS_PlayMontageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		FinishLatentTask(OwnerComp,EBTNodeResult::Succeeded);
 		return;
 	}
+}
+
+void UCAS_PlayMontageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
+{
+	auto CurPawn = OwnerComp.GetAIOwner()->GetPawn();
+	if (!CurPawn) {
+		return;
+	}
+	auto CurCharacter = Cast<ACAS_Character>(CurPawn);
+	auto AnimInstance = CurCharacter->GetMesh()->GetAnimInstance();
+	auto BlackBoard = OwnerComp.GetBlackboardComponent();
+
+	AnimInstance->OnMontageEnded.RemoveDynamic(this, &ThisClass::MontageEnd);
+
+	BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
+	AnimInstance->Montage_Stop(0.2f, CAS_Montage);
+
+	return;
 }
 
 
