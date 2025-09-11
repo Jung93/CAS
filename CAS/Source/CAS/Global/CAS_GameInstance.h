@@ -30,8 +30,8 @@ public:
 	
 	void SaveGameData_Sync(class ACAS_Player* player, int32 index);
 	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
-	void LoadGameData_Sync(class ACAS_Player* player, int32 index);
-	void LoadGameData_ASync(class ACAS_Player* player, int32 index);
+	void LoadGameData_Sync(int32 index);
+	void LoadGameData_ASync(int32 index);
 
 	void PlayBgm(int32 bgmIndex = 0);
 
@@ -89,5 +89,15 @@ private:
 	float NextDetectedVolume;
 
 	bool ChangeVolume;
+
+private:
+	struct FTempSaveGameData
+	{
+		bool bDataLoadingReady = false;
+		float PlayerHP = 0;
+		FVector PlayerLocation = FVector::ZeroVector;
+		TArray<FCAS_SlotData> QuickSlotData;
+		FName Level;
+	};
 
 };
