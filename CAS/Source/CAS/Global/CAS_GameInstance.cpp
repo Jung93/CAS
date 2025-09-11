@@ -117,54 +117,68 @@ void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 
 void UCAS_GameInstance::SaveGameData_ASync(ACAS_Player* player, int32 index)
 {
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::CreateSaveGameObject(UCAS_SaveGame::StaticClass()));
+
+	if (!player) {
+		return;
+	}
+	player->SaveCharacterData();
+
+	SaveGameData->PlayerHP = player->GetAttributeSet()->GetHealth();
+	SaveGameData->PlayerLocation = player->GetActorLocation();
+	SaveGameData->QuickSlotData = QuickSlotAbilities;
+	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
+
+	UGameplayStatics::AsyncSaveGameToSlot(SaveGameData, FString::Printf(TEXT("SLOT_%d"),index), 0, FAsyncSaveGameToSlotDelegate::CreateUObject(this, &ThisClass::OnSaveFinished));
+
 }
 
 void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
 {
-	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
-		return;
-	}
-	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
-	if (!SaveGameData) { 
-		return;
-	}
-	player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
-	player->SetActorLocation(SaveGameData->PlayerLocation);
-	player->LoadCharacterData();
-	
-	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+	//if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+	//	return;
+	//}
+	//UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
+	//if (!SaveGameData) { 
+	//	return;
+	//}
+	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
+	//player->SetActorLocation(SaveGameData->PlayerLocation);
+	//player->LoadCharacterData();
+	//
+	//UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
 }
 
 void UCAS_GameInstance::LoadGameData_ASync(ACAS_Player* player, int32 index)
 {
-	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
-		return;
-	}
-	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
-	if (!SaveGameData) {
-		return;
-	}
-	tempIndex = index;
-	bool bSuccess = false;
-
-	player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
-	player->SetActorLocation(SaveGameData->PlayerLocation);
-	player->LoadCharacterData();
-
-	ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), SaveGameData->Level.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
-	if (StreamingLevel)
-	{	
-		StreamingLevel->OnLevelLoaded.AddDynamic(this, &UCAS_GameInstance::LoadLevelEvent);		
-	}
-	UGameplayStatics::AsyncLoadGameFromSlot()
+	//if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+	//	return;
+	//}
+	//UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
+	//if (!SaveGameData) {
+	//	return;
+	//}
+	//tempIndex = index;
+	//bool bSuccess = false;
+	//
+	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
+	//player->SetActorLocation(SaveGameData->PlayerLocation);
+	//player->LoadCharacterData();
+	//
+	//ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), SaveGameData->Level.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
+	//if (StreamingLevel)
+	//{	
+	//	StreamingLevel->OnLevelLoaded.AddDynamic(this, &UCAS_GameInstance::LoadLevelEvent);		
+	//}
+	//UGameplayStatics::AsyncLoadGameFromSlot("PlayerSaveSlot", 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &UMyGameInstance::OnLoadFinished));
 }
 
-void UCAS_GameInstance::LoadLevelEvent()
+void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedGame)
 {
-	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), tempIndex), 0));
-	
-	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+}
 
+void UCAS_GameInstance::OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess)
+{
 }
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)
@@ -261,3 +275,4 @@ void UCAS_GameInstance::ManageTick(float DeltaSecond)
 		}
 	}
 }
+
