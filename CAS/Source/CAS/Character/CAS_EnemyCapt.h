@@ -55,8 +55,8 @@ public:
 
 
 
-protected:
 	virtual void ActivateEnemyAbility() PURE_VIRTUAL(ThisClass::ActivateEnemyAbility, );
+protected:
 	virtual void InputReleased(const FInputActionValue& Value);
 	void RightClickAction(const FInputActionValue& Value);
 	virtual void AddDefaultAbilites() override;

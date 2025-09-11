@@ -4,21 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_EvadeTask.generated.h"
+#include "CAS_ActivateAbilityTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_EvadeTask : public UBTTaskNode
+class CAS_API UCAS_ActivateAbilityTask : public UBTTaskNode
 {
 	GENERATED_BODY()
-public:
-	UCAS_EvadeTask();
-
+	
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
-	UPROPERTY(EditAnywhere)
-	FBlackboardKeySelector Key;
 };

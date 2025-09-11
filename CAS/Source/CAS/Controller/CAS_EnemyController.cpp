@@ -13,12 +13,13 @@ ACAS_EnemyController::ACAS_EnemyController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 	BehaviorComponent = CreateDefaultSubobject<UCAS_BehaviorComponent>(TEXT("BehaviorComponent"));
-    SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sense_Sight"));
+    
+	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
 
     SightConfig->SightRadius = 1500.0f;
     SightConfig->LoseSightRadius = 7500.0f;
     SightConfig->PeripheralVisionAngleDegrees = 95.0f;
-    SightConfig->SetMaxAge(1.0f);
+    SightConfig->SetMaxAge(3.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -27,7 +28,23 @@ ACAS_EnemyController::ACAS_EnemyController()
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
 
     AIPerceptionComponent->ConfigureSense(*SightConfig);
+
+	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing"));
+	HearingConfig->HearingRange = 1000.0f;
+	HearingConfig->SetMaxAge(3.0f);
+	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
+	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
+	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
+	
+	AIPerceptionComponent->ConfigureSense(*HearingConfig);
+
+	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("Damage"));
+	DamageConfig->SetMaxAge(1.0f);
+
+	AIPerceptionComponent->ConfigureSense(*DamageConfig);
+
     AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
+
 
 	if (bUseDebug) {
 		PrimaryActorTick.bCanEverTick = true;
@@ -50,7 +67,13 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 
 void ACAS_EnemyController::OnUnPossess()
 {
+	auto ThisCharacter = Cast<ACharacter>(GetPawn());
+	auto AnimInstance = ThisCharacter->GetMesh()->GetAnimInstance();
+	
+	AnimInstance->StopAllMontages(0.1f);
+	
 	Super::OnUnPossess();
+
 }
 
 void ACAS_EnemyController::BeginPlay()
@@ -104,26 +127,79 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	if (!playerController) {
 		return;
 	}
+
+	FAISenseID StimulusID = Stimulus.Type;
+
 	bDebugOn = true;
-	AActor* Player = nullptr;
 
-	if (Stimulus.WasSuccessfullySensed()) {
-		bool bDetected = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+	if (StimulusID == DamageConfig->GetSenseID()) {
+		if (Stimulus.WasSuccessfullySensed()) {
+			APawn* ThisPawn = GetPawn();
+			if (!ThisPawn) {
+				return;
+			}
+			FVector CurrentLocation = ThisPawn->GetActorLocation();
+			FVector TargetLocation = Actor->GetActorLocation();
+			FVector TargetVector = TargetLocation - CurrentLocation;
+			TargetVector.Z = 0.0f;
+			FRotator NewRot = TargetVector.Rotation();
 
-		if (bDetected) {
-			Blackboard->SetValueAsBool("bIsMontagePlaying", true);
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
-			Player = Actor;
+			ThisPawn->SetActorRotation(NewRot);
+		}
+	}
+	else if (StimulusID == HearingConfig->GetSenseID()) {
+		if (Stimulus.WasSuccessfullySensed()) {
+			APawn* ThisPawn = GetPawn();
+			if (!ThisPawn) {
+				return;
+			}
+			FVector CurrentLocation = ThisPawn->GetActorLocation();
+			FVector TargetLocation = Actor->GetActorLocation();
+			FVector TargetVector = TargetLocation - CurrentLocation;
+			TargetVector.Z = 0.0f;
+			FRotator NewRot = TargetVector.Rotation();
+
+			ThisPawn->SetActorRotation(NewRot);
+			Blackboard->SetValueAsVector("LastHeardLocation", Stimulus.StimulusLocation);
+		}
+		else if (!Stimulus.WasSuccessfullySensed()) {
+			Blackboard->ClearValue("LastHeardLocation");
+		}
+	}
+	else if (StimulusID == SightConfig->GetSenseID()) {
+
+		bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
+		AActor* Player = nullptr;
+
+		if (bDetectable) {
+			if (Stimulus.WasSuccessfullySensed()) {
+				APawn* ThisPawn = GetPawn();
+				if (!ThisPawn) {
+					return;
+				}
+				FVector CurrentLocation = ThisPawn->GetActorLocation();
+				FVector TargetLocation = Actor->GetActorLocation();
+				FVector TargetVector = TargetLocation - CurrentLocation;
+				TargetVector.Z = 0.0f;
+				FRotator NewRot = TargetVector.Rotation();
+
+				ThisPawn->SetActorRotation(NewRot);
+
+				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
+				Player = Actor;
+			}
+			else if (!Stimulus.WasSuccessfullySensed()) {
+				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+			}
 		}
 		else {
 			return;
 		}
+		Blackboard->SetValueAsObject("player", Player);
+		return;
 	}
-	else if(!Stimulus.WasSuccessfullySensed()){
-		Blackboard->SetValueAsBool("bIsMontagePlaying", true);
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
-	}
-	Blackboard->SetValueAsObject("player", Player);
+
 }
 
 void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
@@ -146,13 +222,13 @@ void ACAS_EnemyController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedAct
 
 void ACAS_EnemyController::OnTargetPerceptionForgotten(AActor* Actor)
 {
-	auto Player = Cast<ACAS_Player>(Actor);
+	/*auto Player = Cast<ACAS_Player>(Actor);
 	if (!Player) {
 		return;
 	}
 	Blackboard->SetValueAsBool("bIsMontagePlaying", true);
 	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
-	Blackboard->SetValueAsObject("player", nullptr);
+	Blackboard->SetValueAsObject("player", nullptr);*/
 }
 
 void ACAS_EnemyController::SetMeshColor(APawn* pawn, FVector colorVector, FName name)

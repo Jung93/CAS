@@ -7,6 +7,8 @@
 #include "Perception/AISense.h"
 #include "Perception/AIPerceptionComponent.h"	
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
+#include "Perception/AISenseConfig_Damage.h"
 #include "CAS_EnemyController.generated.h"
 
 /**
@@ -51,6 +53,10 @@ protected:
 	UAIPerceptionComponent* AIPerceptionComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
 	UAISenseConfig_Sight* SightConfig;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	UAISenseConfig_Hearing* HearingConfig;	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "AI")
+	UAISenseConfig_Damage* DamageConfig;
 
 	UPROPERTY(EditAnywhere)
 	class UCAS_BehaviorComponent* BehaviorComponent;

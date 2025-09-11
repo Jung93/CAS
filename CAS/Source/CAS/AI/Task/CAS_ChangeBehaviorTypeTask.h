@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_AttackTask.generated.h"
+#include "AI/CAS_BehaviorComponent.h"
+#include "CAS_ChangeBehaviorTypeTask.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
-class CAS_API UCAS_AttackTask : public UBTTaskNode
+class CAS_API UCAS_ChangeBehaviorTypeTask : public UBTTaskNode
 {
 	GENERATED_BODY()
-public:
-	UCAS_AttackTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	UPROPERTY(EditAnywhere)
-	FBlackboardKeySelector Key;
+	
+protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EBehaviorType BehaviorType;
+
 };
