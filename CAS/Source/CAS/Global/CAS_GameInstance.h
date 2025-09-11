@@ -85,6 +85,6 @@ private:
 	float NextNormalVolume;
 	float NextDetectedVolume;
 
-	bool ChangeVolume;
+	bool ChangeVolume = false;
 
 };

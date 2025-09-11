@@ -3,6 +3,7 @@
 
 #include "Ability/CAS_Ability_Evade.h"
 #include "Ability_Task/CAS_Task_Evade.h"
+#include "Character/CAS_Player.h"
 
 UCAS_Ability_Evade::UCAS_Ability_Evade()
 {
@@ -31,6 +32,27 @@ void UCAS_Ability_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		PlayMontageTask->TaskEndEvent.AddUObject(this, &ThisClass::CAS_EndAbility);
 		PlayMontageTask->ReadyForActivation();
 	}
+
+
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp = nullptr;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+			AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+
+		}
+	}
+
+
+
+
+
 }
 
 void UCAS_Ability_Evade::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
