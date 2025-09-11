@@ -33,6 +33,9 @@ public:
 	void LoadGameData_Sync(int32 index);
 	void LoadGameData_ASync(int32 index);
 
+	bool IsSaveDataReady() { return CachedSaveGameData.bDataLoadingReady; }
+	void ClearCachedData() { CachedSaveGameData = FTempSaveGameData(); }
+
 	void PlayBgm(int32 bgmIndex = 0);
 
 	UFUNCTION(BlueprintCallable, Category = "Audio")
@@ -43,6 +46,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Audio")
 	void ManageTick(float DeltaSecond);
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
@@ -99,5 +103,7 @@ private:
 		TArray<FCAS_SlotData> QuickSlotData;
 		FName Level;
 	};
+
+	FTempSaveGameData CachedSaveGameData;
 
 };

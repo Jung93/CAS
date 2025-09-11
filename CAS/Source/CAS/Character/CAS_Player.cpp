@@ -366,10 +366,18 @@ void ACAS_Player::BeginPlay()
 		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
 		LoadCharacterData();		
 
+		if (GameInstance->IsSaveDataReady()) {
+
+
+
+			GameInstance->ClearCachedData();
+		}
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
-
+	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
+	//player->SetActorLocation(SaveGameData->PlayerLocation);
+	//player->LoadCharacterData();
 
 }
 
@@ -496,6 +504,7 @@ void ACAS_Player::SaveCharacterData()
 void ACAS_Player::LoadCharacterData()
 {
 	Super::LoadCharacterData();
+
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	for (int32 i = 0; i < PlayerAbilityCount; i++) {
 		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);		
