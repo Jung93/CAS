@@ -9,6 +9,7 @@
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
 #include "Character/CAS_PlayerState.h"
+#include "Perception/AISense_Hearing.h"
 
 UCAS_GameplayCueNotifyStatic::UCAS_GameplayCueNotifyStatic()
 {
@@ -24,7 +25,7 @@ bool UCAS_GameplayCueNotifyStatic::OnExecute_Implementation(AActor* Target, cons
 
 	if (character->IsValidLowLevel())
 	{
-		auto playerState = Cast<ACAS_PlayerState>(character->GetPlayerState());
+		auto playerState = Cast<ACAS_PlayerState>(Target);
 		auto player = Cast<ACAS_Player>(character);
 
 		if (playerState->IsValidLowLevel())
@@ -43,6 +44,10 @@ bool UCAS_GameplayCueNotifyStatic::OnExecute_Implementation(AActor* Target, cons
 
 				auto newAudio = UGameplayStatics::SpawnSoundAtLocation(GetWorld(), Sounds[i], FVector::ZeroVector);
 				character->SetAudioComponent(newAudio);
+				
+				if(player)
+					UAISense_Hearing::ReportNoiseEvent(GetWorld(), player->GetActorLocation(), 1.0f, player, 1000.0f, TEXT("Ability"));
+				
 				
 				break;
 			}
