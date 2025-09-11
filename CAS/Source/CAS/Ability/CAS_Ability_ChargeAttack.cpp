@@ -16,6 +16,25 @@ void UCAS_Ability_ChargeAttack::InputPressed(const FGameplayAbilitySpecHandle Ha
 
 	StartTime = GetWorld()->GetTimeSeconds();
 	ChargeMontageTask->ReadyForActivation();
+
+
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp = nullptr;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Charge")));
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Charge")));
+			AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+
+		}
+	}
+
 }
 
 void UCAS_Ability_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
@@ -28,6 +47,29 @@ void UCAS_Ability_ChargeAttack::InputReleased(const FGameplayAbilitySpecHandle H
 
 	FString DebugMessage = FString::Printf(TEXT("ChargeTime : %f"), ChargedTime);
 	
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp = nullptr;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Charge")));
+		AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Release")));
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+			AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Charge")));
+			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Release")));
+			AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+
+		}
+	}
+
+	AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.Release")));
+
+
+
 	AttackMontageTask->ReadyForActivation();
 	CAS_EndAbility();	
 	//ChargeInputTask->ChargeReleased(chargeTime);

@@ -28,6 +28,12 @@ protected:
 	UFUNCTION()
 	void OnChargeReleased(float HeldTime);
 
+	UFUNCTION(BlueprintCallable)
+	void SetChargingAudioComponent(class UAudioComponent* ChargingAudio) { ChargingAudioComponent = ChargingAudio; }
+
+	UFUNCTION(BlueprintCallable)
+	class UAudioComponent* GetChargingAudioComponent() { return ChargingAudioComponent; }
+
 	UPROPERTY(EditDefaultsOnly, Category = "ChargeAttack")
 	float MaxChargeTime = 4.0f;
 
@@ -52,6 +58,9 @@ protected:
 	float StartTime = 0.0f; 
 	float EndTime = 0.0f;
 	float ChargedTime = 0.0f;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UAudioComponent* ChargingAudioComponent;
 
 protected:
 	//FTimerHandle MontageLoopTimerHandle;

@@ -56,6 +56,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Abilities")
 	bool CanActivateAbilitiesWithTags(FGameplayTagContainer AbilityTags, bool bAllowRemoteActivation = true);
 
+
+	void SetAudioComponent(class UAudioComponent* NewComponent) { AuidoComponent = NewComponent; };
+	class UAudioComponent* GetAudioComponent() { return AuidoComponent; };
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
 	TObjectPtr<class UCAS_AbilitySystemComponent> AbilitySystemComponent;
@@ -65,6 +69,11 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
 	TArray<TSubclassOf<class UGameplayAbility>> DefaultAbilities;
+
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Audio)
+	class UAudioComponent* AuidoComponent;
+
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HpBar")

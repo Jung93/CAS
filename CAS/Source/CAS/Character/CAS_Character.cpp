@@ -96,6 +96,7 @@ void ACAS_Character::BeginPlay()
 	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	//GameInstance->SaveSettingsToINI(TEXT("Ability Texture Icon"));
 	GameInstance->LoadSettingsFromINI(TEXT("Ability Texture Icon"));
+	AuidoComponent = nullptr;
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
