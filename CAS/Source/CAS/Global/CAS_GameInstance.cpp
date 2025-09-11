@@ -156,6 +156,7 @@ void UCAS_GameInstance::LoadGameData_ASync(ACAS_Player* player, int32 index)
 	{	
 		StreamingLevel->OnLevelLoaded.AddDynamic(this, &UCAS_GameInstance::LoadLevelEvent);		
 	}
+	UGameplayStatics::AsyncLoadGameFromSlot()
 }
 
 void UCAS_GameInstance::LoadLevelEvent()
