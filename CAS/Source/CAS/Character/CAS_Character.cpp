@@ -113,8 +113,12 @@ void ACAS_Character::UnPossessed()
 
 void ACAS_Character::DeadEvent()
 {
+	auto CharacterMesh = GetMesh();
+	if (CharacterMesh) {
+		auto AnimInstance = CharacterMesh->GetAnimInstance();
+		AnimInstance->StopAllMontages(0.1f);
+	}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
-
 }
 
 void ACAS_Character::TakeDamageEvent()

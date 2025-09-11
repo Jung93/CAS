@@ -96,6 +96,6 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 		}
 
 		int32 index = SelectionWidget->GetSelectedIndex();
-		GameInstance->LoadGameData_Sync(player, index);
+		GameInstance->LoadGameData_Sync(index);
 	}
 }

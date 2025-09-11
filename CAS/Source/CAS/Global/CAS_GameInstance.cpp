@@ -133,23 +133,33 @@ void UCAS_GameInstance::SaveGameData_ASync(ACAS_Player* player, int32 index)
 
 }
 
-void UCAS_GameInstance::LoadGameData_Sync(ACAS_Player* player, int32 index)
+void UCAS_GameInstance::LoadGameData_Sync(int32 index)
 {
-	//if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
-	//	return;
-	//}
-	//UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
-	//if (!SaveGameData) { 
-	//	return;
-	//}
+	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+		return;
+	}
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
+	if (!SaveGameData) { 
+		return;
+	}
+
+	FTempSaveGameData TempSaveGameData;
+
+	TempSaveGameData.PlayerHP = SaveGameData->PlayerHP;
+	TempSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
+	TempSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
+	TempSaveGameData.bDataLoadingReady = true;
+
+
+	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+
 	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
 	//player->SetActorLocation(SaveGameData->PlayerLocation);
 	//player->LoadCharacterData();
-	//
-	//UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+	
 }
 
-void UCAS_GameInstance::LoadGameData_ASync(ACAS_Player* player, int32 index)
+void UCAS_GameInstance::LoadGameData_ASync(int32 index)
 {
 	//if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 	//	return;
