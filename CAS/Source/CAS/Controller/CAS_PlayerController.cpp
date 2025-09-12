@@ -7,6 +7,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "UI/CAS_TitleWidget.h"
+#include "Character/CAS_Player.h"
 
 void ACAS_PlayerController::BeginPlay()
 {
@@ -117,9 +118,37 @@ void ACAS_PlayerController::EnterUIMode()
 
 void ACAS_PlayerController::ExitUIMode()
 {
+    auto player = Cast<ACAS_Player>(GetCharacter());
+
+    if (player->IsValidLowLevel())
+    {
+        if (player->IsDead())
+        {
+            OpenTitle();
+            return;
+        }
+    }
+
+    FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+
+    if (CurrentLevelName == FName("Title"))
+    {
+        OpenTitle();
+        return;
+    }
+
     UGameplayStatics::SetGamePaused(GetWorld(), false);
 
     bShowMouseCursor = false;
     bEnableClickEvents = false;
     bEnableMouseOverEvents = false;
+}
+
+void ACAS_PlayerController::OpenTitle()
+{
+    auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
+    TitleWidget = titleWidget;
+    TitleWidget->AddToViewport(2);
+    TitleWidget->SetVisibility(ESlateVisibility::Visible);
+    EnterUIMode();
 }

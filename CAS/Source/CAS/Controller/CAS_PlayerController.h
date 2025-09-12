@@ -31,6 +31,8 @@ public:
 	void EnterUIMode();
 	void ExitUIMode();
 
+	void OpenTitle();
+
 	FOnInputDeviceChanged OnInputDeviceChanged;
 protected:
 	virtual void BeginPlay() override;

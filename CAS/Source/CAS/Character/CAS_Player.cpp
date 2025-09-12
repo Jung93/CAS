@@ -485,6 +485,14 @@ void ACAS_Player::AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbilit
 	QuickSlotWidget->SetSlotData(Index, SlotData);
 }
 
+bool ACAS_Player::IsDead()
+{
+	if (AttributeSet == nullptr)
+		return false;
+
+	return AttributeSet->GetHealth() <= 0;
+}
+
 void ACAS_Player::ToggleSkill()
 {
 	QuickSlotWidget->SwitchToggle();

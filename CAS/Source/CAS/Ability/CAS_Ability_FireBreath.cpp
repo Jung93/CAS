@@ -99,13 +99,14 @@ FActiveGameplayEffectHandle UCAS_Ability_FireBreath::ApplyGamePlayEffectToTarget
 
 	if (SpecHandle.IsValid())
 	{
-		SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.FireBreath")), -1.0f);
+		//SpecHandle.Data->SetSetByCallerMagnitude(FGameplayTag::RequestGameplayTag(FName("Effect.Attack.FireBreath")), -1.0f);
 		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
 
 		FGameplayCueParameters params;
 		params.Location = TargetAbilitySystemComp->GetOwnerActor()->GetActorLocation();
 
 		TargetAbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.OnFire"));
+		Target->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
 
 		return Handle;
 	}
@@ -134,15 +135,18 @@ void UCAS_Ability_FireBreath::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	EffectContextHandle.AddInstigator(PlayerState, nullptr);
 
 	auto owner = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
-	auto player = Cast<ACAS_Player>(Target);
 
-	if(player->IsValidLowLevel())
-		player->ToggleSkill();
 
 
 	if (owner == Target)
 	{
 		ApplyGamePlayEffectToSelf(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+		auto player = Cast<ACAS_Player>(Target);
+
+		if (player->IsValidLowLevel())
+			player->ToggleSkill();
+
 	}
 	else
 	{

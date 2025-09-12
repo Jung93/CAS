@@ -54,9 +54,14 @@ void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* 
 	UAbilitySystemComponent* ASC = nullptr;
 
 	if (player != nullptr)
-		ASC = Cast<ACAS_PlayerState>(player->GetPlayerState())->GetAbilitySystemComponent();
+	{
+		if(!player->IsDead())
+			ASC = Cast<ACAS_PlayerState>(player->GetPlayerState())->GetAbilitySystemComponent();
+	}
 	else
+	{
 		ASC = OwnerClass->GetAbilitySystemComponent();
+	}
 
 	if (!ASC->IsValidLowLevel())
 		return;

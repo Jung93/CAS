@@ -3,6 +3,8 @@
 
 #include "Ability/CAS_Ability_Dead.h"
 #include "Ability_Task/CAS_Task_Dead.h"
+#include "Character/CAS_Player.h"
+#include "Controller/CAS_PlayerController.h"
 
 UCAS_Ability_Dead::UCAS_Ability_Dead()
 {
@@ -56,7 +58,19 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 		Character->SetActorHiddenInGame(true);
 		Character->SetActorEnableCollision(false);
 
+		auto player = Cast<ACAS_Player>(Character);
+
+		if (player->IsValidLowLevel())
+		{
+			auto controller = Cast<ACAS_PlayerController>(player->GetController());
+			controller->OpenTitle();
+			PlayMontageTask->TaskEndEvent.Broadcast();
+			return;
+		}
+
 		Character->Controller->UnPossess();
+
+
 
 		PlayMontageTask->TaskEndEvent.Broadcast();
 	}
