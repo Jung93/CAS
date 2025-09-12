@@ -8,6 +8,8 @@
 #include "Global/CAS_GameInstance.h"
 #include "Character/CAS_Player.h"
 
+#include "Kismet/GameplayStatics.h"
+
 void UCAS_SaveLoadWidget::NativeConstruct()
 {
 	Super::NativeConstruct();	
@@ -19,6 +21,13 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 
 		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));
 		SelectionWidget->YES_OnClickedEvent(this, FName("SaveLoadFromSlot"));
+
+		if (bSaveMode) {
+			SelectionWidget->SetWidgetText(TEXT(" Do you want to Save the Game ? "));
+		}
+		else {
+			SelectionWidget->SetWidgetText(TEXT(" Do you want to Load the Game ? "));
+		}
 	}
 	
 	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
@@ -45,6 +54,13 @@ void UCAS_SaveLoadWidget::NativePreConstruct()
 		}
 	}
 
+}
+
+void UCAS_SaveLoadWidget::InitialSetting(bool IsSaveMode)
+{
+	bSaveMode = IsSaveMode;
+	AddToViewport(3);
+	SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UCAS_SaveLoadWidget::DisplaySelectionWidget()
@@ -82,20 +98,29 @@ void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 {
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
-	if (bSaveMode) {
 
+	auto pawn = GetOwningPlayer()->GetPawn();
+
+	if (!pawn || !GameInstance) {
+		return;
+	}
+
+	auto player = Cast<ACAS_Player>(pawn);
+
+	if (!player) {
+		return;
+	}
+
+	int32 index = SelectionWidget->GetSelectedIndex();
+	GameInstance->CurrentSlotIndex = index;
+
+	if (bSaveMode) {
+		if (UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+			//여기서 데이터 덮어씌울건지 물어보기 TODO
+		}
+		GameInstance->SaveGameData_Sync(player,index);
 	}
 	else {
-		auto pawn = GetOwningPlayer()->GetPawn();
-		if (!pawn || !GameInstance) {
-			return;
-		}
-		auto player = Cast<ACAS_Player>(pawn);
-		if (!player) {
-			return;
-		}
-
-		int32 index = SelectionWidget->GetSelectedIndex();
 		GameInstance->LoadGameData_Sync(index);
 	}
 }

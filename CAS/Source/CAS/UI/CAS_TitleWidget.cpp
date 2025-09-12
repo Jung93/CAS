@@ -16,9 +16,7 @@ void UCAS_TitleWidget::NativeConstruct()
         auto controller = GetWorld()->GetFirstPlayerController();
         auto playerController = Cast<ACAS_PlayerController>(controller);
 		ContinueWidget = CreateWidget<UCAS_SaveLoadWidget>(playerController, SaveLoadWidgetClass);
-		ContinueWidget->bSaveMode = false;	
-        ContinueWidget->AddToViewport(3);
-        ContinueWidget->SetVisibility(ESlateVisibility::Collapsed);
+        ContinueWidget->InitialSetting();
 	}
 
 	CAS_ContinueSlot->BindOnClickedEvent(this, "DisplayContinueWidget");
