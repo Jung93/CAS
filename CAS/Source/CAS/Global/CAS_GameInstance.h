@@ -35,6 +35,7 @@ public:
 
 	bool IsSaveDataReady() { return CachedSaveGameData.bDataLoadingReady; }
 	void ClearCachedData() { CachedSaveGameData = FTempSaveGameData(); }
+	void ApplyCachedGameData(ACharacter* Character);
 
 	void PlayBgm(int32 bgmIndex = 0);
 

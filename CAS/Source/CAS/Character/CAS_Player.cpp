@@ -363,15 +363,15 @@ void ACAS_Player::BeginPlay()
 
 	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	if (GameInstance) {
-		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
-		LoadCharacterData();		
-
 		if (GameInstance->IsSaveDataReady()) {
 
 
 
 			GameInstance->ClearCachedData();
 		}
+		GameInstance->SetQuickSlotSize(PlayerAbilityCount);
+		LoadCharacterData();		
+
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 

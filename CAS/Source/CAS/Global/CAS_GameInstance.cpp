@@ -154,34 +154,37 @@ void UCAS_GameInstance::LoadGameData_Sync(int32 index)
 
 void UCAS_GameInstance::LoadGameData_ASync(int32 index)
 {
-	//if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
-	//	return;
-	//}
-	//UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0));
-	//if (!SaveGameData) {
-	//	return;
-	//}
-	//tempIndex = index;
-	//bool bSuccess = false;
-	//
-	//player->GetAttributeSet()->SetHealth(SaveGameData->PlayerHP);
-	//player->SetActorLocation(SaveGameData->PlayerLocation);
-	//player->LoadCharacterData();
-	//
-	//ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(GetWorld(), SaveGameData->Level.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
-	//if (StreamingLevel)
-	//{	
-	//	StreamingLevel->OnLevelLoaded.AddDynamic(this, &UCAS_GameInstance::LoadLevelEvent);		
-	//}
-	//UGameplayStatics::AsyncLoadGameFromSlot("PlayerSaveSlot", 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &UMyGameInstance::OnLoadFinished));
+	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
+		return;
+	}
+	UGameplayStatics::AsyncLoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
+	
 }
 
 void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedGame)
 {
+	UCAS_SaveGame* SaveGameData = Cast<UCAS_SaveGame>(LoadedGame);
+
+	CachedSaveGameData.PlayerHP = SaveGameData->PlayerHP;
+	CachedSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
+	CachedSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
+	CachedSaveGameData.bDataLoadingReady = true;
+
+
+	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+
 }
 
 void UCAS_GameInstance::OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess)
 {
+	//성공 실패시 메세지 띄우기 
+}
+
+void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
+{
+	auto SaveLocation = CachedSaveGameData.PlayerLocation;
+	auto SaveHP = CachedSaveGameData.PlayerHP;
+	QuickSlotAbilities =  CachedSaveGameData.QuickSlotData;
 }
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)
