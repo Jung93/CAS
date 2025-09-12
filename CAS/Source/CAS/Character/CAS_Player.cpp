@@ -303,6 +303,11 @@ void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 	abilities[0] = data;
 }
 
+void ACAS_Player::InteractionInput(const FInputActionValue& Value)
+{
+	//TODO
+}
+
 // Called when the game starts or when spawned
 void ACAS_Player::BeginPlay()
 {
@@ -420,6 +425,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(ChangeSlotAction01, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot01);
 		EnhancedInputComponent->BindAction(ChangeSlotAction02, ETriggerEvent::Started, this, &ACAS_Player::ChangeSlot02);
+		EnhancedInputComponent->BindAction(IneractionAction, ETriggerEvent::Started, this, &ACAS_Player::InteractionInput);
 
 
 	}

@@ -23,13 +23,28 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool CanInteraction() { return bCanInteraction; }
+protected:
+	UFUNCTION()
+	void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
+	UFUNCTION()
+	void EndOverlapEvent(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	class UStaticMeshComponent* NPC_Mesh;
+
+	UPROPERTY(EditAnywhere, Category = "Collider")
+	class USphereComponent* SenseCollider;
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UCAS_KeyPressUI> KeyPressUIClass;
+	TSubclassOf<class UCAS_KeyPressUI> KeyPressUIClass;
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	class UWidgetComponent* KeyPressWidgetComponent;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	class UTexture2D* KeyTexture;
+
+	bool bCanInteraction = false;
 };
 /*
 세이브 npc와 대화하면 
