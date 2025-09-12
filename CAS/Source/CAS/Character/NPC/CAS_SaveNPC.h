@@ -23,4 +23,17 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UCAS_KeyPressUI> KeyPressUIClass;
+	UPROPERTY(VisibleAnywhere,Category = "UI")
+	class UWidgetComponent* KeyPressWidgetComponent;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	class UTexture2D* KeyTexture;
 };
+/*
+세이브 npc와 대화하면 
+1.ui가나오고
+2.ui에서 저장하기 누르면 saveloadWidget나옴
+3.저장하면 슬롯에 세이브파일 생성 
+*/

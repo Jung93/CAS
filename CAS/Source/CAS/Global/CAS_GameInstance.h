@@ -48,7 +48,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Audio")
 	void ManageTick(float DeltaSecond);
 
-
+	int32 CurrentSlotIndex = -1;
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;

@@ -20,6 +20,8 @@ class CAS_API UCAS_SaveLoadWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	virtual void NativePreConstruct() override;
+	
+	virtual void InitialSetting(bool IsSaveMode = false);
 
 	UFUNCTION()
 	void DisplaySelectionWidget();
