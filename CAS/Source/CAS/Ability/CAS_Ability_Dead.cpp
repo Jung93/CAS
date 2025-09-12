@@ -64,7 +64,8 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 		{
 			auto controller = Cast<ACAS_PlayerController>(player->GetController());
 			controller->OpenTitle();
-
+			PlayMontageTask->TaskEndEvent.Broadcast();
+			return;
 		}
 
 		Character->Controller->UnPossess();

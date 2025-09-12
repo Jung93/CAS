@@ -118,6 +118,8 @@ public:
 	class UCAS_QuickSlotWidgetComponent* GetQuickSlotWidgetComponent() { return QuickSlotWidgetComponent; }
 	void AddPlayerAbility(TSubclassOf<class UGameplayAbility> newAbility);
 
+	bool IsDead();
+
 	UFUNCTION(BlueprintCallable)
 	void ToggleSkill();
 
