@@ -123,3 +123,12 @@ void ACAS_PlayerController::ExitUIMode()
     bEnableClickEvents = false;
     bEnableMouseOverEvents = false;
 }
+
+void ACAS_PlayerController::OpenTitle()
+{
+    auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
+    TitleWidget = titleWidget;
+    TitleWidget->AddToViewport(2);
+    TitleWidget->SetVisibility(ESlateVisibility::Visible);
+    EnterUIMode();
+}
