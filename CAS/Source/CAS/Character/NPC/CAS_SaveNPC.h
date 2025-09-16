@@ -25,7 +25,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UCAS_KeyPressUI> KeyPressUIClass;
+	TSubclassOf<class UCAS_KeyPressUI> KeyPressUIClass;
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	class UWidgetComponent* KeyPressWidgetComponent;
 	UPROPERTY(EditAnywhere, Category = "UI")

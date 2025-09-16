@@ -51,7 +51,8 @@ void ACAS_PlayerController::SetupInputComponent()
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
 
 		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ThisClass::PrintDebugMessage);
-		EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
+        EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
+        EnhancedInputComponent->BindAction(QuitGameAction, ETriggerEvent::Started, this, &ThisClass::QuitGame);
 
 	}
 }
@@ -105,6 +106,11 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
     else {
         SaveLoadWidget->DisplaySaveLoadWidget();
     }
+}
+
+void ACAS_PlayerController::QuitGame(const FInputActionValue& Value)
+{
+    UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, true);
 }
 
 void ACAS_PlayerController::EnterUIMode()

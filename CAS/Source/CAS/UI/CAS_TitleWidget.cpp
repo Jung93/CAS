@@ -23,6 +23,8 @@ void UCAS_TitleWidget::NativeConstruct()
 	CAS_ContinueSlot->SetButtonText(TEXT("CONTINUE GAME"));
 	CAS_NewGameSlot->BindOnClickedEvent(this, "StartNewGame");
 	CAS_NewGameSlot->SetButtonText(TEXT("NEW GAME"));
+    CAS_QuitGameSlot->BindOnClickedEvent(this, "QuitGame");
+    CAS_QuitGameSlot->SetButtonText(TEXT("Quit Game"));
 }
 
 void UCAS_TitleWidget::DisplayContinueWidget()
@@ -54,6 +56,15 @@ void UCAS_TitleWidget::StartNewGame()
             StreamingLevel->OnLevelLoaded.AddDynamic(this, &ThisClass::LoadLevelEvent);
         }
     }
+}
+
+void UCAS_TitleWidget::QuitGame()
+{
+    auto controller = GetWorld()->GetFirstPlayerController();
+    auto playerController = Cast<ACAS_PlayerController>(controller);
+
+    UKismetSystemLibrary::QuitGame(GetWorld(), playerController, EQuitPreference::Quit, true);
+
 }
 
 void UCAS_TitleWidget::LoadLevelEvent()

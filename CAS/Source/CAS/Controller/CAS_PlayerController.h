@@ -42,7 +42,7 @@ protected:
 	void OnLastInputDeviceChanged(EInputDeviceType DeviceType);
 	void PrintDebugMessage(const FInputActionValue& Value);
 	void ControlSaveLoadWidget(const FInputActionValue& Value);
-
+	void QuitGame(const FInputActionValue& Value);
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
@@ -50,6 +50,8 @@ private:
 	UInputAction* DebugAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SaveLoad", meta = (AllowPrivateAccess = "true"))
 	UInputAction* ControlSaveLoadAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "QuitGame", meta = (AllowPrivateAccess = "true"))
+	UInputAction* QuitGameAction;
 	UPROPERTY()
 	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
 protected:

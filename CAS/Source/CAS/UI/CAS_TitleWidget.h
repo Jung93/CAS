@@ -28,6 +28,8 @@ private:
 	void CloseContinueWidget();
 	UFUNCTION()
 	void StartNewGame();
+	UFUNCTION()
+	void QuitGame();
 
 private:			
 	UPROPERTY(EditAnywhere, Category = "Slots")
@@ -42,6 +44,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	UCAS_SaveLoadWidget* ContinueWidget;
 	
+	UPROPERTY(VisibleAnywhere, meta = (BindWidget))
+	UCAS_SaveLoadSlot* CAS_QuitGameSlot;
+
 	FName StartLevel = "Test";
 
 	UFUNCTION()
