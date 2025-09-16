@@ -7,11 +7,13 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 
+#include "UI/CAS_SaveLoadWidget.h"
+
 // Sets default values
 ACAS_SaveNPC::ACAS_SaveNPC()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	SenseCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
 	NPC_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -19,7 +21,8 @@ ACAS_SaveNPC::ACAS_SaveNPC()
 	RootComponent = NPC_Mesh;
 
 	SenseCollider->SetupAttachment(NPC_Mesh);
-	SenseCollider->SetCollisionProfileName(TEXT("SaveNPC"));
+	KeyPressWidgetComponent->SetupAttachment(NPC_Mesh);
+	SenseCollider->SetCollisionProfileName(TEXT("NPC"));
 }
 
 // Called when the game starts or when spawned
@@ -29,15 +32,25 @@ void ACAS_SaveNPC::BeginPlay()
 
 	if (KeyPressUIClass) {
 		KeyPressWidgetComponent->SetWidgetClass(KeyPressUIClass);
+		KeyPressWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		KeyPressWidgetComponent->SetVisibility(true);
+
+		KeyPressWidgetComponent->SetRelativeLocation(FVector(0, 0, 88.0f));
 	}
-	auto KeyPressWidget = Cast<UCAS_KeyPressUI>(KeyPressWidgetComponent->GetWidget());
-	if (KeyTexture || KeyPressWidget) {
-		KeyPressWidget->SetTexture(KeyTexture);
-		KeyPressWidget->SetVisibility(ESlateVisibility::Collapsed);
+	KeyPressUI = Cast<UCAS_KeyPressUI>(KeyPressWidgetComponent->GetUserWidgetObject());
+	if (KeyTexture && KeyPressUI) {
+		KeyPressUI->SetTexture(KeyTexture);
+		KeyPressUI->SetVisibility(ESlateVisibility::Collapsed);
 	}
 
 	SenseCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 	SenseCollider->OnComponentEndOverlap.AddDynamic(this, &ThisClass::EndOverlapEvent);
+
+	SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
+	SaveLoadWidget->bSaveMode = true;
+	SaveLoadWidget->AddToViewport(3);
+	SaveLoadWidget->CloseSaveLoadWidget();
+
 }
 
 // Called every frame
@@ -45,23 +58,26 @@ void ACAS_SaveNPC::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto playerCameraManager = GetWorld()->GetFirstPlayerController()->PlayerCameraManager;
+}
 
-	if (playerCameraManager)
-	{
-		FVector widgetLocation = KeyPressWidgetComponent->GetComponentLocation();
-		FVector cameraLocation = playerCameraManager->GetCameraLocation();
-		FRotator rotation = UKismetMathLibrary::FindLookAtRotation(widgetLocation, cameraLocation);
-		KeyPressWidgetComponent->SetWorldRotation(rotation);
-	}
+void ACAS_SaveNPC::InteractionWithPlayer()												
+{
+	SaveLoadWidget->DisplaySaveLoadWidget();
 }
 
 void ACAS_SaveNPC::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	KeyPressWidgetComponent->GetWidget()->SetVisibility(ESlateVisibility::Visible);
+	if (KeyPressUI) {
+		KeyPressUI->SetVisibility(ESlateVisibility::Visible);
+		bCanInteraction = true;
+	}
 }
 
 void ACAS_SaveNPC::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	KeyPressWidgetComponent->GetWidget()->SetVisibility(ESlateVisibility::Collapsed);
+	if (KeyPressUI) {
+		KeyPressUI->SetVisibility(ESlateVisibility::Collapsed);
+		bCanInteraction = false;
+	}
+	SaveLoadWidget->CloseSaveLoadWidget();
 }
