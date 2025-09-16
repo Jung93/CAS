@@ -17,7 +17,7 @@ class CAS_API UCAS_SaveGame : public USaveGame
 	
 public:
 	UPROPERTY(VisibleAnywhere)
-	float PlayerHP = 0;
+	int32 PlayerHP = 0;
 	UPROPERTY(VisibleAnywhere)
 	FVector PlayerLocation;
 	UPROPERTY(VisibleAnywhere)

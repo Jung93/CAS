@@ -32,6 +32,10 @@ public:
 	UFUNCTION()
 	void CloseSaveLoadWidget();
 	UFUNCTION()
+	void OverwriteSlot();
+	UFUNCTION()
+	void CloseOverwriteWidget();
+	UFUNCTION()
 	void SaveLoadFromSlot();
 
 	bool bSaveMode = false;
@@ -48,6 +52,8 @@ protected:
 	
 	UPROPERTY()
 	UCAS_SelectWidget* SelectionWidget = nullptr;
+	UPROPERTY()
+	UCAS_SelectWidget* OverwriteWidget = nullptr;
 	
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* CAS_ExitButton;

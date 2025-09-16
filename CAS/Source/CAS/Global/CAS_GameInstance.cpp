@@ -185,6 +185,13 @@ void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
 	auto SaveLocation = CachedSaveGameData.PlayerLocation;
 	auto SaveHP = CachedSaveGameData.PlayerHP;
 	QuickSlotAbilities =  CachedSaveGameData.QuickSlotData;
+
+	auto Player = Cast<ACAS_Player>(Character);
+
+	if (Player) {
+		Player->SetActorLocation(SaveLocation);
+		Player->SetHp(SaveHP);
+	}
 }
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)
