@@ -49,6 +49,7 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 	for (int32 i = 0; i < SlotCount; i++) {
 
 		SaveLoadSlots[i]->BindOnClickedEvent(this, FName("DisplaySelectionWidget"));
+		SaveLoadSlots[i]->SetSlotText(i);
 		SaveLoadSlots[i]->SendSlotIndex.AddUObject(SelectionWidget, &UCAS_SelectWidget::SetSelectedIndex);
 	}
 }
@@ -130,6 +131,8 @@ void UCAS_SaveLoadWidget::OverwriteSlot()
 
 	CloseOverwriteWidget();
 	CloseSelectionWidget();
+
+	SaveLoadSlots[index]->SetSlotText(index);
 }
 
 void UCAS_SaveLoadWidget::CloseOverwriteWidget()
@@ -172,4 +175,5 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 	else {
 		GameInstance->LoadGameData_Sync(index);
 	}
+	SaveLoadSlots[index]->SetSlotText(index);
 }
