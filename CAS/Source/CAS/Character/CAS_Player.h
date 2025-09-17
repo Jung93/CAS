@@ -42,6 +42,7 @@ protected:
 	//void CloseSlot(const FInputActionValue& Value);
 	void ChangeSlot01(const FInputActionValue& Value);
 	void ChangeSlot02(const FInputActionValue& Value);
+	void InteractionInput(const FInputActionValue& Value);
 
 
 protected:
@@ -87,7 +88,8 @@ protected:
 	UInputAction* ChangeSlotAction01;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ChangeSlotAction02;
-
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* IneractionAction;
 
 
 protected:

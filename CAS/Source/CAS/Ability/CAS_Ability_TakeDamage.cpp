@@ -9,6 +9,22 @@ UCAS_Ability_TakeDamage::UCAS_Ability_TakeDamage()
 
 bool UCAS_Ability_TakeDamage::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
+	auto ThisActor = ActorInfo->OwnerActor;
+	auto ThisPawn = Cast<ACAS_Character>(ThisActor);
+	auto PlayerState = Cast<ACAS_PlayerState>(ThisActor);
+
+	if (!PlayerState) {
+		if (ThisPawn->GetAttributeSet()->GetHealth() <= 0) {
+			return false;
+		}
+		return true;
+	}
+	if (!ThisPawn) {
+		if (PlayerState->GetAttributeSet()->GetHealth() <= 0) {
+			return false;
+		}
+		return true;
+	}
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 

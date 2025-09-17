@@ -23,17 +23,35 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	bool CanInteraction() { return bCanInteraction; }
+	void InteractionWithPlayer();
+protected:
+	UFUNCTION()
+	void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
+	UFUNCTION()
+	void EndOverlapEvent(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	class UStaticMeshComponent* NPC_Mesh;
+
+	UPROPERTY(EditAnywhere, Category = "Collider")
+	class USphereComponent* SenseCollider;
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<class UCAS_KeyPressUI> KeyPressUIClass;
+	UPROPERTY()
+	class UCAS_KeyPressUI* KeyPressUI = nullptr;
 	UPROPERTY(VisibleAnywhere,Category = "UI")
 	class UWidgetComponent* KeyPressWidgetComponent;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	class UTexture2D* KeyTexture;
+
+	bool bCanInteraction = false;
+
+protected:
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCAS_SaveLoadWidget> SaveLoadWidgetClass;
+	UPROPERTY()
+	class UCAS_SaveLoadWidget* SaveLoadWidget;
 };
-/*
-세이브 npc와 대화하면 
-1.ui가나오고
-2.ui에서 저장하기 누르면 saveloadWidget나옴
-3.저장하면 슬롯에 세이브파일 생성 
-*/

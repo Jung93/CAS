@@ -57,12 +57,16 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	
 	//플레이어를 감지하지 못한 경우 -> 순찰
 	if (!Player) {
+		EnemyController->ClearFocus(EAIFocusPriority::Gameplay); 
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
 		return;
 
 	}
 	//플레이어를 감지 한 경우
-	
+	FRotator LookAtRot = (Player->GetActorLocation() - Enemy->GetActorLocation()).Rotation();
+	EnemyController->SetControlRotation(LookAtRot);
+	EnemyController->SetFocus(Player);
+
 	float Distance = Enemy->GetDistanceTo(Player);
 
 	if (Distance < AttackRange) {
@@ -77,43 +81,6 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
 	return;
 
-	//if (BlackBoard->GetValueAsBool(IsMontagePlayingKey.SelectedKeyName)) {
-	//	
-	//	return;
-	//}
-	//if (BehaviorComponent->IsBehaviorType(EBehaviorType::Missed)) {
-	//	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
-	//	return;
-	//}
-	//if (Enemy->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
-	//
-	//	BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, true);
-	//	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Stun);
-	//	return;
-	//}
-	//if (!Player) {
-	//	if(!BehaviorComponent->IsBehaviorType(EBehaviorType::Missed)){
-	//		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
-	//	}
-	//
-	//	return;
-	//}
-	//
-	//float Distance = Enemy->GetDistanceTo(Player);
-	//
-	//if (Distance < AttackRange) {
-	//	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);
-	//	
-	//	return;
-	//}
-	//
-	//if (Distance <= EnemyController->GetSightRange()) {
-	//	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
-	//	
-	//	return;
-	//}
-	//
 }

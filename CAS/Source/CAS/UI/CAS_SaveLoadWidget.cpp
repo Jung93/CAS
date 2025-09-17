@@ -15,9 +15,12 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 	Super::NativeConstruct();	
 					
 	SelectionWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
+	OverwriteWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
+
 	if (SelectionWidget) {
-		SelectionWidget->AddToViewport(10);
-		CloseSelectionWidget();
+		SelectionWidget->AddToViewport(5);
+
+		SelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 		SelectionWidget->NO_OnClickedEvent(this, FName("CloseSelectionWidget"));
 		SelectionWidget->YES_OnClickedEvent(this, FName("SaveLoadFromSlot"));
@@ -29,7 +32,18 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 			SelectionWidget->SetWidgetText(TEXT(" Do you want to Load the Game ? "));
 		}
 	}
-	
+
+	if (OverwriteWidget) {
+		OverwriteWidget->AddToViewport(6);
+
+		OverwriteWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+		OverwriteWidget->NO_OnClickedEvent(this, FName("CloseOverwriteWidget"));
+		OverwriteWidget->YES_OnClickedEvent(this, FName("OverwriteSlot"));
+
+		OverwriteWidget->SetWidgetText(TEXT("Do you want to Overwrite the Save ?"));
+
+	}
 	CAS_ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSaveLoadWidget);
 	
 	for (int32 i = 0; i < SlotCount; i++) {
@@ -95,6 +109,37 @@ void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 	playerController->ExitUIMode();
 }
 
+void UCAS_SaveLoadWidget::OverwriteSlot()
+{
+	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
+
+	auto pawn = GetOwningPlayer()->GetPawn();
+
+	if (!pawn || !GameInstance) {
+		return;
+	}
+
+	auto player = Cast<ACAS_Player>(pawn);
+
+	if (!player) {
+		return;
+	}
+	int32 index = GameInstance->CurrentSlotIndex;
+
+	GameInstance->SaveGameData_Sync(player, index);
+
+	CloseOverwriteWidget();
+	CloseSelectionWidget();
+}
+
+void UCAS_SaveLoadWidget::CloseOverwriteWidget()
+{
+	if (!SelectionWidget) {
+		return;
+	}
+	OverwriteWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
 void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 {
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
@@ -116,9 +161,13 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 
 	if (bSaveMode) {
 		if (UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
-			//여기서 데이터 덮어씌울건지 물어보기 TODO
+			OverwriteWidget->SetVisibility(ESlateVisibility::Visible);
+			return;
 		}
-		GameInstance->SaveGameData_Sync(player,index);
+		else {
+			GameInstance->SaveGameData_Sync(player, index);
+			CloseSelectionWidget();
+		}
 	}
 	else {
 		GameInstance->LoadGameData_Sync(index);

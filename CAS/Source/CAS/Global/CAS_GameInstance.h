@@ -99,7 +99,7 @@ private:
 	struct FTempSaveGameData
 	{
 		bool bDataLoadingReady = false;
-		float PlayerHP = 0;
+		int32 PlayerHP = 0;
 		FVector PlayerLocation = FVector::ZeroVector;
 		TArray<FCAS_SlotData> QuickSlotData;
 		FName Level;
