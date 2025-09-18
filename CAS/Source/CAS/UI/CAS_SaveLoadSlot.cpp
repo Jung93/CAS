@@ -25,7 +25,7 @@ void UCAS_SaveLoadSlot::BindOnClickedEvent(UObject* Object, FName name)
 	CAS_SaveLoadButton->OnClicked.Add(Delegate);
 }
 
-void UCAS_SaveLoadSlot::SetSlotText(int32 Slotindex)
+void UCAS_SaveLoadSlot::UpdateSlotInfo(int32 Slotindex)
 {
 	FString SlotName = FString::Printf(TEXT("SLOT_%d"), SlotIndex);
 	
@@ -33,10 +33,10 @@ void UCAS_SaveLoadSlot::SetSlotText(int32 Slotindex)
 		auto SaveData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
 
 		if (SaveData) {
-			FString SaveTimeData = SaveData->SaveTime.ToString(TEXT("%Y-%m-%d %H:%M"));
+			FString SaveTimeData = SaveData->SaveTime.ToString(TEXT(" Date : %Y-%m-%d %H:%M"));
 			FString SaveMapData;
 			SaveData->Level.ToString(SaveMapData);
-			SetButtonText(SaveTimeData+TEXT("  MAP : ")+SaveMapData);
+			SetButtonText(SaveTimeData+ LINE_TERMINATOR +TEXT(" MAP : ")+SaveMapData);
 		}
 	}
 	else {
