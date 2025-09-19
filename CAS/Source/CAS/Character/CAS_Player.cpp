@@ -374,6 +374,7 @@ void ACAS_Player::BeginPlay()
 		if (_hatSpawn)
 		{
 
+
 			_hatSpawn->SetPlayer(this);
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
@@ -497,6 +498,10 @@ void ACAS_Player::InitAbilitySystemComponent()
 UAbilitySystemComponent* ACAS_Player::GetAbilitySystemComponent() const
 {
 	ACAS_PlayerState* playerState = GetPlayerState<ACAS_PlayerState>();
+
+	if (playerState == nullptr)
+		return nullptr;
+
 	auto AbilitySystemComp = playerState->GetAbilitySystemComponent();
 
 	return AbilitySystemComp;
