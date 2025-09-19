@@ -21,6 +21,7 @@ public:
 	void SetSlotIndex(int32 index) { SlotIndex = index; }
 	int32 GetSlotIndex() { return SlotIndex; }
 
+	void UpdateSlotInfo(int32 Slotindex);
 
 	void SetButtonText(FText text);
 	void SetButtonText(FString string);

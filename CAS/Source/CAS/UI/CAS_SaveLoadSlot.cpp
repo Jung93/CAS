@@ -4,6 +4,8 @@
 #include "UI/CAS_SaveLoadSlot.h"
 #include "UI/CAS_SaveLoadWidget.h"
 #include "Blueprint/WidgetLayoutLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Global/CAS_SaveGame.h"
 
 void UCAS_SaveLoadSlot::NativeConstruct()
 {
@@ -21,6 +23,25 @@ void UCAS_SaveLoadSlot::BindOnClickedEvent(UObject* Object, FName name)
 	FScriptDelegate Delegate;
 	Delegate.BindUFunction(Object,name);
 	CAS_SaveLoadButton->OnClicked.Add(Delegate);
+}
+
+void UCAS_SaveLoadSlot::UpdateSlotInfo(int32 Slotindex)
+{
+	FString SlotName = FString::Printf(TEXT("SLOT_%d"), SlotIndex);
+	
+	if (UGameplayStatics::DoesSaveGameExist(SlotName, 0)) {
+		auto SaveData = Cast<UCAS_SaveGame>(UGameplayStatics::LoadGameFromSlot(SlotName, 0));
+
+		if (SaveData) {
+			FString SaveTimeData = SaveData->SaveTime.ToString(TEXT(" Date : %Y-%m-%d %H:%M"));
+			FString SaveMapData;
+			SaveData->Level.ToString(SaveMapData);
+			SetButtonText(SaveTimeData+ LINE_TERMINATOR +TEXT(" MAP : ")+SaveMapData);
+		}
+	}
+	else {
+		SetButtonText(TEXT("Empty Slot"));
+	}
 }
 
 void UCAS_SaveLoadSlot::SetButtonText(FText text)

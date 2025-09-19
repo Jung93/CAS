@@ -24,5 +24,7 @@ public:
 	TArray<FCAS_SlotData> QuickSlotData;
 	UPROPERTY(VisibleAnywhere)
 	FName Level;
+	UPROPERTY()
+	FDateTime SaveTime;
 };
 									

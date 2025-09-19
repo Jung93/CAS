@@ -11,6 +11,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+
 // Sets default values
 ACAS_Character::ACAS_Character()
 {
@@ -59,6 +60,11 @@ ACAS_Character::ACAS_Character()
 void ACAS_Character::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCharacterMovement()->bUseRVOAvoidance = true;
+	GetCharacterMovement()->AvoidanceConsiderationRadius = 600.0f;
+	GetCharacterMovement()->AvoidanceWeight = 0.5f;
+
 	InitAbilitySystemComponent();
 	if(HpBarWidgetClass){
 	
@@ -97,6 +103,7 @@ void ACAS_Character::BeginPlay()
 	//GameInstance->SaveSettingsToINI(TEXT("Ability Texture Icon"));
 	GameInstance->LoadSettingsFromINI(TEXT("Ability Texture Icon"));
 	AuidoComponent = nullptr;
+
 }
 
 void ACAS_Character::PossessedBy(AController* NewController)
