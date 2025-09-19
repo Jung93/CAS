@@ -14,6 +14,8 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Dead, "Ability.State.Dead")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_Invincible, "Ability.State.Invincible")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_State_TakeDamage, "Ability.State.TakeDamage")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_State_PickUp, "Ability.State.PickUp")
+	UE_DEFINE_GAMEPLAY_TAG(Ability_State_PutDown, "Ability.State.PutDown")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperJump, "Ability.Move.SuperJump")
 	UE_DEFINE_GAMEPLAY_TAG(Ability_Move_SuperSpeed, "Ability.Move.SuperSpeed")
 
@@ -40,6 +42,7 @@ namespace CAS_GamePlayTag {
 	UE_DEFINE_GAMEPLAY_TAG(State_Invincible, "State.Invincible")
 	UE_DEFINE_GAMEPLAY_TAG(State_Detectable, "State.Detectable")
 	UE_DEFINE_GAMEPLAY_TAG(State_Ability_Attacking, "State.Ability.Attacking")
+	UE_DEFINE_GAMEPLAY_TAG(State_Picking, "State.Picking")
 
 
 		

@@ -19,6 +19,8 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_Invincible);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_TakeDamage);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_PickUp);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_State_PutDown);
 	
 
 
@@ -47,6 +49,7 @@ namespace CAS_GamePlayTag {
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Dead);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Invincible);
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Detectable);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Picking);
 	
 
 }
