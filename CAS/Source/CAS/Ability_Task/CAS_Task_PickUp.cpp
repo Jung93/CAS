@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Ability_Task/CAS_Task_StealAbility.h"
+#include "Ability_Task/CAS_Task_PickUp.h"
 
-UCAS_Task_StealAbility* UCAS_Task_StealAbility::Task_StealAbility(UGameplayAbility* OwningAbility, FName TaskName)
+UCAS_Task_PickUp* UCAS_Task_PickUp::Task_PickUp(UGameplayAbility* OwningAbility, FName TaskName)
 {
-	UCAS_Task_StealAbility* Task = NewAbilityTask<UCAS_Task_StealAbility>(OwningAbility, TaskName);
+	UCAS_Task_PickUp* Task = NewAbilityTask<UCAS_Task_PickUp>(OwningAbility, TaskName);
 
 	return Task;
 }
 
-void UCAS_Task_StealAbility::Activate()
+void UCAS_Task_PickUp::Activate()
 {
 	Super::Activate();
 

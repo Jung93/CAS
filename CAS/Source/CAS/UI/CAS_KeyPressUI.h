@@ -14,6 +14,7 @@ class CAS_API UCAS_KeyPressUI : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+	UFUNCTION(BlueprintCallable)
 	void SetTexture(class UTexture2D* Texture);
 protected:
 	UPROPERTY(Editanywhere, BlueprintReadWrite, meta = (BindWidget))
