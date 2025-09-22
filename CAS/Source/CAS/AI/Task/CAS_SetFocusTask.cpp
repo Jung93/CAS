@@ -53,12 +53,13 @@ void UCAS_SetFocusTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	}
 	
 	FVector Direction = TargetCharacter->GetActorLocation() - ThisPawn->GetActorLocation();
+	FRotator TargetRotation = Direction.Rotation();
 	FRotator CurrentRotation = AIController->GetControlRotation();
-	FRotator TargetRotation = FMath::RInterpConstantTo(CurrentRotation, Direction.Rotation(), DeltaSeconds, 0.1f);
-	AIController->SetControlRotation(TargetRotation);
+	FRotator NextRotation = FMath::RInterpConstantTo(CurrentRotation, Direction.Rotation(), DeltaSeconds, 20.0f);
+	AIController->SetControlRotation(NextRotation);
 
-	float YawDiff = FMath::Abs(FMath::FindDeltaAngleDegrees(CurrentRotation.Yaw, Direction.Rotation().Yaw));
-	if (YawDiff <= 5.0f)
+	float YawDiff = FMath::Abs(FMath::FindDeltaAngleDegrees(NextRotation.Yaw, TargetRotation.Yaw));
+	if (YawDiff <= 10.0f)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 		return;
