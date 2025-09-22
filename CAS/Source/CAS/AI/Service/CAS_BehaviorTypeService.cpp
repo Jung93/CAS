@@ -65,8 +65,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	//플레이어를 감지 한 경우
 	FRotator LookAtRot = (Player->GetActorLocation() - Enemy->GetActorLocation()).Rotation();
 	EnemyController->SetControlRotation(LookAtRot);
-	EnemyController->SetFocus(Player);
-
+	
 	float Distance = Enemy->GetDistanceTo(Player);
 
 	if (Distance < AttackRange) {

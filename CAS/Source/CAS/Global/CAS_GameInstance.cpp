@@ -111,6 +111,7 @@ void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 	SaveGameData->PlayerLocation = player->GetActorLocation();
 	SaveGameData->QuickSlotData = QuickSlotAbilities;
 	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
+	SaveGameData->SaveTime = FDateTime::Now();
 
 	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT_%d"), index), 0);
 }
@@ -128,6 +129,7 @@ void UCAS_GameInstance::SaveGameData_ASync(ACAS_Player* player, int32 index)
 	SaveGameData->PlayerLocation = player->GetActorLocation();
 	SaveGameData->QuickSlotData = QuickSlotAbilities;
 	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
+	SaveGameData->SaveTime = FDateTime::Now();
 
 	UGameplayStatics::AsyncSaveGameToSlot(SaveGameData, FString::Printf(TEXT("SLOT_%d"),index), 0, FAsyncSaveGameToSlotDelegate::CreateUObject(this, &ThisClass::OnSaveFinished));
 
