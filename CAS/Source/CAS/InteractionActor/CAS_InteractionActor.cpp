@@ -13,15 +13,13 @@ ACAS_InteractionActor::ACAS_InteractionActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SenseCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	KeyPressWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("KeyPressWidgetComponent"));
-
 	RootComponent = StaticMesh;
 
 	SenseCollider->SetupAttachment(StaticMesh);
 	KeyPressWidgetComponent->SetupAttachment(StaticMesh);
-
 	SenseCollider->SetCollisionProfileName(TEXT("NPC"));
 
 }
@@ -36,7 +34,7 @@ void ACAS_InteractionActor::BeginPlay()
 		KeyPressWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 		KeyPressWidgetComponent->SetVisibility(true);
 
-		KeyPressWidgetComponent->SetRelativeLocation(FVector(0, 0, 88.0f));
+		KeyPressWidgetComponent->SetRelativeLocation(FVector::ZeroVector);
 	}
 	KeyPressUI = Cast<UCAS_KeyPressUI>(KeyPressWidgetComponent->GetUserWidgetObject());
 	if (KeyTexture && KeyPressUI) {
@@ -62,8 +60,8 @@ void ACAS_InteractionActor::OnOverlapEvent(UPrimitiveComponent* OverlappedCompon
 {
 	if (KeyPressUI) {
 		KeyPressUI->SetVisibility(ESlateVisibility::Visible);
-		bCanInteraction = true;
-	}
+		bCanInteraction = true;	}
+	
 }
 
 void ACAS_InteractionActor::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)

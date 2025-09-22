@@ -34,7 +34,7 @@ void UCAS_SetFocusTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 {
 	auto AIController = OwnerComp.GetAIOwner();
 	if (!AIController) { 
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 	auto ThisPawn = AIController->GetPawn();
@@ -42,13 +42,13 @@ void UCAS_SetFocusTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	auto TargetActor = BlackBoard->GetValueAsObject(TargetActorKey.SelectedKeyName);
 
 	if (!ThisPawn||!TargetActor) {
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 	auto TargetCharacter = Cast<ACAS_Character>(TargetActor);
 
 	if (!TargetCharacter) {
-		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 	
