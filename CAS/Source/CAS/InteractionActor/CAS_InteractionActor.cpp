@@ -20,8 +20,9 @@ ACAS_InteractionActor::ACAS_InteractionActor()
 
 	SenseCollider->SetupAttachment(StaticMesh);
 	KeyPressWidgetComponent->SetupAttachment(StaticMesh);
-	SenseCollider->SetCollisionProfileName(TEXT("NPC"));
 
+	SenseCollider->SetCollisionProfileName(TEXT("InteractionSensor"));
+	StaticMesh->SetCollisionProfileName(TEXT("InteractionActor"));
 }
 
 // Called when the game starts or when spawned
