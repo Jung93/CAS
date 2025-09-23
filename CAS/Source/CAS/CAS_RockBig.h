@@ -34,8 +34,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BoxCollider;
 
-	UPROPERTY(EditAnywhere)
-	class UPhysicsConstraintComponent* PhysicsConstraint;
 
 
 

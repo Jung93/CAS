@@ -13,11 +13,9 @@ ACAS_RockBig::ACAS_RockBig()
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>("Static Mesh");
 	BoxCollider = CreateDefaultSubobject<UBoxComponent>("BoxCollider");
-	PhysicsConstraint = CreateDefaultSubobject<UPhysicsConstraintComponent>("PhysicsConstraint");
 
 
 	BoxCollider->SetupAttachment(Mesh);
-	PhysicsConstraint->SetupAttachment(Mesh);
 	RootComponent = Mesh;
 
 }
