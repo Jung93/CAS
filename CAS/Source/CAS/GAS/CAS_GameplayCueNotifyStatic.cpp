@@ -9,6 +9,7 @@
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
 #include "Character/CAS_PlayerState.h"
+#include "Controller/CAS_PlayerController.h"
 #include "Perception/AISense_Hearing.h"
 
 UCAS_GameplayCueNotifyStatic::UCAS_GameplayCueNotifyStatic()
@@ -47,7 +48,13 @@ bool UCAS_GameplayCueNotifyStatic::OnExecute_Implementation(AActor* Target, cons
 				
 				if(player)
 					UAISense_Hearing::ReportNoiseEvent(GetWorld(), player->GetActorLocation(), 1.0f, player, 1000.0f, TEXT("Ability"));
-				
+				else
+				{
+					auto controller = Cast<ACAS_PlayerController>(character->GetController());
+					if(controller)
+						UAISense_Hearing::ReportNoiseEvent(GetWorld(), character->GetActorLocation(), 1.0f, character, 1000.0f, TEXT("Ability"));
+
+				}
 				
 				break;
 			}
