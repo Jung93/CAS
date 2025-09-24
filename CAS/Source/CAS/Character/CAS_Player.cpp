@@ -19,6 +19,7 @@
 #include "Character/CAS_HitScan.h"
 #include "Character/CAS_PlayerState.h"
 #include "Character/NPC/CAS_SaveNPC.h"
+#include "InteractionActor/CAS_InteractionActor.h"
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "UI/CAS_QuickSlotWidget.h"
@@ -306,33 +307,29 @@ void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 
 void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 {
+
 	auto controller = GetController();
 	if (!controller) {
 		return;
 	}
 	auto PlayerController = Cast<ACAS_PlayerController>(controller);
 
-	FVector PlayerLocation;
-	FRotator PlayerRotation;
-
-	PlayerController->GetPlayerViewPoint(PlayerLocation, PlayerRotation);
-	
-	FVector Start = PlayerLocation;
-	FVector End = Start + (PlayerRotation.Vector() * 1000.0f);
+	FVector Start = GetActorLocation();
+	FVector End = Start + (GetActorForwardVector() * 1000.0f);
 
 	FHitResult HitResult;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	bool bHit = PlayerController->GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel6, Params);
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel6, Params);
 
 	if (!bHit || !HitResult.GetActor()) {
 		return;
 	}
 	
-	ACAS_SaveNPC* SaveNPC = Cast<ACAS_SaveNPC>(HitResult.GetActor());
+	ACAS_InteractionActor* InteractionActor = Cast<ACAS_InteractionActor>(HitResult.GetActor());
 
-	if (!SaveNPC) {
+	if (!InteractionActor) {
 		return;
 	}
 
@@ -340,7 +337,7 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 	GEngine->GameViewport->GetViewportSize(ViewPortSize);
 
 	FVector2D ScreenPosition;
-	PlayerController->ProjectWorldLocationToScreen(SaveNPC->GetActorLocation(), ScreenPosition);
+	PlayerController->ProjectWorldLocationToScreen(InteractionActor->GetActorLocation(), ScreenPosition);
 	
 	bool bIsInViewPort = ScreenPosition.X >= 0 && ScreenPosition.X <= ViewPortSize.X && ScreenPosition.Y >= 0 && ScreenPosition.Y <= ViewPortSize.Y;
 	
@@ -348,12 +345,9 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 		return;
 	}
 
-	if (SaveNPC->CanInteraction()) {
-		SaveNPC->InteractionWithPlayer();
-		//TODO HUD에 UI올리기
+	if (InteractionActor->CanInteraction()) {
+		InteractionActor->InteractionWithPlayer();
 	}
-
-	
 }
 
 // Called when the game starts or when spawned
