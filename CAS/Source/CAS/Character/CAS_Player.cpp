@@ -20,6 +20,7 @@
 #include "Character/CAS_PlayerState.h"
 #include "Character/NPC/CAS_SaveNPC.h"
 #include "InteractionActor/CAS_InteractionActor.h"
+#include "InteractionActor/CAS_InteractionCube.h"
 
 #include "UI/CAS_QuickSlotWidgetComponent.h"
 #include "UI/CAS_QuickSlotWidget.h"
@@ -64,11 +65,17 @@ ACAS_Player::ACAS_Player()
 	AbilitySystemComponent = nullptr;
 	AttributeSet = nullptr;
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> CaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Capture.GA_Ability_Capture_C'"));
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> PickUpAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_PickUp.GA_Ability_PickUp_C'"));
 
 
 	if (CaptureAbilityClass.Succeeded())
 	{
 		DefaultAbilities.Add(CaptureAbilityClass.Class);
+	}
+
+	if (PickUpAbilityClass.Succeeded())
+	{
+		DefaultAbilities.Add(PickUpAbilityClass.Class);
 	}
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
