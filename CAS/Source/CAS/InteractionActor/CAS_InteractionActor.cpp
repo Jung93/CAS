@@ -74,7 +74,8 @@ void ACAS_InteractionActor::OnOverlapEvent(UPrimitiveComponent* OverlappedCompon
 {
 	if (KeyPressUI) {
 		KeyPressUI->SetVisibility(ESlateVisibility::Visible);
-		bCanInteraction = true;	}
+		bCanInteraction = true;	
+	}
 	
 }
 

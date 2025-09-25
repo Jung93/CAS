@@ -5,6 +5,8 @@
 
 void ACAS_InteractionSwitch::BeginPlay()
 {
+    Super::BeginPlay();
+
     auto Material = StaticMesh->GetMaterial(0);
     
     if (Material)
@@ -21,10 +23,10 @@ void ACAS_InteractionSwitch::BeginPlay()
 void ACAS_InteractionSwitch::InteractionWithPlayer()
 {
     if (bSwitchOn) {
-        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(1.0f, 0.6f, 0.2f, 1.0f));
+        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
     }
     else {
-        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.5f, 1.0f, 0.5f, 1.0f));
+        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
     }
 
     bSwitchOn = !bSwitchOn;
