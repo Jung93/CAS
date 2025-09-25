@@ -328,8 +328,8 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_GameTraceChannel6, Params);
-
+	bool bHit = GetWorld()->SweepSingleByChannel(HitResult, Start, End, FQuat::Identity, ECC_GameTraceChannel6, FCollisionShape::MakeSphere(88.0f), Params);
+	
 	if (!bHit || !HitResult.GetActor()) {
 		return;
 	}
