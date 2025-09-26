@@ -10,7 +10,7 @@
 // Sets default values
 ACAS_InteractionActor::ACAS_InteractionActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	SenseCollider = CreateDefaultSubobject<USphereComponent>(TEXT("Collider"));
@@ -23,6 +23,19 @@ ACAS_InteractionActor::ACAS_InteractionActor()
 
 	SenseCollider->SetCollisionProfileName(TEXT("InteractionSensor"));
 	StaticMesh->SetCollisionProfileName(TEXT("InteractionActor"));
+
+	static ConstructorHelpers::FClassFinder<UCAS_KeyPressUI> UIClass(TEXT("/Script/UMGEditor.WidgetBlueprint'/Game/CAS/Blueprint/UI/Interaction/BP_KeyPressUI.BP_KeyPressUI_C'"));
+
+	if (UIClass.Succeeded())
+	{
+		KeyPressUIClass = UIClass.Class;
+	}
+	static ConstructorHelpers::FObjectFinder<UTexture2D> TextureImage(TEXT("/Script/Engine.Texture2D'/Game/Assets/UI/Icon/T_e_256px_gray.T_e_256px_gray'"));
+
+	if (TextureImage.Succeeded())
+	{
+		KeyTexture = TextureImage.Object;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -61,7 +74,8 @@ void ACAS_InteractionActor::OnOverlapEvent(UPrimitiveComponent* OverlappedCompon
 {
 	if (KeyPressUI) {
 		KeyPressUI->SetVisibility(ESlateVisibility::Visible);
-		bCanInteraction = true;	}
+		bCanInteraction = true;	
+	}
 	
 }
 
