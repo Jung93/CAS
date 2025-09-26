@@ -5,7 +5,7 @@
 #include "Ability_Task/CAS_Task_PickUp.h"
 #include "Controller/CAS_PlayerController.h"
 #include "Character/CAS_Player.h"
-
+#include "InteractionActor/CAS_InteractionBall.h"
 
 UCAS_Ability_PickUp::UCAS_Ability_PickUp()
 {
@@ -34,8 +34,10 @@ void UCAS_Ability_PickUp::ActivateAbility(const FGameplayAbilitySpecHandle Handl
 		ReceiveTarget(owner, 1);
 
 	}
+	auto player = Cast<ACAS_Player>(GetActorInfo().AvatarActor);
+	FName name = !player->IsInteracting ? FName("PickUp") : FName("PutDown");
 
-	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", CaptureMontage, 1.0f, true);
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", PickMontage, 1.0f, true, name);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
 	}
@@ -48,6 +50,30 @@ void UCAS_Ability_PickUp::EndAbility(const FGameplayAbilitySpecHandle Handle, co
 
 void UCAS_Ability_PickUp::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
+	auto player = Cast<ACAS_Player>(GetActorInfo().AvatarActor);
+	auto ball = Cast<ACAS_InteractionBall>(player->GetInteractingActor());
+
+	if (NotifyName == FName("PickUp"))
+	{
+		player->IsInteracting = true;
+
+		ball->GetMesh()->SetSimulatePhysics(false);
+		ball->SetActorEnableCollision(false);
+
+		ball->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r"));
+	}
+	else if (NotifyName == FName("PutDown"))
+	{
+		player->IsInteracting = false;
+
+		ball->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		ball->SetActorEnableCollision(true);
+		ball->GetMesh()->SetSimulatePhysics(true);
+	}
+
+
+
 	PlayMontageTask->ReadyForActivation();
 }
 

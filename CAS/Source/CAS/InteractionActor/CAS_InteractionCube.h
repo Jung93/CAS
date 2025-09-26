@@ -32,5 +32,5 @@ protected:
 
 private:
 	UPROPERTY()
-	class ACAS_Player* player;
+	class ACAS_Player* PushPlyer;
 };

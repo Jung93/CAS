@@ -17,6 +17,7 @@ public:
 
 	bool CanInteraction() { return bCanInteraction; }
 	virtual void InteractionWithPlayer() PURE_VIRTUAL(ACAS_InteractionActor::InteractionWithPlayer, ;); 
+	class UStaticMeshComponent* GetMesh() { return StaticMesh; };
 
 protected:
 	// Called when the game starts or when spawned

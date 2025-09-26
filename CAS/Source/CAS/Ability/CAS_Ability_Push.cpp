@@ -1,0 +1,90 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Ability/CAS_Ability_Push.h"
+#include "Ability_Task/CAS_Task_Push.h"
+#include "Controller/CAS_PlayerController.h"
+#include "Character/CAS_Player.h"
+#include "InteractionActor/CAS_InteractionCube.h"
+
+
+UCAS_Ability_Push::UCAS_Ability_Push()
+{
+	BlockAbilitiesWithTag.AddTag(FGameplayTag::RequestGameplayTag("State.TakeDamage"));
+}
+
+bool UCAS_Ability_Push::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+
+}
+
+void UCAS_Ability_Push::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	auto Task = UCAS_Task_Push::Task_Push(this, "Push");
+
+	if (Task->IsValidLowLevel())
+	{
+		Task->AbilityEndEvent.AddUObject(this, &ThisClass::EndAbility);
+		Task->ReadyForActivation();
+
+		auto owner = Cast<ACAS_Character>(GetGameplayTaskAvatar(Task));
+
+		ReceiveTarget(owner, 1);
+
+	}
+
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", PushMontage, 1.0f, true);
+	if (PlayMontageTask) {
+		PlayMontageTask->ReadyForActivation();
+	}
+}
+
+void UCAS_Ability_Push::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
+{
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UCAS_Ability_Push::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
+{
+	auto player = Cast<ACAS_Player>(GetActorInfo().AvatarActor);
+	auto cube = Cast<ACAS_InteractionCube>(player->GetInteractingActor());
+
+	if (NotifyName == "PushStart")
+	{
+		player->IsInteracting = true;
+
+		//cube->GetMesh()->SetSimulatePhysics(false);
+		//cube->SetActorEnableCollision(false);
+
+		//cube->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r"));
+	}
+
+
+
+
+
+	PlayMontageTask->ReadyForActivation();
+}
+
+FActiveGameplayEffectHandle UCAS_Ability_Push::ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
+{
+	UAbilitySystemComponent* TargetAbilitySystemComp = Target->GetAbilitySystemComponent();
+
+	FGameplayEffectSpecHandle SpecHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, 1.0f, EffectContext);
+
+	if (SpecHandle.IsValid())
+	{
+		FActiveGameplayEffectHandle Handle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data, TargetAbilitySystemComp);
+		return Handle;
+	}
+
+	return FActiveGameplayEffectHandle();
+}
+
+void UCAS_Ability_Push::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
+{
+}
+

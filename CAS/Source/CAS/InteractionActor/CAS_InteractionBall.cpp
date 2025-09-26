@@ -6,13 +6,15 @@
 
 ACAS_InteractionBall::ACAS_InteractionBall()
 {
+
+	RootComponent = StaticMesh;
 }
 
 void ACAS_InteractionBall::InteractionWithPlayer()
 {
 	if (PickPlayer)
 	{
-		PickPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.PickUp"));
+		PickPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Pick"));
 	}
 }
 

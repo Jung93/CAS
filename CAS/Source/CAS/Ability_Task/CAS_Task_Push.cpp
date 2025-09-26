@@ -1,16 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Ability_Task/CAS_Task_PutDown.h"
+#include "Ability_Task/CAS_Task_Push.h"
 
-UCAS_Task_PutDown* UCAS_Task_PutDown::Task_PutDown(UGameplayAbility* OwningAbility, FName TaskName)
+UCAS_Task_Push* UCAS_Task_Push::Task_Push(UGameplayAbility* OwningAbility, FName TaskName)
 {
-	UCAS_Task_PutDown* Task = NewAbilityTask<UCAS_Task_PutDown>(OwningAbility, TaskName);
+	UCAS_Task_Push* Task = NewAbilityTask<UCAS_Task_Push>(OwningAbility, TaskName);
 
 	return Task;
 }
 
-void UCAS_Task_PutDown::Activate()
+void UCAS_Task_Push::Activate()
 {
 	Super::Activate();
 

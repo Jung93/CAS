@@ -28,14 +28,8 @@ protected:
 	FActiveGameplayEffectHandle  ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	TSubclassOf<UGameplayEffect> PickEffectClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	TSubclassOf<UGameplayEffect> TagEffectClass;
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
-	UAnimMontage* CaptureMontage;
+	UAnimMontage* PickMontage;
 
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;

@@ -109,6 +109,8 @@ public:
 
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
 	class ACAS_HitScan* GetHitScan() { return _hitScan; }
+	class ACAS_InteractionActor* GetInteractingActor() { return InteractingActor; }
+
 	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
 public:	
 	virtual void InitAbilitySystemComponent() override;
@@ -126,6 +128,7 @@ public:
 	void ToggleSkill();
 
 	bool isSlotChangable = true;
+	bool IsInteracting = false;
 
 protected:
 	
@@ -140,6 +143,9 @@ protected:
 
 	UPROPERTY()
 	class ACAS_HitScan* _hitScan = nullptr;
+
+	UPROPERTY()
+	class ACAS_InteractionActor* InteractingActor = nullptr;
 
 protected:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "PlayerAblilties|QuickSlots")

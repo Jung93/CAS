@@ -5,18 +5,17 @@
 #include "CoreMinimal.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "Ability_Task/CAS_Task_PlayMontage.h"
-#include "CAS_Ability_PutDown.generated.h"
+#include "CAS_Ability_Push.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_Ability_PutDown : public UCAS_GameplayAbility
+class CAS_API UCAS_Ability_Push : public UCAS_GameplayAbility
 {
 	GENERATED_BODY()
-
 public:
-	UCAS_Ability_PutDown();
+	UCAS_Ability_Push();
 
 protected:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
@@ -28,14 +27,9 @@ protected:
 	FActiveGameplayEffectHandle  ApplyGamePlayEffectToSelf(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent);
 	void ReceiveTarget(ACAS_Character* Target, int32 TaskLevel);
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	TSubclassOf<UGameplayEffect> PickEffectClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
-	TSubclassOf<UGameplayEffect> TagEffectClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Montage")
-	UAnimMontage* CaptureMontage;
+	UAnimMontage* PushMontage;
 
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;

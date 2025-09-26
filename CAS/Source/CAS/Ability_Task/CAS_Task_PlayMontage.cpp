@@ -3,7 +3,7 @@
 
 #include "Ability_Task/CAS_Task_PlayMontage.h"
 
-UCAS_Task_PlayMontage* UCAS_Task_PlayMontage::Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate,  bool bNotifyReady)
+UCAS_Task_PlayMontage* UCAS_Task_PlayMontage::Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate,  bool bNotifyReady, FName SectionName)
 {
 	if (!MontageToPlay) {
 		return nullptr;
@@ -13,6 +13,7 @@ UCAS_Task_PlayMontage* UCAS_Task_PlayMontage::Task_PlayMontage(UGameplayAbility*
 	Task->Montage = MontageToPlay;
 	Task->PlayRate = Rate;
 	Task->bNotifyReady = bNotifyReady;
+	Task->MontageSection = SectionName;
 	return Task;
 }
 
@@ -41,6 +42,7 @@ void UCAS_Task_PlayMontage::Activate()
 		}
 		AnimInstance->OnMontageEnded.AddDynamic(ability,&UCAS_GameplayAbility::MontageEndEvent);
 		AnimInstance->Montage_Play(Montage, PlayRate);
+		AnimInstance->Montage_JumpToSection(MontageSection);
 	}
 }
 

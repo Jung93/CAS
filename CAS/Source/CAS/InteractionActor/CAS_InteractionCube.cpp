@@ -3,29 +3,24 @@
 
 #include "InteractionActor/CAS_InteractionCube.h"
 #include "Character/CAS_Player.h"
-#include "Character/CAS_PlayerState.h"
-#include "GAS/CAS_AbilitySystemComponent.h"
+
 
 ACAS_InteractionCube::ACAS_InteractionCube()
 {
+	RootComponent = StaticMesh;
 }
 
 void ACAS_InteractionCube::InteractionWithPlayer()
 {
-	int a = 1;
-
-	if (player)
+	if (PushPlyer)
 	{
-		player->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.PickUp"));
-
+		PushPlyer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Push"));
 	}
 }
 
 void ACAS_InteractionCube::BeginPlay()
 {
 	Super::BeginPlay();
-
-
 }
 
 void ACAS_InteractionCube::Tick(float DeltaTime)
@@ -40,7 +35,7 @@ void ACAS_InteractionCube::OnOverlapEvent(UPrimitiveComponent* OverlappedCompone
 	auto OverlapPlayer = Cast<ACAS_Player>(OtherActor);
 
 	if (OverlapPlayer)
-		player = OverlapPlayer;
+		PushPlyer = OverlapPlayer;
 }
 
 void ACAS_InteractionCube::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
@@ -50,5 +45,5 @@ void ACAS_InteractionCube::EndOverlapEvent(UPrimitiveComponent* OverlappedCompon
 	auto OverlapPlayer = Cast<ACAS_Player>(OtherActor);
 
 	if (OverlapPlayer)
-		player = nullptr;
+		PushPlyer = nullptr;
 }

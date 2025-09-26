@@ -65,7 +65,8 @@ ACAS_Player::ACAS_Player()
 	AbilitySystemComponent = nullptr;
 	AttributeSet = nullptr;
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> CaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Capture.GA_Ability_Capture_C'"));
-	static ConstructorHelpers::FClassFinder<UGameplayAbility> PickUpAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_PickUp.GA_Ability_PickUp_C'"));
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> PickAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_PickUp.GA_Ability_PickUp_C'"));
+	static ConstructorHelpers::FClassFinder<UGameplayAbility> PushAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Push.GA_Ability_Push_C'"));
 
 
 	if (CaptureAbilityClass.Succeeded())
@@ -73,9 +74,14 @@ ACAS_Player::ACAS_Player()
 		DefaultAbilities.Add(CaptureAbilityClass.Class);
 	}
 
-	if (PickUpAbilityClass.Succeeded())
+	if (PickAbilityClass.Succeeded())
 	{
-		DefaultAbilities.Add(PickUpAbilityClass.Class);
+		DefaultAbilities.Add(PickAbilityClass.Class);
+	}
+
+	if (PushAbilityClass.Succeeded())
+	{
+		DefaultAbilities.Add(PushAbilityClass.Class);
 	}
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
@@ -314,6 +320,17 @@ void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 
 void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 {
+	if (IsInteracting && InteractingActor)
+	{
+		if(Cast<ACAS_InteractionCube>(InteractingActor))
+			ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Push"));
+		else
+			ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Pick"));
+
+
+		return;
+	}
+
 
 	auto controller = GetController();
 	if (!controller) {
@@ -353,6 +370,7 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 	}
 
 	if (InteractionActor->CanInteraction()) {
+		InteractingActor = InteractionActor;
 		InteractionActor->InteractionWithPlayer();
 	}
 }
