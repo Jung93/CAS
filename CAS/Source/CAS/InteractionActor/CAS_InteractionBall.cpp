@@ -14,6 +14,7 @@ void ACAS_InteractionBall::InteractionWithPlayer()
 {
 	if (PickPlayer)
 	{
+		PickPlayer->SetInteractingActor(this);
 		PickPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Pick"));
 	}
 }

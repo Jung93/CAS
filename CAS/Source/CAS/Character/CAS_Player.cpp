@@ -327,8 +327,6 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 		else
 			ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Pick"));
 
-
-		return;
 	}
 
 
@@ -370,7 +368,6 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 	}
 
 	if (InteractionActor->CanInteraction()) {
-		InteractingActor = InteractionActor;
 		InteractionActor->InteractionWithPlayer();
 	}
 }

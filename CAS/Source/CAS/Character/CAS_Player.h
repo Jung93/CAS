@@ -110,6 +110,8 @@ public:
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
 	class ACAS_HitScan* GetHitScan() { return _hitScan; }
 	class ACAS_InteractionActor* GetInteractingActor() { return InteractingActor; }
+	void SetInteractingActor(class ACAS_InteractionActor* Actor) { InteractingActor = Actor; }
+	void ClearInteratingActor() { InteractingActor = nullptr; }
 
 	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
 public:	
@@ -129,7 +131,9 @@ public:
 
 	bool isSlotChangable = true;
 	bool IsInteracting = false;
+	bool bPositionReceived = false;
 
+	FVector ReceivedPosition;
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
