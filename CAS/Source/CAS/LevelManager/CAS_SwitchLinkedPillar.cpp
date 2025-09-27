@@ -26,10 +26,10 @@ void ACAS_SwitchLinkedPillar::SwitchClicked(bool SwitchOn)
 	StartPosition = GetActorLocation();
 
 	if (SwitchOn) {
-		EndPosition = StartPosition + FVector(0,0,Offset);		
+		EndPosition = StartPosition + (GetActorUpVector() * Offset);
 	}
 	else {
-		EndPosition = StartPosition + FVector(0, 0, -Offset);
+		EndPosition = StartPosition + (GetActorUpVector() * -Offset);
 	}
 	GetWorldTimerManager().SetTimer(MoveHandle, this, &ACAS_SwitchLinkedPillar::SetTargetLocation, Interval, true);
 }
