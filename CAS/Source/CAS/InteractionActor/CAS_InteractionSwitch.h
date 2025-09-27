@@ -6,6 +6,8 @@
 #include "InteractionActor/CAS_InteractionActor.h"
 #include "CAS_InteractionSwitch.generated.h"
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnSwitchClicked, bool);
+
 UCLASS()
 class CAS_API ACAS_InteractionSwitch : public ACAS_InteractionActor
 {
@@ -14,6 +16,8 @@ public:
 	virtual void InteractionWithPlayer() override;
 
 	bool IsSwitchOn() { return bSwitchOn; }
+
+	FOnSwitchClicked OnSwitchClicked;
 protected:
 	virtual void BeginPlay() override;
 

@@ -31,5 +31,6 @@ void ACAS_InteractionSwitch::InteractionWithPlayer()
 
     bSwitchOn = !bSwitchOn;
 
+    OnSwitchClicked.Broadcast(bSwitchOn);
 }
 

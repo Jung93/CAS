@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CAS_InteractionActor.generated.h"
 
-UCLASS()
+UCLASS(Abstract)
 class CAS_API ACAS_InteractionActor : public AActor
 {
 	GENERATED_BODY()
