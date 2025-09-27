@@ -35,6 +35,7 @@ private:
 
 	FVector StartPosition;
 	FVector EndPosition;
+
 protected:
 	FTimerHandle MoveHandle;
 

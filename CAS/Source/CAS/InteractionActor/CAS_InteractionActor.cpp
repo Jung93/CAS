@@ -58,9 +58,6 @@ void ACAS_InteractionActor::BeginPlay()
 
 	SenseCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 	SenseCollider->OnComponentEndOverlap.AddDynamic(this, &ThisClass::EndOverlapEvent);
-
-
-
 }
 
 // Called every frame

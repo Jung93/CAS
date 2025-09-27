@@ -29,4 +29,5 @@ protected:
 	
 	UPROPERTY()
 	class ACAS_InteractionSwitch* SwitchInstance = nullptr;
+
 };
