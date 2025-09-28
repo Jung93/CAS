@@ -11,7 +11,7 @@ ACAS_BallTargetPoint::ACAS_BallTargetPoint()
 	PrimaryActorTick.bCanEverTick = false;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	BallDetectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Volume"));
+	BallDetectCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Collider"));
 
 	RootComponent = StaticMesh;
 	BallDetectCollider->SetupAttachment(RootComponent);

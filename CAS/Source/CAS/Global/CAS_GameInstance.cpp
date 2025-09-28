@@ -51,7 +51,7 @@ void UCAS_GameInstance::GetAssetsFromPaths(const FString& Path, const FString& H
 	for (auto AssetData : AssetDataList) {
 
 		FString AssetName = AssetData.AssetName.ToString();
-		FString AssetPath = AssetData.ObjectPath.ToString();
+		FString AssetPath = AssetData.GetObjectPathString();
 
 		OutGameAssets.Add(AssetName, AssetPath);
 	}
