@@ -17,6 +17,15 @@ UCAS_Task_PlayMontage* UCAS_Task_PlayMontage::Task_PlayMontage(UGameplayAbility*
 	return Task;
 }
 
+void UCAS_Task_PlayMontage::JumpToSection(FName SectionName)
+{
+	if (!AnimInstance || !AnimInstance->Montage_IsPlaying(Montage))
+		return;
+
+	AnimInstance->Montage_JumpToSection(SectionName);
+
+}
+
 void UCAS_Task_PlayMontage::Activate()
 {
 	Super::Activate();
@@ -28,7 +37,7 @@ void UCAS_Task_PlayMontage::Activate()
 	auto Character = Cast<ACAS_Character>((GetAvatarActor()));
 	if (Character) {
 
-		UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+		AnimInstance = Character->GetMesh()->GetAnimInstance();
 
 		if (!AnimInstance)
 		{
@@ -49,7 +58,7 @@ void UCAS_Task_PlayMontage::Activate()
 void UCAS_Task_PlayMontage::OnDestroy(bool bInOwnerFinished)
 {
 	auto Character = Cast<ACAS_Character>((GetAvatarActor()));
-	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+	AnimInstance = Character->GetMesh()->GetAnimInstance();
 	UCAS_GameplayAbility* ability = Cast<UCAS_GameplayAbility>(Ability);
 	if (bNotifyReady) {
 		AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);

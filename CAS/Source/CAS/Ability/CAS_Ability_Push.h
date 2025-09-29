@@ -34,4 +34,14 @@ protected:
 	UPROPERTY()
 	UCAS_Task_PlayMontage* PlayMontageTask;
 
+	FActiveGameplayEffectHandle GetActiveEffectHandle() { return ActiveEffectHandle; }
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> TagEffectClassJump;
+
+private:
+	UPROPERTY()
+	FActiveGameplayEffectHandle ActiveEffectHandle;
+
+
 };

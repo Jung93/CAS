@@ -90,24 +90,66 @@ ACAS_Player::ACAS_Player()
 	GetCharacterMovement()->MaxAcceleration = 2000.0f;
 }
 
+//void ACAS_Player::Move(const FInputActionValue& Value)
+//{
+//	FVector2D MovementVector = Value.Get<FVector2D>();
+//
+//	if (Controller != nullptr)
+//	{
+//		// find out which way is forward
+//		const FRotator Rotation = Controller->GetControlRotation();
+//		const FRotator YawRotation(0, Rotation.Yaw, 0);
+//
+//		// get forward vector
+//		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+//
+//		// get right vector 
+//		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+//
+//		// add movement 
+//		AddMovementInput(ForwardDirection, MovementVector.Y);
+//
+//		if(!Cast<ACAS_InteractionCube>(InteractingActor))
+//			AddMovementInput(RightDirection, MovementVector.X);
+//
+//
+//	}
+//}
+
 void ACAS_Player::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller == nullptr) return;
+
+	FVector ForwardDirection;
+	FVector RightDirection;
+
+	if (Cast<ACAS_InteractionCube>(InteractingActor))
 	{
-		// find out which way is forward
+		// 캐릭터 정면 기준 이동
+		ForwardDirection = GetActorForwardVector();
+		RightDirection = FVector::ZeroVector; 
+
+		// S 입력 무시
+		if (MovementVector.Y < 0.0f)
+			MovementVector.Y = 0.0f;
+
+		MovementVector.X = 0.0f; 
+	}
+	else
+	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+		RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	}
 
-		// get right vector 
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	AddMovementInput(ForwardDirection, MovementVector.Y);
 
-		// add movement 
-		AddMovementInput(ForwardDirection, MovementVector.Y);
+	if (!RightDirection.IsZero())
+	{
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }

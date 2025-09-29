@@ -15,6 +15,7 @@ class CAS_API UCAS_Task_PlayMontage : public UCAS_AbilityTask
 	GENERATED_BODY()
 public:
 	static UCAS_Task_PlayMontage* Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate = 1.0f , bool bNotifyReady = false, FName SectionName = FName("Default"));
+	void JumpToSection(FName SectionName);
 protected:
 	virtual void Activate() override;
 	virtual void OnDestroy(bool bInOwnerFinished)override;
@@ -25,4 +26,8 @@ protected:
 	bool bNotifyReady = false;
 	UPROPERTY()
 	FName MontageSection;
+
+	UPROPERTY()
+	class UAnimInstance* AnimInstance = nullptr;
+
 };

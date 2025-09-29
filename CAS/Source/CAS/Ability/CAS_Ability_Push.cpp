@@ -15,6 +15,11 @@ UCAS_Ability_Push::UCAS_Ability_Push()
 
 bool UCAS_Ability_Push::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
+	auto isPlaying = Cast<ACAS_Character>(ActorInfo->AvatarActor)->GetMesh()->GetAnimInstance()->Montage_IsPlaying(PushMontage);
+	if (isPlaying) {
+		return false;
+	}
+
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 
 }
@@ -22,6 +27,9 @@ bool UCAS_Ability_Push::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
 void UCAS_Ability_Push::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+
+
 
 	auto Task = UCAS_Task_Push::Task_Push(this, "Push");
 
@@ -36,7 +44,15 @@ void UCAS_Ability_Push::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	}
 
-	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", PushMontage, 1.0f, true);
+	auto player = Cast<ACAS_Player>(GetGameplayTaskAvatar(Task));
+
+	FName sectionName = FName("Start");
+	if (player->IsValidLowLevel()) {
+		if(player->IsInteracting)
+			sectionName = FName("End");
+	}
+
+	PlayMontageTask = UCAS_Task_PlayMontage::Task_PlayMontage(this, "PlayMontage", PushMontage, 1.0f, true, sectionName);
 	if (PlayMontageTask) {
 		PlayMontageTask->ReadyForActivation();
 	}
@@ -55,16 +71,13 @@ void UCAS_Ability_Push::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 	if (NotifyName == "PushStart")
 	{
 		player->IsInteracting = true;
-
-		//cube->GetMesh()->SetSimulatePhysics(false);
-		//cube->SetActorEnableCollision(false);
-
-		//cube->AttachToComponent(player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r"));
 	}
+	else if (NotifyName == "PushEnd")
+	{
+		player->IsInteracting = false;
+		player->ClearInteractingActor();
 
-
-
-
+	}
 
 	PlayMontageTask->ReadyForActivation();
 }
@@ -86,5 +99,38 @@ FActiveGameplayEffectHandle UCAS_Ability_Push::ApplyGamePlayEffectToSelf(ACAS_Ch
 
 void UCAS_Ability_Push::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 {
+	if (!TagEffectClassJump)
+		return;
+
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp;
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+		FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
+		EffectContextHandle.AddInstigator(PlayerState, nullptr);
+
+		if (AbilitySystemComp->GetActiveGameplayEffect(ActiveEffectHandle) == nullptr)
+		{
+			FGameplayEffectSpecHandle SpecHandle = MakeOutgoingGameplayEffectSpec(TagEffectClassJump, GetAbilityLevel());
+			SpecHandle.Data->DynamicGrantedTags.AddTag(FGameplayTag::RequestGameplayTag(FName("State.Interacting")));
+			ActiveEffectHandle = ApplyGamePlayEffectToSelf(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
+			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Interacting")));
+
+
+
+
+
+
+
+		}
+		else
+		{
+			AbilitySystemComp->RemoveActiveGameplayEffect(ActiveEffectHandle);
+			ActiveEffectHandle = FActiveGameplayEffectHandle();
+			AbilitySystemComp->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Interacting")));
+		}
+	}
+
 }
 
