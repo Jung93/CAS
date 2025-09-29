@@ -28,6 +28,10 @@ public:
 	void SetQuickSlotAbilityData(int32 index, struct FCAS_SlotData data) { QuickSlotAbilities[index] = data; }
 	struct FCAS_SlotData GetQuickSlotAbilityData(int32 index) { return QuickSlotAbilities[index]; }
 	
+	int32 GetPlayerHPCount() { return PlayerHPCount; }
+	void SetPlayerHPCount(int32 Count) { PlayerHPCount = Count; }
+	void ClearPlayerHPCount() { PlayerHPCount = -1; }
+
 	void SaveGameData_Sync(class ACAS_Player* player, int32 index);
 	void SaveGameData_ASync(class ACAS_Player* player, int32 index);
 	void LoadGameData_Sync(int32 index);
@@ -36,6 +40,7 @@ public:
 	bool IsSaveDataReady() { return CachedSaveGameData.bDataLoadingReady; }
 	void ClearCachedData() { CachedSaveGameData = FTempSaveGameData(); }
 	void ApplyCachedGameData(ACharacter* Character);
+	FName GetNextLevelName() { return CachedSaveGameData.Level; }
 
 	void PlayBgm(int32 bgmIndex = 0);
 
@@ -60,7 +65,6 @@ protected:
 
 	UFUNCTION()
 	void OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess);
-
 
 
 	int32 tempIndex = -1;
@@ -89,6 +93,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
 	float BgmFadeSpeed;
 
+	int32 PlayerHPCount = -1;
 private:
 	float NextNormalVolume;
 	float NextDetectedVolume;

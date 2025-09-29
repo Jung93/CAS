@@ -5,7 +5,7 @@
 #include "Character/CAS_Player.h"
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Global/CAS_GameInstance.h"
 
 // Sets default values
 ACAS_LevelConversion::ACAS_LevelConversion()
@@ -24,7 +24,7 @@ void ACAS_LevelConversion::LoadLevel(FName levelName)
 	if (levelName.IsNone()) {
 		return;
 	}
-
+	
 	UGameplayStatics::OpenLevel(GetWorld(), levelName);
 }
 

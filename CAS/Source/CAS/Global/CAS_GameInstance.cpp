@@ -159,8 +159,9 @@ void UCAS_GameInstance::LoadGameData_ASync(int32 index)
 	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 		return;
 	}
+	UGameplayStatics::OpenLevel(GetWorld(), "LoadingOnly");	
+
 	UGameplayStatics::AsyncLoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
-	
 }
 
 void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedGame)
@@ -170,11 +171,8 @@ void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 User
 	CachedSaveGameData.PlayerHP = SaveGameData->PlayerHP;
 	CachedSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
 	CachedSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
+	CachedSaveGameData.Level = SaveGameData->Level;
 	CachedSaveGameData.bDataLoadingReady = true;
-
-
-	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
-
 }
 
 void UCAS_GameInstance::OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess)
