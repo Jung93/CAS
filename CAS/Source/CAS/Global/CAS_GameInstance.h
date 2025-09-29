@@ -40,7 +40,16 @@ public:
 	bool IsSaveDataReady() { return CachedSaveGameData.bDataLoadingReady; }
 	void ClearCachedData() { CachedSaveGameData = FTempSaveGameData(); }
 	void ApplyCachedGameData(ACharacter* Character);
-	FName GetNextLevelName() { return CachedSaveGameData.Level; }
+	
+	void OpenLoadingLevel();
+	void OpenStartLevel();
+	//세이브 로드용
+	FName GetCachedLevelName() { return CachedSaveGameData.Level; }
+	//포탈 , 레벨변경 볼륨용
+	FName GetNextLevelName() { return FName(*NextLevelName); }
+	void SetNextLevelName(FString LevelName) { NextLevelName = LevelName; }
+	void ClearNextLevelName() { NextLevelName.Empty(); }
+	void OpenNextLevel(FName LevelName);
 
 	void PlayBgm(int32 bgmIndex = 0);
 
@@ -69,6 +78,7 @@ protected:
 
 	int32 tempIndex = -1;
 
+	FString NextLevelName;
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Audio")
 	//TArray<class USoundCue*> Bgms;
 

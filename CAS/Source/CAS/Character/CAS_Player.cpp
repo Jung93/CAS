@@ -596,7 +596,7 @@ void ACAS_Player::LoadCharacterData()
 	GameInstance->ClearPlayerHPCount();
 
 	auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
-	if (widget) {
+	if (widget&& CurrHP != -1) {
 		widget->UpdateHp(CurrHP);
 		GetAttributeSet()->SetHealth(CurrHP);
 	}

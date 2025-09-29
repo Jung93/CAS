@@ -159,7 +159,8 @@ void UCAS_GameInstance::LoadGameData_ASync(int32 index)
 	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 		return;
 	}
-	UGameplayStatics::OpenLevel(GetWorld(), "LoadingOnly");	
+	
+	OpenLoadingLevel();
 
 	UGameplayStatics::AsyncLoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
 }
@@ -192,6 +193,22 @@ void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
 		Player->SetActorLocation(SaveLocation);
 		Player->SetHp(SaveHP);
 	}
+}
+
+void UCAS_GameInstance::OpenLoadingLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "LoadingOnly");
+}
+
+void UCAS_GameInstance::OpenStartLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "Test");
+}
+
+void UCAS_GameInstance::OpenNextLevel(FName LevelName)
+{
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName);
+	ClearNextLevelName();
 }
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)

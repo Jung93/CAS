@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_LoadingOnlyActor();
 
+	UPROPERTY(EditAnywhere)
+	float Interval = 0.5f;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -4,7 +4,6 @@
 #include "Global/CAS_LoadingOnlyActor.h"
 #include "Blueprint/UserWidget.h"
 #include "Global/CAS_GameInstance.h"
-#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ACAS_LoadingOnlyActor::ACAS_LoadingOnlyActor()
@@ -24,18 +23,22 @@ void ACAS_LoadingOnlyActor::BeginPlay()
 		LoadingUI->AddToViewport(10);
 		LoadingUI->SetVisibility(ESlateVisibility::Visible);
 	}
-	GetWorldTimerManager().SetTimer(Timer,this, &ThisClass::CheckReady,1.0f,true);
+	GetWorldTimerManager().SetTimer(Timer,this, &ThisClass::CheckReady,Interval,true);
 }
 
 void ACAS_LoadingOnlyActor::CheckReady()
 {
     auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 
-    if (GameInstance && GameInstance->IsSaveDataReady())
+    if (GameInstance->IsSaveDataReady())
     {
+		FName NextLevelName = GameInstance->GetCachedLevelName();
+		GameInstance->OpenNextLevel(NextLevelName);
+	}
+	else {
 		FName NextLevelName = GameInstance->GetNextLevelName();
-		UGameplayStatics::OpenLevel(GetWorld(), NextLevelName);
-    }
+		GameInstance->OpenNextLevel(NextLevelName);
+	}
 }
 // Called every frame
 void ACAS_LoadingOnlyActor::Tick(float DeltaTime)

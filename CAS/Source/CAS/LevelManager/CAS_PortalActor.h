@@ -23,8 +23,10 @@ protected:
 	virtual void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, Category = "NextLevel")
+	class UWorld* NextLevel;
+	
+	FName GetNextLevelName() { return NextLevelName; }
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;
@@ -35,4 +37,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class USceneComponent* RootScene;
+private:
+	FName NextLevelName;
 };
