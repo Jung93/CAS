@@ -26,10 +26,11 @@
 #include "UI/CAS_QuickSlotWidget.h"
 #include "UI/CAS_SelectSkillWidget.h"
 #include "UI/CAS_TitleWidget.h"
+#include "UI/CAS_Hpbar.h"
 
 #include "Global/CAS_GameInstance.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "Components/WidgetComponent.h"
 
 
 // Sets default values
@@ -369,8 +370,6 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 		else
 			ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Pick"));
 
-
-		return;
 	}
 
 
@@ -412,7 +411,6 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 	}
 
 	if (InteractionActor->CanInteraction()) {
-		InteractingActor = InteractionActor;
 		InteractionActor->InteractionWithPlayer();
 	}
 }
@@ -621,6 +619,8 @@ void ACAS_Player::SaveCharacterData()
 	for(int32 i = 0; i<PlayerAbilityCount;i++){
 		GameInstance->SetQuickSlotAbilityData(i, QuickSlotWidgetComponent->GetAbilityData(i));
 	}
+	auto currHP =GetAttributeSet()->GetHealth();
+	GameInstance->SetPlayerHPCount(currHP);
 }
 
 void ACAS_Player::LoadCharacterData()
@@ -632,5 +632,14 @@ void ACAS_Player::LoadCharacterData()
 		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);		
 		TSubclassOf<UGameplayAbility> AbilityClass = AbilityData.AbilityClass;
 		AddPlayerAbility(AbilityClass);
+	}
+
+	auto CurrHP = GameInstance->GetPlayerHPCount();	
+	GameInstance->ClearPlayerHPCount();
+
+	auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
+	if (widget&& CurrHP != -1) {
+		widget->UpdateHp(CurrHP);
+		GetAttributeSet()->SetHealth(CurrHP);
 	}
 }

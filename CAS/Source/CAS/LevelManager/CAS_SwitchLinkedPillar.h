@@ -1,0 +1,48 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "LevelManager/CAS_SwitchLinkedActor.h"
+#include "CAS_SwitchLinkedPillar.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class CAS_API ACAS_SwitchLinkedPillar : public ACAS_SwitchLinkedActor
+{
+	GENERATED_BODY()
+	
+public:
+	ACAS_SwitchLinkedPillar();
+protected:
+	void BeginPlay() override;
+
+	virtual void SwitchClicked(bool SwitchOn) override;
+
+	void SetTargetLocation();
+protected:
+	UPROPERTY(EditAnywhere)
+	float Offset = 100.0f;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	class UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Mesh")
+	AActor* PillarCase = nullptr;
+
+	FVector StartPosition;
+	FVector EndPosition;
+
+protected:
+	FTimerHandle MoveHandle;
+
+	UPROPERTY(EditAnywhere)
+	float MaxDuration = 0.3f;
+	UPROPERTY(EditAnywhere)
+	float Interval = 0.03f;
+
+	float CurrDuration = 0.0f;
+};

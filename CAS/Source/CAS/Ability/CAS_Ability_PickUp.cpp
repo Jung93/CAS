@@ -69,12 +69,26 @@ void UCAS_Ability_PickUp::PlayAnimNotify(FName NotifyName, const FBranchingPoint
 	}
 	else if (NotifyName == FName("PutDown"))
 	{
-		player->IsInteracting = false;
-
 		ball->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		ball->SetActorEnableCollision(true);
 		ball->GetMesh()->SetSimulatePhysics(true);
+		
+		FVector ballLocation;
+		FVector PlayerLocation = player->GetActorLocation();
+
+		if (player->bPositionReceived) {
+			ballLocation = player->ReceivedPosition;
+			player->bPositionReceived = false;
+		}
+		else {
+			ballLocation = PlayerLocation + (player->GetActorForwardVector() * 100.0f);
+		}
+
+		ball->SetActorLocation(ballLocation);
+
+		player->IsInteracting = false;
+		player->ClearInteratingActor();
 	}
 
 

@@ -49,6 +49,4 @@ private:
 
 	FName StartLevel = "Test";
 
-	UFUNCTION()
-	void LoadLevelEvent();
 };

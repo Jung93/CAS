@@ -51,7 +51,7 @@ void UCAS_GameInstance::GetAssetsFromPaths(const FString& Path, const FString& H
 	for (auto AssetData : AssetDataList) {
 
 		FString AssetName = AssetData.AssetName.ToString();
-		FString AssetPath = AssetData.ObjectPath.ToString();
+		FString AssetPath = AssetData.GetObjectPathString();
 
 		OutGameAssets.Add(AssetName, AssetPath);
 	}
@@ -159,8 +159,10 @@ void UCAS_GameInstance::LoadGameData_ASync(int32 index)
 	if (!UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 		return;
 	}
-	UGameplayStatics::AsyncLoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
 	
+	OpenLoadingLevel();
+
+	UGameplayStatics::AsyncLoadGameFromSlot(FString::Printf(TEXT("SLOT_%d"), index), 0, FAsyncLoadGameFromSlotDelegate::CreateUObject(this, &ThisClass::OnLoadFinished));
 }
 
 void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 UserIndex, USaveGame* LoadedGame)
@@ -170,11 +172,8 @@ void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 User
 	CachedSaveGameData.PlayerHP = SaveGameData->PlayerHP;
 	CachedSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
 	CachedSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
+	CachedSaveGameData.Level = SaveGameData->Level;
 	CachedSaveGameData.bDataLoadingReady = true;
-
-
-	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
-
 }
 
 void UCAS_GameInstance::OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess)
@@ -194,6 +193,22 @@ void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
 		Player->SetActorLocation(SaveLocation);
 		Player->SetHp(SaveHP);
 	}
+}
+
+void UCAS_GameInstance::OpenLoadingLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "LoadingOnly");
+}
+
+void UCAS_GameInstance::OpenStartLevel()
+{
+	UGameplayStatics::OpenLevel(GetWorld(), "Test");
+}
+
+void UCAS_GameInstance::OpenNextLevel(FName LevelName)
+{
+	UGameplayStatics::OpenLevel(GetWorld(), LevelName);
+	ClearNextLevelName();
 }
 
 void UCAS_GameInstance::PlayBgm(int32 bgmIndex)

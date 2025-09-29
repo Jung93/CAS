@@ -109,9 +109,9 @@ public:
 
 	class ACAS_Hat* GetHat() { return _hatSpawn; }
 	class ACAS_HitScan* GetHitScan() { return _hitScan; }
-	UFUNCTION(BlueprintCallable)
 	class ACAS_InteractionActor* GetInteractingActor() { return InteractingActor; }
-	void ClearInteractingActor() { InteractingActor = nullptr; }
+	void SetInteractingActor(class ACAS_InteractionActor* Actor) { InteractingActor = Actor; }
+	void ClearInteratingActor() { InteractingActor = nullptr; }
 
 	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
 public:	
@@ -130,10 +130,10 @@ public:
 	void ToggleSkill();
 
 	bool isSlotChangable = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool IsInteracting = false;
+	bool bPositionReceived = false;
 
+	FVector ReceivedPosition;
 protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")

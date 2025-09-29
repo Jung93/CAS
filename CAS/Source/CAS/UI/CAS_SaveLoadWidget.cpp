@@ -173,7 +173,7 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 		}
 	}
 	else {
-		GameInstance->LoadGameData_Sync(index);
+		GameInstance->LoadGameData_ASync(index);
 	}
 	SaveLoadSlots[index]->UpdateSlotInfo(index);
 }

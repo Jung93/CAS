@@ -45,17 +45,10 @@ void UCAS_TitleWidget::CloseContinueWidget()
 
 void UCAS_TitleWidget::StartNewGame()
 {
-    UWorld* World = GetWorld();
-    if (World)
-    {
-        bool bSuccess = false;
-        ULevelStreamingDynamic* StreamingLevel = ULevelStreamingDynamic::LoadLevelInstance(World, StartLevel.ToString(), FVector::ZeroVector, FRotator::ZeroRotator, bSuccess);
+    auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 
-        if (StreamingLevel)
-        {
-            StreamingLevel->OnLevelLoaded.AddDynamic(this, &ThisClass::LoadLevelEvent);
-        }
-    }
+    GameInstance->SetNextLevelName("Test");
+    GameInstance->OpenLoadingLevel();
 }
 
 void UCAS_TitleWidget::QuitGame()
@@ -65,9 +58,4 @@ void UCAS_TitleWidget::QuitGame()
 
     UKismetSystemLibrary::QuitGame(GetWorld(), playerController, EQuitPreference::Quit, true);
 
-}
-
-void UCAS_TitleWidget::LoadLevelEvent()
-{
-    UGameplayStatics::OpenLevel(this, StartLevel);
 }
