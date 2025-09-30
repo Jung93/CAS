@@ -212,7 +212,7 @@ void ACAS_EnemyCapt::AddDefaultAbilites()
 void ACAS_EnemyCapt::AddPlayerAbility(AActor* actor)
 {
 	auto Player = Cast<ACAS_Player>(actor);
-	if (Player->IsValidLowLevel()) {
+	if (Player) {
 		Player->AddPlayerAbility(EnemyAbility);
 	}
 }

@@ -6,6 +6,7 @@
 #include "NiagaraComponent.h"
 #include "Character/CAS_Player.h"
 #include "Global/CAS_GameInstance.h"
+#include "LevelManager/CAS_BallTargetPoint.h"
 // Sets default values
 ACAS_PortalActor::ACAS_PortalActor()
 {
@@ -34,6 +35,12 @@ void ACAS_PortalActor::BeginPlay()
 	}
 
 	PortalCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
+
+	////목표에 공이 들어가면 델리게이트로 모든 목표가 true인지 확인하는 함수 바인딩
+	//for (auto BallTargetPoint : BallTargetPoints) {
+	//	
+	//	//BallTargetPoint
+	//}
 }
 void ACAS_PortalActor::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -48,5 +55,16 @@ void ACAS_PortalActor::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, 
 	else {
 		return;
 	}
+}
+
+void ACAS_PortalActor::CheckAllPoints()
+{
+	for (auto BallTargetPoint : BallTargetPoints) {
+		if (!BallTargetPoint->GetPuzzleCompleted()) {
+			return;
+		}
+
+	}
+	bStageClear = true;
 }
 

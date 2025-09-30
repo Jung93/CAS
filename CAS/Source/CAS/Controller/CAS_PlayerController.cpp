@@ -30,12 +30,12 @@ void ACAS_PlayerController::BeginPlay()
         EnterUIMode();
     }
 
-#if WITH_EDITOR
-    if (IsLocalController())
-    {
-        ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
-    }
-#endif
+//#if WITH_EDITOR
+//    if (IsLocalController())
+//    {
+//        ConsoleCommand(TEXT("ShowDebug AbilitySystem"), true);
+//    }
+//#endif
 
 
 }

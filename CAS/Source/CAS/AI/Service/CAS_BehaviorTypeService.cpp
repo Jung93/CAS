@@ -49,7 +49,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Stun);
 		return;
 	}
-	//반드시 소리가 들렸을 경우 -> 해당 위치까지 가서 확인해보기
+	//소리가 들렸을 경우 -> 해당 위치까지 가서 확인해보기
 	if (BlackBoard->GetValueAsVector("LastHeardLocation") != FVector::ZeroVector) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Alert);
 		return;

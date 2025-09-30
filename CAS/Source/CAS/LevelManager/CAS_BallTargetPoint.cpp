@@ -44,7 +44,7 @@ void ACAS_BallTargetPoint::OnOverlapEvent(UPrimitiveComponent* OverlappedCompone
 {
 	if (auto InteractionBall = Cast<ACAS_InteractionBall>(OtherActor)) {
 		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
-		//포탈 열기 TODO
+		bComplete = true;
 	}
 	else {
 		return;
@@ -56,7 +56,7 @@ void ACAS_BallTargetPoint::EndOverlapEvent(UPrimitiveComponent* OverlappedCompon
 {
 	if (auto InteractionBall = Cast<ACAS_InteractionBall>(OtherActor)) {
 		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
-		//포탈 닫기
+		bComplete = false;
 	}
 	else {
 		return;

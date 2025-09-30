@@ -25,12 +25,11 @@ public:
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void OnUnPossess() override;
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaSeconds) override;
+	//virtual void Tick(float DeltaSeconds) override;
 
 	float GetSightRange() { return SightConfig->SightRadius; }
 	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
 	
-	bool bUseDebug = true;
 	bool bDebugOn = false;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

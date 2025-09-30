@@ -15,6 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_BallTargetPoint();
 
+	bool GetPuzzleCompleted() { return bComplete; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,4 +31,6 @@ private:
 	class UStaticMeshComponent* StaticMesh;
 	UPROPERTY()
 	UMaterialInstanceDynamic* DynamicMaterial;
+
+	bool bComplete = false;
 };
