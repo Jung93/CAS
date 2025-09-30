@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CAS_PortalActor.generated.h"
 
-//DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
+DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
 
 UCLASS()
 class CAS_API ACAS_PortalActor : public AActor
@@ -41,11 +41,6 @@ private:
 	class USceneComponent* RootScene;
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TArray<class ACAS_BallTargetPoint*> BallTargetPoints;
-
-	void CheckAllPoints();
-
 	bool bStageClear = false;
 	FName NextLevelName;
 };

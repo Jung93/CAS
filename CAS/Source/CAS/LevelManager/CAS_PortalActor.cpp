@@ -57,14 +57,3 @@ void ACAS_PortalActor::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, 
 	}
 }
 
-void ACAS_PortalActor::CheckAllPoints()
-{
-	for (auto BallTargetPoint : BallTargetPoints) {
-		if (!BallTargetPoint->GetPuzzleCompleted()) {
-			return;
-		}
-
-	}
-	bStageClear = true;
-}
-
