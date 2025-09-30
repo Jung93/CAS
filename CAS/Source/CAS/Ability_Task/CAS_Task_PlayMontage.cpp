@@ -49,12 +49,15 @@ void UCAS_Task_PlayMontage::Activate()
 void UCAS_Task_PlayMontage::OnDestroy(bool bInOwnerFinished)
 {
 	auto Character = Cast<ACAS_Character>((GetAvatarActor()));
-	UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
-	UCAS_GameplayAbility* ability = Cast<UCAS_GameplayAbility>(Ability);
-	if (bNotifyReady) {
-		AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);
-	}
-	AnimInstance->OnMontageEnded.RemoveDynamic(ability, &UCAS_GameplayAbility::MontageEndEvent);
+	if (Character) {
+		UAnimInstance* AnimInstance = Character->GetMesh()->GetAnimInstance();
+		UCAS_GameplayAbility* ability = Cast<UCAS_GameplayAbility>(Ability);
+		if (bNotifyReady) {
+			AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);
+		}
+		AnimInstance->OnMontageEnded.RemoveDynamic(ability, &UCAS_GameplayAbility::MontageEndEvent);
 
+	}
+	
 	Super::OnDestroy(bInOwnerFinished);
 }
