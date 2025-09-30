@@ -13,13 +13,13 @@ ACAS_EnemyController::ACAS_EnemyController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("AIPerceptionComponent"));
 	BehaviorComponent = CreateDefaultSubobject<UCAS_BehaviorComponent>(TEXT("BehaviorComponent"));
-    
+
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
 
-    SightConfig->SightRadius = 1500.0f;
-    SightConfig->LoseSightRadius = 7500.0f;
-    SightConfig->PeripheralVisionAngleDegrees = 95.0f;
-    SightConfig->SetMaxAge(3.0f);
+	SightConfig->SightRadius = 1500.0f;
+	SightConfig->LoseSightRadius = 7500.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 95.0f;
+	SightConfig->SetMaxAge(3.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
@@ -27,7 +27,7 @@ ACAS_EnemyController::ACAS_EnemyController()
 
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
 
-    AIPerceptionComponent->ConfigureSense(*SightConfig);
+	AIPerceptionComponent->ConfigureSense(*SightConfig);
 
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing"));
 	HearingConfig->HearingRange = 1000.0f;
@@ -35,7 +35,7 @@ ACAS_EnemyController::ACAS_EnemyController()
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
-	
+
 	AIPerceptionComponent->ConfigureSense(*HearingConfig);
 
 	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("Damage"));
@@ -43,15 +43,8 @@ ACAS_EnemyController::ACAS_EnemyController()
 
 	AIPerceptionComponent->ConfigureSense(*DamageConfig);
 
-    AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
+	AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
-
-	if (bUseDebug) {
-		PrimaryActorTick.bCanEverTick = true;
-	}
-	else {
-		PrimaryActorTick.bCanEverTick = false;
-	}
 }
 
 void ACAS_EnemyController::OnPossess(APawn* pawn)
@@ -83,31 +76,6 @@ void ACAS_EnemyController::BeginPlay()
 	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ThisClass::OnTargetPerceptionUpdated);
 	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ThisClass::OnTargetPerceptionForgotten);
 
-}
-
-void ACAS_EnemyController::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-	auto world = GetWorld();
-
-	if (bUseDebug && world && GetPawn())
-	{
-		auto ThisPawn = GetPawn();
-		FVector center = ThisPawn->GetActorLocation();
-		center.Z += 50.0f; 
-		
-		DrawDebugCircle(GetWorld(), // 월드
-			center,					// 중심
-			SightConfig->SightRadius,		// 시야 범위
-			300,
-			FColor::Green,
-			false,
-			-1,
-			0,
-			0,
-			FVector::RightVector,
-			FVector::ForwardVector);
-	}
 }
 
 void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus Stimulus)
