@@ -14,6 +14,7 @@ void ACAS_InteractionCube::InteractionWithPlayer()
 {
 	if (PushPlyer)
 	{
+		PushPlyer->SetInteractingActor(this);
 		PushPlyer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Push"));
 	}
 }

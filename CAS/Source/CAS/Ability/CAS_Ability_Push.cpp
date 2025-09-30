@@ -71,11 +71,16 @@ void UCAS_Ability_Push::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 	if (NotifyName == "PushStart")
 	{
 		player->IsInteracting = true;
+
+		cube->GetMesh()->SetSimulatePhysics(true);
+
+
 	}
 	else if (NotifyName == "PushEnd")
 	{
 		player->IsInteracting = false;
 		player->ClearInteractingActor();
+		cube->GetMesh()->SetSimulatePhysics(false);
 
 	}
 

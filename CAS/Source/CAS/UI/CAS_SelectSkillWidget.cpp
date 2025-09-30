@@ -105,18 +105,6 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         TargetAbility = newAbility;
     }
 
-
-    auto root = Cast<UCanvasPanel>(GetRootWidget());
-    auto border = Cast<UBorder>(root->GetChildAt(0));
-    auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
-
-    GEngine->GameViewport->GetViewportSize(WidgetSize);
-
-    float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
-    WidgetSize /= Scale; // DPI 보정 적용
-
-    slot2->SetSize(WidgetSize);
-
     AddToViewport();
 
     APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);

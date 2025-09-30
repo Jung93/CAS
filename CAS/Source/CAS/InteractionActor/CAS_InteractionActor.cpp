@@ -2,6 +2,7 @@
 
 
 #include "InteractionActor/CAS_InteractionActor.h"
+#include "Controller/CAS_PlayerController.h"
 #include "UI/CAS_KeyPressUI.h"
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
@@ -18,8 +19,8 @@ ACAS_InteractionActor::ACAS_InteractionActor()
 	KeyPressWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("KeyPressWidgetComponent"));
 	RootComponent = StaticMesh;
 
-	SenseCollider->SetupAttachment(StaticMesh);
 	KeyPressWidgetComponent->SetupAttachment(StaticMesh);
+	SenseCollider->SetupAttachment(StaticMesh);
 
 	SenseCollider->SetCollisionProfileName(TEXT("InteractionSensor"));
 	StaticMesh->SetCollisionProfileName(TEXT("InteractionActor"));
@@ -36,6 +37,14 @@ ACAS_InteractionActor::ACAS_InteractionActor()
 	{
 		KeyTexture = TextureImage.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> ControllerTextureImage(TEXT("/Script/Engine.Texture2D'/Game/CAS/Resource/Texture/texture_circle.texture_circle'"));
+
+	if (TextureImage.Succeeded())
+	{
+		ControllerKeyTexture = ControllerTextureImage.Object;
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -58,6 +67,12 @@ void ACAS_InteractionActor::BeginPlay()
 
 	SenseCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 	SenseCollider->OnComponentEndOverlap.AddDynamic(this, &ThisClass::EndOverlapEvent);
+
+	auto controller = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
+
+	if(controller)
+		controller->OnInputDeviceChanged.AddUObject(this, &ACAS_InteractionActor::ChangeTexture);
+
 }
 
 // Called every frame
@@ -83,4 +98,16 @@ void ACAS_InteractionActor::EndOverlapEvent(UPrimitiveComponent* OverlappedCompo
 		bCanInteraction = false;
 	}
 	
+}
+
+void ACAS_InteractionActor::ChangeTexture(EInputDeviceType InputDevice)
+{
+	if (InputDevice == EInputDeviceType::KeyboardMouse)
+	{
+		KeyPressUI->SetTexture(KeyTexture);
+	}
+	else
+	{
+		KeyPressUI->SetTexture(ControllerKeyTexture);
+	}
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Controller/CAS_PlayerController.h"
 #include "CAS_InteractionActor.generated.h"
 
 UCLASS(Abstract)
@@ -18,6 +19,7 @@ public:
 	bool CanInteraction() { return bCanInteraction; }
 	virtual void InteractionWithPlayer() PURE_VIRTUAL(ACAS_InteractionActor::InteractionWithPlayer, ;); 
 	class UStaticMeshComponent* GetMesh() { return StaticMesh; };
+	void ChangeTexture(EInputDeviceType InputDevice);
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,6 +37,8 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Collider")
 	class USphereComponent* SenseCollider;
 
+
+
 protected:
 	//상호작용
 	UPROPERTY(EditAnywhere, Category = "UI")
@@ -45,6 +49,9 @@ protected:
 	class UWidgetComponent* KeyPressWidgetComponent;
 	UPROPERTY(EditAnywhere, Category = "UI")
 	class UTexture2D* KeyTexture;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	class UTexture2D* ControllerKeyTexture;
+
 
 	bool bCanInteraction = false;
 

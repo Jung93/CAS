@@ -88,7 +88,7 @@ void UCAS_Ability_PickUp::PlayAnimNotify(FName NotifyName, const FBranchingPoint
 		ball->SetActorLocation(ballLocation);
 
 		player->IsInteracting = false;
-		player->ClearInteratingActor();
+		player->ClearInteractingActor();
 	}
 
 
