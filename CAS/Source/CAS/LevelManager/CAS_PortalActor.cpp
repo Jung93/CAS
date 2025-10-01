@@ -30,9 +30,8 @@ void ACAS_PortalActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (NextLevel.IsValid()) {
-		NextLevelName = FName(*NextLevel.GetAssetName());
-	}
+	FString AssetPath = NextLevel.ToSoftObjectPath().GetAssetName();
+	NextLevelName = FName(*FPaths::GetBaseFilename(AssetPath));
 
 	PortalCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 
