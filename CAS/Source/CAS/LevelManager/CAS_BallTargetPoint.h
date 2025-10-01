@@ -15,7 +15,6 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_BallTargetPoint();
 
-	bool GetPuzzleCompleted() { return bComplete; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -24,13 +23,22 @@ protected:
 	virtual void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
 	UFUNCTION()
 	virtual void EndOverlapEvent(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+	UFUNCTION()
+	void CheckTarget();
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* BallDetectCollider;
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;
 	UPROPERTY()
 	UMaterialInstanceDynamic* DynamicMaterial;
 
-	bool bComplete = false;
+	FTimerHandle CheckTimerHandle;
+
+	float CheckTime = 0.0f;
+	float ClearTime = 2.0f;
+
+	bool bTargetInCollider = false;
+
 };
