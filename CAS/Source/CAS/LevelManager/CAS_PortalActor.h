@@ -26,8 +26,8 @@ protected:
 
 public:	
 	UPROPERTY(EditAnywhere, Category = "NextLevel")
-	class UWorld* NextLevel;
-	
+	TSoftObjectPtr<UWorld> NextLevel;
+
 	FName GetNextLevelName() { return NextLevelName; }
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
@@ -42,5 +42,6 @@ private:
 
 protected:
 	bool bStageClear = false;
+	UPROPERTY()
 	FName NextLevelName;
 };

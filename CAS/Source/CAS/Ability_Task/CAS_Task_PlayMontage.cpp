@@ -57,8 +57,10 @@ void UCAS_Task_PlayMontage::Activate()
 
 void UCAS_Task_PlayMontage::OnDestroy(bool bInOwnerFinished)
 {
-	auto Character = Cast<ACAS_Character>((GetAvatarActor()));
-	AnimInstance = Character->GetMesh()->GetAnimInstance();
+	if (!GetAvatarActor() || !Ability) {
+		Super::OnDestroy(bInOwnerFinished);
+		return;
+	}
 	UCAS_GameplayAbility* ability = Cast<UCAS_GameplayAbility>(Ability);
 	if (bNotifyReady) {
 		AnimInstance->OnPlayMontageNotifyBegin.RemoveDynamic(ability, &UCAS_GameplayAbility::PlayAnimNotify);

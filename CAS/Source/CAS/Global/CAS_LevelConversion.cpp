@@ -24,8 +24,8 @@ void ACAS_LevelConversion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (NextLevel) {
-		NextLevelName = FName(*NextLevel->GetName());
+	if (NextLevel.IsValid()) {
+		NextLevelName = FName(*NextLevel.GetAssetName());
 	}
 	volume->OnComponentBeginOverlap.AddDynamic(this,&ThisClass::OnOverlapBegin);
 }
