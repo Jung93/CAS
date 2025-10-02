@@ -427,7 +427,6 @@ void ACAS_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
-	DetectingEnemy.Reserve(5);
 
 	if (_hatBP->IsValidLowLevel())
 	{
@@ -620,17 +619,17 @@ void ACAS_Player::ToggleSkill()
 
 }
 
-void ACAS_Player::AddDetectingEnemy(class ACAS_Character* enemy)
-{
-	if(DetectingEnemy.Find(enemy) < 0)
-		DetectingEnemy.Add(enemy);
-}
-
-void ACAS_Player::RemoveDetectingEnemy(class ACAS_Character* enemy)
-{
-	if(!DetectingEnemy.IsEmpty())
-		DetectingEnemy.Remove(enemy);
-}
+//void ACAS_Player::AddDetectingEnemy(class ACAS_Character* enemy)
+//{
+//	if(DetectingEnemy.Find(enemy) < 0)
+//		DetectingEnemy.Add(enemy);
+//}
+//
+//void ACAS_Player::RemoveDetectingEnemy(class ACAS_Character* enemy)
+//{
+//	if(!DetectingEnemy.IsEmpty())
+//		DetectingEnemy.Remove(enemy);
+//}
 
 void ACAS_Player::SaveCharacterData()
 {

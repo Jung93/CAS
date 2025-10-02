@@ -7,10 +7,6 @@
 #include "Character/CAS_Hat.h"
 
 
-//테스트용 헤더
-#include "Global/CAS_GameInstance.h"
-
-
 UCAS_Ability_Capture::UCAS_Ability_Capture()
 {
 }
@@ -35,13 +31,6 @@ void UCAS_Ability_Capture::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 		PlayMontageTask->ReadyForActivation();
 	}
 
-	//배경음악 테스트
-	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Task->GetOwnerActor()->GetGameInstance());
-	if (gi)
-	{
-		gi->CrossFadeMusic(testBool);
-		testBool = !testBool;
-	}
 }
 
 void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)

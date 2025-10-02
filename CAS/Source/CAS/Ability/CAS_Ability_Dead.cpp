@@ -58,15 +58,23 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 		Character->SetActorHiddenInGame(true);
 		Character->SetActorEnableCollision(false);
 
-		auto player = Cast<ACAS_Player>(Character);
+		auto playerController = Cast<ACAS_PlayerController>(Character->GetController());
 
-		if (player->IsValidLowLevel())
+		if (playerController->IsValidLowLevel())
 		{
-			auto controller = Cast<ACAS_PlayerController>(player->GetController());
-			controller->OpenTitle();
+			playerController->ClearDetectingEnemy();
+			playerController->OpenTitle();
 			PlayMontageTask->TaskEndEvent.Broadcast();
 			return;
 		}
+
+		auto player = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
+
+		if (player)
+		{
+			player->RemoveDetectingEnemy(Character);
+		}
+
 
 		Character->Controller->UnPossess();
 

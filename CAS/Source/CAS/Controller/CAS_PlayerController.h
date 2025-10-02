@@ -34,6 +34,17 @@ public:
 	void OpenTitle();
 
 	FOnInputDeviceChanged OnInputDeviceChanged;
+
+	bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
+
+	void AddDetectingEnemy(class ACAS_Character* enemy);
+
+	void RemoveDetectingEnemy(class ACAS_Character* enemy);
+
+	TArray<class ACAS_Character*> GetEnemies() { return DetectingEnemy; }
+
+	void ClearDetectingEnemy() { DetectingEnemy.Empty(); }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -79,5 +90,8 @@ protected:
 
 	UPROPERTY()
 	UUserWidget* CurrentCursorWidget;
+
+	UPROPERTY()
+	TArray<class ACAS_Character*> DetectingEnemy;
 
 };

@@ -40,6 +40,7 @@ void ACAS_PlayerController::BeginPlay()
 
     CurrentCursorWidget = CreateWidget<UUserWidget>(this, MouseCursorClass);
     SetMouseCursorWidget(EMouseCursor::Default, CurrentCursorWidget);
+    DetectingEnemy.Reserve(5);
 
 }
 
@@ -203,6 +204,18 @@ void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
         // PlayerController에 커서 좌표 세팅
         SetMouseLocation(NewPos.X, NewPos.Y);
     }
+}
+
+void ACAS_PlayerController::AddDetectingEnemy(class ACAS_Character* enemy)
+{
+    if (DetectingEnemy.Find(enemy) < 0)
+        DetectingEnemy.Add(enemy);
+}
+
+void ACAS_PlayerController::RemoveDetectingEnemy(class ACAS_Character* enemy)
+{
+    if (!DetectingEnemy.IsEmpty())
+        DetectingEnemy.Remove(enemy);
 }
 
 

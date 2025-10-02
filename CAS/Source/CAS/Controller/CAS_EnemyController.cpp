@@ -168,41 +168,43 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 				Player = Actor;
 
-				//auto DetectedPlayer = Cast<ACAS_Player>(Player);
-				//bool firstDetection = !DetectedPlayer->IsAnyDetectingEnemy();
+				auto Controller = Cast<ACAS_Character>(Player)->GetController();
+				auto PlayerController = Cast<ACAS_PlayerController>(Controller);
+				bool firstDetection = !PlayerController->IsAnyDetectingEnemy();
 
-				//if (firstDetection)
-				//{
-				//	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Player->GetGameInstance());
-				//	if (gi)
-				//	{
-				//		gi->CrossFadeMusic(true);
-				//	}
-				//}
-				//ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
+				if (firstDetection)
+				{
+					UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
+					if (gi)
+					{
+						gi->CrossFadeMusic(true);
+					}
+				}
+				ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
 
-				//DetectedPlayer->AddDetectingEnemy(thisCharacter);
+				PlayerController->AddDetectingEnemy(thisCharacter);
 
 			}
 			else if (!Stimulus.WasSuccessfullySensed()) {
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
-				//Player = Actor;
+				Player = Actor;
 
-				//auto DetectedPlayer = Cast<ACAS_Player>(Player);
+				auto Controller = Cast<ACAS_Character>(Player)->GetController();
+				auto PlayerController = Cast<ACAS_PlayerController>(Controller);
 
-				//ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
+				ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
 
-				//DetectedPlayer->RemoveDetectingEnemy(thisCharacter);
+				PlayerController->RemoveDetectingEnemy(thisCharacter);
 
-				//bool lastDetection = !DetectedPlayer->IsAnyDetectingEnemy();
-				//if (lastDetection)
-				//{
-				//	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Player->GetGameInstance());
-				//	if (gi)
-				//	{
-				//		gi->CrossFadeMusic(false);
-				//	}
-				//}
+				bool lastDetection = !PlayerController->IsAnyDetectingEnemy();
+				if (lastDetection)
+				{
+					UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
+					if (gi)
+					{
+						gi->CrossFadeMusic(false);
+					}
+				}
 
 			}
 		}

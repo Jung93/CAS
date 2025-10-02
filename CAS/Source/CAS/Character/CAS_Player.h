@@ -139,17 +139,17 @@ public:
 	FVector ReceivedPosition;
 
 
-	bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
+	//bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
 
-	void AddDetectingEnemy(class ACAS_Character* enemy);
+	//void AddDetectingEnemy(class ACAS_Character* enemy);
 
-	void RemoveDetectingEnemy(class ACAS_Character* enemy);
+	//void RemoveDetectingEnemy(class ACAS_Character* enemy);
 
-	TArray<class ACAS_Character*> GetEnemies() { return DetectingEnemy; }
+	//TArray<class ACAS_Character*> GetEnemies() { return DetectingEnemy; }
 
 protected:
-	UPROPERTY()
-	TArray<class ACAS_Character*> DetectingEnemy;
+	//UPROPERTY()
+	//TArray<class ACAS_Character*> DetectingEnemy;
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
 	TSubclassOf<class ACAS_Hat> _hatBP;
