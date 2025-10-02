@@ -30,9 +30,8 @@ void ACAS_PortalActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (NextLevel) {
-		NextLevelName = FName(*NextLevel->GetName());
-	}
+	FString AssetPath = NextLevel.ToSoftObjectPath().GetAssetName();
+	NextLevelName = FName(*FPaths::GetBaseFilename(AssetPath));
 
 	PortalCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 
@@ -55,16 +54,5 @@ void ACAS_PortalActor::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, 
 	else {
 		return;
 	}
-}
-
-void ACAS_PortalActor::CheckAllPoints()
-{
-	for (auto BallTargetPoint : BallTargetPoints) {
-		if (!BallTargetPoint->GetPuzzleCompleted()) {
-			return;
-		}
-
-	}
-	bStageClear = true;
 }
 

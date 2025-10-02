@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CAS_PortalActor.generated.h"
 
-//DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
+DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
 
 UCLASS()
 class CAS_API ACAS_PortalActor : public AActor
@@ -26,8 +26,8 @@ protected:
 
 public:	
 	UPROPERTY(EditAnywhere, Category = "NextLevel")
-	class UWorld* NextLevel;
-	
+	TSoftObjectPtr<UWorld> NextLevel;
+
 	FName GetNextLevelName() { return NextLevelName; }
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
@@ -41,11 +41,7 @@ private:
 	class USceneComponent* RootScene;
 
 protected:
-	UPROPERTY(EditAnywhere)
-	TArray<class ACAS_BallTargetPoint*> BallTargetPoints;
-
-	void CheckAllPoints();
-
 	bool bStageClear = false;
+	UPROPERTY()
 	FName NextLevelName;
 };

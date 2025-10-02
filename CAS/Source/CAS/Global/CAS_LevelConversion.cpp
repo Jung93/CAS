@@ -24,9 +24,9 @@ void ACAS_LevelConversion::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (NextLevel) {
-		NextLevelName = FName(*NextLevel->GetName());
-	}
+	FString AssetPath = NextLevel.ToSoftObjectPath().GetAssetName(); 
+	NextLevelName = FName(*FPaths::GetBaseFilename(AssetPath));
+
 	volume->OnComponentBeginOverlap.AddDynamic(this,&ThisClass::OnOverlapBegin);
 }
 

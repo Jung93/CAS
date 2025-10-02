@@ -151,7 +151,7 @@ void UCAS_GameInstance::LoadGameData_Sync(int32 index)
 	CachedSaveGameData.bDataLoadingReady = true;
 
 
-	UGameplayStatics::OpenLevel(GetWorld(), SaveGameData->Level);
+	UGameplayStatics::OpenLevel(this, SaveGameData->Level);
 }
 
 void UCAS_GameInstance::LoadGameData_ASync(int32 index)
@@ -197,17 +197,17 @@ void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
 
 void UCAS_GameInstance::OpenLoadingLevel()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), "LoadingOnly");
+	UGameplayStatics::OpenLevel(this, "LoadingOnly");
 }
 
 void UCAS_GameInstance::OpenStartLevel()
 {
-	UGameplayStatics::OpenLevel(GetWorld(), "Test");
+	UGameplayStatics::OpenLevel(this, "Test");
 }
 
 void UCAS_GameInstance::OpenNextLevel(FName LevelName)
 {
-	UGameplayStatics::OpenLevel(GetWorld(), LevelName);
+	UGameplayStatics::OpenLevel(this, LevelName);
 	ClearNextLevelName();
 }
 

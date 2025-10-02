@@ -28,7 +28,7 @@ protected:
 
 public:
 	UPROPERTY(EditAnywhere, Category = "NextLevel")
-	class UWorld* NextLevel;
+	TSoftObjectPtr<UWorld> NextLevel;
 
 	FName GetNextLevelName() { return NextLevelName; }
 
