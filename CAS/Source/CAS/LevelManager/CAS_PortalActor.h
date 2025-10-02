@@ -24,6 +24,10 @@ protected:
 	UFUNCTION()
 	virtual void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnPuzzleCompleted();
+
+	void PortalInitialSetting();
 public:	
 	UPROPERTY(EditAnywhere, Category = "NextLevel")
 	TSoftObjectPtr<UWorld> NextLevel;

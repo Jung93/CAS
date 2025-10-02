@@ -42,7 +42,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float MaxDuration = 0.3f;
 	UPROPERTY(EditAnywhere)
-	float Interval = 0.03f;
+	float Interval = 0.02f;
 
 	float CurrDuration = 0.0f;
 };

@@ -31,13 +31,22 @@ protected:
 
 	FTransform SpawnTransform;
 
+	UPROPERTY(EditAnywhere, Category = "SpawnActor")
+	int32 SpawnCount = 0;
+
+	int32 RemainingSpawnNum = 0;
+
+	FTimerHandle SpawnTimerHandle;
+
+	UPROPERTY(EditAnywhere, Category = "SpawnActor")
+	float Interval = 0.0f;
+
 protected:
 	UFUNCTION()
 	void OnDestroyedEvent(AActor* Actor);
 
 	void SpawnNewActor();
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
+	
+	UFUNCTION()
+	void InitialSpawn();
 };

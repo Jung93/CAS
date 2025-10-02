@@ -16,8 +16,10 @@ void ACAS_SwitchLinkedPillar::BeginPlay()
 
 	if (PillarCase) {
 		FTransform baseTransform = PillarCase->GetTransform();
-		FVector Start = baseTransform.GetLocation();
-		SetActorLocation(Start);
+		FVector StartLocation = baseTransform.GetLocation() - (PillarCase->GetActorUpVector() * Offset * 0.3f);
+
+		SetActorTransform(baseTransform);
+		SetActorLocation(StartLocation);
 	}
 }
 
