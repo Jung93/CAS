@@ -30,7 +30,11 @@ protected:
 	virtual void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult) override;
 	virtual void EndOverlapEvent(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex) override;
 
+	UPROPERTY(EditAnywhere, Category = "Collider")
+	class UBoxComponent* CubeCollider;
+
 private:
 	UPROPERTY()
 	class ACAS_Player* PushPlyer;
+
 };

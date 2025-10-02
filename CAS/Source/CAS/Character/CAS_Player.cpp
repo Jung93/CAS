@@ -167,6 +167,13 @@ void ACAS_Player::Look(const FInputActionValue& Value)
 	}
 }
 
+void ACAS_Player::Jump()
+{
+	if(!IsInteracting)
+		Super::Jump();
+
+}
+
 void ACAS_Player::StealAbility(const FInputActionValue& Value)
 {
 	FVector2D viewportSize;
@@ -420,6 +427,8 @@ void ACAS_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
+	DetectingEnemy.Reserve(5);
+
 	if (_hatBP->IsValidLowLevel())
 	{
 		FActorSpawnParameters SpawnParams;
@@ -510,7 +519,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACAS_Player::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		// Moving
@@ -609,6 +618,18 @@ void ACAS_Player::ToggleSkill()
 {
 	QuickSlotWidget->SwitchToggle();
 
+}
+
+void ACAS_Player::AddDetectingEnemy(class ACAS_Character* enemy)
+{
+	if(DetectingEnemy.Find(enemy) < 0)
+		DetectingEnemy.Add(enemy);
+}
+
+void ACAS_Player::RemoveDetectingEnemy(class ACAS_Character* enemy)
+{
+	if(!DetectingEnemy.IsEmpty())
+		DetectingEnemy.Remove(enemy);
 }
 
 void ACAS_Player::SaveCharacterData()

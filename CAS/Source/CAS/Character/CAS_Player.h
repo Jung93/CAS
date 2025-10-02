@@ -28,6 +28,7 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+	virtual void Jump() override;
 
 	void StealAbility(const FInputActionValue& Value);
 
@@ -136,7 +137,19 @@ public:
 	bool bPositionReceived = false;
 
 	FVector ReceivedPosition;
+
+
+	bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
+
+	void AddDetectingEnemy(class ACAS_Character* enemy);
+
+	void RemoveDetectingEnemy(class ACAS_Character* enemy);
+
+	TArray<class ACAS_Character*> GetEnemies() { return DetectingEnemy; }
+
 protected:
+	UPROPERTY()
+	TArray<class ACAS_Character*> DetectingEnemy;
 	
 	UPROPERTY(EditAnywhere, Category = "Hat")
 	TSubclassOf<class ACAS_Hat> _hatBP;

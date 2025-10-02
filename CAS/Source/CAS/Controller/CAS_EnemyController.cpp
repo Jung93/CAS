@@ -8,6 +8,7 @@
 #include "Character/CAS_Character.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
+#include "Global/CAS_GameInstance.h"
 
 ACAS_EnemyController::ACAS_EnemyController()
 {
@@ -166,9 +167,43 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 				Player = Actor;
+
+				//auto DetectedPlayer = Cast<ACAS_Player>(Player);
+				//bool firstDetection = !DetectedPlayer->IsAnyDetectingEnemy();
+
+				//if (firstDetection)
+				//{
+				//	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Player->GetGameInstance());
+				//	if (gi)
+				//	{
+				//		gi->CrossFadeMusic(true);
+				//	}
+				//}
+				//ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
+
+				//DetectedPlayer->AddDetectingEnemy(thisCharacter);
+
 			}
 			else if (!Stimulus.WasSuccessfullySensed()) {
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+				//Player = Actor;
+
+				//auto DetectedPlayer = Cast<ACAS_Player>(Player);
+
+				//ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
+
+				//DetectedPlayer->RemoveDetectingEnemy(thisCharacter);
+
+				//bool lastDetection = !DetectedPlayer->IsAnyDetectingEnemy();
+				//if (lastDetection)
+				//{
+				//	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Player->GetGameInstance());
+				//	if (gi)
+				//	{
+				//		gi->CrossFadeMusic(false);
+				//	}
+				//}
+
 			}
 		}
 		else {

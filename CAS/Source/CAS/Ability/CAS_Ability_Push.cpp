@@ -6,6 +6,7 @@
 #include "Controller/CAS_PlayerController.h"
 #include "Character/CAS_Player.h"
 #include "InteractionActor/CAS_InteractionCube.h"
+#include "InteractionActor/CAS_InteractionBall.h"
 
 
 UCAS_Ability_Push::UCAS_Ability_Push()
@@ -20,6 +21,7 @@ bool UCAS_Ability_Push::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
 		return false;
 	}
 
+
 	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 
 }
@@ -27,7 +29,6 @@ bool UCAS_Ability_Push::CanActivateAbility(const FGameplayAbilitySpecHandle Hand
 void UCAS_Ability_Push::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
 
 
 
@@ -71,9 +72,7 @@ void UCAS_Ability_Push::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 	if (NotifyName == "PushStart")
 	{
 		player->IsInteracting = true;
-
 		cube->GetMesh()->SetSimulatePhysics(true);
-
 
 	}
 	else if (NotifyName == "PushEnd")
@@ -121,12 +120,6 @@ void UCAS_Ability_Push::ReceiveTarget(ACAS_Character* Target, int32 TaskLevel)
 			ActiveEffectHandle = ApplyGamePlayEffectToSelf(Target, TagEffectClassJump, TaskLevel, EffectContextHandle, AbilitySystemComp);
 
 			AbilitySystemComp->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag(FName("State.Interacting")));
-
-
-
-
-
-
 
 		}
 		else

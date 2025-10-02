@@ -43,6 +43,8 @@ protected:
 	void PrintDebugMessage(const FInputActionValue& Value);
 	void ControlSaveLoadWidget(const FInputActionValue& Value);
 	void QuitGame(const FInputActionValue& Value);
+	void MoveVirtualCursor(const FInputActionValue& Value);
+
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
@@ -52,6 +54,9 @@ private:
 	UInputAction* ControlSaveLoadAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "QuitGame", meta = (AllowPrivateAccess = "true"))
 	UInputAction* QuitGameAction;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cursor", meta = (AllowPrivateAccess = "true"))
+	UInputAction* CursorMoveAction;
+
 	UPROPERTY()
 	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
 protected:
@@ -65,4 +70,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCAS_TitleWidget> TitleWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "Cursor")
+	TSubclassOf<UUserWidget> GamepadCursorClass;
+
+	UPROPERTY(EditAnywhere, Category = "Cursor")
+	TSubclassOf<UUserWidget> MouseCursorClass;
+
+	UPROPERTY()
+	UUserWidget* CurrentCursorWidget;
+
 };
