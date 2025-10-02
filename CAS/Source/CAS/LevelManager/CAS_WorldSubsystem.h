@@ -17,7 +17,7 @@ public:
 	void RegisterTarget() { SpawnedTargetCount++; }
 	void PlusCompletedCount() { CompletedTargetCount++; CheckGameProgress(); }
 	void SubCompletedCount() { CompletedTargetCount--; }
-
+	void StageClearEvent();
 	FOnPuzzleCompleted OnPuzzleCompleted;
 private:
 	UFUNCTION()
@@ -25,5 +25,6 @@ private:
 
 	int32 SpawnedTargetCount = 0;
 	int32 CompletedTargetCount = 0;
+
 
 };

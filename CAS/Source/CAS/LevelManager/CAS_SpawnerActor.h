@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "SpawnActor")
 	int32 SpawnCount = 0;
 
-	int32 RemainingSpawnedNum = 0;
+	int32 RemainingSpawnNum = 0;
 
 	FTimerHandle SpawnTimerHandle;
 

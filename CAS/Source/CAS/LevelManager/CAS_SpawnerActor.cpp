@@ -21,10 +21,12 @@ void ACAS_SpawnerActor::BeginPlay()
 		SpawnTransform = GetTransform();
 		FVector	SpawnPosition = GetActorTransform().TransformPosition(RelativePosition);
 		SpawnTransform.SetLocation(SpawnPosition);
-		
-		RemainingSpawnedNum = SpawnCount;
 
-		GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &ThisClass::InitialSpawn, Interval, true);
+		RemainingSpawnNum = SpawnCount;
+
+		if (Interval > 0) {
+			GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &ThisClass::InitialSpawn, Interval, true);
+		}
 	}
 
 }
@@ -42,11 +44,11 @@ void ACAS_SpawnerActor::SpawnNewActor()
 
 void ACAS_SpawnerActor::InitialSpawn()
 {
-	if (RemainingSpawnedNum <= 0) {
+	if (RemainingSpawnNum <= 0) {
 		GetWorldTimerManager().ClearTimer(SpawnTimerHandle);
 	}
 	else {
-		RemainingSpawnedNum--;
+		RemainingSpawnNum--;
 		SpawnNewActor();
 	}
 }

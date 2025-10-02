@@ -17,7 +17,3 @@ void ACAS_EnemyNoCapt::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ACAS_EnemyNoCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}

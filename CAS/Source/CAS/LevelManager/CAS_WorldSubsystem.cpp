@@ -3,10 +3,14 @@
 
 #include "LevelManager/CAS_WorldSubsystem.h"
 
+void UCAS_WorldSubsystem::StageClearEvent()
+{
+	OnPuzzleCompleted.Broadcast();
+}
+
 void UCAS_WorldSubsystem::CheckGameProgress()
 {
 	if (CompletedTargetCount == SpawnedTargetCount) {
-		OnPuzzleCompleted.Broadcast();
+		StageClearEvent();
 	}
-	auto temp = 1;
 }
