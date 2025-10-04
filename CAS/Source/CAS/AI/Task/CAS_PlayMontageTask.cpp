@@ -76,6 +76,8 @@ void UCAS_PlayMontageTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 
 void UCAS_PlayMontageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, EBTNodeResult::Type TaskResult)
 {
+	Super::OnTaskFinished(OwnerComp, NodeMemory, TaskResult);
+
 	auto CurPawn = OwnerComp.GetAIOwner()->GetPawn();
 	if (!CurPawn) {
 		return;
@@ -85,7 +87,7 @@ void UCAS_PlayMontageTask::OnTaskFinished(UBehaviorTreeComponent& OwnerComp, uin
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 
 	AnimInstance->OnMontageEnded.RemoveDynamic(this, &ThisClass::MontageEnd);
-
+	
 	BlackBoard->SetValueAsBool(IsMontagePlayingKey.SelectedKeyName, false);
 	AnimInstance->Montage_Stop(0.2f, CAS_Montage);
 
