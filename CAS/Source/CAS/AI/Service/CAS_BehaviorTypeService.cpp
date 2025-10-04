@@ -23,11 +23,8 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	auto Enemy = Cast<ACAS_Character>(EnemyController->GetPawn());
 
 	auto EnemyTpye = BlackBoard->GetValueAsEnum("EnemyType");
-	if (EnemyController->bDebugOn) {
-		auto curType = BehaviorComponent->GetBehaviorType();
-		FString EnumName = UEnum::GetValueAsString(curType);
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, EnumName);
-	}
+	auto curType = BehaviorComponent->GetBehaviorType();
+
 	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Death)) {
 
 		return;
@@ -38,12 +35,6 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 		return;
 	}
-	//idle 상태 -> patrol
-	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Wait)) {
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
-		return;
-	}
-
 	bool bStunState = Enemy->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"));
 	//스턴 태그 보유 -> 스턴 몽타주재생 -> wait
 	if (bStunState) {
@@ -51,34 +42,41 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 	//소리가 들렸을 경우 -> 해당 위치까지 가서 확인해보기
-	if (BlackBoard->GetValueAsVector("LastHeardLocation") != FVector::ZeroVector) {
+	if (BlackBoard->GetValueAsVector("LastHeardLocation") != FVector::ZeroVector && !Player) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Alert);
 		return;
 	}
-	
+
 	//플레이어를 감지하지 못한 경우 -> 순찰
 	if (!Player) {
-		EnemyController->ClearFocus(EAIFocusPriority::Gameplay); 
+		EnemyController->ClearFocus(EAIFocusPriority::Gameplay);
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
 		return;
-
 	}
+
+	//플레이어를 감지했다가 놓쳐서 마지막에 보였던 장소에 가보는 경우 -> 장소에 가보고 perception으로 다음 행동 판단
+	if (BlackBoard->GetValueAsVector("LastSeenLocation") != FVector::ZeroVector && Player) {
+		BehaviorComponent->ChangeBehaviorType(EBehaviorType::TargetLost);
+		return;
+	}
+
 	//플레이어를 감지 한 경우
-	FRotator LookAtRot = (Player->GetActorLocation() - Enemy->GetActorLocation()).Rotation();
-	EnemyController->SetControlRotation(LookAtRot);
-	
-	float Distance = Enemy->GetDistanceTo(Player);
+	bool bDetectable = Player->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+	if (bDetectable) {
 
-	if (Distance < AttackRange) {
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);
+		float Distance = Enemy->GetDistanceTo(Player);
 
-		return;
-	}
+		if (Distance < AttackRange) {
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);
 
-	if (Distance <= EnemyController->GetSightRange()) {
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
+			return;
+		}
 
-		return;
+		if (Distance <= EnemyController->GetSightRange()) {
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
+
+			return;
+		}
 	}
 
 	return;
