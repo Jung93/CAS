@@ -17,32 +17,27 @@ ACAS_EnemyController::ACAS_EnemyController()
 
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
 
-	SightConfig->SightRadius = 1500.0f;
-	SightConfig->LoseSightRadius = 7500.0f;
-	SightConfig->PeripheralVisionAngleDegrees = 95.0f;
-	SightConfig->SetMaxAge(3.0f);
+	SightConfig->SightRadius = 2000.0f;
+	SightConfig->LoseSightRadius = 4500.0f;
+	SightConfig->PeripheralVisionAngleDegrees = 75.0f;
+	SightConfig->SetMaxAge(5.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
 	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
-	
+
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
 
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing"));
-	HearingConfig->HearingRange = 1000.0f;
-	HearingConfig->SetMaxAge(0.1f);
+	HearingConfig->HearingRange = 2500.0f;
+	HearingConfig->SetMaxAge(15.0f);
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
 	AIPerceptionComponent->ConfigureSense(*HearingConfig);
-
-	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>(TEXT("Damage"));
-	DamageConfig->SetMaxAge(1.0f);
-
-	AIPerceptionComponent->ConfigureSense(*DamageConfig);
 
 	AIPerceptionComponent->SetDominantSense(SightConfig->GetSenseImplementation());
 
@@ -65,9 +60,9 @@ void ACAS_EnemyController::OnUnPossess()
 {
 	auto ThisCharacter = Cast<ACharacter>(GetPawn());
 	auto AnimInstance = ThisCharacter->GetMesh()->GetAnimInstance();
-	
+
 	AnimInstance->StopAllMontages(0.1f);
-	
+
 	Super::OnUnPossess();
 
 }
@@ -107,72 +102,29 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	if (!playerController) {
 		return;
 	}
+	bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+	auto CurrBehaviorType = BehaviorComponent->GetBehaviorType();
 
 	FAISenseID StimulusID = Stimulus.Type;
 
 	bDebugOn = true;
 
-	if (StimulusID == DamageConfig->GetSenseID()) {
-		if (Stimulus.WasSuccessfullySensed()) {
-			APawn* ThisPawn = GetPawn();
-			if (!ThisPawn) {
-				return;
+	if (Stimulus.WasSuccessfullySensed()) {
+
+		APawn* ThisPawn = GetPawn();
+		if (!ThisPawn) {
+			return;
+		}
+		if (StimulusID == SightConfig->GetSenseID()) {
+			if (CurrBehaviorType == EBehaviorType::DetectLost) {
+				//플레이어가 숨어서 놓쳤다가 해당 위치에 가봤더니 다시 발견한 상황 -> LastTargetLocation를 초기화해서 서비스에서 갱신 막기
+				BlackBoardComponent->SetValueAsVector("LastTargetLocation", FVector::ZeroVector);
 			}
-			FVector CurrentLocation = ThisPawn->GetActorLocation();
-			FVector TargetLocation = Actor->GetActorLocation();
-			FVector TargetVector = TargetLocation - CurrentLocation;
-			TargetVector.Z = 0.0f;
-			FRotator NewRot = TargetVector.Rotation();
-
-			ThisPawn->SetActorRotation(NewRot);
-		}
-	}
-	else if (StimulusID == HearingConfig->GetSenseID()) {
-		if (Stimulus.WasSuccessfullySensed()) {
-			APawn* ThisPawn = GetPawn();
-			if (!ThisPawn) {
-				return;
-			}
-			FVector CurrentLocation = ThisPawn->GetActorLocation();
-			FVector TargetLocation = Actor->GetActorLocation();
-			FVector TargetVector = TargetLocation - CurrentLocation;
-			TargetVector.Z = 0.0f;
-			FRotator NewRot = TargetVector.Rotation();
-
-			ThisPawn->SetActorRotation(NewRot);
-			BlackBoardComponent->SetValueAsVector("LastHeardLocation", Stimulus.StimulusLocation);
-		}
-		else if (!Stimulus.WasSuccessfullySensed()) {
-			BlackBoardComponent->ClearValue("LastHeardLocation");
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
-		}
-	}
-	else if (StimulusID == SightConfig->GetSenseID()) {
-
-		bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
-
-		AActor* Player = nullptr;
-
-		if (bDetectable) {
-			if (Stimulus.WasSuccessfullySensed()) {
-				APawn* ThisPawn = GetPawn();
-				if (!ThisPawn) {
-					return;
-				}
-				FVector CurrentLocation = ThisPawn->GetActorLocation();
-				FVector TargetLocation = Actor->GetActorLocation();
-				FVector TargetVector = TargetLocation - CurrentLocation;
-				TargetVector.Z = 0.0f;
-				FRotator NewRot = TargetVector.Rotation();
-
-				ThisPawn->SetActorRotation(NewRot);
-
+			if (bDetectable) {
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
-				Player = Actor;
+				BlackBoardComponent->SetValueAsObject("player", Actor);
 
-				auto Controller = Cast<ACAS_Character>(Player)->GetController();
-				auto PlayerController = Cast<ACAS_PlayerController>(Controller);
-				bool firstDetection = !PlayerController->IsAnyDetectingEnemy();
+				bool firstDetection = !playerController->IsAnyDetectingEnemy();
 
 				if (firstDetection)
 				{
@@ -184,38 +136,145 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 				}
 				ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
 
-				PlayerController->AddDetectingEnemy(thisCharacter);
+				playerController->AddDetectingEnemy(thisCharacter);
 
+				return;
 			}
-			else if (!Stimulus.WasSuccessfullySensed()) {
-				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
-				Player = Actor;
-
-				auto Controller = Cast<ACAS_Character>(Player)->GetController();
-				auto PlayerController = Cast<ACAS_PlayerController>(Controller);
-
-				ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
-
-				PlayerController->RemoveDetectingEnemy(thisCharacter);
-
-				bool lastDetection = !PlayerController->IsAnyDetectingEnemy();
-				if (lastDetection)
-				{
-					UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
-					if (gi)
-					{
-						gi->CrossFadeMusic(false);
-					}
-				}
-
+			else {
+				//시야에 플레이어 컨트롤러가 빙의된 캐릭터가 포착되었으나 탐지가능 태그가 없는경우
+				return;
 			}
 		}
-		else {
+		else if (StimulusID == HearingConfig->GetSenseID()) {
+			FVector CurrentLocation = ThisPawn->GetActorLocation();
+			FVector TargetLocation = Actor->GetActorLocation();
+			FVector TargetVector = TargetLocation - CurrentLocation;
+			TargetVector.Z = 0.0f;
+			FRotator NewRot = TargetVector.Rotation();
+
+			ThisPawn->SetActorRotation(NewRot);
+			BlackBoardComponent->SetValueAsVector("LastHeardLocation", Stimulus.StimulusLocation);
 			return;
 		}
-		BlackBoardComponent->SetValueAsObject("player", Player);
-		return;
+
 	}
+	else if (!Stimulus.WasSuccessfullySensed()) {
+		if (StimulusID == SightConfig->GetSenseID()) {
+			BlackBoardComponent->ClearValue("player");
+			//BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+			BlackBoardComponent->SetValueAsVector("LastTargetLocation", Stimulus.StimulusLocation);
+
+			ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
+
+			playerController->RemoveDetectingEnemy(thisCharacter);
+
+			bool lastDetection = !playerController->IsAnyDetectingEnemy();
+			if (lastDetection)
+			{
+				UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
+				if (gi)
+				{
+					gi->CrossFadeMusic(false);
+				}
+			}
+		}
+		else if (StimulusID == HearingConfig->GetSenseID()) {
+			BlackBoardComponent->SetValueAsVector("LastHeardLocation", FVector::ZeroVector);
+		}
+
+	}
+
+
+	//if (StimulusID == HearingConfig->GetSenseID()) {
+	//
+	//	if (Stimulus.WasSuccessfullySensed()) {
+	//		APawn* ThisPawn = GetPawn();
+	//		if (!ThisPawn) {
+	//			return;
+	//		}
+	//		FVector CurrentLocation = ThisPawn->GetActorLocation();
+	//		FVector TargetLocation = Actor->GetActorLocation();
+	//		FVector TargetVector = TargetLocation - CurrentLocation;
+	//		TargetVector.Z = 0.0f;
+	//		FRotator NewRot = TargetVector.Rotation();
+	//
+	//		ThisPawn->SetActorRotation(NewRot);
+	//		BlackBoardComponent->SetValueAsVector("LastHeardLocation", Stimulus.StimulusLocation);
+	//		if (bDetectable) {
+	//			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
+	//			Player = Actor;
+	//		}
+	//	}
+	//	else if (!Stimulus.WasSuccessfullySensed()) {
+	//		BlackBoardComponent->SetValueAsVector("LastHeardLocation",FVector::ZeroVector);
+	//		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+	//	}
+	//}
+	//else if (StimulusID == SightConfig->GetSenseID()) {
+	//			
+	//	if (bDetectable) {
+	//		if (Stimulus.WasSuccessfullySensed()) {
+	//			APawn* ThisPawn = GetPawn();
+	//			if (!ThisPawn) {
+	//				return;
+	//			}
+	//			FVector CurrentLocation = ThisPawn->GetActorLocation();
+	//			FVector TargetLocation = Actor->GetActorLocation();
+	//			FVector TargetVector = TargetLocation - CurrentLocation;
+	//			TargetVector.Z = 0.0f;
+	//			FRotator NewRot = TargetVector.Rotation();
+	//
+	//			ThisPawn->SetActorRotation(NewRot);
+	//
+	//			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
+	//			Player = Actor;
+	//
+	//			auto Controller = Cast<ACAS_Character>(Player)->GetController();
+	//			auto PlayerController = Cast<ACAS_PlayerController>(Controller);
+	//			bool firstDetection = !PlayerController->IsAnyDetectingEnemy();
+	//
+	//			if (firstDetection)
+	//			{
+	//				UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
+	//				if (gi)
+	//				{
+	//					gi->CrossFadeMusic(true);
+	//				}
+	//			}
+	//			ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
+	//
+	//			PlayerController->AddDetectingEnemy(thisCharacter);
+	//
+	//		}
+	//		else if (!Stimulus.WasSuccessfullySensed()) {
+	//			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+	//			Player = Actor;
+	//
+	//			auto Controller = Cast<ACAS_Character>(Player)->GetController();
+	//			auto PlayerController = Cast<ACAS_PlayerController>(Controller);
+	//
+	//			ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
+	//
+	//			PlayerController->RemoveDetectingEnemy(thisCharacter);
+	//
+	//			bool lastDetection = !PlayerController->IsAnyDetectingEnemy();
+	//			if (lastDetection)
+	//			{
+	//				UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
+	//				if (gi)
+	//				{
+	//					gi->CrossFadeMusic(false);
+	//				}
+	//			}
+	//
+	//		}
+	//	}
+	//	else {
+	//		return;
+	//	}
+	//	BlackBoardComponent->SetValueAsObject("player", Player);
+	//	return;
+	//}
 
 }
 
