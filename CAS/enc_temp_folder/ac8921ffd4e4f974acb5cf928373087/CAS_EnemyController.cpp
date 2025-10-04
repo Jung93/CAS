@@ -32,7 +32,7 @@ ACAS_EnemyController::ACAS_EnemyController()
 
 	HearingConfig = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing"));
 	HearingConfig->HearingRange = 1000.0f;
-	HearingConfig->SetMaxAge(0.1f);
+	HearingConfig->SetMaxAge(3.0f);
 	HearingConfig->DetectionByAffiliation.bDetectEnemies = true;
 	HearingConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	HearingConfig->DetectionByAffiliation.bDetectFriendlies = true;
