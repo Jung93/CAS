@@ -10,6 +10,7 @@
 #include "AbilitySystemInterface.h"
 #include "GAS/CAS_AbilitySystemComponent.h"
 #include "AI/CAS_PatrolPath.h"
+#include "Controller/CAS_EnemyController.h"
 #include "CAS_Character.generated.h"
 
 class USpringArmComponent;
@@ -17,6 +18,12 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+
+UENUM(BlueprintType)
+enum class EMoveType : uint8
+{
+	Idle, Quiet, Walk, Sprint
+};
 
 UCLASS(Abstract)
 class CAS_API ACAS_Character : public ACharacter
@@ -75,6 +82,12 @@ protected:
 	class UAudioComponent* AuidoComponent;
 
 
+public:
+	EEnemyType GetEnemyType() { return MyType; }
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
+	EEnemyType MyType = EEnemyType::Nomal;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HpBar")
 	class UWidgetComponent* HpBarWidgetComponent;
@@ -91,5 +104,7 @@ public:
 public:
 	virtual void SaveCharacterData();
 	virtual void LoadCharacterData();
+
+
 };
 

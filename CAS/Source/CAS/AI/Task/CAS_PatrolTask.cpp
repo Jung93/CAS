@@ -46,7 +46,13 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	//auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
 
 	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
-		PatrolPath->IncreasePathIndex();
+		if (!bInverse) {
+			PatrolPath->IncreasePathIndex();
+		}
+		else {
+			PatrolPath->DecreasePathIndex();
+		}
+		
 		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
 
 		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);

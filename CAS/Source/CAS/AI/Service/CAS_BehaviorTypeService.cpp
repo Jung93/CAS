@@ -22,6 +22,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	auto Player = Cast<ACAS_Character>(BlackBoard->GetValueAsObject(PlayerKey.SelectedKeyName));
 	auto Enemy = Cast<ACAS_Character>(EnemyController->GetPawn());
 
+	auto EnemyTpye = BlackBoard->GetValueAsEnum("EnemyType");
 	if (EnemyController->bDebugOn) {
 		auto curType = BehaviorComponent->GetBehaviorType();
 		FString EnumName = UEnum::GetValueAsString(curType);

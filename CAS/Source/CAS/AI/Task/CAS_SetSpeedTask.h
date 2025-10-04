@@ -4,24 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "CAS_PatrolTask.generated.h"
+#include "Character/CAS_Character.h"
+#include "CAS_SetSpeedTask.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CAS_API UCAS_PatrolTask : public UBTTaskNode
+class CAS_API UCAS_SetSpeedTask : public UBTTaskNode
 {
 	GENERATED_BODY()
 public:
-	UCAS_PatrolTask();
+	UCAS_SetSpeedTask();
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
-	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector MovePositionKey;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bInverse = false;
+	EMoveType MoveType;
+	
 };

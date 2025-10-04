@@ -11,9 +11,15 @@
 #include "Perception/AISenseConfig_Damage.h"
 #include "CAS_EnemyController.generated.h"
 
-/**
- * 
- */
+UENUM(BlueprintType)
+enum class EEnemyType : uint8
+{
+	Nomal,
+	Aggressive,//공격적인 성향
+	Scared,//적을 보면 도주하는 성향
+	Mild, //
+};
+
 UCLASS()
 class CAS_API ACAS_EnemyController : public AAIController
 {
@@ -25,7 +31,6 @@ public:
 	virtual void OnPossess(APawn* pawn) override;
 	virtual void OnUnPossess() override;
 	virtual void BeginPlay() override;
-	//virtual void Tick(float DeltaSeconds) override;
 
 	float GetSightRange() { return SightConfig->SightRadius; }
 	class UCAS_BehaviorComponent* GetBehaviorComponent() { return BehaviorComponent; }
@@ -40,10 +45,7 @@ protected:
 	class UBlackboardComponent* BlackBoardComponent;
 	UFUNCTION()
 	void OnTargetPerceptionUpdated(AActor* Actor, struct FAIStimulus Stimulus);
-	UFUNCTION()
-	void OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors);
-	UFUNCTION()
-	void OnTargetPerceptionForgotten(AActor* Actor);
+
 	void SetMeshColor(APawn * pawn,FVector colorVector , FName name = "Tint");
 protected:
 	FVector OriginalColorVector = FVector(1,1,1);

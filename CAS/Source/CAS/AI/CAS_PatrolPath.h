@@ -18,7 +18,8 @@ public:
 	int32 GetPatrolLength() { return PatrolPath.Num(); }
 	int32 GetPathIndex() { return PathIndex; }
 
-	void IncreasePathIndex() { PathIndex = (PathIndex + 1) % PatrolPath.Num(); }
+	void IncreasePathIndex() { PathIndex = (PathIndex + 1) % GetPatrolLength(); }
+	void DecreasePathIndex(){ PathIndex = (PathIndex - 1 + GetPatrolLength()) % GetPatrolLength(); }
 protected:
 	virtual void BeginPlay() override;
 
@@ -26,5 +27,5 @@ protected:
 	TArray<FVector> PatrolPath;
 
 	UPROPERTY()
-	int32 PathIndex = 0;
+	int32 PathIndex = 0;	
 };
