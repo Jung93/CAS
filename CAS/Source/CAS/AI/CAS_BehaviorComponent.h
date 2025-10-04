@@ -14,7 +14,6 @@ enum class EBehaviorType : uint8
 	Patrol,
 	Alert,
 	Detect,
-	DetectLost,
 	Trace,
 	Runaway,
 	Missed,
