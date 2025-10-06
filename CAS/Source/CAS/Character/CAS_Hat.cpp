@@ -6,6 +6,7 @@
 #include "CAS/Character/CAS_EnemyCapt.h"
 #include "CAS/Character/CAS_Player.h"
 #include "CAS/Character/CAS_HitScan.h"
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
 
 // Sets default values
 ACAS_Hat::ACAS_Hat()
@@ -25,6 +26,7 @@ void ACAS_Hat::BeginPlay()
 {
 	Super::BeginPlay();
 
+	
 }
 
 // Called every frame
@@ -44,7 +46,7 @@ void ACAS_Hat::PostInitializeComponents()
 	Super::PostInitializeComponents();
 
 	_collider->OnComponentBeginOverlap.AddDynamic(this, &ACAS_Hat::OnMyCharacterOverlap);
- 
+
 }
 
 // Called to bind functionality to input

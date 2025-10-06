@@ -20,13 +20,13 @@ ACAS_EnemyController::ACAS_EnemyController()
 	SightConfig->SightRadius = 2000.0f;
 	SightConfig->LoseSightRadius = 4500.0f;
 	SightConfig->PeripheralVisionAngleDegrees = 75.0f;
-	SightConfig->SetMaxAge(5.0f);
+	SightConfig->SetMaxAge(10.0f);
 
 	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
 	SightConfig->DetectionByAffiliation.bDetectNeutrals = true;
 	SightConfig->DetectionByAffiliation.bDetectFriendlies = true;
 
-	SightConfig->AutoSuccessRangeFromLastSeenLocation = 5.0f;
+	SightConfig->AutoSuccessRangeFromLastSeenLocation = 450.0f;
 
 	AIPerceptionComponent->ConfigureSense(*SightConfig);
 
@@ -93,7 +93,8 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		return;
 
 	bool bStunState = ASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"));
-	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Stun) || bStunState) {
+	
+	if (bStunState) {
 		return;
 	}
 
@@ -103,6 +104,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		return;
 	}
 	bool bDetectable = character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+	
 	auto CurrBehaviorType = BehaviorComponent->GetBehaviorType();
 
 	FAISenseID StimulusID = Stimulus.Type;
@@ -116,16 +118,17 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 			return;
 		}
 		if (StimulusID == SightConfig->GetSenseID()) {
-			if (CurrBehaviorType == EBehaviorType::TargetLost) {
-				//플레이어가 숨어서 놓쳤다가 해당 위치에 가봤더니 다시 발견한 상황 -> LastSeenLocation를 초기화해서 서비스에서 갱신 막기
-				BlackBoardComponent->SetValueAsVector("LastSeenLocation", FVector::ZeroVector);
-			}
+			
 			if (bDetectable) {
+				if (CurrBehaviorType == EBehaviorType::TargetLost) {
+					//플레이어가 숨어서 놓쳤다가 해당 위치에 가봤더니 다시 발견한 상황 -> LastSeenLocation를 초기화해서 서비스에서 State 갱신 막기
+					BlackBoardComponent->SetValueAsVector("LastSeenLocation", FVector::ZeroVector);
+				}
 				BehaviorComponent->ChangeBehaviorType(EBehaviorType::Detect);
 				BlackBoardComponent->SetValueAsObject("player", Actor);
-
+			
 				bool firstDetection = !playerController->IsAnyDetectingEnemy();
-
+			
 				if (firstDetection)
 				{
 					UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(Actor->GetGameInstance());
@@ -135,9 +138,9 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 					}
 				}
 				ACAS_Character* thisCharacter = Cast<ACAS_Character>(ThisPawn);
-
+			
 				playerController->AddDetectingEnemy(thisCharacter);
-
+			
 				return;
 			}
 			else {
@@ -160,7 +163,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 	}
 	else if (!Stimulus.WasSuccessfullySensed()) {
 		if (StimulusID == SightConfig->GetSenseID()) {
-			BlackBoardComponent->ClearValue("player");
+			//BlackBoardComponent->ClearValue("player");
 			//BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
 			BlackBoardComponent->SetValueAsVector("LastSeenLocation", Stimulus.StimulusLocation);
 
