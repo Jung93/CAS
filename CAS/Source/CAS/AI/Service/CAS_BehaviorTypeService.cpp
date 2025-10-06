@@ -56,16 +56,17 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
 		return;
 	}
-	//플레이어를 감지했다가 놓쳐서 마지막에 보였던 장소에 가보는 경우 -> 장소에 가보고 perception으로 다음 행동 판단
-	auto LastSeenLocation = BlackBoard->GetValueAsVector("LastSeenLocation");
-	if (LastSeenLocation != FVector::ZeroVector) {
-		
-		BehaviorComponent->ChangeBehaviorType(EBehaviorType::TargetLost);
-		return;
-	}
 	
 	//플레이어를 감지 한 경우
 	float Distance = Enemy->GetDistanceTo(Player);
+
+	//플레이어를 감지했다가 놓쳐서 마지막에 보였던 장소에 가보는 경우 -> 장소에 가보고 perception으로 다음 행동 판단
+	auto LastSeenLocation = BlackBoard->GetValueAsVector("LastSeenLocation");
+	if (LastSeenLocation != FVector::ZeroVector) {
+
+		BehaviorComponent->ChangeBehaviorType(EBehaviorType::TargetLost);
+		return;
+	}
 
 	if (Distance < AttackRange) {
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);

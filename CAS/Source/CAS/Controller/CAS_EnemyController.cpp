@@ -165,6 +165,7 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		if (StimulusID == SightConfig->GetSenseID()) {
 			//BlackBoardComponent->ClearValue("player");
 			//BehaviorComponent->ChangeBehaviorType(EBehaviorType::Missed);
+			auto tempLoc = Stimulus.StimulusLocation;
 			BlackBoardComponent->SetValueAsVector("LastSeenLocation", Stimulus.StimulusLocation);
 
 			ACAS_Character* thisCharacter = Cast<ACAS_Character>(GetPawn());
