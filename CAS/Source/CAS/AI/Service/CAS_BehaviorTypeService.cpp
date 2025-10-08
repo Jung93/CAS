@@ -74,13 +74,13 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	if (Distance <= EnemyController->GetSightRange()) {
-		if (curType != EBehaviorType::PreAttackPhase) {
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
+	if (Distance <= EnemyController->GetSightRange()) { 
+		//시야안에 들어왔으나 너무 멀면 trace , 어느정도 가까우면 공격 전에 대치상황
+		if (Distance < 400.0f) {
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::PreAttackPhase);
 		}
 		else {
-			auto temp123 = BlackBoard->GetValueAsVector("TestVector");
-			BehaviorComponent->ChangeBehaviorType(EBehaviorType::PreAttackPhase);
+			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
 		}
 		return;
 	}
