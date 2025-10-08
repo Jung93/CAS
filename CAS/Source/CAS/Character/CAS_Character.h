@@ -22,7 +22,7 @@ struct FInputActionValue;
 UENUM(BlueprintType)
 enum class EMoveType : uint8
 {
-	Idle, Quiet, Walk, Sprint
+	Idle, Patrol, Walk, Sprint , PreAttackPhase
 };
 
 UCLASS(Abstract)

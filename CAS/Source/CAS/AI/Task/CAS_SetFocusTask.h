@@ -23,4 +23,10 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FBlackboardKeySelector TargetActorKey;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bContinuous = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bClearTargetMode = false;
 };

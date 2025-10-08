@@ -19,7 +19,7 @@ EBTNodeResult::Type UCAS_SetSpeedTask::ExecuteTask(UBehaviorTreeComponent& Owner
     case EMoveType::Idle:
         ThisCharacter->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
         break;
-    case EMoveType::Quiet:
+    case EMoveType::Patrol:
         ThisCharacter->GetCharacterMovement()->MaxWalkSpeed = 250.0f;
         break;
     case EMoveType::Walk:
@@ -27,6 +27,9 @@ EBTNodeResult::Type UCAS_SetSpeedTask::ExecuteTask(UBehaviorTreeComponent& Owner
         break;
     case EMoveType::Sprint:
         ThisCharacter->GetCharacterMovement()->MaxWalkSpeed = 450.0f;
+        break;
+    case EMoveType::PreAttackPhase:
+        ThisCharacter->GetCharacterMovement()->MaxWalkSpeed = 150.0f;
         break;
     }
 

@@ -21,7 +21,8 @@ enum class EBehaviorType : uint8
 	Ability,
 	Hit,
 	Death,
-	TargetLost
+	TargetLost,
+	PreAttackPhase
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
