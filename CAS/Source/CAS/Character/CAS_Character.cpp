@@ -63,6 +63,7 @@ void ACAS_Character::BeginPlay()
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 600.0f;
 	GetCharacterMovement()->AvoidanceWeight = 0.5f;
+	bUseControllerRotationYaw = true;
 
 	InitAbilitySystemComponent();
 	if(HpBarWidgetClass){

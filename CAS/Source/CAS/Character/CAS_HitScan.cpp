@@ -52,11 +52,11 @@ void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* 
 
 	auto player = Cast<ACAS_Player>(OwnerClass);
 	UAbilitySystemComponent* ASC = nullptr;
-
 	if (player != nullptr)
 	{
 		if(!player->IsDead())
-			ASC = Cast<ACAS_PlayerState>(player->GetPlayerState())->GetAbilitySystemComponent();
+			if(player->GetPlayerState())
+				ASC = Cast<ACAS_PlayerState>(player->GetPlayerState())->GetAbilitySystemComponent();
 	}
 	else
 	{

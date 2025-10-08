@@ -401,6 +401,7 @@ void ACAS_Player::BeginPlay()
 {
 	Super::BeginPlay();
 
+	bUseControllerRotationYaw = false;
 
 	if (_hatBP->IsValidLowLevel())
 	{

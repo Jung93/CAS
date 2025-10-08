@@ -69,6 +69,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	}
 
 	if (Distance < AttackRange) {
+		Enemy->bIsAttackOn = true;
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);
 
 		return;
@@ -77,13 +78,16 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	if (Distance <= EnemyController->GetSightRange()) { 
 		//시야안에 들어왔으나 너무 멀면 trace , 어느정도 가까우면 공격 전에 대치상황
 		if (Distance < 400.0f) {
+			Enemy->bIsAttackOn = true;
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::PreAttackPhase);
 		}
 		else {
+			Enemy->bIsAttackOn = false;
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::Trace);
 		}
 		return;
 	}
+	Enemy->bIsAttackOn = false;
 	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Wait);
 	return;
 

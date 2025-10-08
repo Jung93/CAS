@@ -51,17 +51,21 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 	BehaviorComponent->SetBlackBoard(BlackBoardComponent);
 	RunBehaviorTree(BehaviorTree);
 
-	auto ThisPawn = Cast<ACAS_Character>(GetPawn());
-	EEnemyType ThisPawnType = ThisPawn->GetEnemyType();
-	BlackBoardComponent->SetValueAsEnum("EnemyType", static_cast<uint8>(ThisPawnType));
+	auto ThisCharacter = Cast<ACAS_Character>(GetPawn());
+	EEnemyType ThisCharacteType = ThisCharacter->GetEnemyType();
+	ThisCharacter->bIsAttackOn = false;
+
+	BlackBoardComponent->SetValueAsEnum("EnemyType", static_cast<uint8>(ThisCharacteType));
 }
 
 void ACAS_EnemyController::OnUnPossess()
 {
-	auto ThisCharacter = Cast<ACharacter>(GetPawn());
+	auto ThisCharacter = Cast<ACAS_Character>(GetPawn());
 	auto AnimInstance = ThisCharacter->GetMesh()->GetAnimInstance();
 
 	AnimInstance->StopAllMontages(0.1f);
+	ThisCharacter->bIsAttackOn = false;
+
 
 	Super::OnUnPossess();
 

@@ -84,6 +84,9 @@ protected:
 
 public:
 	EEnemyType GetEnemyType() { return MyType; }
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	bool bIsAttackOn = false;
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
 	EEnemyType MyType = EEnemyType::Nomal;
@@ -95,6 +98,7 @@ protected:
 	TSubclassOf<class UUserWidget> HpBarWidgetClass;
 	UPROPERTY(EditAnywhere, Category = "HpBar")
 	int32 HpCount = 3;
+	
 protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	ACAS_PatrolPath* PatrolPath;
@@ -105,6 +109,6 @@ public:
 	virtual void SaveCharacterData();
 	virtual void LoadCharacterData();
 
-
+	
 };
 
