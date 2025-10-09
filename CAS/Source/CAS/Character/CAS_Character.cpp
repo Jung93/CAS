@@ -10,7 +10,7 @@
 #include "Global/CAS_GameInstance.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "Character/CAS_AnimInstance.h"
 
 // Sets default values
 ACAS_Character::ACAS_Character()
@@ -110,6 +110,10 @@ void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
+	if (auto AnimInstance = Cast<UCAS_AnimInstance>(GetMesh()->GetAnimInstance()))
+	{
+		AnimInstance->CheckControllerClass(NewController);
+	}
 }
 
 void ACAS_Character::UnPossessed()

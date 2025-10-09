@@ -83,13 +83,11 @@ protected:
 
 
 public:
-	EEnemyType GetEnemyType() { return MyType; }
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
-	bool bIsAttackOn = false;
+	EEnemyType GetEnemyType() { return CurEnemyType; }
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
-	EEnemyType MyType = EEnemyType::Nomal;
+	EEnemyType CurEnemyType = EEnemyType::Nomal;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HpBar")
