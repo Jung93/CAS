@@ -13,7 +13,7 @@ void UCAS_AnimInstance::CheckControllerClass(AController* Controller)
 	if (!ThisCharacter || !Controller) {
 		return;
 	}
-
+	
 	if (auto EnemyController = Cast<ACAS_EnemyController>(Controller)) {
 		bPlayerControl = false;		
 	}

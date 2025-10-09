@@ -86,6 +86,12 @@ ACAS_Player::ACAS_Player()
 	}
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
+		
+}
+
+void ACAS_Player::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
 
 	GetCharacterMovement()->MaxWalkSpeed = 600.0f;
 	GetCharacterMovement()->MaxAcceleration = 2000.0f;
@@ -400,8 +406,6 @@ void ACAS_Player::InteractionInput(const FInputActionValue& Value)
 void ACAS_Player::BeginPlay()
 {
 	Super::BeginPlay();
-
-	bUseControllerRotationYaw = false;
 
 	if (_hatBP->IsValidLowLevel())
 	{

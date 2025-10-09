@@ -5,6 +5,7 @@
 #include "CAS_SetSpeedTask.h"
 #include "Controller/CAS_EnemyController.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Character/EnemyCapt/CAS_EnemyCapt_SuperSpeed.h"
 
 UCAS_SetSpeedTask::UCAS_SetSpeedTask()
 {
@@ -13,7 +14,9 @@ UCAS_SetSpeedTask::UCAS_SetSpeedTask()
 EBTNodeResult::Type UCAS_SetSpeedTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
     auto ThisCharacter = Cast<ACAS_Character>(OwnerComp.GetAIOwner()->GetPawn());
-
+    if (auto SuperSpeedCharaceter = Cast<ACAS_EnemyCapt_SuperSpeed>(ThisCharacter)) {
+        return EBTNodeResult::Succeeded; //특수한 이동속도를 가진 캐릭터는 변경하지않는다 
+    }
     switch (MoveType)
     {
     case EMoveType::Idle:
@@ -33,6 +36,6 @@ EBTNodeResult::Type UCAS_SetSpeedTask::ExecuteTask(UBehaviorTreeComponent& Owner
         break;
     }
 
-    return EBTNodeResult::Type();
+    return EBTNodeResult::Succeeded;
 }
 

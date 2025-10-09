@@ -25,12 +25,12 @@ EBTNodeResult::Type UCAS_SetFocusTask::ExecuteTask(UBehaviorTreeComponent& Owner
 	if (!TargetCharacter) {
 		return EBTNodeResult::Failed;
 	}
+	if (bClearTargetMode) {
+		OwnerComp.GetAIOwner()->ClearFocus(EAIFocusPriority::Default);
+	}
 	if (!bContinuous) {
 		OwnerComp.GetAIOwner()->SetFocus(TargetCharacter);
 		return EBTNodeResult::InProgress;
-	}
-	if (bClearTargetMode) {
-		OwnerComp.GetAIOwner()->ClearFocus(EAIFocusPriority::Default);
 	}
 	else {
 		OwnerComp.GetAIOwner()->SetFocus(TargetCharacter);

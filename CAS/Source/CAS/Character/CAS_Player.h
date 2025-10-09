@@ -22,6 +22,7 @@ public:
 	// Sets default values for this character's properties
 	ACAS_Player();
 protected:
+	virtual void PossessedBy(AController* NewController) override;
 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);

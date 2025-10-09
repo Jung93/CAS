@@ -18,6 +18,9 @@ ACAS_Character::ACAS_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	bReplicates = true;
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationYaw = false;
+	bUseControllerRotationRoll = false;
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -62,8 +65,7 @@ void ACAS_Character::BeginPlay()
 
 	GetCharacterMovement()->bUseRVOAvoidance = true;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 600.0f;
-	GetCharacterMovement()->AvoidanceWeight = 0.5f;
-	bUseControllerRotationYaw = true;
+	GetCharacterMovement()->AvoidanceWeight = 0.5f;	
 
 	InitAbilitySystemComponent();
 	if(HpBarWidgetClass){
@@ -110,9 +112,10 @@ void ACAS_Character::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 
-	if (auto AnimInstance = Cast<UCAS_AnimInstance>(GetMesh()->GetAnimInstance()))
+	if (auto CurAnimInstance = Cast<UCAS_AnimInstance>(GetMesh()->GetAnimInstance()))
 	{
-		AnimInstance->CheckControllerClass(NewController);
+		CurAnimInstance->CheckControllerClass(NewController);
+		GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	}
 }
 

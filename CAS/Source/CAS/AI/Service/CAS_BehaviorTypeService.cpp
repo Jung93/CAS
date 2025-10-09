@@ -24,7 +24,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 	auto Enemy = Cast<ACAS_Character>(EnemyController->GetPawn());
 
 	auto EnemyTpye = BlackBoard->GetValueAsEnum("EnemyType");
-	auto curType = BehaviorComponent->GetBehaviorType();
+	auto curBehaviorType = BehaviorComponent->GetBehaviorType();
 
 	if (BehaviorComponent->IsBehaviorType(EBehaviorType::Death)) {
 
@@ -44,7 +44,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 	auto temp1 = BlackBoard->GetValueAsVector("LastHeardLocation");
 	auto temp2 = Player;
-	//소리가 들렸을 경우 -> 해당 위치까지 가서 확인해보기
+	//소리가 들렸을 경우 -> 경계상태(ex : 해당 위치까지 가서 확인해보기)
 	if (BlackBoard->GetValueAsVector("LastHeardLocation") != FVector::ZeroVector && !Player) {
 		
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Alert);
@@ -69,7 +69,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	if (Distance < AttackRange) {
+	if (Distance < AttackRange && EnemyTpye == static_cast<uint8>(EEnemyType::Aggressive)) {
 		auto Anim = Cast<UCAS_AnimInstance>(Enemy->GetMesh()->GetAnimInstance());
 		Anim->SetAttackMode(true);
 		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Ability);
@@ -79,7 +79,7 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 
 	if (Distance <= EnemyController->GetSightRange()) { 
 		//시야안에 들어왔으나 너무 멀면 trace , 어느정도 가까우면 공격 전에 대치상황
-		if (Distance < 400.0f) {
+		if (Distance < 400.0f && EnemyTpye == static_cast<uint8>(EEnemyType::Aggressive)) {
 			auto Anim = Cast<UCAS_AnimInstance>(Enemy->GetMesh()->GetAnimInstance());
 			Anim->SetAttackMode(true);
 			BehaviorComponent->ChangeBehaviorType(EBehaviorType::PreAttackPhase);
@@ -92,6 +92,10 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
+	if (Distance > EnemyController->GetSightRange()) {
+		BehaviorComponent->ChangeBehaviorType(EBehaviorType::Patrol);
+		return;
+	}
 	BehaviorComponent->ChangeBehaviorType(EBehaviorType::Wait);
 	return;
 
