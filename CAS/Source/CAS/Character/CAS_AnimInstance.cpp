@@ -20,5 +20,6 @@ void UCAS_AnimInstance::CheckControllerClass(AController* Controller)
 
 	if (auto PlayerController = Cast<ACAS_PlayerController>(Controller)) {
 		bPlayerControl = true;
+		bAttackMode = false;
 	}
 }
