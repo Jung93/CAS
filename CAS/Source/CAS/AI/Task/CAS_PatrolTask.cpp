@@ -11,6 +11,7 @@
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
 	bNotifyTick = true;
+	
 }
 
 EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -25,6 +26,19 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if (!Character || !PatrolPath) {
 		return EBTNodeResult::Failed;
 	}
+	int32 NextIndex = BlackBoard->GetValueAsInt(IndexKey.SelectedKeyName);
+	FVector LocalPatrolPosition = PatrolPath->GetPatrolPoint(NextIndex);
+	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
+	
+	BlackBoard->SetValueAsVector(MoveVectorKey.SelectedKeyName, PatrolPosition);
+
+	FAIRequestID MoveID = AIController->MoveToLocation(PatrolPosition, 50.0f, false);
+
+	if (!MoveID.IsValid()) {
+		AIController->GetBehaviorComponent()->ChangeBehaviorType(EBehaviorType::Wait);
+		return EBTNodeResult::Failed;
+	}
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -40,11 +54,7 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 
 	FVector CurrentPosition = Character->GetActorLocation();
 
-	int32 PatrolIndex = PatrolPath->GetPathIndex();
-	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
-
-	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
-	//auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
+	FVector PatrolPosition = BlackBoard->GetValueAsVector(MoveVectorKey.SelectedKeyName);
 
 	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
 		bool bInverse = BlackBoard->GetValueAsBool("bInversePatrolPath");
@@ -55,22 +65,11 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 		else {
 			PatrolPath->DecreasePathIndex();
 		}
-		
-		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
-
-		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);
-		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
-		BlackBoard->SetValueAsInt("NextIndex", PatrolPath->GetPathIndex());
+		BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
 
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 
 	}
-	else {
-
-		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
-	}
-	AIController->MoveToLocation(PatrolPosition, 50.0f, false);
 
 	return;
 }
-
