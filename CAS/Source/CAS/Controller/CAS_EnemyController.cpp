@@ -47,11 +47,15 @@ void ACAS_EnemyController::OnPossess(APawn* pawn)
 {
 	Super::OnPossess(pawn);
 
+	auto ThisCharacter = Cast<ACAS_Character>(GetPawn());
+	auto CustomBehaviorTree = ThisCharacter->GetCustomBehaviorTree();
+	if (CustomBehaviorTree) {
+		BehaviorTree = CustomBehaviorTree;
+	}
 	UseBlackboard(BlackboardData, BlackBoardComponent);
 	BehaviorComponent->SetBlackBoard(BlackBoardComponent);
 	RunBehaviorTree(BehaviorTree);
-
-	auto ThisCharacter = Cast<ACAS_Character>(GetPawn());
+	
 	EEnemyType ThisCharacteType = ThisCharacter->GetEnemyType();
 
 	BlackBoardComponent->SetValueAsEnum("EnemyType", static_cast<uint8>(ThisCharacteType));

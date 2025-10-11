@@ -107,6 +107,10 @@ public:
 	virtual void SaveCharacterData();
 	virtual void LoadCharacterData();
 
+	class UBehaviorTree* GetCustomBehaviorTree() { return CustomBehaviorTree; }
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBehaviorTree* CustomBehaviorTree = nullptr;
 	
 };
 

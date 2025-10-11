@@ -296,19 +296,6 @@ void ACAS_Player::QuickSlotInputReleased(const FInputActionValue& Value)
 	
 }
 
-
-//void ACAS_Player::OpenSlot(const FInputActionValue& Value)
-//{
-//	QuickSlotWidget->OpenSlot();
-//
-//}
-//
-//void ACAS_Player::CloseSlot(const FInputActionValue& Value)
-//{
-//	QuickSlotWidget->CloseSlot();
-//
-//}
-
 void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 {
 	if (!isSlotChangable)
