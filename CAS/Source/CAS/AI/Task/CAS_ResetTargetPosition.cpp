@@ -35,7 +35,7 @@ EBTNodeResult::Type UCAS_ResetTargetPosition::ExecuteTask(UBehaviorTreeComponent
 	else {
 		PatrolPath->DecreasePathIndex();
 	}
-	BlackBoard->SetValueAsInt("NextIndex", PatrolPath->GetPathIndex());
+	BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
 
 	return EBTNodeResult::InProgress;
 }
@@ -49,18 +49,17 @@ void UCAS_ResetTargetPosition::TickTask(UBehaviorTreeComponent& OwnerComp, uint8
 	auto PatrolPath = Character->GetPatrolPath();
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 
-	int32 PatrolIndex = BlackBoard->GetValueAsInt("NextIndex");
+	int32 PatrolIndex = BlackBoard->GetValueAsInt(IndexKey.SelectedKeyName);
 	FVector CurrentPosition = Character->GetActorLocation();
 	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
 	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
 
 	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
 		
-		BlackBoard->SetValueAsInt("NextIndex", PatrolPath->GetPathIndex());
+		BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
 		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
 
 		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);
-		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 
 	}

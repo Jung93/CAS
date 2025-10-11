@@ -7,6 +7,8 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AI/CAS_BehaviorComponent.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "NavigationSystem.h"        
+#include "NavigationPath.h"  
 
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
@@ -30,14 +32,10 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	FVector LocalPatrolPosition = PatrolPath->GetPatrolPoint(NextIndex);
 	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
 	
+	
 	BlackBoard->SetValueAsVector(MoveVectorKey.SelectedKeyName, PatrolPosition);
 
 	FAIRequestID MoveID = AIController->MoveToLocation(PatrolPosition, 50.0f, false);
-
-	if (!MoveID.IsValid()) {
-		AIController->GetBehaviorComponent()->ChangeBehaviorType(EBehaviorType::Wait);
-		return EBTNodeResult::Failed;
-	}
 
 	return EBTNodeResult::InProgress;
 }
@@ -53,11 +51,29 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 
 	FVector CurrentPosition = Character->GetActorLocation();
-
 	FVector PatrolPosition = BlackBoard->GetValueAsVector(MoveVectorKey.SelectedKeyName);
+	bool bInverse = BlackBoard->GetValueAsBool("bInversePatrolPath");
+
+	FNavLocation NavLocation;
+	auto NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+	UNavigationPath* Path = NavSystem->FindPathToLocationSynchronously(GetWorld(), Character->GetActorLocation(), PatrolPosition);
+	if (!NavSystem || !Path || Path->IsPartial()) {
+
+		bInverse = !bInverse;
+		BlackBoard->SetValueAsBool("bInversePatrolPath", bInverse);
+		if (!bInverse) {
+			PatrolPath->IncreasePathIndex();
+		}
+		else {
+			PatrolPath->DecreasePathIndex();
+		}
+
+		BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
 
 	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
-		bool bInverse = BlackBoard->GetValueAsBool("bInversePatrolPath");
 
 		if (!bInverse) {
 			PatrolPath->IncreasePathIndex();
