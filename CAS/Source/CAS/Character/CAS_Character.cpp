@@ -116,7 +116,9 @@ void ACAS_Character::PossessedBy(AController* NewController)
 	if (auto CurAnimInstance = Cast<UCAS_AnimInstance>(GetMesh()->GetAnimInstance()))
 	{
 		CurAnimInstance->CheckControllerClass(NewController);
-		GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+		if (Cast<ACAS_PlayerController>(NewController)) {
+			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+		}
 	}
 }
 

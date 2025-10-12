@@ -21,7 +21,7 @@ public:
 	void ActivateAbility(const FGameplayTag& Tag);
 	void GetActiveAbilitiesWithTags(const FGameplayTagContainer& GameplayTagContainer, TArray<class UCAS_GameplayAbility*>& Abilities);
 
+	FGameplayAbilitySpec* FindAbilitySpecByTag(const FGameplayTag& Tag);
 private:
 	TArray<FGameplayAbilitySpecHandle> SpecHandles;
-	FGameplayAbilitySpec* FindAbilitySpecByTag(const FGameplayTag& Tag);
 };
