@@ -5,6 +5,7 @@
 #include "Ability_Task/CAS_Task_Dead.h"
 #include "Character/CAS_Player.h"
 #include "Controller/CAS_PlayerController.h"
+#include "LevelManager/CAS_WorldSubsystem.h"
 
 UCAS_Ability_Dead::UCAS_Ability_Dead()
 {
@@ -78,6 +79,8 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 
 		Character->Controller->UnPossess();
 
+		auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
+		PuzzleSubsystem->PlusCompletedCount();
 
 
 		PlayMontageTask->TaskEndEvent.Broadcast();

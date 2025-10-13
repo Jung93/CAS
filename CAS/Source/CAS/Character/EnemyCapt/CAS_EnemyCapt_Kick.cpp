@@ -3,6 +3,7 @@
 
 #include "Character/EnemyCapt/CAS_EnemyCapt_Kick.h"
 #include "Character/CAS_HitScan.h"
+#include "LevelManager/CAS_WorldSubsystem.h"
 
 ACAS_EnemyCapt_Kick::ACAS_EnemyCapt_Kick()
 {
@@ -33,6 +34,9 @@ void ACAS_EnemyCapt_Kick::BeginPlay()
 			_hitScan->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("foot_r_Socket")); // 소켓 이름 "head" 예시
 		}
 	}
+
+	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
+	PuzzleSubsystem->RegisterTarget();
 
 }
 
