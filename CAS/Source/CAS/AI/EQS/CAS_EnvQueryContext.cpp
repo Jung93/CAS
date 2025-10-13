@@ -10,7 +10,7 @@
 #include "AI/CAS_BehaviorComponent.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_Character.h"
-#include "GameFramework/PlayerStart.h"
+
 
 void UCAS_EnvQueryContext::ProvideContext(FEnvQueryInstance& QueryInstance, FEnvQueryContextData& ContextData) const
 {

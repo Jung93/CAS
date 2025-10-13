@@ -74,7 +74,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
 	TObjectPtr<class UCAS_AttributeSet> AttributeSet;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Abilities)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities)
 	TArray<TSubclassOf<class UGameplayAbility>> DefaultAbilities;
 
 
@@ -107,6 +107,10 @@ public:
 	virtual void SaveCharacterData();
 	virtual void LoadCharacterData();
 
+	class UBehaviorTree* GetCustomBehaviorTree() { return CustomBehaviorTree; }
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UBehaviorTree* CustomBehaviorTree = nullptr;
 	
 };
 

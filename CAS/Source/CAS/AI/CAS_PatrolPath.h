@@ -14,6 +14,7 @@ class CAS_API ACAS_PatrolPath : public AActor
 public:	
 	ACAS_PatrolPath();
 
+	FVector GetFirstPatrolPoint() { return PatrolPath[0]; }
 	FVector GetPatrolPoint(int32 index) { return PatrolPath[index]; }
 	int32 GetPatrolLength() { return PatrolPath.Num(); }
 	int32 GetPathIndex() { return PathIndex; }

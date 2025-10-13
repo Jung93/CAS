@@ -29,4 +29,10 @@ public:
 	virtual class UCAS_AttributeSet* GetAttributeSet() const override { return AttributeSet; }
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override { return AbilitySystemComponent; }
 
+protected:
+	virtual void AddDefaultAbilites() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Abilities, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<class UGameplayAbility> EnemyAbility;
+
 };

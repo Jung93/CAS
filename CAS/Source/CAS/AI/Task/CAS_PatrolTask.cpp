@@ -7,16 +7,20 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AI/CAS_BehaviorComponent.h"
 #include "Navigation/PathFollowingComponent.h"
+#include "NavigationSystem.h"        
+#include "NavigationPath.h"  
 
 UCAS_PatrolTask::UCAS_PatrolTask()
 {
 	bNotifyTick = true;
+	
 }
 
 EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 	auto AIController = Cast<ACAS_EnemyController>(OwnerComp.GetAIOwner());
 	auto Character = Cast<ACAS_Character>(AIController->GetPawn());
 	auto PatrolPath = Character->GetPatrolPath();
@@ -24,6 +28,15 @@ EBTNodeResult::Type UCAS_PatrolTask::ExecuteTask(UBehaviorTreeComponent& OwnerCo
 	if (!Character || !PatrolPath) {
 		return EBTNodeResult::Failed;
 	}
+	int32 NextIndex = BlackBoard->GetValueAsInt(IndexKey.SelectedKeyName);
+	FVector LocalPatrolPosition = PatrolPath->GetPatrolPoint(NextIndex);
+	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
+	
+	
+	BlackBoard->SetValueAsVector(MoveVectorKey.SelectedKeyName, PatrolPosition);
+
+	FAIRequestID MoveID = AIController->MoveToLocation(PatrolPosition, 50.0f, false);
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -38,35 +51,41 @@ void UCAS_PatrolTask::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMem
 	auto BlackBoard = OwnerComp.GetBlackboardComponent();
 
 	FVector CurrentPosition = Character->GetActorLocation();
+	FVector PatrolPosition = BlackBoard->GetValueAsVector(MoveVectorKey.SelectedKeyName);
+	bool bInverse = BlackBoard->GetValueAsBool("bInversePatrolPath");
 
-	int32 PatrolIndex = PatrolPath->GetPathIndex();
-	auto LocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolIndex);
+	FNavLocation NavLocation;
+	auto NavSystem = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld());
+	UNavigationPath* Path = NavSystem->FindPathToLocationSynchronously(GetWorld(), Character->GetActorLocation(), PatrolPosition);
+	if (!NavSystem || !Path || Path->IsPartial()) {
 
-	FVector PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(LocalPatrolPosition);
-	//auto temp = FVector::Distance(CurrentPosition, PatrolPosition);
-
-	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
+		bInverse = !bInverse;
+		BlackBoard->SetValueAsBool("bInversePatrolPath", bInverse);
 		if (!bInverse) {
 			PatrolPath->IncreasePathIndex();
 		}
 		else {
 			PatrolPath->DecreasePathIndex();
 		}
-		
-		auto NextLocalPatrolPosition = PatrolPath->GetPatrolPoint(PatrolPath->GetPathIndex());
 
-		PatrolPosition = PatrolPath->GetActorTransform().TransformPosition(NextLocalPatrolPosition);
-		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
-
-	}
-	else {
-
-		BlackBoard->SetValueAsVector(MovePositionKey.SelectedKeyName, PatrolPosition);
+		BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
-	AIController->MoveToLocation(PatrolPosition, 50.0f, false);
+	if (FVector::Distance(CurrentPosition, PatrolPosition) <= 50.0f) {
 
-	FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		if (!bInverse) {
+			PatrolPath->IncreasePathIndex();
+		}
+		else {
+			PatrolPath->DecreasePathIndex();
+		}
+		BlackBoard->SetValueAsInt(IndexKey.SelectedKeyName, PatrolPath->GetPathIndex());
+
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+
+	}
+
 	return;
 }
-

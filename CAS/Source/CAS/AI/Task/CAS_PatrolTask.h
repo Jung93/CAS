@@ -19,9 +19,10 @@ protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
+protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FBlackboardKeySelector MovePositionKey;
+	FBlackboardKeySelector MoveVectorKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bInverse = false;
+	FBlackboardKeySelector IndexKey;
 };

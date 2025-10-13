@@ -56,6 +56,7 @@ ACAS_Character::ACAS_Character()
 	
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->MaxAcceleration = 1800.0f;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
@@ -75,7 +76,7 @@ void ACAS_Character::BeginPlay()
 		if (widget) { 
 			widget->InitSetting(HpCount);			
 		}
-		HpBarWidgetComponent->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, 200.0f), FRotator::ZeroRotator);
+		HpBarWidgetComponent->SetRelativeLocationAndRotation(FVector(0,0,100.0f), FRotator::ZeroRotator);
 		HpBarWidgetComponent->SetCastShadow(false);
 	}
 	if (AttributeSet) {
@@ -115,7 +116,9 @@ void ACAS_Character::PossessedBy(AController* NewController)
 	if (auto CurAnimInstance = Cast<UCAS_AnimInstance>(GetMesh()->GetAnimInstance()))
 	{
 		CurAnimInstance->CheckControllerClass(NewController);
-		GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+		if (Cast<ACAS_PlayerController>(NewController)) {
+			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+		}
 	}
 }
 

@@ -27,6 +27,7 @@ void ACAS_EnemyCapt_ChargeAttack::ActivateEnemyAbility()
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.ChargeAttack"));
 	AbilitySystemComponent->AbilityLocalInputPressed(static_cast<int32>(EAbilityInputID::ChargeAttack));
+	AbilitySystemComponent->AbilityLocalInputReleased(static_cast<int32>(EAbilityInputID::ChargeAttack));
 }
 void ACAS_EnemyCapt_ChargeAttack::InputReleased(const FInputActionValue& Value)
 {
