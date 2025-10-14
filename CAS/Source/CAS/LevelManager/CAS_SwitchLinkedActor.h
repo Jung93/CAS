@@ -24,10 +24,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere, Category = "Switch")
-	TSubclassOf<class ACAS_InteractionSwitch> SwitchClass;
+	//UPROPERTY(EditAnywhere, Category = "Switch")
+	//TSubclassOf<class ACAS_InteractionSwitch> SwitchClass;
 	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category = "Switch")
 	class ACAS_InteractionSwitch* SwitchInstance = nullptr;
 
 };

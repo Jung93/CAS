@@ -4,6 +4,7 @@
 #include "LevelManager/CAS_DestroyVolumeActor.h"
 #include "Components/BoxComponent.h"
 #include "Character/CAS_Character.h"
+#include "Character/CAS_Player.h"
 
 // Sets default values
 ACAS_DestroyVolumeActor::ACAS_DestroyVolumeActor()
@@ -13,7 +14,7 @@ ACAS_DestroyVolumeActor::ACAS_DestroyVolumeActor()
 	
 	DestroyVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("Trigger Volume"));
 	DestroyVolume->SetCollisionProfileName(TEXT("Trigger"));
-	DestroyVolume->SetHiddenInGame(false);
+	DestroyVolume->SetHiddenInGame(true);
 	RootComponent = DestroyVolume;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("VisualMesh"));
@@ -30,6 +31,7 @@ void ACAS_DestroyVolumeActor::BeginPlay()
 void ACAS_DestroyVolumeActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (auto Character = Cast<ACAS_Character>(OtherActor)) {
+		Character->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
 		return;
 	}
 	else {
