@@ -4,27 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CAS_SwitchLinkedActor.generated.h"
+#include "LevelManager/CAS_PressureSwitch.h"
+#include "CAS_PressureSwitchLinkedDoor.generated.h"
 
-UCLASS(Abstract)
-class CAS_API ACAS_SwitchLinkedActor : public AActor
+UCLASS()
+class CAS_API ACAS_PressureSwitchLinkedDoor : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ACAS_SwitchLinkedActor();
+	ACAS_PressureSwitchLinkedDoor();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void SwitchClicked(bool SwitchOn) PURE_VIRTUAL(ACAS_SwitchLinkedActor::SwitchClicked, );
+	void SwitchPressed(bool SwithOn);
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Switch")
-	class ACAS_InteractionSwitch* SwitchInstance = nullptr;
-
+	ACAS_PressureSwitch* SwitchInstance = nullptr;
 };
