@@ -56,7 +56,6 @@ ACAS_Character::ACAS_Character()
 	
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->MaxAcceleration = 1800.0f;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
 }
 
 // Called when the game starts or when spawned
@@ -64,7 +63,7 @@ void ACAS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->bUseRVOAvoidance = true;
+	GetCharacterMovement()->bUseRVOAvoidance = false;
 	GetCharacterMovement()->AvoidanceConsiderationRadius = 600.0f;
 	GetCharacterMovement()->AvoidanceWeight = 0.5f;	
 

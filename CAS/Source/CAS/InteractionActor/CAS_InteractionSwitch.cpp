@@ -15,7 +15,7 @@ void ACAS_InteractionSwitch::BeginPlay()
 
         StaticMesh->SetMaterial(0, DynamicMaterial);
 
-        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(1.0f, 0.6f, 0.2f, 1.0f));
+        DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
 
     }
 
