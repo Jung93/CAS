@@ -82,7 +82,7 @@ void UCAS_Ability_PickUp::PlayAnimNotify(FName NotifyName, const FBranchingPoint
 			player->bPositionReceived = false;
 		}
 		else {
-			ballLocation = PlayerLocation + (player->GetActorForwardVector() * 100.0f);
+			ballLocation = PlayerLocation + (player->GetActorForwardVector() * 250.0f);
 		}
 
 		ball->SetActorLocation(ballLocation);
