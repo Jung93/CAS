@@ -30,6 +30,10 @@ protected:
 	UFUNCTION()
 	virtual void EndOverlapEvent(class UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+protected:
+	void SwitchPressedEvent(float DeltaTime);
+
+	void SwitchReleasedEvent(float DeltaTime);
 
 protected:
 	UPROPERTY(EditAnywhere)
@@ -55,8 +59,5 @@ protected:
 	bool bSwitchPressed = false;
 
 	float TotalMass = 0.0f;
-protected:
-	void SwitchPressedEvent(float DeltaTime);
 
-	void SwitchReleasedEvent(float DeltaTime);
 };
