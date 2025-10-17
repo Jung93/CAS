@@ -56,6 +56,8 @@ ACAS_Character::ACAS_Character()
 	
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 	GetCharacterMovement()->MaxAcceleration = 1800.0f;
+	GetCharacterMovement()->StandingDownwardForceScale = 10.0f;   
+	GetCharacterMovement()->PushForceFactor = 0.0f;              
 }
 
 // Called when the game starts or when spawned
@@ -116,7 +118,12 @@ void ACAS_Character::PossessedBy(AController* NewController)
 	{
 		CurAnimInstance->CheckControllerClass(NewController);
 		if (Cast<ACAS_PlayerController>(NewController)) {
-			GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+			if (AbilitySystemComponent) {
+				auto Check = AbilitySystemComponent->FindAbilitySpecByTag(FGameplayTag::RequestGameplayTag("Ability.Move.SuperSpeed"));
+				if (!Check) {
+					GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+				}
+			}
 		}
 	}
 }
