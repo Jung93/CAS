@@ -18,6 +18,10 @@ public:
 
 	virtual void ActivateEnemyAbility() override;
 protected:
+	virtual void BeginPlay() override;
+	virtual void PossessedBy(AController* NewController) override;
 
-
+private:
+	UPROPERTY(EditAnywhere, Category = "Montage")
+	UAnimMontage* CAS_Montage;
 };
