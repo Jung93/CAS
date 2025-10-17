@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CAS_PortalActor.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
+DECLARE_MULTICAST_DELEGATE(FOnStageCompleted);
 
 UCLASS()
 class CAS_API ACAS_PortalActor : public AActor
@@ -25,7 +25,7 @@ protected:
 	virtual void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
 
 	UFUNCTION()
-	void OnPuzzleCompleted();
+	void OnStageCompleted();
 
 	void PortalInitialSetting();
 public:	

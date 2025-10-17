@@ -16,7 +16,7 @@ void ACAS_Elevator::BeginPlay()
 	StartLocation = GetActorLocation();
 
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::StartMove);
+	PuzzleSubsystem->OnStageCompleted.AddUObject(this, &ThisClass::StartMove);
 
 }
 

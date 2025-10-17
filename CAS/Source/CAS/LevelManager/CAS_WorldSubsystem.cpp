@@ -5,12 +5,19 @@
 
 void UCAS_WorldSubsystem::StageClearEvent()
 {
-	OnPuzzleCompleted.Broadcast();
+	OnStageCompleted.Broadcast();
 }
 
-void UCAS_WorldSubsystem::CheckGameProgress()
+void UCAS_WorldSubsystem::WithdrawClearEvent()
+{
+}
+
+void UCAS_WorldSubsystem::CheckGameProgress(bool bPuzzle)
 {
 	if (CompletedTargetCount == SpawnedTargetCount) {
 		StageClearEvent();
+	}
+	else {
+		WithdrawClearEvent();
 	}
 }
