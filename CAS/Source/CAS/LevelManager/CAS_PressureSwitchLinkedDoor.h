@@ -35,10 +35,10 @@ protected:
 	ACAS_PressureSwitch* SwitchInstance = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Door")
-	UStaticMeshComponent* BaseMesh;
+	UStaticMeshComponent* Base_Mesh;
 
 	UPROPERTY(EditAnywhere, Category = "Door")
-	UStaticMeshComponent* DoorMesh;
+	UStaticMeshComponent* Door_Mesh;
 
 	UPROPERTY(EditAnywhere, Category = "Door")
 	float Offset = 400.0f;

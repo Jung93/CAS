@@ -9,11 +9,11 @@ ACAS_PressureSwitchLinkedDoor::ACAS_PressureSwitchLinkedDoor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	BaseMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BaseMesh"));
-	DoorMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
+	Base_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Base_Mesh"));
+	Door_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Door_Mesh"));
 
-	SetRootComponent(BaseMesh);
-	DoorMesh->SetupAttachment(BaseMesh);
+	SetRootComponent(Base_Mesh);
+	Door_Mesh->SetupAttachment(Base_Mesh);
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +25,7 @@ void ACAS_PressureSwitchLinkedDoor::BeginPlay()
 		SwitchInstance->OnSwitchPressed.AddUObject(this, &ThisClass::SwitchPressed);
 	}
 	
-	DoorPosition = DoorMesh->GetRelativeLocation();
+	DoorPosition = Door_Mesh->GetRelativeLocation();
 }
 
 void ACAS_PressureSwitchLinkedDoor::SwitchPressed(bool SwitchOn)
@@ -38,20 +38,20 @@ void ACAS_PressureSwitchLinkedDoor::DoorOpenEvent(float DeltaTime)
 	FVector TargetLocation = DoorPosition;
 	TargetLocation.Z += Offset;
 
-	FVector CurrentLocation = DoorMesh->GetRelativeLocation();
+	FVector CurrentLocation = Door_Mesh->GetRelativeLocation();
 	FVector NextLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, MoveSpeed);
 
-	DoorMesh->SetRelativeLocation(NextLocation);
+	Door_Mesh->SetRelativeLocation(NextLocation);
 }
 
 void ACAS_PressureSwitchLinkedDoor::DoorCloseEvent(float DeltaTime)
 {
 	FVector TargetLocation = DoorPosition;
 
-	FVector CurrentLocation = DoorMesh->GetRelativeLocation();
+	FVector CurrentLocation = Door_Mesh->GetRelativeLocation();
 	FVector NextLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaTime, MoveSpeed);
 
-	DoorMesh->SetRelativeLocation(NextLocation);
+	Door_Mesh->SetRelativeLocation(NextLocation);
 }
 
 // Called every frame
