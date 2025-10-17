@@ -17,6 +17,8 @@ public:
 	void RegisterTarget() { SpawnedTargetCount++; }
 	void PlusCompletedCount() { CompletedTargetCount++; CheckGameProgress(); }
 	void SubCompletedCount() { CompletedTargetCount--; }
+
+	UFUNCTION(BlueprintCallable)
 	void StageClearEvent();
 	FOnPuzzleCompleted OnPuzzleCompleted;
 private:
