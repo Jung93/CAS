@@ -23,10 +23,16 @@ protected:
 	virtual void SwitchClicked(bool SwitchOn) override;
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult);
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere, Category = "Switch")
+	class ACAS_InteractionSwitch* SwitchInstance2 = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float MoveSpeed = 50.0f;
@@ -38,4 +44,6 @@ private:
 	FVector EndPosition;
 
 	bool IsOpen = false;
+	bool IsWaiting = true;
+	bool IsAnotherSwitch = false;
 };

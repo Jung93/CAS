@@ -38,8 +38,11 @@ public:
 	UFUNCTION()
 	void ThrowAndReturn(float DeltaTime);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void Return();
+
+	UFUNCTION(BlueprintCallable)
+	void SetReturning() { _isReturning = true; }
 
 	UFUNCTION()
 	void SetPlayer(class ACAS_Player* player) { _player = player; }
@@ -48,7 +51,10 @@ public:
 	class ACAS_Player* GetPlayer() { return _player; }
 
 	bool GetIsReady() { return IsReady; }
+
+	UFUNCTION(BlueprintCallable)
 	bool GetIsThrowing() { return _isThrowing; }
+	bool GetIsReturning() { return _isReturning; }
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")

@@ -190,6 +190,7 @@ void ACAS_Hat::Return()
 	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 
 	_testCaptureTarget = nullptr;
-
+	_isThrowing = false;
+	_isReturning = false;
 }
 
