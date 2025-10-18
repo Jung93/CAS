@@ -6,8 +6,7 @@
 #include "Subsystems/WorldSubsystem.h"
 #include "CAS_WorldSubsystem.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnStageCompleted);
-DECLARE_MULTICAST_DELEGATE(FWithdrawStageCompleted);
+DECLARE_MULTICAST_DELEGATE(FOnPuzzleCompleted);
 //auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
 UCLASS()
 class CAS_API UCAS_WorldSubsystem : public UWorldSubsystem
@@ -16,18 +15,18 @@ class CAS_API UCAS_WorldSubsystem : public UWorldSubsystem
 	
 public:
 	void RegisterTarget() { SpawnedTargetCount++; }
-	void PlusCompletedCount(bool bPuzzle) { CompletedTargetCount++; CheckGameProgress(bPuzzle); }
-	void SubCompletedCount(bool bPuzzle) { CompletedTargetCount--;  CheckGameProgress(bPuzzle); } 
-	
+	void PlusCompletedCount() { CompletedTargetCount++; CheckGameProgress(); }
+	void SubCompletedCount() { CompletedTargetCount--; }
 	void StageClearEvent();
-	void WithdrawClearEvent();
-
-	FOnStageCompleted OnStageCompleted;
-	FWithdrawStageCompleted WithdrawStageCompleted;
+	FOnPuzzleCompleted OnPuzzleCompleted;
 private:
 	UFUNCTION()
-	void CheckGameProgress(bool bPuzzle);
+	void CheckGameProgress();
 
 	int32 SpawnedTargetCount = 0;
 	int32 CompletedTargetCount = 0;
+
+
 };
+//적 3명 각각 비긴플레이에서 resister 시킨다음 -> 3
+//적 각각 비긴플레이에서 사망시 델리게이트로 -> 사망카운트 ++ + 카운트 올리면서 검사

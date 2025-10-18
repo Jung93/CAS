@@ -37,8 +37,7 @@ void ACAS_PortalActor::BeginPlay()
 	PortalCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->OnStageCompleted.AddUObject(this, &ThisClass::OnStageCompleted);
-	PuzzleSubsystem->WithdrawStageCompleted.AddUObject(this, &ThisClass::PortalInitialSetting);
+	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::OnPuzzleCompleted);
 
 	PortalInitialSetting();
 }
@@ -57,7 +56,7 @@ void ACAS_PortalActor::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, 
 	}
 }
 
-void ACAS_PortalActor::OnStageCompleted()
+void ACAS_PortalActor::OnPuzzleCompleted()
 {
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
