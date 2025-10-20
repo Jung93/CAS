@@ -22,6 +22,8 @@ protected:
 
 	UFUNCTION()
 	void RotateWheel();
+
+	virtual void SwitchClicked(bool SwitchOn)override;
 protected:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* WheelMesh;
@@ -34,4 +36,5 @@ protected:
 
 	FTimerHandle RotationTimerHandle;
 
+	bool bInverse = false;
 };
