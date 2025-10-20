@@ -17,8 +17,18 @@ void ACAS_SwitchLinkedWheel::BeginPlay()
 
 	GetWorld()->GetTimerManager().SetTimer(RotationTimerHandle, this, &ThisClass::RotateWheel, RotationInterval, true);
 }
-//맵 클리어 -> 타이머 클리어
+
 void ACAS_SwitchLinkedWheel::RotateWheel()
 {
-	AddActorLocalRotation(FRotator(0, Degree, 0));
+	if (!bInverse) {
+		AddActorLocalRotation(FRotator(0, Degree, 0));
+	}
+	else {
+		AddActorLocalRotation(FRotator(0, -Degree, 0));
+	}
+}
+
+void ACAS_SwitchLinkedWheel::SwitchClicked(bool SwitchOn)
+{
+	bInverse = SwitchOn;
 }
