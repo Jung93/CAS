@@ -2,6 +2,7 @@
 
 
 #include "Character/EnemyCapt/CAS_EnemyCapt_FireBreath.h"
+#include "LevelManager/CAS_WorldSubsystem.h"
 
 ACAS_EnemyCapt_FireBreath::ACAS_EnemyCapt_FireBreath()
 {
@@ -19,4 +20,12 @@ void ACAS_EnemyCapt_FireBreath::SetupPlayerInputComponent(UInputComponent* Playe
 void ACAS_EnemyCapt_FireBreath::ActivateEnemyAbility()
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.FireBreath"));
+}
+
+void ACAS_EnemyCapt_FireBreath::BeginPlay()
+{
+	Super::BeginPlay();
+
+	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
+	PuzzleSubsystem->RegisterTarget();
 }
