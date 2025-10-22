@@ -28,6 +28,9 @@ class CAS_API ACAS_PlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	virtual void OnPossess(APawn* pawn) override;
+	virtual void OnUnPossess() override;
+
 	void EnterUIMode();
 	void ExitUIMode();
 

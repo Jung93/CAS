@@ -8,7 +8,7 @@
 #include "InputActionValue.h"
 #include "UI/CAS_TitleWidget.h"
 #include "Character/CAS_Player.h"
-
+#include "Character/CAS_EnemyCapt.h"
 
 void ACAS_PlayerController::BeginPlay()
 {
@@ -139,6 +139,45 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
 void ACAS_PlayerController::QuitGame(const FInputActionValue& Value)
 {
     UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, true);
+}
+
+void ACAS_PlayerController::OnPossess(APawn* pawn)
+{
+    Super::OnPossess(pawn);
+
+    auto EnemyCharacter = Cast<ACAS_EnemyCapt>(pawn);
+
+    if (!EnemyCharacter) {
+        return;
+    }
+
+    auto ASC = EnemyCharacter->GetAbilitySystemComponent();
+
+    if (!ASC) {
+        return;
+    }
+
+    ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+}
+
+void ACAS_PlayerController::OnUnPossess()
+{
+    Super::OnUnPossess();
+    
+    auto EnemyCharacter = Cast<ACAS_EnemyCapt>(GetPawn());
+   
+    if (!EnemyCharacter) {
+        return;
+    }
+
+    auto ASC = EnemyCharacter->GetAbilitySystemComponent();
+
+    if (!ASC) {
+        return;
+    }
+
+    ASC->RemoveLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
 }
 
 void ACAS_PlayerController::EnterUIMode()
