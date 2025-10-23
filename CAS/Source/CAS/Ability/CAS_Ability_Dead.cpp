@@ -57,7 +57,7 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 	else if(NotifyName == "DeadMontage")
 	{
 		Character->SetActorHiddenInGame(true);
-		Character->SetActorEnableCollision(false);
+		//Character->SetActorEnableCollision(false);
 
 		auto playerController = Cast<ACAS_PlayerController>(Character->GetController());
 

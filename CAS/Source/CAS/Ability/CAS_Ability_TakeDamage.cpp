@@ -2,6 +2,8 @@
 
 
 #include "Ability/CAS_Ability_TakeDamage.h"
+#include "Character/CAS_Player.h"
+#include "Character/CAS_Hat.h"
 
 UCAS_Ability_TakeDamage::UCAS_Ability_TakeDamage()
 {
@@ -86,6 +88,17 @@ void UCAS_Ability_TakeDamage::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 	}
 	FGameplayEffectContextHandle EffectContextHandle = AbilitySystemComp->MakeEffectContext();
 	EffectContextHandle.AddInstigator(PlayerState, nullptr);
+
+	AbilitySystemComp->CancelAllAbilities();
+
+	auto player = Cast<ACAS_Player>(Target);
+
+	if (player)
+	{
+		auto hat = player->GetHat();
+		if (hat->GetIsReady())
+			hat->Return();
+	}
 
 	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);

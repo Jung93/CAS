@@ -38,7 +38,6 @@ void UCAS_Ability_Capture::EndAbility(const FGameplayAbilitySpecHandle Handle, c
 	PlayMontageTask->EndTask();
 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-
 }
 
 void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
