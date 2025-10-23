@@ -22,6 +22,11 @@
 #include "Math/UnrealMathUtility.h"
 
 #include "DrawDebugHelpers.h"
+
+#include "Perception/AIPerceptionComponent.h"
+#include "Perception/AISense_Sight.h"
+#include "BehaviorTree/BlackboardComponent.h"
+
 ACAS_EnemyCapt::ACAS_EnemyCapt()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -73,7 +78,29 @@ void ACAS_EnemyCapt::BeginPlay()
 void ACAS_EnemyCapt::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	TArray<AActor*> PerceivedActors;
+	auto EnemyController = Cast<AAIController>(GetController());
+	if (!EnemyController) {
+		return;
+	}
+	EnemyController->GetPerceptionComponent()->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
 
+	for (AActor* Actor : PerceivedActors)
+	{
+		if (auto Hat = Cast<ACAS_Hat>(Actor)) {
+			continue;
+		}
+		auto Character = Cast<ACAS_Character>(Actor);
+		auto ASC = Character->GetAbilitySystemComponent();
+		if (ASC) {
+			bool bDetectable = Character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
+
+			if (bDetectable) {
+				EnemyController->GetBlackboardComponent()->SetValueAsObject("player", Actor);
+			}
+		}
+	}
 }
 
 void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

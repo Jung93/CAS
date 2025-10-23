@@ -42,8 +42,6 @@ void UCAS_BehaviorTypeService::TickNode(UBehaviorTreeComponent& OwnerComp, uint8
 		return;
 	}
 
-	auto temp1 = BlackBoard->GetValueAsVector("LastHeardLocation");
-	auto temp2 = Player;
 	//소리가 들렸을 경우 -> 경계상태(ex : 해당 위치까지 가서 확인해보기)
 	if (BlackBoard->GetValueAsVector("LastHeardLocation") != FVector::ZeroVector && !Player) {
 		
