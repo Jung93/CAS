@@ -141,6 +141,7 @@ void ACAS_Character::DeadEvent()
 		auto AnimInstance = CharacterMesh->GetAnimInstance();
 		AnimInstance->StopAllMontages(0.1f);
 		SetActorEnableCollision(false);
+		GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 	}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
 }
