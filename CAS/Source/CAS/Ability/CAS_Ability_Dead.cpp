@@ -13,11 +13,13 @@ UCAS_Ability_Dead::UCAS_Ability_Dead()
 
 bool UCAS_Ability_Dead::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	auto isPlaying = Cast<ACAS_Character>(ActorInfo->AvatarActor)->GetMesh()->GetAnimInstance()->Montage_IsPlaying(DeadMontage);
+	auto AnimInstance = Cast<ACAS_Character>(ActorInfo->AvatarActor)->GetMesh()->GetAnimInstance();
+	auto isPlaying = AnimInstance->Montage_IsPlaying(DeadMontage);
 	if (isPlaying) {
-		return false;
+		AnimInstance->StopAllMontages(0.1f);
+		return true;
 	}
-	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
+	return true;
 }
 
 void UCAS_Ability_Dead::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)

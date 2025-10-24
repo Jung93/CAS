@@ -34,6 +34,7 @@ class CAS_API UCAS_GameplayAbility : public UGameplayAbility
 
 public:
 	UCAS_GameplayAbility();
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
 
 	const FCAS_SkillData& GetSkillData();
 
