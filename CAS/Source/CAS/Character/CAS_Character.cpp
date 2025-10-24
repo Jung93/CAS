@@ -142,6 +142,9 @@ void ACAS_Character::DeadEvent()
 		AnimInstance->StopAllMontages(0.1f);
 		SetActorEnableCollision(false);
 		GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
+
+		auto EnemyController = Cast<ACAS_EnemyController>(Controller);
+		EnemyController->UnPossess();
 	}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
 }

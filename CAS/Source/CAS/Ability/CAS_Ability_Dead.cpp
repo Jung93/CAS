@@ -79,7 +79,7 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 		}
 
 
-		Character->Controller->UnPossess();
+		//Character->Controller->UnPossess();
 
 		auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
 		PuzzleSubsystem->PlusCompletedCount();
