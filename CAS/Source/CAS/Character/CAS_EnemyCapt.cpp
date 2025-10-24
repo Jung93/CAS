@@ -26,6 +26,7 @@
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISense_Sight.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "AI/CAS_BehaviorComponent.h"
 
 ACAS_EnemyCapt::ACAS_EnemyCapt()
 {
@@ -80,7 +81,7 @@ void ACAS_EnemyCapt::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	
 	TArray<AActor*> PerceivedActors;
-	auto EnemyController = Cast<AAIController>(GetController());
+	auto EnemyController = Cast<ACAS_EnemyController>(GetController());
 	if (!EnemyController) {
 		return;
 	}
@@ -101,6 +102,14 @@ void ACAS_EnemyCapt::Tick(float DeltaTime)
 			}
 		}
 	}
+
+	if (auto ASC = GetAbilitySystemComponent()) {
+		if (ASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
+			EnemyController->GetBehaviorComponent()->ChangeBehaviorType(EBehaviorType::Stun);
+		}
+	}
+
+	
 }
 
 void ACAS_EnemyCapt::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
