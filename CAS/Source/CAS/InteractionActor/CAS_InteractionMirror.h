@@ -21,8 +21,8 @@ public:
 
 	FVector GetMirrorForwardVector() { return GetActorForwardVector(); }
 
-	void RegisterParent(AActor* Parent);
-	void CancelRegistration();
+	bool GetLaserActivated() { return bLaserActivated; }
+	void SetLaserActivated(bool LaserActivated) { bLaserActivated = LaserActivated; }
 protected:
 	virtual void BeginPlay() override;
 
@@ -45,6 +45,5 @@ private:
 
 	bool bLaserActivated = false;
 
-	AActor* ParentLaser = nullptr;
 	ACAS_InteractionMirror* ChildLaser = nullptr;
 };

@@ -18,20 +18,6 @@ void ACAS_InteractionMirror::InteractionWithPlayer()
 	AddActorLocalRotation(FRotator(0, Degree, 0));
 }
 
-void ACAS_InteractionMirror::RegisterParent(AActor* Parent)
-{
-	ParentLaser = Parent;
-	bLaserActivated = true;
-}
-
-void ACAS_InteractionMirror::CancelRegistration()
-{
-	if (ParentLaser) {
-		ParentLaser = nullptr;
-	}
-	bLaserActivated = false;
-}
-
 void ACAS_InteractionMirror::BeginPlay()
 {
 	Super::BeginPlay();
@@ -52,7 +38,7 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 
 	if (!bLaserActivated) {
 		if (ChildLaser) {
-			ChildLaser->CancelRegistration();
+			ChildLaser->SetLaserActivated(false);
 			ChildLaser = nullptr;
 		}
 		NiagaraComponent->Deactivate();
@@ -87,25 +73,25 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 					ChildLaser = Mirror;
 				}
 				else if (ChildLaser != Mirror) {
-					ChildLaser->CancelRegistration();
+					ChildLaser->SetLaserActivated(false);
 					ChildLaser = Mirror;
-					ChildLaser->RegisterParent(this);
+					ChildLaser->SetLaserActivated(true);
 				}
 				else {
 					ChildLaser = Mirror;
-					ChildLaser->RegisterParent(this);
+					ChildLaser->SetLaserActivated(true);
 				}
 			}
 			else {
 				if (ChildLaser) {
-					ChildLaser->CancelRegistration();
+					ChildLaser->SetLaserActivated(false);
 					ChildLaser = nullptr;
 				}
 			}
 		}
 		else {
 			if (ChildLaser) {
-				ChildLaser->CancelRegistration();
+				ChildLaser->SetLaserActivated(false);
 				ChildLaser = nullptr;
 			}
 		}

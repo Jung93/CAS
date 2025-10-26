@@ -34,9 +34,9 @@ void ACAS_LaserSpawnActor::BeginPlay()
 
 void ACAS_LaserSpawnActor::ClearCurrentMirrorInfo()
 {
-	if (CurrentMirror) {
-		CurrentMirror->CancelRegistration();
-		CurrentMirror = nullptr;
+	if (ChildMirror) {
+		ChildMirror->SetLaserActivated(false);
+		ChildMirror = nullptr;
 	}
 }
 
@@ -65,23 +65,23 @@ void ACAS_LaserSpawnActor::Tick(float DeltaTime)
 		LaserEnd = HitResult.ImpactPoint;
 
 		if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
-			if (CurrentMirror != Mirror) {
+			if (ChildMirror != Mirror) {
 				ClearCurrentMirrorInfo();
-				CurrentMirror = Mirror;
-				Mirror->RegisterParent(this);
+				ChildMirror = Mirror;
+				Mirror->SetLaserActivated(true);
 			}
 		}
 		else {
-			if (CurrentMirror) {
-				CurrentMirror->CancelRegistration();
-				CurrentMirror = nullptr;
+			if (ChildMirror) {
+				ChildMirror->SetLaserActivated(false);
+				ChildMirror = nullptr;
 			}
 		}
 	}
 	else {
-		if (CurrentMirror) {
-			CurrentMirror->CancelRegistration();
-			CurrentMirror = nullptr;
+		if (ChildMirror) {
+			ChildMirror->SetLaserActivated(false);
+			ChildMirror = nullptr;
 		}
 	}
 

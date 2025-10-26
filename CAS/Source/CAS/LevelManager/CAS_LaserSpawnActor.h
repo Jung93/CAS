@@ -37,7 +37,7 @@ protected:
 
 	FVector LaserEnd;
 
-	float Offset = 2000.0f;
+	float Offset = 10000.0f;
 
-	ACAS_InteractionMirror* CurrentMirror = nullptr;
+	ACAS_InteractionMirror* ChildMirror = nullptr;
 };
