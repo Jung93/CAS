@@ -19,9 +19,10 @@ public:
 	ACAS_InteractionMirror();
 	virtual void InteractionWithPlayer()override;
 
-	void LaserActivated(bool On) { bLaserActivated = On; }
-
 	FVector GetMirrorForwardVector() { return GetActorForwardVector(); }
+
+	void RegisterParent(AActor* Parent);
+	void CancelRegistration();
 protected:
 	virtual void BeginPlay() override;
 
@@ -37,12 +38,13 @@ protected:
 	UPROPERTY()
 	UNiagaraComponent* NiagaraComponent;
 
+private:
 	FVector LaserEnd;
 
 	float Offset = 2000.0f;
 
-	FVector	InitDir = FVector::ZeroVector;
-
 	bool bLaserActivated = false;
 
+	AActor* ParentLaser = nullptr;
+	ACAS_InteractionMirror* ChildLaser = nullptr;
 };
