@@ -17,11 +17,10 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_LaserSpawnActor();
 
-	void SetLaserDirection(FVector Dir) { InitDir = Dir; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	void ClearCurrentMirrorInfo();
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -38,7 +37,7 @@ protected:
 
 	FVector LaserEnd;
 
-	float Offset = 2000.0f;
+	float Offset = 10000.0f;
 
-	FVector	InitDir = FVector::ZeroVector;
+	ACAS_InteractionMirror* ChildMirror = nullptr;
 };

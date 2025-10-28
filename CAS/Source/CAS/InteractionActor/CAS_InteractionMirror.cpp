@@ -22,8 +22,6 @@ void ACAS_InteractionMirror::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetActorRotation(InitDir.Rotation());
-
 	FVector StartPosition = GetActorLocation();
 	FVector ForwardDir = GetActorForwardVector();
 	LaserEnd = StartPosition + ForwardDir * Offset;
@@ -39,8 +37,13 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	if (!bLaserActivated) {
+		if (ChildLaser) {
+			ChildLaser->SetLaserActivated(false);
+			ChildLaser = nullptr;
+		}
 		NiagaraComponent->Deactivate();
 		LaserEnd = GetActorLocation();
+		NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), LaserEnd);
 	}
 	else {
 		NiagaraComponent->Activate();
@@ -66,7 +69,30 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 			LaserEnd = HitResult.ImpactPoint;
 
 			if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
-				Mirror->LaserActivated(true);
+				if (!ChildLaser) {
+					ChildLaser = Mirror;
+				}
+				else if (ChildLaser != Mirror) {
+					ChildLaser->SetLaserActivated(false);
+					ChildLaser = Mirror;
+					ChildLaser->SetLaserActivated(true);
+				}
+				else {
+					ChildLaser = Mirror;
+					ChildLaser->SetLaserActivated(true);
+				}
+			}
+			else {
+				if (ChildLaser) {
+					ChildLaser->SetLaserActivated(false);
+					ChildLaser = nullptr;
+				}
+			}
+		}
+		else {
+			if (ChildLaser) {
+				ChildLaser->SetLaserActivated(false);
+				ChildLaser = nullptr;
 			}
 		}
 

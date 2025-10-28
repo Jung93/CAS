@@ -22,8 +22,6 @@ void ACAS_LaserSpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetActorRotation(InitDir.Rotation());
-
 	FVector StartPosition = GetActorLocation();
 	FVector ForwardDir = GetActorForwardVector();
 	LaserEnd = StartPosition + ForwardDir * Offset;
@@ -32,6 +30,14 @@ void ACAS_LaserSpawnActor::BeginPlay()
 	NiagaraComponent->SetVariableLinearColor(TEXT("Color"), FLinearColor(0.8f, 0, 0.7f, 1.0f));
 	NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), LaserEnd);
 	NiagaraComponent->Activate();
+}
+
+void ACAS_LaserSpawnActor::ClearCurrentMirrorInfo()
+{
+	if (ChildMirror) {
+		ChildMirror->SetLaserActivated(false);
+		ChildMirror = nullptr;
+	}
 }
 
 // Called every frame
@@ -43,8 +49,8 @@ void ACAS_LaserSpawnActor::Tick(float DeltaTime)
 	FVector Start = GetActorLocation();          
 	FVector ForwardDir = GetActorForwardVector();
 
-	LaserEnd += ForwardDir * Offset * DeltaTime;
-	
+	FVector TargetEnd = Start + ForwardDir * Offset;
+	LaserEnd = FMath::VInterpTo(LaserEnd, TargetEnd, DeltaTime, 10.0f);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
 		HitResult,
@@ -59,7 +65,23 @@ void ACAS_LaserSpawnActor::Tick(float DeltaTime)
 		LaserEnd = HitResult.ImpactPoint;
 
 		if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
-			Mirror->LaserActivated(true);
+			if (ChildMirror != Mirror) {
+				ClearCurrentMirrorInfo();
+				ChildMirror = Mirror;
+				Mirror->SetLaserActivated(true);
+			}
+		}
+		else {
+			if (ChildMirror) {
+				ChildMirror->SetLaserActivated(false);
+				ChildMirror = nullptr;
+			}
+		}
+	}
+	else {
+		if (ChildMirror) {
+			ChildMirror->SetLaserActivated(false);
+			ChildMirror = nullptr;
 		}
 	}
 
