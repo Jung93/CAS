@@ -26,12 +26,8 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Offset = 100.0f;
 
-private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;
-
-	UPROPERTY(EditAnywhere, Category = "Mesh")
-	AActor* PillarCase = nullptr;
 
 	FVector StartPosition;
 	FVector EndPosition;
