@@ -144,7 +144,8 @@ void ACAS_Character::DeadEvent()
 		GetAbilitySystemComponent()->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
 		auto EnemyController = Cast<ACAS_EnemyController>(Controller);
-		EnemyController->UnPossess();
+		if(EnemyController)
+			EnemyController->UnPossess();
 	}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.Dead"));
 }

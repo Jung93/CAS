@@ -139,6 +139,8 @@ public:
 
 	FVector ReceivedPosition;
 
+	void HideForTitle();
+
 
 	//bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
 
