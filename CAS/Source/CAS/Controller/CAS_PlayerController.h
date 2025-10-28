@@ -34,6 +34,9 @@ public:
 	void EnterUIMode();
 	void ExitUIMode();
 
+	void EnterTitleUIMode();
+	void ExitTitleUIMode();
+
 	void OpenTitle();
 
 	FOnInputDeviceChanged OnInputDeviceChanged;

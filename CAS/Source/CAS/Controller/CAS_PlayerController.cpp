@@ -2,6 +2,8 @@
 
 
 #include "Controller/CAS_PlayerController.h"
+#include "Engine/LocalPlayer.h"
+
 #include "Kismet/GameplayStatics.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
@@ -28,7 +30,7 @@ void ACAS_PlayerController::BeginPlay()
         TitleWidget = titleWidget;
         TitleWidget->AddToViewport(2);
         TitleWidget->SetVisibility(ESlateVisibility::Visible);
-        EnterUIMode();
+        EnterTitleUIMode();
     }
 
 //#if WITH_EDITOR
@@ -217,13 +219,38 @@ void ACAS_PlayerController::ExitUIMode()
     bEnableMouseOverEvents = false;
 }
 
+void ACAS_PlayerController::EnterTitleUIMode()
+{
+    if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+    {
+        Subsystem->RemoveMappingContext(_inputMappingContext);
+    }
+
+    bShowMouseCursor = true;
+    bEnableClickEvents = true;
+    bEnableMouseOverEvents = true;
+}
+
+void ACAS_PlayerController::ExitTitleUIMode()
+{
+    if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+    {
+        Subsystem->AddMappingContext(_inputMappingContext, 0);
+    }
+
+
+    bShowMouseCursor = false;
+    bEnableClickEvents = false;
+    bEnableMouseOverEvents = false;
+}
+
 void ACAS_PlayerController::OpenTitle()
 {
     auto titleWidget = CreateWidget<UCAS_TitleWidget>(GetWorld(), TitleWidgetClass);
     TitleWidget = titleWidget;
     TitleWidget->AddToViewport(2);
     TitleWidget->SetVisibility(ESlateVisibility::Visible);
-    EnterUIMode();
+    EnterTitleUIMode();
 }
 
 

@@ -460,6 +460,14 @@ void ACAS_Player::BeginPlay()
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
+
+	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+
+	if (CurrentLevelName == FName("Title"))
+	{
+		HideForTitle();
+	}
+
 }
 
 // Called every frame
@@ -583,6 +591,17 @@ void ACAS_Player::ToggleSkill()
 {
 	QuickSlotWidget->SwitchToggle();
 
+}
+
+void ACAS_Player::HideForTitle()
+{
+	SetActorHiddenInGame(true);
+
+	if (_hatSpawn && QuickSlotWidget)
+	{
+		_hatSpawn->SetActorHiddenInGame(true);
+		QuickSlotWidget->SetVisibility(ESlateVisibility::Collapsed);
+	}
 }
 
 //void ACAS_Player::AddDetectingEnemy(class ACAS_Character* enemy)
