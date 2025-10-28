@@ -3,6 +3,7 @@
 
 #include "LevelManager/CAS_LaserSpawnActor.h"
 #include "InteractionActor/CAS_InteractionMirror.h"
+#include "LevelManager/CAS_LaserTarget.h"
 // Sets default values
 ACAS_LaserSpawnActor::ACAS_LaserSpawnActor()
 {
@@ -63,8 +64,10 @@ void ACAS_LaserSpawnActor::Tick(float DeltaTime)
 	if (bHit)
 	{
 		LaserEnd = HitResult.ImpactPoint;
-
-		if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
+		if (auto Target = Cast<ACAS_LaserTarget>(HitResult.GetActor())) {
+			Target->LaserReached();
+		}
+		else if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
 			if (ChildMirror != Mirror) {
 				ClearCurrentMirrorInfo();
 				ChildMirror = Mirror;

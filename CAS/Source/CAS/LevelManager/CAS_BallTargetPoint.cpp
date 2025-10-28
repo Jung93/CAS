@@ -39,8 +39,7 @@ void ACAS_BallTargetPoint::BeginPlay()
 
 		StaticMesh->SetMaterial(0, DynamicMaterial);
 
-		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(1.0f, 0.6f, 0.2f, 1.0f));
-
+		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
 	}
 
 }
@@ -52,7 +51,13 @@ void ACAS_BallTargetPoint::OnOverlapEvent(UPrimitiveComponent* OverlappedCompone
 		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
 
 		bTargetInCollider = true;
-		GetWorldTimerManager().SetTimer(CheckTimerHandle, this, &ThisClass::CheckTarget, 0.1f, true);
+		if (!bCheckOnce) {
+			GetWorldTimerManager().SetTimer(CheckTimerHandle, this, &ThisClass::CheckTarget, 0.1f, true);
+		}
+		else {
+			auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
+			PuzzleSubsystem->PlusCompletedCount();
+		}
 	}
 	else {
 		return;
@@ -62,6 +67,9 @@ void ACAS_BallTargetPoint::OnOverlapEvent(UPrimitiveComponent* OverlappedCompone
 
 void ACAS_BallTargetPoint::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
+	if (bCheckOnce) {
+		return;
+	}
 	if (auto InteractionBall = Cast<ACAS_InteractionBall>(OtherActor)) {
 		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
 		

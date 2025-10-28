@@ -2,6 +2,7 @@
 
 
 #include "InteractionActor/CAS_InteractionMirror.h"
+#include "LevelManager/CAS_LaserTarget.h"
 
 ACAS_InteractionMirror::ACAS_InteractionMirror()
 {
@@ -67,8 +68,10 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 		if (bHit)
 		{
 			LaserEnd = HitResult.ImpactPoint;
-
-			if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
+			if (auto Target = Cast<ACAS_LaserTarget>(HitResult.GetActor())) {
+				Target->LaserReached();
+			}
+			else if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
 				if (!ChildLaser) {
 					ChildLaser = Mirror;
 				}
