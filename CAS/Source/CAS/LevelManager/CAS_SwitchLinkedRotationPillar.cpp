@@ -13,7 +13,7 @@ void ACAS_SwitchLinkedRotationPillar::BeginPlay()
 void ACAS_SwitchLinkedRotationPillar::SwitchClicked(bool SwitchOn)
 {
 	if (SwitchOn) {
-		EndRotation = StartRotation + FRotator(0, 180.0f, 0);
+		EndRotation = StartRotation + FRotator(0, 150.0f, 0);
 	}
 	else {
 		EndRotation = StartRotation;

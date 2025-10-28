@@ -19,6 +19,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void DestorySpawnerActor();
 protected:
 	UPROPERTY(EditAnywhere, Category = "SpawnActor")
 	class UStaticMeshComponent* StaticMesh;

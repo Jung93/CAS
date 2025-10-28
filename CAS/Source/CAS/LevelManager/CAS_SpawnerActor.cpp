@@ -2,6 +2,7 @@
 
 
 #include "LevelManager/CAS_SpawnerActor.h"
+#include "LevelManager/CAS_WorldSubsystem.h"
 
 // Sets default values
 ACAS_SpawnerActor::ACAS_SpawnerActor()
@@ -27,8 +28,16 @@ void ACAS_SpawnerActor::BeginPlay()
 		if (Interval > 0) {
 			GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &ThisClass::InitialSpawn, Interval, true);
 		}
+		auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
+
+		PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::DestorySpawnerActor);
 	}
 
+}
+
+void ACAS_SpawnerActor::DestorySpawnerActor()
+{
+	Destroy();
 }
 
 void ACAS_SpawnerActor::OnDestroyedEvent(AActor* Actor)
