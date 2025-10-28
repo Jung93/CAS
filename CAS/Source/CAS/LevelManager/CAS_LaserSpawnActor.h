@@ -39,5 +39,5 @@ protected:
 
 	float Offset = 10000.0f;
 
-	ACAS_InteractionMirror* ChildMirror = nullptr;
+	class ACAS_InteractionMirror* ChildMirror = nullptr;
 };
