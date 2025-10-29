@@ -15,11 +15,10 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_StageDoor();
 
+	void DoorOpen();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	void DoorOpen();
 
 	void DoorOpenEvent(float DeltaTime);
 	void DoorCloseEvent(float DeltaTime);
@@ -37,10 +36,10 @@ protected:
 	UStaticMeshComponent* Door__Mesh;
 
 	UPROPERTY(EditAnywhere, Category = "Door")
-	float Offset = 400.0f;
+	float Offset = 350.0f;
 
 	UPROPERTY(EditAnywhere, Category = "Door")
-	float MoveSpeed = 10.0f;
+	float MoveSpeed = 5.0f;
 
 	bool bDoorOpen = false;
 };

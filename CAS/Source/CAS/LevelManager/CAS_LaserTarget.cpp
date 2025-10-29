@@ -21,8 +21,7 @@ bool ACAS_LaserTarget::CheckPuzzleState()
 	for (auto Mirror : Mirrors) {
 		if (!Mirror->GetLaserActivated()) {
 			ResetAllMirrors();
-			bTargetInCollider = false;
-			DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
+			bTargetInCollider = false;			
 			return false;
 		}
 	}
@@ -58,7 +57,7 @@ void ACAS_LaserTarget::BeginPlay()
 
 		StaticMesh->SetMaterial(0, DynamicMaterial);
 
-		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
+		SetTargetColor(false);
 	}
 }
 
@@ -74,10 +73,19 @@ void ACAS_LaserTarget::LaserReached()
 	if (bTargetInCollider) {
 		return;
 	}
-	DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
+	SetTargetColor(true);
 
 	bTargetInCollider = true;
 
-	
+}
+
+void ACAS_LaserTarget::SetTargetColor(bool Reached)
+{
+	if (Reached) {
+		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
+	}
+	else {
+		DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
+	}
 }
 

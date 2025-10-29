@@ -14,7 +14,7 @@ class CAS_API ACAS_LaserTarget : public AActor
 public:	
 	// Sets default values for this actor's properties
 	ACAS_LaserTarget();
-
+	bool IsTargetInCollider() { return bTargetInCollider; }
 	bool CheckPuzzleState();
 protected:
 	// Called when the game starts or when spawned
@@ -22,6 +22,7 @@ protected:
 	void ResetAllMirrors();
 public:	
 	void LaserReached();
+	void SetTargetColor(bool Reached);
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
 	class UStaticMeshComponent* StaticMesh;

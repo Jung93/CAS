@@ -21,6 +21,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	class ACAS_LaserTarget* Target;
 	UPROPERTY(EditAnywhere)
-	class ACAS_PressureSwitchLinkedDoor* Door;
+	class ACAS_MiniStageDoor* Door;
 
 };
