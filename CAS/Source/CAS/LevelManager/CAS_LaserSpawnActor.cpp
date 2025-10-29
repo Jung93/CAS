@@ -46,6 +46,14 @@ void ACAS_LaserSpawnActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!bLaserActivated) {
+		ClearCurrentMirrorInfo();
+		NiagaraComponent->Deactivate();
+		return;
+	}
+	
+	NiagaraComponent->Activate();
+
 	FHitResult HitResult;
 	FVector Start = GetActorLocation();          
 	FVector ForwardDir = GetActorForwardVector();

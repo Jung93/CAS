@@ -19,9 +19,16 @@ void ACAS_InteractionMirror::InteractionWithPlayer()
 	AddActorLocalRotation(FRotator(0, Degree, 0));
 }
 
+void ACAS_InteractionMirror::ResetMirrorTransform()
+{
+	SetActorTransform(InitTransform);
+}
+
 void ACAS_InteractionMirror::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitTransform = GetActorTransform();
 
 	FVector StartPosition = GetActorLocation();
 	FVector ForwardDir = GetActorForwardVector();

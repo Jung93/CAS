@@ -23,6 +23,8 @@ public:
 
 	bool GetLaserActivated() { return bLaserActivated; }
 	void SetLaserActivated(bool LaserActivated) { bLaserActivated = LaserActivated; }
+
+	void ResetMirrorTransform();
 protected:
 	virtual void BeginPlay() override;
 
@@ -46,4 +48,6 @@ private:
 	bool bLaserActivated = false;
 
 	ACAS_InteractionMirror* ChildLaser = nullptr;
+
+	FTransform InitTransform;
 };

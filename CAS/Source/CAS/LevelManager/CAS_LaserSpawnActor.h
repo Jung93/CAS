@@ -17,6 +17,7 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_LaserSpawnActor();
 
+	void SetLaserActivated(bool LaserActivated) { bLaserActivated = LaserActivated; }
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,4 +41,7 @@ protected:
 	float Offset = 10000.0f;
 
 	class ACAS_InteractionMirror* ChildMirror = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	bool bLaserActivated = true;
 };

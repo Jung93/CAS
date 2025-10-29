@@ -3,6 +3,8 @@
 
 #include "LevelManager/CAS_LaserTarget.h"
 #include "LevelManager/CAS_WorldSubsystem.h"
+#include "Kismet/GameplayStatics.h"
+#include "InteractionActor/CAS_InteractionMirror.h"
 
 // Sets default values
 ACAS_LaserTarget::ACAS_LaserTarget()
@@ -14,13 +16,39 @@ ACAS_LaserTarget::ACAS_LaserTarget()
 	SetRootComponent(StaticMesh);
 }
 
+bool ACAS_LaserTarget::CheckPuzzleState()
+{
+	for (auto Mirror : Mirrors) {
+		if (!Mirror->GetLaserActivated()) {
+			ResetAllMirrors();
+			bTargetInCollider = false;
+			DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.8f, 0.3f, 0.0f, 1.0f));
+			return false;
+		}
+	}
+
+	for (auto Mirror : Mirrors) {
+	
+		Mirror->SetLaserActivated(false);
+	}
+	return true;
+}
+
 // Called when the game starts or when spawned
 void ACAS_LaserTarget::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->RegisterTarget();
+
+	TArray<AActor*> Actors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), MirrorClass, Actors);
+
+	for (auto Actor : Actors)
+	{
+		if (auto Target = Cast<ACAS_InteractionMirror>(Actor))
+		{
+			Mirrors.Add(Target);
+		}
+	}
 
 	auto Material = StaticMesh->GetMaterial(0);
 
@@ -34,6 +62,13 @@ void ACAS_LaserTarget::BeginPlay()
 	}
 }
 
+void ACAS_LaserTarget::ResetAllMirrors()
+{
+	for (auto Mirror : Mirrors) {
+		Mirror->ResetMirrorTransform();
+	}
+}
+
 void ACAS_LaserTarget::LaserReached()
 {
 	if (bTargetInCollider) {
@@ -41,9 +76,8 @@ void ACAS_LaserTarget::LaserReached()
 	}
 	DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor(0.0f, 0.6f, 0.0f, 1.0f));
 
-	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->PlusCompletedCount();
-
 	bTargetInCollider = true;
+
+	
 }
 

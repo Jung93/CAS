@@ -15,10 +15,11 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_LaserTarget();
 
+	bool CheckPuzzleState();
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
+	void ResetAllMirrors();
 public:	
 	void LaserReached();
 private:
@@ -26,6 +27,11 @@ private:
 	class UStaticMeshComponent* StaticMesh;
 	UPROPERTY()
 	UMaterialInstanceDynamic* DynamicMaterial;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class ACAS_InteractionMirror> MirrorClass;
+
 
 	bool bTargetInCollider = false;
+
+	TArray<class ACAS_InteractionMirror*> Mirrors;
 };
