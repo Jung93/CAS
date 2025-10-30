@@ -25,8 +25,10 @@ public:
 
 	void SetOwnerClass(class ACAS_Character* owner) { OwnerClass = owner; };
 	class ACAS_Character* GetOwnerClass() { return OwnerClass; }
-	class USphereComponent* GetCollision() { return Collision; }
+	//class USphereComponent* GetCollision() { return Collision; }
 
+	void EnableCollision();
+	void DisableCollision();
 
 private:
 	UPROPERTY()

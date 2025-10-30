@@ -26,7 +26,9 @@ void UCAS_QuitGameWidget::NativeConstruct()
 void UCAS_QuitGameWidget::CloseWidget()
 {
 	SelectWidget->SetVisibility(ESlateVisibility::Collapsed);
-
+	auto controller = GetWorld()->GetFirstPlayerController();
+	auto playerController = Cast<ACAS_PlayerController>(controller);
+	playerController->ExitUIMode();
 }
 
 void UCAS_QuitGameWidget::QuitGame()

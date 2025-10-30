@@ -21,6 +21,8 @@ public:
 	//void ActivateAbility(const FInputActionValue& Value);
 	virtual void ActivateEnemyAbility() override;
 
+	class ACAS_HitScan* GetHitScan() { return _hitScan; }
+
 protected:
 	virtual void BeginPlay() override;
 

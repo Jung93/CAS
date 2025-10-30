@@ -27,6 +27,7 @@ void ACAS_HitScan::BeginPlay()
 
 	Collision->OnComponentEndOverlap.AddDynamic(this, &ACAS_HitScan::NotifyCollision);
 
+	DisableCollision();
 
 }
 
@@ -35,8 +36,16 @@ void ACAS_HitScan::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	//DrawDebugSphere(GetWorld(), GetActorLocation(), Collision->GetScaledSphereRadius(), 10, FColor::Green, false, 0.1f);
+}
 
+void ACAS_HitScan::EnableCollision()
+{
+	Collision->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+}
+
+void ACAS_HitScan::DisableCollision()
+{
+	Collision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 
@@ -72,6 +81,7 @@ void ACAS_HitScan::NotifyCollision(UPrimitiveComponent* OverlappedComp, AActor* 
 
 	character->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
 
+	DisableCollision();
 }
 
 

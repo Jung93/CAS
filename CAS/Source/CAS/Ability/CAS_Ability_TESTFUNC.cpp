@@ -3,6 +3,9 @@
 
 #include "Ability/CAS_Ability_TESTFUNC.h"
 #include "Ability_Task/CAS_Task_Attack.h"
+#include "Character/CAS_Player.h"
+#include "Character/EnemyCapt/CAS_EnemyCapt_Kick.h"
+#include "Character/CAS_HitScan.h"
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {		
@@ -174,5 +177,33 @@ void UCAS_Ability_TESTFUNC::PlaySound()
 void UCAS_Ability_TESTFUNC::PlayAnimNotify(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
 	//AttackTask->ReadyForActivation();
-	CAS_EndAbility();
+
+	if (NotifyName == "AttackCollision")
+	{
+		auto Character = Cast<ACAS_Character>(GetAvatarActorFromActorInfo());
+
+		auto player = Cast<ACAS_Player>(Character);
+		if (player)
+		{
+			auto hitscan = player->GetHitScan();
+			if (hitscan)
+				hitscan->EnableCollision();
+			return;
+		}
+
+		auto enemyKick = Cast<ACAS_EnemyCapt_Kick>(Character);
+		if (enemyKick)
+		{
+			auto hitscan = enemyKick->GetHitScan();
+			if (hitscan)
+				hitscan->EnableCollision();
+			return;
+		}
+
+	}
+	else
+	{
+		CAS_EndAbility();
+	}
+
 }
