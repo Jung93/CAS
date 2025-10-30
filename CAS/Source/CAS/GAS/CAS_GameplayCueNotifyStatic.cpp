@@ -50,9 +50,7 @@ bool UCAS_GameplayCueNotifyStatic::OnExecute_Implementation(AActor* Target, cons
 					UAISense_Hearing::ReportNoiseEvent(GetWorld(), player->GetActorLocation(), 1.0f, player, 1000.0f, TEXT("Ability"));
 				else
 				{
-					auto controller = Cast<ACAS_PlayerController>(character->GetController());
-					if(controller)
-						UAISense_Hearing::ReportNoiseEvent(GetWorld(), character->GetActorLocation(), 1.0f, character, 1000.0f, TEXT("Ability"));
+					UAISense_Hearing::ReportNoiseEvent(GetWorld(), character->GetActorLocation(), 1.0f, character, 1000.0f, TEXT("Ability"));
 
 				}
 				
