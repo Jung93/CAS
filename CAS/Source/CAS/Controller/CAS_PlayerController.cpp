@@ -21,7 +21,7 @@ void ACAS_PlayerController::BeginPlay()
     SaveLoadWidget->AddToViewport(3);
     SaveLoadWidget->CloseSaveLoadWidget();
 
-    ExitUIMode();
+    //ExitUIMode();
 
     FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
 
@@ -193,24 +193,24 @@ void ACAS_PlayerController::EnterUIMode()
 
 void ACAS_PlayerController::ExitUIMode()
 {
-    auto player = Cast<ACAS_Player>(GetCharacter());
+    //auto player = Cast<ACAS_Player>(GetCharacter());
 
-    if (player->IsValidLowLevel())
-    {
-        if (player->IsDead())
-        {
-            OpenTitle();
-            return;
-        }
-    }
+    //if (player->IsValidLowLevel())
+    //{
+    //    if (player->IsDead())
+    //    {
+    //        OpenTitle();
+    //        return;
+    //    }
+    //}
 
-    FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
+    //FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
 
-    if (CurrentLevelName == FName("Title"))
-    {
-        OpenTitle();
-        return;
-    }
+    //if (CurrentLevelName == FName("Title"))
+    //{
+    //    OpenTitle();
+    //    return;
+    //}
 
     UGameplayStatics::SetGamePaused(GetWorld(), false);
 
@@ -250,7 +250,7 @@ void ACAS_PlayerController::OpenTitle()
     TitleWidget = titleWidget;
     TitleWidget->AddToViewport(2);
     TitleWidget->SetVisibility(ESlateVisibility::Visible);
-    EnterTitleUIMode();
+    EnterUIMode();
 }
 
 

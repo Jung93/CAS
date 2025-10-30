@@ -7,6 +7,7 @@
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Kismet/GameplayStatics.h"
 #include "Character/CAS_Player.h"
+#include "Character/CAS_EnemyCapt.h"
 #include "Engine/LevelStreamingDynamic.h"
 #include "Components/AudioComponent.h"
 
@@ -112,6 +113,7 @@ void UCAS_GameInstance::SaveGameData_Sync(ACAS_Player* player, int32 index)
 	SaveGameData->QuickSlotData = QuickSlotAbilities;
 	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
 	SaveGameData->SaveTime = FDateTime::Now();
+	SaveGameData->PuzzleClear = CurrentPuzzleClear;
 
 	UGameplayStatics::SaveGameToSlot(SaveGameData,FString::Printf(TEXT("SLOT_%d"), index), 0);
 }
@@ -130,6 +132,7 @@ void UCAS_GameInstance::SaveGameData_ASync(ACAS_Player* player, int32 index)
 	SaveGameData->QuickSlotData = QuickSlotAbilities;
 	SaveGameData->Level = FName(*UGameplayStatics::GetCurrentLevelName(GetWorld(), true));
 	SaveGameData->SaveTime = FDateTime::Now();
+	SaveGameData->PuzzleClear = CurrentPuzzleClear;
 
 	UGameplayStatics::AsyncSaveGameToSlot(SaveGameData, FString::Printf(TEXT("SLOT_%d"),index), 0, FAsyncSaveGameToSlotDelegate::CreateUObject(this, &ThisClass::OnSaveFinished));
 
@@ -149,7 +152,7 @@ void UCAS_GameInstance::LoadGameData_Sync(int32 index)
 	CachedSaveGameData.PlayerLocation = SaveGameData->PlayerLocation;
 	CachedSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
 	CachedSaveGameData.bDataLoadingReady = true;
-
+	CachedSaveGameData.PuzzleClear = SaveGameData->PuzzleClear;
 
 	UGameplayStatics::OpenLevel(this, SaveGameData->Level);
 }
@@ -174,6 +177,11 @@ void UCAS_GameInstance::OnLoadFinished(const FString& SlotName, const int32 User
 	CachedSaveGameData.QuickSlotData = SaveGameData->QuickSlotData;
 	CachedSaveGameData.Level = SaveGameData->Level;
 	CachedSaveGameData.bDataLoadingReady = true;
+	CachedSaveGameData.PuzzleClear = SaveGameData->PuzzleClear;
+
+	CurrentPuzzleClear = SaveGameData->PuzzleClear;
+
+
 }
 
 void UCAS_GameInstance::OnSaveFinished(const FString& SlotName, const int32 UserIndex, bool bSuccess)
@@ -186,6 +194,7 @@ void UCAS_GameInstance::ApplyCachedGameData(ACharacter* Character)
 	auto SaveLocation = CachedSaveGameData.PlayerLocation;
 	auto SaveHP = CachedSaveGameData.PlayerHP;
 	QuickSlotAbilities =  CachedSaveGameData.QuickSlotData;
+	CurrentPuzzleClear = CachedSaveGameData.PuzzleClear;
 
 	auto Player = Cast<ACAS_Player>(Character);
 
@@ -237,7 +246,8 @@ void UCAS_GameInstance::PlayNormalBgm(bool isDetected)
 
 	// 사운드 큐가 제대로 설정되었는지 확인
 	//if (BgmNormal && BgmDetected)
-	if(BgmNormal && BgmDetected)
+	if (BgmNormal)
+		//if(BgmNormal && BgmDetected)
 	{
 		// 각 음악을 생성하고 재생
 
@@ -249,11 +259,11 @@ void UCAS_GameInstance::PlayNormalBgm(bool isDetected)
 		if (BgmNormalComponent)
 			BgmNormalComponent->SetVolumeMultiplier(NextNormalVolume);
 
-		BgmDetectedComponent = UGameplayStatics::SpawnSound2D(GetWorld(),
-			BgmDetected);
+		//BgmDetectedComponent = UGameplayStatics::SpawnSound2D(GetWorld(),
+		//	BgmDetected);
 
-		if (BgmDetectedComponent)
-			BgmDetectedComponent->SetVolumeMultiplier(NextDetectedVolume);
+		//if (BgmDetectedComponent)
+		//	BgmDetectedComponent->SetVolumeMultiplier(NextDetectedVolume);
 	}
 
 }
@@ -264,11 +274,21 @@ void UCAS_GameInstance::CrossFadeMusic(bool isDetected)
 	{
 		NextDetectedVolume = BgmTargetVolume;
 		NextNormalVolume = 0;
+
+		BgmDetectedComponent = UGameplayStatics::SpawnSound2D(GetWorld(),
+			BgmDetected);
+
+		if (BgmDetectedComponent)
+			BgmDetectedComponent->SetVolumeMultiplier(NextDetectedVolume);
+
 	}
 	else
 	{
 		NextNormalVolume = BgmTargetVolume;
 		NextDetectedVolume = 0;
+
+
+
 	}
 
 	ChangeVolume = true;
@@ -297,12 +317,14 @@ void UCAS_GameInstance::ManageTick(float DeltaSecond)
 			BgmNormalComponent->SetVolumeMultiplier(lerpNormalVolume);
 			BgmDetectedComponent->SetVolumeMultiplier(lerpDetectedVolume);
 
-			if (BgmNormalComponent->VolumeMultiplier == NextNormalVolume ||
+			if (BgmNormalComponent->VolumeMultiplier == NextNormalVolume &&
 				BgmDetectedComponent->VolumeMultiplier == NextDetectedVolume)
 			{
+				if(BgmDetectedComponent->VolumeMultiplier == 0)
+					BgmDetectedComponent->Stop();
 				ChangeVolume = false;
+
 			}
 		}
 	}
 }
-

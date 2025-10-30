@@ -105,9 +105,9 @@ void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
 void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
-	auto controller = GetWorld()->GetFirstPlayerController();
-	auto playerController = Cast<ACAS_PlayerController>(controller);
-	playerController->ExitUIMode();
+	//auto controller = GetWorld()->GetFirstPlayerController();
+	//auto playerController = Cast<ACAS_PlayerController>(controller);
+	//playerController->ExitUIMode();
 }
 
 void UCAS_SaveLoadWidget::OverwriteSlot()

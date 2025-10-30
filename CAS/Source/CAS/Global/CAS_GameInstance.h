@@ -63,6 +63,18 @@ public:
 	void ManageTick(float DeltaSecond);
 
 	int32 CurrentSlotIndex = -1;
+
+	UFUNCTION(BlueprintCallable)
+	void ResetPuzzleClear() { CurrentPuzzleClear = false; }
+
+	UFUNCTION(BlueprintCallable)
+	void ClearCurrentPuzzle() { CurrentPuzzleClear = true; }
+
+	UFUNCTION(BlueprintCallable)
+	bool IsPuzzleClear() { return CurrentPuzzleClear; }
+
+
+
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "SaveLoad")
 	TMap<FString, FString> GameAssets;
@@ -109,6 +121,8 @@ private:
 	float NextDetectedVolume;
 
 	bool ChangeVolume = false;
+	bool CurrentPuzzleClear = false;
+
 
 private:
 	struct FTempSaveGameData
@@ -118,6 +132,7 @@ private:
 		FVector PlayerLocation = FVector::ZeroVector;
 		TArray<FCAS_SlotData> QuickSlotData;
 		FName Level;
+		bool PuzzleClear = false;
 	};
 
 	FTempSaveGameData CachedSaveGameData;

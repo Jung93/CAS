@@ -2,10 +2,15 @@
 
 
 #include "LevelManager/CAS_WorldSubsystem.h"
+#include "Global/CAS_GameInstance.h"
 
 void UCAS_WorldSubsystem::StageClearEvent()
 {
 	OnPuzzleCompleted.Broadcast();
+
+	UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(GetWorld()->GetGameInstance());
+
+	gi->ClearCurrentPuzzle();
 }
 
 void UCAS_WorldSubsystem::CheckGameProgress()

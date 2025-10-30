@@ -18,7 +18,19 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void OnOverlapEvent(class UPrimitiveComponent* OverlappedComponent, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const struct FHitResult& SweepResult);
+
 private:
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* StaticMesh;
+
+	UPROPERTY(EditAnywhere)
+	class UBoxComponent* Collider;
+
+	UPROPERTY(EditAnywhere)
+	class UBoxComponent* InvisibleDoor;
+
 	FVector StartLocation;
 	float ElapsedTime = 0.0f;
 
@@ -38,4 +50,5 @@ private:
 
 	void ToggleDirection();
 	void StartMove();
+	void Active();
 };

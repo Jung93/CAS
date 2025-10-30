@@ -4,6 +4,7 @@
 #include "LevelManager/CAS_SpotLight.h"
 #include "Components/SpotLightComponent.h"
 #include "LevelManager/CAS_WorldSubsystem.h"
+#include "Global/CAS_GameInstance.h"
 
 ACAS_SpotLight::ACAS_SpotLight()
 {
@@ -33,6 +34,12 @@ void ACAS_SpotLight::BeginPlay()
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
 	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::LightOn);
 
+	auto gi = Cast<UCAS_GameInstance>(GetGameInstance());
+
+	if (gi && gi->IsPuzzleClear())
+	{
+		LightOn();
+	}
 }
 
 void ACAS_SpotLight::LightOn()

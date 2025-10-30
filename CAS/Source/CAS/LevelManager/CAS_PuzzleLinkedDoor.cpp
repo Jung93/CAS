@@ -3,7 +3,7 @@
 
 #include "LevelManager/CAS_PuzzleLinkedDoor.h"
 #include "LevelManager/CAS_WorldSubsystem.h"
-
+#include "Global/CAS_GameInstance.h"
 
 // Sets default values
 ACAS_PuzzleLinkedDoor::ACAS_PuzzleLinkedDoor()
@@ -18,6 +18,13 @@ void ACAS_PuzzleLinkedDoor::BeginPlay()
 	
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
 	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::DoorOpen);
+
+	auto gi = Cast<UCAS_GameInstance>(GetGameInstance());
+
+	if (gi && gi->IsPuzzleClear())
+	{
+		DoorOpen();
+	}
 }
 
 void ACAS_PuzzleLinkedDoor::DoorOpen()

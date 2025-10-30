@@ -450,6 +450,7 @@ void ACAS_Player::BeginPlay()
 
 	UCAS_GameInstance* GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	if (GameInstance) {
+			GameInstance->ResetPuzzleClear();
 		if (GameInstance->IsSaveDataReady()) {
 			GameInstance->ApplyCachedGameData(this);
 			GameInstance->ClearCachedData();

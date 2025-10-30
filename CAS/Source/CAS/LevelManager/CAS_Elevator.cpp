@@ -3,11 +3,22 @@
 
 #include "LevelManager/CAS_Elevator.h"
 #include "LevelManager/CAS_WorldSubsystem.h"
+#include "Character/CAS_Player.h"
 #include "TimerManager.h"
+#include "Components/BoxComponent.h"
+#include "Global/CAS_GameInstance.h"
 
 ACAS_Elevator::ACAS_Elevator()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("Mesh");
+	Collider = CreateDefaultSubobject<UBoxComponent>("Collider");
+	InvisibleDoor = CreateDefaultSubobject<UBoxComponent>("Door");
+
+	RootComponent = StaticMesh;
+	Collider->SetupAttachment(StaticMesh);
+	InvisibleDoor->SetupAttachment(StaticMesh);
 }
 
 void ACAS_Elevator::BeginPlay()
@@ -16,7 +27,18 @@ void ACAS_Elevator::BeginPlay()
 	StartLocation = GetActorLocation();
 
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::StartMove);
+	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::Active);
+
+	Collider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
+	Collider->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	InvisibleDoor->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	auto gi = Cast<UCAS_GameInstance>(GetGameInstance());
+
+	if (gi && gi->IsPuzzleClear())
+	{
+		Active();
+	}
 
 }
 
@@ -41,19 +63,31 @@ void ACAS_Elevator::Tick(float DeltaTime)
 	if (FVector::Dist(NewLocation, TargetLocation) < 1.f)
 	{
 		Waiting = true;
-		GetWorldTimerManager().SetTimer(WaitTimerHandle, this, &ACAS_Elevator::ToggleDirection, WaitTime, false);
+		InvisibleDoor->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
 	}
 }
 
-void ACAS_Elevator::ToggleDirection()
+void ACAS_Elevator::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	MovingUp = !MovingUp;
-	Waiting = false;
+	auto player = Cast<ACAS_Player>(OtherActor);
+
+	if (player)
+	{
+		StartMove();
+		InvisibleDoor->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	}
+
 }
 
 void ACAS_Elevator::StartMove()
 {
 	Waiting = false;
-	MovingUp = true;
+	MovingUp = !MovingUp;
+}
+
+void ACAS_Elevator::Active()
+{
+	Collider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 }
 

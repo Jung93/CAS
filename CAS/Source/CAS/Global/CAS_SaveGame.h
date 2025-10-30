@@ -26,5 +26,8 @@ public:
 	FName Level;
 	UPROPERTY()
 	FDateTime SaveTime;
+	UPROPERTY(VisibleAnywhere)
+	bool PuzzleClear = false;
+
 };
 									
