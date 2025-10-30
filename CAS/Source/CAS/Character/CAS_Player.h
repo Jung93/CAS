@@ -117,6 +117,7 @@ public:
 	void ClearInteractingActor() { InteractingActor = nullptr; }
 
 	void SwitchSlotChangable() { isSlotChangable = !isSlotChangable; }
+	void DeactivateHat();
 public:	
 	virtual void InitAbilitySystemComponent() override;
 	virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;

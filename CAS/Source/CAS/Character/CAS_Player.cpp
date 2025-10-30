@@ -460,7 +460,7 @@ void ACAS_Player::BeginPlay()
 
 	}
 	AbilitySystemComponent->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
-
+	AttributeSet->DeadEvent.AddUObject(this, &ThisClass::DeactivateHat);
 
 	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
 
@@ -521,6 +521,17 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	}
 	
+}
+
+void ACAS_Player::DeactivateHat()
+{
+	if (_hatSpawn) 
+	{
+		_hatSpawn->SetActorEnableCollision(false);
+		_hatSpawn->SetActorHiddenInGame(true);
+	}
+
+
 }
 
 void ACAS_Player::InitAbilitySystemComponent()
