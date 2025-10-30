@@ -10,13 +10,14 @@ ACAS_LaserSpawnActor::ACAS_LaserSpawnActor()
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SetRootComponent(StaticMesh);
+
+	LaserComponent = CreateDefaultSubobject<UCAS_LaserComponent>(TEXT("LaserComponent"));
 }
 
 void ACAS_LaserSpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SetLaserActivated(true);
 }
 
 void ACAS_LaserSpawnActor::SetLaserActivated(bool LaserActivated)

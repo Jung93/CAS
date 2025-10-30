@@ -4,6 +4,7 @@
 #include "LevelManager/CAS_DamageLaserSpawnActor.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_PlayerState.h"
+#include "LevelManager/CAS_LaserComponent.h"
 
 ACAS_DamageLaserSpawnActor::ACAS_DamageLaserSpawnActor()
 {
@@ -16,8 +17,8 @@ void ACAS_DamageLaserSpawnActor::BeginPlay()
 
 void ACAS_DamageLaserSpawnActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-
+	//Super::Tick(DeltaTime);
+	//
 	//FHitResult HitResult;
 	//FVector Start = GetActorLocation();
 	//FVector ForwardDir = GetActorForwardVector();
@@ -71,25 +72,34 @@ void ACAS_DamageLaserSpawnActor::Tick(float DeltaTime)
 	//	ClearContinuousDamageTimer();
 	//	CurrentHitPlayer = nullptr;
 	//}
+	////auto DetectedActor = LaserComponent->GetDetectedActor();
+	////
+	////if (auto Player = Cast<ACAS_Player>(DetectedActor)) {
+	////	CurrentHitPlayer = Player;
+	////
+	////}
+	////else {
+	////	ClearContinuousDamageTimer();
+	////}
 }
 
 void ACAS_DamageLaserSpawnActor::ApplyContinuousDamage()
 {
-	//if (CurrentHitPlayer)
-	//{
-	//	CurrentHitPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
-	//}
-	//else
-	//{
-	//	ClearContinuousDamageTimer();
-	//	CurrentHitPlayer = nullptr;
-	//}
+	if (CurrentHitPlayer)
+	{
+		CurrentHitPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
+	}
+	else
+	{
+		ClearContinuousDamageTimer();
+		CurrentHitPlayer = nullptr;
+	}
 }
 
 void ACAS_DamageLaserSpawnActor::ClearContinuousDamageTimer()
 {
-	//if (GetWorldTimerManager().IsTimerActive(ContinuousDamageTimerHandle))
-	//{
-	//	GetWorldTimerManager().ClearTimer(ContinuousDamageTimerHandle);
-	//}
+	if (GetWorldTimerManager().IsTimerActive(ContinuousDamageTimerHandle))
+	{
+		GetWorldTimerManager().ClearTimer(ContinuousDamageTimerHandle);
+	}
 }

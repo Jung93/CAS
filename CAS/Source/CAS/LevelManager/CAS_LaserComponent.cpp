@@ -8,11 +8,8 @@
 // Sets default values for this component's properties
 UCAS_LaserComponent::UCAS_LaserComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LaserNiagara"));
 }
 
 
@@ -21,10 +18,11 @@ void UCAS_LaserComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	NiagaraComponent->AttachToComponent(GetOwner()->GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 	NiagaraComponent->SetAsset(NiagaraSystem);
 	NiagaraComponent->SetVariableLinearColor(TEXT("Color"), FLinearColor(0.8f, 0, 0.7f, 1.0f));
+	LaserEnd = GetOwner()->GetActorLocation();
 	NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), GetOwner()->GetActorLocation());
-	NiagaraComponent->Activate();
 }
 
 void UCAS_LaserComponent::TraceLaser(float DeltaTime)
@@ -52,16 +50,21 @@ void UCAS_LaserComponent::TraceLaser(float DeltaTime)
 	if (bHit)
 	{
 		LaserEnd = HitResult.ImpactPoint;
-		ChildActor = HitResult.GetActor();
 
 		if(auto Target = Cast<ACAS_LaserTarget>(HitResult.GetActor())) {
 			Target->LaserReached();
+			ChildActor = Target;
 		}
 		else if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
 			if (Mirror != ChildActor) {
-				ClearChildActor();
-				Mirror->SetLaserActivated(true);
+				ClearChildActor();								
 			}
+			Mirror->SetLaserActivated(true);
+			ChildActor = Mirror;
+		}
+		else {
+			ClearChildActor();
+			ChildActor = HitResult.GetActor();
 		}
 	}
 	else {
@@ -77,6 +80,9 @@ void UCAS_LaserComponent::ClearChildActor()
 {
 	if (auto Mirror = Cast<ACAS_InteractionMirror>(ChildActor)) {
 		Mirror->SetLaserActivated(false);
+	}
+	else if (auto Target = Cast<ACAS_LaserTarget>(ChildActor)) {
+		Target->LaserUnreachable();
 	}
 	ChildActor = nullptr;
 }

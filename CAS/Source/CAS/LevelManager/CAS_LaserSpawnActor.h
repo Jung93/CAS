@@ -4,8 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "NiagaraComponent.h"
-#include "NiagaraSystem.h"
 #include "CAS_LaserSpawnActor.generated.h"
 
 UCLASS()

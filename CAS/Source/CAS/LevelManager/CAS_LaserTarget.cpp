@@ -27,7 +27,6 @@ bool ACAS_LaserTarget::CheckPuzzleState()
 	}
 
 	for (auto Mirror : Mirrors) {
-	
 		Mirror->SetLaserActivated(false);
 	}
 	return true;
@@ -77,6 +76,13 @@ void ACAS_LaserTarget::LaserReached()
 
 	bTargetInCollider = true;
 
+}
+
+void ACAS_LaserTarget::LaserUnreachable()
+{
+	SetTargetColor(false);
+
+	bTargetInCollider = false;
 }
 
 void ACAS_LaserTarget::SetTargetColor(bool Reached)

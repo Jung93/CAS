@@ -22,6 +22,7 @@ protected:
 	void ResetAllMirrors();
 public:	
 	void LaserReached();
+	void LaserUnreachable();
 	void SetTargetColor(bool Reached);
 private:
 	UPROPERTY(EditAnywhere, Category = "Mesh")
