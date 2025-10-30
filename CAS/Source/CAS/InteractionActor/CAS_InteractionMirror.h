@@ -17,37 +17,21 @@ class CAS_API ACAS_InteractionMirror : public ACAS_InteractionActor
 	GENERATED_BODY()
 public:
 	ACAS_InteractionMirror();
+
 	virtual void InteractionWithPlayer()override;
 
-	FVector GetMirrorForwardVector() { return GetActorForwardVector(); }
-
-	bool GetLaserActivated() { return bLaserActivated; }
-	void SetLaserActivated(bool LaserActivated) { bLaserActivated = LaserActivated; }
-
+	void SetLaserActivated(bool LaserActivated);
+	bool GetLaserActivated();
 	void ResetMirrorTransform();
 protected:
 	virtual void BeginPlay() override;
 
-public:
-	virtual void Tick(float DeltaTime) override;
 protected:
 	UPROPERTY(EditAnywhere)
 	float Degree = 5.0f;
-
-	UPROPERTY(EditAnywhere)
-	UNiagaraSystem* NiagaraSystem;
-
-	UPROPERTY()
-	UNiagaraComponent* NiagaraComponent;
-
-private:
-	FVector LaserEnd;
-
-	float Offset = 2000.0f;
-
-	bool bLaserActivated = false;
-
-	ACAS_InteractionMirror* ChildLaser = nullptr;
+protected:
+	UPROPERTY(VisibleAnywhere)
+	class UCAS_LaserComponent* LaserComponent;
 
 	FTransform InitTransform;
 };
