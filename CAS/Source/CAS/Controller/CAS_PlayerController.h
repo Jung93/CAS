@@ -51,6 +51,10 @@ public:
 
 	void ClearDetectingEnemy() { DetectingEnemy.Empty(); }
 
+
+	class UCAS_TitleWidget* GetTitleWidget() {return TitleWidget;};
+
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -87,6 +91,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCAS_TitleWidget> TitleWidgetClass;
+
+
+	UPROPERTY()
+	class UCAS_QuitGameWidget* QuitGameWidget;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UCAS_QuitGameWidget> QuitGameWidgetClass;
+
 
 	UPROPERTY(EditAnywhere, Category = "Cursor")
 	TSubclassOf<UUserWidget> GamepadCursorClass;

@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputActionValue.h"
 #include "UI/CAS_TitleWidget.h"
+#include "UI/CAS_QuitGameWidget.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
 
@@ -43,6 +44,9 @@ void ACAS_PlayerController::BeginPlay()
     CurrentCursorWidget = CreateWidget<UUserWidget>(this, MouseCursorClass);
     SetMouseCursorWidget(EMouseCursor::Default, CurrentCursorWidget);
     DetectingEnemy.Reserve(5);
+
+    QuitGameWidget = CreateWidget<UCAS_QuitGameWidget>(GetWorld(), QuitGameWidgetClass);
+    QuitGameWidget->AddToViewport(4);
 
 }
 
@@ -140,7 +144,9 @@ void ACAS_PlayerController::ControlSaveLoadWidget(const FInputActionValue& Value
 
 void ACAS_PlayerController::QuitGame(const FInputActionValue& Value)
 {
-    UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, true);
+    //UKismetSystemLibrary::QuitGame(GetWorld(), this, EQuitPreference::Quit, true);
+
+    QuitGameWidget->OpenWidget();
 }
 
 void ACAS_PlayerController::OnPossess(APawn* pawn)
@@ -237,7 +243,6 @@ void ACAS_PlayerController::ExitTitleUIMode()
     {
         Subsystem->AddMappingContext(_inputMappingContext, 0);
     }
-
 
     bShowMouseCursor = false;
     bEnableClickEvents = false;

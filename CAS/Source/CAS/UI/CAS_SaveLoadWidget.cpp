@@ -7,7 +7,7 @@
 #include "Controller/CAS_PlayerController.h"
 #include "Global/CAS_GameInstance.h"
 #include "Character/CAS_Player.h"
-
+#include "UI/CAS_TitleWidget.h"
 #include "Kismet/GameplayStatics.h"
 
 void UCAS_SaveLoadWidget::NativeConstruct()
@@ -105,9 +105,14 @@ void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
 void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 {
 	SetVisibility(ESlateVisibility::Collapsed);
-	//auto controller = GetWorld()->GetFirstPlayerController();
-	//auto playerController = Cast<ACAS_PlayerController>(controller);
-	//playerController->ExitUIMode();
+	auto controller = GetWorld()->GetFirstPlayerController();
+	auto playerController = Cast<ACAS_PlayerController>(controller);
+
+	auto titleWidget = playerController->GetTitleWidget();
+	if(titleWidget && titleWidget->IsVisible())
+		return;
+
+	playerController->ExitUIMode();
 }
 
 void UCAS_SaveLoadWidget::OverwriteSlot()
@@ -147,6 +152,8 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 {
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 
+	auto test = GetOwningPlayer();
+
 	auto pawn = GetOwningPlayer()->GetPawn();
 
 	if (!pawn || !GameInstance) {
@@ -155,9 +162,9 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 
 	auto player = Cast<ACAS_Player>(pawn);
 
-	if (!player) {
-		return;
-	}
+	//if (!player) {
+	//	return;
+	//}
 
 	int32 index = SelectionWidget->GetSelectedIndex();
 	GameInstance->CurrentSlotIndex = index;

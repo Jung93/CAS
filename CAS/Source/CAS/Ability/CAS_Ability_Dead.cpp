@@ -6,6 +6,7 @@
 #include "Character/CAS_Player.h"
 #include "Controller/CAS_PlayerController.h"
 #include "LevelManager/CAS_WorldSubsystem.h"
+#include "Global/CAS_GameInstance.h"
 
 UCAS_Ability_Dead::UCAS_Ability_Dead()
 {
@@ -76,6 +77,16 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 		if (player)
 		{
 			player->RemoveDetectingEnemy(Character);
+
+			if (!player->IsAnyDetectingEnemy())
+			{
+				UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(player->GetGameInstance());
+				if (gi)
+				{
+					gi->CrossFadeMusic(false);
+				}
+			}
+
 		}
 
 
