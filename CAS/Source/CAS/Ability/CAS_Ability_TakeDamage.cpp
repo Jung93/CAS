@@ -94,17 +94,24 @@ void UCAS_Ability_TakeDamage::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 
 	AbilitySystemComp->CancelAllAbilities();
 
+	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
+
 	auto player = Cast<ACAS_Player>(Target);
 
 	if (player)
 	{
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
+
 		auto hat = player->GetHat();
 		if (hat->GetIsReady())
 			hat->Return();
 	}
+	else
+	{
+		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
+	}
 
-	ApplyGamePlayEffect(Target, DamageEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
-	ApplyGamePlayEffect(Target, TagEffectClass, TaskLevel, EffectContextHandle, AbilitySystemComp);
 
 
 

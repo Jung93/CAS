@@ -8,79 +8,48 @@
 
 ACAS_DamageLaserSpawnActor::ACAS_DamageLaserSpawnActor()
 {
+
+	PrimaryActorTick.bCanEverTick = true;
+
 }
 
 void ACAS_DamageLaserSpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetLaserActivated(true);
+
 }
 
 void ACAS_DamageLaserSpawnActor::Tick(float DeltaTime)
 {
 	//Super::Tick(DeltaTime);
-	//
-	//FHitResult HitResult;
-	//FVector Start = GetActorLocation();
-	//FVector ForwardDir = GetActorForwardVector();
-	//
-	//LaserEnd += ForwardDir * Offset * DeltaTime;
-	//
-	//
-	//bool bHit = GetWorld()->LineTraceSingleByChannel(
-	//	HitResult,
-	//	Start,
-	//	LaserEnd,
-	//	ECC_GameTraceChannel7,
-	//	FCollisionQueryParams(NAME_None, true, this)
-	//);
-	//
-	//NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), LaserEnd);
-	//
-	//if (bHit)
-	//{
-	//	LaserEnd = HitResult.ImpactPoint;
-	//
-	//	ACAS_Player* HitPlayer = Cast<ACAS_Player>(HitResult.GetActor());
-	//
-	//	if (HitPlayer)
-	//	{
-	//		if (CurrentHitPlayer != HitPlayer)
-	//		{
-	//			ClearContinuousDamageTimer();
-	//
-	//			CurrentHitPlayer = HitPlayer;
-	//
-	//			HitPlayer->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
-	//
-	//			GetWorldTimerManager().SetTimer(
-	//				ContinuousDamageTimerHandle,
-	//				this,
-	//				&ACAS_DamageLaserSpawnActor::ApplyContinuousDamage,
-	//				DamageInterval,
-	//				true
-	//			);
-	//		}
-	//	}
-	//	else
-	//	{
-	//		ClearContinuousDamageTimer();
-	//		CurrentHitPlayer = nullptr;
-	//	}
-	//}
-	//else
-	//{
-	//	ClearContinuousDamageTimer();
-	//	CurrentHitPlayer = nullptr;
-	//}
-	////auto DetectedActor = LaserComponent->GetDetectedActor();
-	////
-	////if (auto Player = Cast<ACAS_Player>(DetectedActor)) {
-	////	CurrentHitPlayer = Player;
-	////
-	////}
-	////else {
-	////	ClearContinuousDamageTimer();
-	////}
+
+	auto DetectedActor = LaserComponent->GetDetectedActor();
+	auto Player = Cast<ACAS_Player>(DetectedActor);
+	if (Player) {
+		if (CurrentHitPlayer != Player)
+		{
+			ClearContinuousDamageTimer();
+
+			CurrentHitPlayer = Player;
+
+			Player->ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.State.TakeDamage"));
+
+			GetWorldTimerManager().SetTimer(
+				ContinuousDamageTimerHandle,
+				this,
+				&ACAS_DamageLaserSpawnActor::ApplyContinuousDamage,
+				DamageInterval,
+				true
+			);
+		}
+	}
+	else
+	{
+		ClearContinuousDamageTimer();
+		CurrentHitPlayer = nullptr;
+	}
 }
 
 void ACAS_DamageLaserSpawnActor::ApplyContinuousDamage()
