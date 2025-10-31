@@ -13,6 +13,25 @@
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
 
+void ACAS_PlayerController::DisableInputWhenAttack()
+{
+    if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+    {
+        Subsystem->RemoveMappingContext(_inputMappingContext);
+        Subsystem->AddMappingContext(LookOnlygMappingContext, 0);
+    }
+}
+
+void ACAS_PlayerController::EnableInputWhenAttack()
+{
+    if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+    {
+        Subsystem->RemoveMappingContext(LookOnlygMappingContext);
+        Subsystem->AddMappingContext(_inputMappingContext, 0);
+    }
+
+}
+
 void ACAS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();

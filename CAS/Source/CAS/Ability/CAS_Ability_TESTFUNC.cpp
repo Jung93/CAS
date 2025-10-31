@@ -6,6 +6,7 @@
 #include "Character/CAS_Player.h"
 #include "Character/EnemyCapt/CAS_EnemyCapt_Kick.h"
 #include "Character/CAS_HitScan.h"
+#include "Controller/CAS_PlayerController.h"
 
 UCAS_Ability_TESTFUNC::UCAS_Ability_TESTFUNC()
 {		
@@ -52,6 +53,19 @@ void UCAS_Ability_TESTFUNC::ActivateAbility(const FGameplayAbilitySpecHandle Han
 
 	PlaySound();
 
+	auto Character = Cast<ACAS_Character>(GetGameplayTaskAvatar(AttackTask));
+
+	if (!Character)
+		return;
+
+	auto controller = Cast<ACAS_PlayerController>(Character->GetController());
+
+	if (!controller)
+		return;
+
+	controller->DisableInputWhenAttack();
+
+
 }
 
 void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
@@ -60,6 +74,54 @@ void UCAS_Ability_TESTFUNC::EndAbility(const FGameplayAbilitySpecHandle Handle, 
 	PlayMontageTask->EndTask();
 
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+
+
+	auto PlayerState = Cast<ACAS_PlayerState>(GetOwningActorFromActorInfo());
+	UAbilitySystemComponent* AbilitySystemComp = nullptr;
+
+	if (PlayerState->IsValidLowLevel()) {
+		AbilitySystemComp = PlayerState->GetAbilitySystemComponent();
+	}
+	else {
+		auto CharacterState = Cast<ACAS_Character>(GetOwningActorFromActorInfo());
+		if (CharacterState->IsValidLowLevel()) {
+			AbilitySystemComp = CharacterState->GetAbilitySystemComponent();
+		}
+	}
+
+	auto AttackTag = FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST"));
+	AbilitySystemComp->RemoveLooseGameplayTag(AttackTag);
+
+
+	auto Character = Cast<ACAS_Character>(GetGameplayTaskAvatar(AttackTask));
+
+	if (!Character)
+		return;
+
+	auto player = Cast<ACAS_Player>(Character);
+	if (player)
+	{
+		auto hitscan = player->GetHitScan();
+		if (hitscan)
+			hitscan->DisableCollision();
+	}
+
+	auto enemyKick = Cast<ACAS_EnemyCapt_Kick>(Character);
+	if (enemyKick)
+	{
+		auto hitscan = enemyKick->GetHitScan();
+		if (hitscan)
+			hitscan->DisableCollision();
+	}
+
+	auto controller = Cast<ACAS_PlayerController>(Character->GetController());
+
+	if (!controller)
+		return;
+
+	controller->EnableInputWhenAttack();
+
+
 }
 
 void UCAS_Ability_TESTFUNC::ApplyGamePlayEffect(ACAS_Character* Target, TSubclassOf<UGameplayEffect> GameplayEffectClass, int32 GameplayEffectLevel, const FGameplayEffectContextHandle& EffectContext, UAbilitySystemComponent* AbilitySystemComponent)
@@ -118,8 +180,6 @@ void UCAS_Ability_TESTFUNC::ReceiveTarget(ACAS_Character* Target, int32 TaskLeve
 		//AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
 	};
 
-
-
 }
 
 void UCAS_Ability_TESTFUNC::PlaySound()
@@ -135,16 +195,6 @@ void UCAS_Ability_TESTFUNC::PlaySound()
 		auto AttackTag = FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST"));
 		AbilitySystemComp->AddLooseGameplayTag(AttackTag);
 
-		FTimerHandle TimerHandle;
-		FTimerDelegate TimerDelegate;
-
-		TimerDelegate.BindLambda([AbilitySystemComp, AttackTag]()
-			{
-				AbilitySystemComp->RemoveLooseGameplayTag(AttackTag);
-			});
-
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.7f, false);
-
 		AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
 
 	}
@@ -156,21 +206,9 @@ void UCAS_Ability_TESTFUNC::PlaySound()
 			auto AttackTag = FGameplayTag::RequestGameplayTag(FName("Effect.Attack.TEST"));
 			AbilitySystemComp->AddLooseGameplayTag(AttackTag);
 
-			FTimerHandle TimerHandle;
-			FTimerDelegate TimerDelegate;
-
-			TimerDelegate.BindLambda([AbilitySystemComp, AttackTag]()
-				{
-					AbilitySystemComp->RemoveLooseGameplayTag(AttackTag);
-				});
-
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDelegate, 0.7f, false);
-
 			AbilitySystemComp->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Enemy"));
-
 		}
 	}
-
 
 }
 

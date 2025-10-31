@@ -54,6 +54,11 @@ public:
 
 	class UCAS_TitleWidget* GetTitleWidget() {return TitleWidget;};
 
+	class UInputMappingContext* GetUInputMappingContext() {return _inputMappingContext;}
+
+	void DisableInputWhenAttack();
+	void EnableInputWhenAttack();
+
 
 protected:
 	virtual void BeginPlay() override;
@@ -69,6 +74,9 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* _inputMappingContext;
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputMappingContext* LookOnlygMappingContext;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DebugAction;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "SaveLoad", meta = (AllowPrivateAccess = "true"))

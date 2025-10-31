@@ -3,6 +3,7 @@
 
 #include "Ability_Task/CAS_Task_PlayMontage.h"
 
+
 UCAS_Task_PlayMontage* UCAS_Task_PlayMontage::Task_PlayMontage(UGameplayAbility* OwningAbility, FName TaskName, UAnimMontage* MontageToPlay, float Rate,  bool bNotifyReady, FName SectionName)
 {
 	if (!MontageToPlay) {
@@ -53,11 +54,16 @@ void UCAS_Task_PlayMontage::Activate()
 		AnimInstance->Montage_Play(Montage, PlayRate);
 		AnimInstance->Montage_JumpToSection(MontageSection);
 	}
+
+
+
 }
 
 void UCAS_Task_PlayMontage::OnDestroy(bool bInOwnerFinished)
 {
-	if (!GetAvatarActor() || !Ability) {
+	auto Character = Cast<ACAS_Character>(GetAvatarActor());
+
+	if (!Character || !Ability) {
 		Super::OnDestroy(bInOwnerFinished);
 		return;
 	}
