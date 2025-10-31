@@ -16,11 +16,11 @@ public:
 	// Sets default values for this actor's properties
 	ACAS_PressureSwitchLinkedDoor();
 
+	void SwitchPressed(bool SwitchOn);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	void SwitchPressed(bool SwitchOn);
 
 	void DoorOpenEvent(float DeltaTime);
 	void DoorCloseEvent(float DeltaTime);

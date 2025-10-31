@@ -41,4 +41,7 @@ private:
 
 	bool bTargetInCollider = false;
 
+	UPROPERTY(EditAnywhere)
+	bool bCheckOnce = false;
+	
 };

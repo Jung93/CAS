@@ -2,88 +2,30 @@
 
 
 #include "LevelManager/CAS_LaserSpawnActor.h"
-#include "InteractionActor/CAS_InteractionMirror.h"
-// Sets default values
+#include "LevelManager/CAS_LaserComponent.h"
+
 ACAS_LaserSpawnActor::ACAS_LaserSpawnActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	NiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComp"));
-
 	SetRootComponent(StaticMesh);
 
-	NiagaraComponent->SetupAttachment(StaticMesh);
+	LaserComponent = CreateDefaultSubobject<UCAS_LaserComponent>(TEXT("LaserComponent"));
 }
 
-// Called when the game starts or when spawned
 void ACAS_LaserSpawnActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	FVector StartPosition = GetActorLocation();
-	FVector ForwardDir = GetActorForwardVector();
-	LaserEnd = StartPosition + ForwardDir * Offset;
-
-	NiagaraComponent->SetAsset(NiagaraSystem);
-	NiagaraComponent->SetVariableLinearColor(TEXT("Color"), FLinearColor(0.8f, 0, 0.7f, 1.0f));
-	NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), LaserEnd);
-	NiagaraComponent->Activate();
 }
 
-void ACAS_LaserSpawnActor::ClearCurrentMirrorInfo()
+void ACAS_LaserSpawnActor::SetLaserActivated(bool LaserActivated)
 {
-	if (ChildMirror) {
-		ChildMirror->SetLaserActivated(false);
-		ChildMirror = nullptr;
-	}
+	LaserComponent->SetLaserActivated(LaserActivated);
 }
 
-// Called every frame
-void ACAS_LaserSpawnActor::Tick(float DeltaTime)
+bool ACAS_LaserSpawnActor::GetLaserActivated()
 {
-	Super::Tick(DeltaTime);
-
-	FHitResult HitResult;
-	FVector Start = GetActorLocation();          
-	FVector ForwardDir = GetActorForwardVector();
-
-	FVector TargetEnd = Start + ForwardDir * Offset;
-	LaserEnd = FMath::VInterpTo(LaserEnd, TargetEnd, DeltaTime, 10.0f);
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		Start,
-		LaserEnd,
-		ECC_GameTraceChannel7,
-		FCollisionQueryParams(NAME_None, true, this)
-	);
-
-	if (bHit)
-	{
-		LaserEnd = HitResult.ImpactPoint;
-
-		if (auto Mirror = Cast<ACAS_InteractionMirror>(HitResult.GetActor())) {
-			if (ChildMirror != Mirror) {
-				ClearCurrentMirrorInfo();
-				ChildMirror = Mirror;
-				Mirror->SetLaserActivated(true);
-			}
-		}
-		else {
-			if (ChildMirror) {
-				ChildMirror->SetLaserActivated(false);
-				ChildMirror = nullptr;
-			}
-		}
-	}
-	else {
-		if (ChildMirror) {
-			ChildMirror->SetLaserActivated(false);
-			ChildMirror = nullptr;
-		}
-	}
-
-	NiagaraComponent->SetVariableVec3(TEXT("LaserEnd"), LaserEnd);
+	return LaserComponent->GetLaserActivated();
 }
