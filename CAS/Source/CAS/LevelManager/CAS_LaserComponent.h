@@ -10,7 +10,7 @@
 
 
 UCLASS( ClassGroup=(Laser), meta=(BlueprintSpawnableComponent) )
-class CAS_API UCAS_LaserComponent : public UActorComponent
+class CAS_API UCAS_LaserComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
@@ -20,6 +20,7 @@ public:
 
 	void SetLaserActivated(bool bActivate) { bLaserActivated = bActivate; }
 	bool GetLaserActivated() const { return bLaserActivated; }
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -9,12 +9,12 @@ ACAS_InteractionMirror::ACAS_InteractionMirror()
 	PrimaryActorTick.bCanEverTick = false;
 
 	LaserComponent = CreateDefaultSubobject<UCAS_LaserComponent>(TEXT("LaserComponent"));
-
+	LaserComponent->SetupAttachment(StaticMesh);
 }
 
 void ACAS_InteractionMirror::InteractionWithPlayer()
 {
-	AddActorLocalRotation(FRotator(0, Degree, 0));
+	AddActorWorldRotation(FRotator(0, Degree, 0));
 }
 
 void ACAS_InteractionMirror::SetLaserActivated(bool LaserActivated)
@@ -34,6 +34,16 @@ void ACAS_InteractionMirror::ResetMirrorTransform()
 void ACAS_InteractionMirror::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!TargetLocation.IsNearlyZero()) {
+		FTransform ActorTransform = GetActorTransform();
+		FVector WorldLocation = ActorTransform.TransformPosition(TargetLocation);
+
+		FVector Dir = (WorldLocation - GetActorLocation()).GetSafeNormal();
+		FRotator Rotator = Dir.Rotation();
+
+		SetActorRotation(Rotator);
+	}
 
 	InitTransform = GetActorTransform();
 }

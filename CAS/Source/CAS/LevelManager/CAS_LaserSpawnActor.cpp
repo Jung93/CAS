@@ -12,6 +12,7 @@ ACAS_LaserSpawnActor::ACAS_LaserSpawnActor()
 	SetRootComponent(StaticMesh);
 
 	LaserComponent = CreateDefaultSubobject<UCAS_LaserComponent>(TEXT("LaserComponent"));
+	LaserComponent->SetupAttachment(StaticMesh);
 }
 
 void ACAS_LaserSpawnActor::BeginPlay()
