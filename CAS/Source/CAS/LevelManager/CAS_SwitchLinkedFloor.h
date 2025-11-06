@@ -19,11 +19,13 @@ protected:
 	virtual void SwitchClicked(bool SwitchOn) override;
 
 	virtual void BeginPlay()override;
+
+	void OnConstruction(const FTransform& Transform) override;
 public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Instanced)
 	TArray<AActor*> Actors;
 
 	TArray<FVector> ActorLocation;

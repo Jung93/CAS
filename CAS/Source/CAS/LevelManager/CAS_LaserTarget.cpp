@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "InteractionActor/CAS_InteractionMirror.h"
 
+
 // Sets default values
 ACAS_LaserTarget::ACAS_LaserTarget()
 {
@@ -16,37 +17,10 @@ ACAS_LaserTarget::ACAS_LaserTarget()
 	SetRootComponent(StaticMesh);
 }
 
-bool ACAS_LaserTarget::CheckPuzzleState()
-{
-	for (auto Mirror : Mirrors) {
-		if (!Mirror->GetLaserActivated()) {
-			ResetAllMirrors();
-			bTargetInCollider = false;			
-			return false;
-		}
-	}
-
-	for (auto Mirror : Mirrors) {
-		Mirror->SetLaserActivated(false);
-	}
-	return true;
-}
-
 // Called when the game starts or when spawned
 void ACAS_LaserTarget::BeginPlay()
 {
 	Super::BeginPlay();
-
-	TArray<AActor*> Actors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), MirrorClass, Actors);
-
-	for (auto Actor : Actors)
-	{
-		if (auto Target = Cast<ACAS_InteractionMirror>(Actor))
-		{
-			Mirrors.Add(Target);
-		}
-	}
 
 	auto Material = StaticMesh->GetMaterial(0);
 
@@ -57,13 +31,6 @@ void ACAS_LaserTarget::BeginPlay()
 		StaticMesh->SetMaterial(0, DynamicMaterial);
 
 		SetTargetColor(false);
-	}
-}
-
-void ACAS_LaserTarget::ResetAllMirrors()
-{
-	for (auto Mirror : Mirrors) {
-		Mirror->ResetMirrorTransform();
 	}
 }
 
