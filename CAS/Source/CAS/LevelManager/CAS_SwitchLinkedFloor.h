@@ -20,12 +20,12 @@ protected:
 
 	virtual void BeginPlay()override;
 
-	void OnConstruction(const FTransform& Transform) override;
+	virtual void OnConstruction(const FTransform& Transform) override;
 public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
-	UPROPERTY(EditAnywhere, Instanced)
+	UPROPERTY(EditAnywhere)
 	TArray<AActor*> Actors;
 
 	TArray<FVector> ActorLocation;
@@ -43,5 +43,6 @@ protected:
 	float Param = 0.7f;
 	UPROPERTY(EditAnywhere)
 	bool bInverse = false;
-
+	UPROPERTY(EditAnywhere)
+	FVector Offset = FVector(0, 0, 100.0f);
 };

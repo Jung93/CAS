@@ -20,30 +20,12 @@ void ACAS_SwitchLinkedFloor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	int32 ActorNum = Actors.Num();
-
-	if (FMath::IsNearlyZero(Radius)) {
-		Radius = FloorMesh->Bounds.BoxExtent.X * Param;
-	}
 	
-	for (int32 i = 0; i < ActorNum; i++)
-	{
-		float Angle = i * (360.0f / ActorNum);
-		float RadianAngle = FMath::DegreesToRadians(Angle);
-
-		FVector ActorPosition = GetActorLocation() + FVector(FMath::Cos(RadianAngle), FMath::Sin(RadianAngle), 0) * Radius;
-
-		ActorLocation.Add(ActorPosition);
-		Actors[i]->SetActorLocation(ActorLocation[i]);
-		Actors[i]->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
-	}
 }
 
 void ACAS_SwitchLinkedFloor::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
-
-	FlushPersistentDebugLines(GetWorld());
 
 	int32 ActorNum = Actors.Num();
 
@@ -51,8 +33,9 @@ void ACAS_SwitchLinkedFloor::OnConstruction(const FTransform& Transform)
 		return;
 	}
 
-	if (FMath::IsNearlyZero(Radius))
-	{
+	ActorLocation.SetNum(ActorNum);
+
+	if (FMath::IsNearlyZero(Radius)) {
 		Radius = FloorMesh->Bounds.BoxExtent.X * Param;
 	}
 
@@ -61,19 +44,14 @@ void ACAS_SwitchLinkedFloor::OnConstruction(const FTransform& Transform)
 		float Angle = i * (360.0f / ActorNum);
 		float RadianAngle = FMath::DegreesToRadians(Angle);
 
-		FVector ActorPosition = GetActorLocation() + FVector(FMath::Cos(RadianAngle), FMath::Sin(RadianAngle), 0) * Radius;
+		FVector ActorPosition = GetActorLocation() + FVector(FMath::Cos(RadianAngle), FMath::Sin(RadianAngle), 0) * Radius + Offset;
 
-		DrawDebugSphere(
-			GetWorld(),
-			ActorPosition,
-			200.0f,            
-			12,               
-			FColor::Green,
-			false,            
-			0,             
-			0, 1.5f
-		);
+		ActorLocation[i] = ActorPosition;
 
+		if (Actors[i]) {
+			Actors[i]->SetActorLocation(ActorLocation[i]);
+			Actors[i]->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+		}
 	}
 }
 
