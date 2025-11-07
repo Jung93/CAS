@@ -4,6 +4,7 @@
 #include "LevelManager/CAS_LaserComponent.h"
 #include "LevelManager/CAS_LaserTarget.h"
 #include "InteractionActor/CAS_InteractionMirror.h"
+#include "LevelManager/CAS_SwitchLinkedFloor.h"
 
 // Sets default values for this component's properties
 UCAS_LaserComponent::UCAS_LaserComponent()
