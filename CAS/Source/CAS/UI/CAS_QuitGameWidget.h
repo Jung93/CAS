@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/CAS_SelectWidget.h"
+#include "UI/CAS_KeySettingWidget.h"
+#include "UI/CAS_KeySettingSlot.h"
+#include "Components/Button.h"
 
 #include "CAS_QuitGameWidget.generated.h"
 
@@ -18,19 +21,54 @@ class CAS_API UCAS_QuitGameWidget : public UUserWidget
 	
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativePreConstruct() override;
 
-	UFUNCTION()
-	void CloseWidget();
-	UFUNCTION()
-	void QuitGame();
 
 	UFUNCTION()
 	void OpenWidget();
+	UFUNCTION()
+	void CloseWidget();
 
-private:
+	UFUNCTION()
+	void OpenSettingWidget();
+	UFUNCTION()
+	void CloseSettingWidget();
+
+	UFUNCTION()
+	void OpenQuitWidget();
+	UFUNCTION()
+	void CloseQuitWidget();
+
+
+	UFUNCTION()
+	void QuitGame();
+
+
+protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
-	TSubclassOf<UCAS_SelectWidget> SelectWidgetClass;
+	TSubclassOf<UCAS_SelectWidget> QuitWidgetClass;
 
 	UPROPERTY()
-	UCAS_SelectWidget* SelectWidget = nullptr;
+	UCAS_SelectWidget* QuitWidget = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCAS_KeySettingWidget> KeySettingWidgetClass;
+
+	UPROPERTY()
+	UCAS_KeySettingWidget* KeySettingWidget = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
+	TSubclassOf<UCAS_KeySettingSlot> KeySettingSlotWidgetClass;
+
+	UPROPERTY()
+	UCAS_KeySettingSlot* KeySettingSlotWidget = nullptr;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* SettingButton;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* QuitButton;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* ExitButton;
 };

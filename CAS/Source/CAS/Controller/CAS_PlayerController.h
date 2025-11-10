@@ -7,6 +7,8 @@
 #include "InputActionValue.h"
 #include "InputAction.h"
 #include "UI/CAS_SaveLoadWidget.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 #include "CAS_PlayerController.generated.h"
 
 /**
@@ -60,6 +62,9 @@ public:
 	void EnableInputWhenAttack();
 
 
+	const TArray<FEnhancedActionKeyMapping>& GetCurrentKeyArray() { return CurrentMappingArray; }
+
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
@@ -88,6 +93,13 @@ private:
 
 	UPROPERTY()
 	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
+
+	UPROPERTY()
+	TArray<FEnhancedActionKeyMapping> CurrentMappingArray;
+
+	UPROPERTY()
+	TArray<FEnhancedActionKeyMapping> NewMappingArray;
+
 protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UCAS_SaveLoadWidget> SaveLoadWidgetClass;
@@ -106,6 +118,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCAS_QuitGameWidget> QuitGameWidgetClass;
+
+
 
 
 	UPROPERTY(EditAnywhere, Category = "Cursor")

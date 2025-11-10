@@ -2,33 +2,104 @@
 
 
 #include "UI/CAS_QuitGameWidget.h"
+#include "UI/CAS_KeySettingWidget.h"
+#include "UI/CAS_KeySettingSlot.h"
+#include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "Controller/CAS_PlayerController.h"
 
 void UCAS_QuitGameWidget::NativeConstruct()
 {
+	Super::NativeConstruct();
 
-	SelectWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
+	QuitWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), QuitWidgetClass);
+	KeySettingWidget = CreateWidget<UCAS_KeySettingWidget>(GetWorld(), KeySettingWidgetClass);
 
-	if (SelectWidget) {
-		SelectWidget->AddToViewport(5);
+	if (QuitWidget) {
+		QuitWidget->AddToViewport(5);
 
-		SelectWidget->SetVisibility(ESlateVisibility::Collapsed);
+		QuitWidget->SetVisibility(ESlateVisibility::Collapsed);
 
-		SelectWidget->NO_OnClickedEvent(this, FName("CloseWidget"));
-		SelectWidget->YES_OnClickedEvent(this, FName("QuitGame"));
+		QuitWidget->NO_OnClickedEvent(this, FName("CloseQuitWidget"));
+		QuitWidget->YES_OnClickedEvent(this, FName("QuitGame"));
+
+	}
+
+	if (KeySettingWidget) {
+		KeySettingWidget->AddToViewport(5);
+
+		KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
 
 	}
 
 
+
+	SettingButton->OnClicked.AddDynamic(this, &ThisClass::OpenSettingWidget);
+	QuitButton->OnClicked.AddDynamic(this, &ThisClass::OpenQuitWidget);
+	ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseWidget);
+
+
+	SetVisibility(ESlateVisibility::Collapsed);
+
+}
+
+void UCAS_QuitGameWidget::NativePreConstruct()
+{
+	Super::NativePreConstruct();
+
+	//if (KeySettingWidgetClass && KeySettingSlotWidgetClass)
+	//{
+	//	UCAS_KeySettingWidget* keywidget = CreateWidget<UCAS_KeySettingWidget>(GetWorld(), KeySettingWidgetClass);
+
+	//	for (int32 i = 0; i < 3; i++)
+	//	{
+	//		UCAS_KeySettingSlot* slot = CreateWidget<UCAS_KeySettingSlot>(GetWorld(), KeySettingSlotWidgetClass);
+
+	//		keywidget->SetKeySettingSlotWidget(slot);
+
+	//		keywidget->NativePreConstruct();
+
+	//	}
+
+	//}
+
+}
+
+
+void UCAS_QuitGameWidget::OpenWidget()
+{
+	SetVisibility(ESlateVisibility::Visible);
+	auto controller = GetWorld()->GetFirstPlayerController();
+	auto playerController = Cast<ACAS_PlayerController>(controller);
+	playerController->EnterUIMode();
 }
 
 void UCAS_QuitGameWidget::CloseWidget()
 {
-	SelectWidget->SetVisibility(ESlateVisibility::Collapsed);
+	SetVisibility(ESlateVisibility::Collapsed);
 	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 	playerController->ExitUIMode();
+}
+
+void UCAS_QuitGameWidget::OpenSettingWidget()
+{
+	KeySettingWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UCAS_QuitGameWidget::CloseSettingWidget()
+{
+	KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UCAS_QuitGameWidget::OpenQuitWidget()
+{
+	QuitWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UCAS_QuitGameWidget::CloseQuitWidget()
+{
+	QuitWidget->SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UCAS_QuitGameWidget::QuitGame()
@@ -36,10 +107,3 @@ void UCAS_QuitGameWidget::QuitGame()
 	UKismetSystemLibrary::QuitGame(GetWorld(), GetOwningPlayer(), EQuitPreference::Quit, true);
 }
 
-void UCAS_QuitGameWidget::OpenWidget()
-{
-	SelectWidget->SetVisibility(ESlateVisibility::Visible);
-	auto controller = GetWorld()->GetFirstPlayerController();
-	auto playerController = Cast<ACAS_PlayerController>(controller);
-	playerController->EnterUIMode();
-}

@@ -12,6 +12,7 @@
 #include "UI/CAS_QuitGameWidget.h"
 #include "Character/CAS_Player.h"
 #include "Character/CAS_EnemyCapt.h"
+#include "InputMappingContext.h"
 
 void ACAS_PlayerController::DisableInputWhenAttack()
 {
@@ -30,6 +31,7 @@ void ACAS_PlayerController::EnableInputWhenAttack()
         Subsystem->AddMappingContext(_inputMappingContext, 0);
     }
 
+
 }
 
 void ACAS_PlayerController::BeginPlay()
@@ -42,6 +44,26 @@ void ACAS_PlayerController::BeginPlay()
     SaveLoadWidget->CloseSaveLoadWidget();
 
     //ExitUIMode();
+    // 
+    // 
+    auto testmaparray = _inputMappingContext->GetMappings();
+
+    for (auto input : testmaparray)
+    {
+        if (input.Action.GetFName() == "IA_Look" ||
+            input.Action.GetFName() == "IA_DebugMessage" ||
+            input.Action.GetFName() == "IA_ShowMouse" ||
+            input.Action.GetFName() == "IA_ControlSlot" ||
+            input.Action.GetFName() == "IA_ControlSaveLoad" ||
+            input.Action.GetFName() == "IA_ControllerCursor"
+            )
+        {
+            continue;
+        }
+        
+        CurrentMappingArray.Add(input);
+    }
+
 
     FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
 
@@ -67,6 +89,7 @@ void ACAS_PlayerController::BeginPlay()
     QuitGameWidget = CreateWidget<UCAS_QuitGameWidget>(GetWorld(), QuitGameWidgetClass);
     QuitGameWidget->AddToViewport(4);
 
+
 }
 
 void ACAS_PlayerController::SetupInputComponent()
@@ -83,6 +106,8 @@ void ACAS_PlayerController::SetupInputComponent()
         EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
         EnhancedInputComponent->BindAction(QuitGameAction, ETriggerEvent::Started, this, &ThisClass::QuitGame);
         EnhancedInputComponent->BindAction(CursorMoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveVirtualCursor);
+
+
 	}
 }
 

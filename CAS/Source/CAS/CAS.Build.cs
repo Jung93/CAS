@@ -10,7 +10,7 @@ public class CAS : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput","GameplayAbilities",
-			"GameplayTags","GameplayTasks","UMG", "NavigationSystem", "AIModule", "Niagara", "Json", "JsonUtilities" });
+			"GameplayTags","GameplayTasks","UMG", "NavigationSystem", "AIModule", "Niagara", "Json", "JsonUtilities", "Slate", "SlateCore" });
         
         PrivateDependencyModuleNames.AddRange(new string[] { });
 
