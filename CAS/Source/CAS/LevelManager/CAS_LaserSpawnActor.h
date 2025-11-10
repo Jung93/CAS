@@ -22,6 +22,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* StaticMesh;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	class UCAS_LaserComponent* LaserComponent;
 };

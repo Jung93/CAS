@@ -30,8 +30,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float Degree = 5.0f;
 protected:
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(EditAnywhere)
 	class UCAS_LaserComponent* LaserComponent;
 
 	FTransform InitTransform;
+
+	UPROPERTY(EditAnywhere,meta = (MakeEditWidget = "true"))
+	FVector TargetLocation = FVector::ZeroVector;
 };

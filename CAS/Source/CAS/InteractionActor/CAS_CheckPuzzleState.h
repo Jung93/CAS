@@ -18,9 +18,24 @@ public:
 	virtual void InteractionWithPlayer()override;
 
 private:
+	virtual void BeginPlay() override;
+	void ResetAllMirrors();
+	bool CheckPuzzleState();
+
+	void SetInteractionColor(bool PuzzleSolved);
+	void SetInitColor();
+private:
 	UPROPERTY(EditAnywhere)
 	class ACAS_LaserTarget* Target;
 	UPROPERTY(EditAnywhere)
 	class ACAS_MiniStageDoor* Door;
+	UPROPERTY(EditAnywhere)
+	TArray<class ACAS_InteractionMirror*> Mirrors;
 
+	UPROPERTY()
+	UMaterialInstanceDynamic* DynamicMaterial;
+
+	FLinearColor InitColor;
+
+	FTimerHandle InteractionTimer;
 };
