@@ -17,28 +17,31 @@ void UCAS_KeySettingSlot::NativeConstruct()
 void UCAS_KeySettingSlot::SetButtonBackgroundColor()
 {
 	IsClicked = !IsClicked;
-	FButtonStyle buttonStyle = KeyButton->WidgetStyle;
-	FLinearColor color;
+	//FButtonStyle buttonStyle = KeyButton->WidgetStyle;
+	//FLinearColor color;
 
-	if (IsClicked)
-		color = FLinearColor(1, 0, 0, 1);
-	else
-		color = FLinearColor(1, 0, 0, 0);
+	//if (IsClicked)
+	//	color = FLinearColor(1, 0, 0, 1);
+	//else
+	//	color = FLinearColor(1, 0, 0, 0);
 
 
-	buttonStyle.Normal.OutlineSettings.Color = FSlateColor(color);
+	//buttonStyle.Normal.OutlineSettings.Color = FSlateColor(color);
 
-	KeyButton->SetStyle(buttonStyle);
+	//KeyButton->SetStyle(buttonStyle);
 
 
 	ClickSlot.Broadcast(this);
 
 }
 
-void UCAS_KeySettingSlot::InitialSetting(FName Action, UTexture2D* Icon)
+void UCAS_KeySettingSlot::SlotSetting(FName Action, UTexture2D* Icon)
 {
-	FText ActionText = FText::FromName(Action);
-	ActionName->SetText(ActionText);
+	if(!Action.IsNone())
+	{
+		FText ActionText = FText::FromName(Action);
+		ActionName->SetText(ActionText);
+	}
 
 	KeyIcon->SetBrushFromTexture(Icon);
 }

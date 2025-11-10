@@ -27,9 +27,11 @@ public:
 	void SetButtonBackgroundColor();
 
 	UFUNCTION()
-	void InitialSetting(FName Action, UTexture2D* Icon);
+	void SlotSetting(FName Action, UTexture2D* Icon);
 	//void InitialSetting(FName Action, FName Key, UTexture2D* Icon);
 
+
+	UButton* GetKeyButton() { return KeyButton; }
 
 	FClickSlot ClickSlot;
 

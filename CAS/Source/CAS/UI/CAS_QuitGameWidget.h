@@ -43,6 +43,7 @@ public:
 	UFUNCTION()
 	void QuitGame();
 
+	UCAS_KeySettingWidget* GetKeySettingWidget() { return KeySettingWidget; }
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
@@ -57,11 +58,11 @@ protected:
 	UPROPERTY()
 	UCAS_KeySettingWidget* KeySettingWidget = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
-	TSubclassOf<UCAS_KeySettingSlot> KeySettingSlotWidgetClass;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
+	//TSubclassOf<UCAS_KeySettingSlot> KeySettingSlotWidgetClass;
 
-	UPROPERTY()
-	UCAS_KeySettingSlot* KeySettingSlotWidget = nullptr;
+	//UPROPERTY()
+	//UCAS_KeySettingSlot* KeySettingSlotWidget = nullptr;
 
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* SettingButton;

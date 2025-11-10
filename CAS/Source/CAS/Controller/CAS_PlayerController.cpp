@@ -46,9 +46,9 @@ void ACAS_PlayerController::BeginPlay()
     //ExitUIMode();
     // 
     // 
-    auto testmaparray = _inputMappingContext->GetMappings();
+    auto MappingArray = _inputMappingContext->GetMappings();
 
-    for (auto input : testmaparray)
+    for (auto input : MappingArray)
     {
         if (input.Action.GetFName() == "IA_Look" ||
             input.Action.GetFName() == "IA_DebugMessage" ||
@@ -107,7 +107,7 @@ void ACAS_PlayerController::SetupInputComponent()
         EnhancedInputComponent->BindAction(QuitGameAction, ETriggerEvent::Started, this, &ThisClass::QuitGame);
         EnhancedInputComponent->BindAction(CursorMoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveVirtualCursor);
 
-
+        
 	}
 }
 
@@ -320,6 +320,7 @@ void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
         SetMouseLocation(NewPos.X, NewPos.Y);
     }
 }
+
 
 void ACAS_PlayerController::AddDetectingEnemy(class ACAS_Character* enemy)
 {

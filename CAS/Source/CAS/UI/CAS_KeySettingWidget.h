@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
+#include "InputActionValue.h"
+#include "InputAction.h"
 #include "UI/CAS_KeySettingSlot.h"
 #include "CAS_KeySettingWidget.generated.h"
 
@@ -26,7 +28,9 @@ public:
 	UFUNCTION()
 	void CloseSettingWidget();
 
-	void ChangeKeySetting();
+
+	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 	UFUNCTION()
 	void SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot);

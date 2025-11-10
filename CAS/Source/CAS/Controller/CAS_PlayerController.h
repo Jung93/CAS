@@ -91,6 +91,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Cursor", meta = (AllowPrivateAccess = "true"))
 	UInputAction* CursorMoveAction;
 
+
 	UPROPERTY()
 	EInputDeviceType CurrentDevice = EInputDeviceType::KeyboardMouse;
 
