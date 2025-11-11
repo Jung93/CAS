@@ -6,12 +6,18 @@
 #include "Components/TextBlock.h"
 #include "Components/Button.h"
 #include "Components/Image.h"
+#include "Framework/Application/NavigationConfig.h"
+#include "Components/InputKeySelector.h"
 
 void UCAS_KeySettingSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	KeyButton->OnClicked.AddDynamic(this, &ThisClass::SetButtonBackgroundColor);
+	//KeyButton->OnClicked.AddDynamic(this, &ThisClass::SetButtonBackgroundColor);
+
+
+	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::TestSelect);
+	KeySelector->OnIsSelectingKeyChanged.AddDynamic(this, &ThisClass::OnBeginKeyChage);
 }
 
 void UCAS_KeySettingSlot::SetButtonBackgroundColor()
@@ -31,11 +37,10 @@ void UCAS_KeySettingSlot::SetButtonBackgroundColor()
 	//KeyButton->SetStyle(buttonStyle);
 
 
-	ClickSlot.Broadcast(this);
 
 }
 
-void UCAS_KeySettingSlot::SlotSetting(FName Action, UTexture2D* Icon)
+void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* Icon)
 {
 	if(!Action.IsNone())
 	{
@@ -44,6 +49,32 @@ void UCAS_KeySettingSlot::SlotSetting(FName Action, UTexture2D* Icon)
 	}
 
 	KeyIcon->SetBrushFromTexture(Icon);
+
+	FInputChord abc;
+
+	abc.Key = FKey(KeyName);
+	KeySelector->SetSelectedKey(abc);
+
+
+}
+
+void UCAS_KeySettingSlot::TestSelect(FInputChord abc)
+{
+	FKey Key = abc.Key;
+	FName KeyName = Key.GetFName();
+
+	ChangeSlot.Broadcast(this, KeyName);
+}
+
+void UCAS_KeySettingSlot::OnBeginKeyChage()
+{
+	CurrentKey = KeySelector->GetSelectedKey();
+
+	FKey Key = CurrentKey.Key;
+	FName KeyName = Key.GetFName();
+
+	ClickSlot.Broadcast(this, KeyName);
+
 }
 
 

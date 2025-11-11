@@ -29,11 +29,18 @@ public:
 	void CloseSettingWidget();
 
 
-	virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
-	virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+	//virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
+	//virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 	UFUNCTION()
-	void SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot);
+	void SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName CurrentKeyName);
+
+	UFUNCTION()
+	void ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName NewKeyName);
+
+
+	UDataTable* GetKeyIconTable() { return KeyIconTable; };
+
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")

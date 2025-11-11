@@ -24,19 +24,19 @@ void UCAS_KeySettingWidget::NativeConstruct()
 			UCAS_KeySettingSlot* slot = CreateWidget<UCAS_KeySettingSlot>(GetWorld(), KeySettingSlotWidgetClass);
 
 			FName Action = array[i].Action.GetFName();
-			FName Key = array[i].Key.GetFName();
-			UTexture2D* icon = nullptr;
+			FName KeyName = array[i].Key.GetFName();
+			UTexture2D* Icon = nullptr;
 
-			const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(Key, "Jump");
+			const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
 			if (Row)
 			{
-				icon = Row->Icon.LoadSynchronous();
+				Icon = Row->Icon.LoadSynchronous();
 			}
 
-			slot->SlotSetting(Action, icon);
-			//slot->InitialSetting(Action, Key, icon);
+			slot->SlotSetting(Action, KeyName, Icon);
 
 			slot->ClickSlot.AddUObject(this, &ThisClass::SetClickedSlot);
+			slot->ChangeSlot.AddUObject(this, &ThisClass::ChangeClickedSlot);
 			KeySettings->AddChild(slot);
 
 		}
@@ -64,124 +64,132 @@ void UCAS_KeySettingWidget::CloseSettingWidget()
 }
 
 
-FReply UCAS_KeySettingWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
-{
-	if (!KeySettingSlotWidget)
-		return FReply::Unhandled();
+//FReply UCAS_KeySettingWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
+//{
+//	if (!KeySettingSlotWidget)
+//		return FReply::Unhandled();
+//
+//	const FKey Key = InKeyEvent.GetKey();
+//	FName KeyName = Key.GetFName();
+//
+//	UTexture2D* Icon = nullptr;
+//
+//	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
+//	if (Row)
+//	{
+//		Icon = Row->Icon.LoadSynchronous();
+//	}
+//
+//
+//	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
+//
+//	const TArray<FEnhancedActionKeyMapping>& array = owner->GetCurrentKeyArray();
+//
+//	auto Iter = array.FindByPredicate([KeyName](const FEnhancedActionKeyMapping& KeyMapping)
+//		{
+//			return KeyMapping.Key.GetFName().IsEqual(KeyName);
+//		});
+//
+//	if(Iter)
+//		return FReply::Unhandled();
+//
+//	KeySettingSlotWidget->SlotSetting(FName(), KeyName, Icon);
+//
+//	//UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
+//	//FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
+//	//FLinearColor Color = FLinearColor(1, 0, 0, 0);
+//
+//	//ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
+//
+//	//KeyButton->SetStyle(ButtonStyle);
+//
+//	KeySettingSlotWidget = nullptr;
+//
+//	return FReply::Unhandled();
+//}
 
-	const FKey Key = InKeyEvent.GetKey();
-	FName KeyName = Key.GetFName();
+//FReply UCAS_KeySettingWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+//{
+//	if (!KeySettingSlotWidget)
+//		return FReply::Unhandled();
+//
+//	if(KeySettingSlotWidget->IsHovered())
+//		return FReply::Unhandled();
+//
+//
+//	const FKey Key = InMouseEvent.GetEffectingButton();
+//	FName KeyName = Key.GetFName();
+//
+//	UTexture2D* Icon = nullptr;
+//
+//	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
+//	if (Row)
+//	{
+//		Icon = Row->Icon.LoadSynchronous();
+//	}
+//
+//	KeySettingSlotWidget->SlotSetting(FName(), KeyName, Icon);
+//
+//	//UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
+//	//FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
+//	//FLinearColor Color = FLinearColor(1, 0, 0, 0);
+//
+//	//ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
+//
+//	//KeyButton->SetStyle(ButtonStyle);
+//
+//	KeySettingSlotWidget = nullptr;
+//
+//	return FReply::Unhandled();
+//}
 
-	UTexture2D* Icon = nullptr;
-
-	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
-	if (Row)
-	{
-		Icon = Row->Icon.LoadSynchronous();
-	}
-
-	KeySettingSlotWidget->SlotSetting(FName(), Icon);
-
-	UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-	FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-	FLinearColor Color = FLinearColor(1, 0, 0, 0);
-
-	ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
-
-	KeyButton->SetStyle(ButtonStyle);
-
-	KeySettingSlotWidget = nullptr;
-
-	return FReply::Unhandled();
-}
-
-FReply UCAS_KeySettingWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-	if (!KeySettingSlotWidget)
-		return FReply::Unhandled();
-
-	if(KeySettingSlotWidget->IsHovered())
-		return FReply::Unhandled();
-
-
-	const FKey Key = InMouseEvent.GetEffectingButton();
-	FName KeyName = Key.GetFName();
-
-	UTexture2D* Icon = nullptr;
-
-	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
-	if (Row)
-	{
-		Icon = Row->Icon.LoadSynchronous();
-	}
-
-	KeySettingSlotWidget->SlotSetting(FName(), Icon);
-
-	UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-	FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-	FLinearColor Color = FLinearColor(1, 0, 0, 0);
-
-	ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
-
-	KeyButton->SetStyle(ButtonStyle);
-
-	KeySettingSlotWidget = nullptr;
-
-	return FReply::Unhandled();
-}
-
-void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot)
+void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName CurrentKeyName)
 {
 	if (KeySettingSlotWidget == nullptr)
 	{
 		KeySettingSlotWidget = ClickedSlot;
 
-		UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-		FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-		FLinearColor Color = FLinearColor(1, 0, 0, 1);
+		const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(FName("Empty"), "Jump");
+		if (Row)
+		{
+			UTexture2D* Icon = Row->Icon.LoadSynchronous();
+			KeySettingSlotWidget->SlotSetting(FName(), CurrentKeyName, Icon);
+		}
 
-		ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
 
-		KeyButton->SetStyle(ButtonStyle);
 
 	}
 	else
 	{
 		if (KeySettingSlotWidget == ClickedSlot)
 		{
-			UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-			FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-			FLinearColor Color = FLinearColor(1, 0, 0, 0);
-
-			ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
-
-			KeyButton->SetStyle(ButtonStyle);
 
 			KeySettingSlotWidget = nullptr;
 		}
 		else
 		{
-			UButton* OldKeyButton = KeySettingSlotWidget->GetKeyButton();
-			FButtonStyle OldButtonStyle = OldKeyButton->WidgetStyle;
-			FLinearColor OldColor = FLinearColor(1, 0, 0, 0);
-
-			OldButtonStyle.Normal.OutlineSettings.Color = FSlateColor(OldColor);
-
-			OldKeyButton->SetStyle(OldButtonStyle);
 
 			KeySettingSlotWidget = ClickedSlot;
 
-			UButton* NewKeyButton = KeySettingSlotWidget->GetKeyButton();
-			FButtonStyle NewButtonStyle = NewKeyButton->WidgetStyle;
-			FLinearColor Newcolor = FLinearColor(1, 0, 0, 1);
 
-			NewButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Newcolor);
-
-			NewKeyButton->SetStyle(NewButtonStyle);
 		}
 
 	}
 
+
+}
+
+void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName NewKeyName)
+{
+	UTexture2D* Icon = nullptr;
+
+	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(NewKeyName, "Jump");
+	if (Row)
+	{
+		Icon = Row->Icon.LoadSynchronous();
+	}
+
+	ClickedSlot->SlotSetting(FName(), NewKeyName, Icon);
 
 }
 

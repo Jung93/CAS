@@ -12,7 +12,8 @@
  * 
  */
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FClickSlot, UCAS_KeySettingSlot*);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FClickSlot, UCAS_KeySettingSlot*, FName);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeSlot, UCAS_KeySettingSlot*, FName);
 
 
 UCLASS()
@@ -27,13 +28,21 @@ public:
 	void SetButtonBackgroundColor();
 
 	UFUNCTION()
-	void SlotSetting(FName Action, UTexture2D* Icon);
-	//void InitialSetting(FName Action, FName Key, UTexture2D* Icon);
+	//void SlotSetting(FName Action, UTexture2D* Icon);
+	void SlotSetting(FName Action, FName KeyName, UTexture2D* Icon);
 
+	UFUNCTION()
+	void TestSelect(FInputChord abc);
 
-	UButton* GetKeyButton() { return KeyButton; }
+	UFUNCTION()
+	void OnBeginKeyChage();
+
+	//UButton* GetKeyButton() { return KeyButton; }
 
 	FClickSlot ClickSlot;
+	FChangeSlot ChangeSlot;
+
+
 
 protected:
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
@@ -42,12 +51,17 @@ protected:
 	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	//UTextBlock* KeyName;
 
-	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
-	UButton* KeyButton;
+	//UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	//UButton* KeyButton;
 
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	class UImage* KeyIcon;
 
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	class UInputKeySelector* KeySelector;
+
 	bool IsClicked = false;
+
+	FInputChord CurrentKey;
 
 };
