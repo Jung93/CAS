@@ -27,6 +27,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+
+	void OpenMovementUIMode();
+	void ExitMovementUIMode();
 protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<class UCAS_KeyPressMovementUI> MovementUIClass;

@@ -21,21 +21,9 @@ ACAS_InteractionMirror::ACAS_InteractionMirror()
 
 void ACAS_InteractionMirror::InteractionWithPlayer()
 {
-	AddActorWorldRotation(FRotator(0, Degree, 0));
-}
+	//AddActorWorldRotation(FRotator(0, Degree, 0));
 
-void ACAS_InteractionMirror::SetLaserActivated(bool LaserActivated)
-{
-	LaserComponent->SetLaserActivated(LaserActivated);
-}
-
-bool ACAS_InteractionMirror::GetLaserActivated()
-{
-	return LaserComponent->GetLaserActivated();
-}
-void ACAS_InteractionMirror::ResetMirrorTransform()
-{
-	SetActorTransform(InitTransform);
+	OpenMovementUIMode();
 }
 
 void ACAS_InteractionMirror::BeginPlay()
@@ -55,8 +43,8 @@ void ACAS_InteractionMirror::BeginPlay()
 	InitTransform = GetActorTransform();
 	
 	if (MovementUIClass) {
+		MovementUIWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 		MovementUIWidgetComponent->SetWidgetClass(MovementUIClass);
-		MovementUIWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
 		MovementUIWidgetComponent->SetVisibility(false);
 
 		MovementUIWidgetComponent->SetRelativeLocation(FVector::ZeroVector);
@@ -78,10 +66,36 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 
 	if (auto PlayerController = GetWorld()->GetFirstPlayerController()) {
 		if (auto Player = Cast<ACAS_Character>(PlayerController->GetPawn())) {
-
-			FVector PlayerDir = Player->GetActorLocation() - KeyPressWidgetComponent->GetComponentLocation();
+	
+			FVector PlayerDir = Player->GetActorLocation() - MovementUIWidgetComponent->GetComponentLocation();
 			PlayerDir.Z = 0;
-			KeyPressWidgetComponent->SetWorldRotation(PlayerDir.Rotation());
+			MovementUIWidgetComponent->SetWorldRotation(PlayerDir.Rotation());
 		}
 	}
+}
+
+void ACAS_InteractionMirror::OpenMovementUIMode()
+{
+	KeyPressWidgetComponent->SetVisibility(false);
+	MovementUIWidgetComponent->SetVisibility(true);
+}
+
+void ACAS_InteractionMirror::ExitMovementUIMode()
+{
+	KeyPressWidgetComponent->SetVisibility(true);
+	MovementUIWidgetComponent->SetVisibility(false);
+}
+
+void ACAS_InteractionMirror::SetLaserActivated(bool LaserActivated)
+{
+	LaserComponent->SetLaserActivated(LaserActivated);
+}
+
+bool ACAS_InteractionMirror::GetLaserActivated()
+{
+	return LaserComponent->GetLaserActivated();
+}
+void ACAS_InteractionMirror::ResetMirrorTransform()
+{
+	SetActorTransform(InitTransform);
 }
