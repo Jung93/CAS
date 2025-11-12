@@ -64,6 +64,7 @@ public:
 
 	const TArray<FEnhancedActionKeyMapping>& GetCurrentKeyArray() { return CurrentMappingArray; }
 
+	class UEnhancedInputUserSettings* GetUserSetting() { return UserSetting; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -81,6 +82,10 @@ private:
 	class UInputMappingContext* _inputMappingContext;
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* LookOnlygMappingContext;
+
+	UPROPERTY()
+	class UEnhancedInputUserSettings* UserSetting;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Debug", meta = (AllowPrivateAccess = "true"))
 	UInputAction* DebugAction;

@@ -60,4 +60,5 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* KeyIconTable;
+
 };

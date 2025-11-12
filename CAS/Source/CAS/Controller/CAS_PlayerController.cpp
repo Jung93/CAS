@@ -112,7 +112,7 @@ void ACAS_PlayerController::SetupInputComponent()
     {
         Subsystem->AddMappingContext(_inputMappingContext, 0);
 
-        auto setting = Subsystem->GetUserSettings();
+        UserSetting = Subsystem->GetUserSettings();
 
 
     }

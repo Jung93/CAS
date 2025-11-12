@@ -4,9 +4,11 @@
 #include "UI/CAS_KeySettingWidget.h"
 #include "UI/CAS_KeySettingSlot.h"
 #include "Components/VerticalBox.h"
+#include "Components/Image.h"
 #include "Controller/CAS_PlayerController.h"
 #include "InputMappingContext.h"
 #include "Data/InputKeyIconData.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
 void UCAS_KeySettingWidget::NativeConstruct()
 {
@@ -149,29 +151,39 @@ void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FNa
 	{
 		KeySettingSlotWidget = ClickedSlot;
 
-		const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(FName("Empty"), "Jump");
-		if (Row)
-		{
-			UTexture2D* Icon = Row->Icon.LoadSynchronous();
-			KeySettingSlotWidget->SlotSetting(FName(), CurrentKeyName, Icon);
-		}
+		auto Image = KeySettingSlotWidget->GetKeyIcon();
 
-
+		auto Color = Image->GetColorAndOpacity();
+		Color.A = 0.7f;
+		Image->SetColorAndOpacity(Color);
 
 	}
 	else
 	{
 		if (KeySettingSlotWidget == ClickedSlot)
 		{
+			auto Image = KeySettingSlotWidget->GetKeyIcon();
+			auto Color = Image->GetColorAndOpacity();
+			Color.A = 1.f;
+			Image->SetColorAndOpacity(Color);
 
 			KeySettingSlotWidget = nullptr;
 		}
 		else
 		{
+			auto Image = KeySettingSlotWidget->GetKeyIcon();
+			auto Color = Image->GetColorAndOpacity();
+			Color.A = 1.f;
+			Image->SetColorAndOpacity(Color);
+
 
 			KeySettingSlotWidget = ClickedSlot;
 
 
+			auto NewImage = KeySettingSlotWidget->GetKeyIcon();
+			auto NewColor = NewImage->GetColorAndOpacity();
+			NewColor.A = 0.7f;
+			NewImage->SetColorAndOpacity(NewColor);
 		}
 
 	}
@@ -188,6 +200,26 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 	{
 		Icon = Row->Icon.LoadSynchronous();
 	}
+
+
+	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
+
+	auto UserSetting = owner->GetUserSetting();
+
+	FMapPlayerKeyArgs KeyArgs;
+
+
+	KeyArgs.MappingName = "Jump";
+	KeyArgs.NewKey = FKey("M");
+	KeyArgs.Slot = EPlayerMappableKeySlot::First;
+
+	FGameplayTagContainer tags;
+
+	UserSetting->MapPlayerKey(KeyArgs, tags);
+	UserSetting->ApplySettings();
+
+
+
 
 	ClickedSlot->SlotSetting(FName(), NewKeyName, Icon);
 

@@ -27,6 +27,8 @@ public:
 	UFUNCTION()
 	void SetButtonBackgroundColor();
 
+	class UImage* GetKeyIcon() { return KeyIcon; }
+
 	UFUNCTION()
 	//void SlotSetting(FName Action, UTexture2D* Icon);
 	void SlotSetting(FName Action, FName KeyName, UTexture2D* Icon);
@@ -63,5 +65,7 @@ protected:
 	bool IsClicked = false;
 
 	FInputChord CurrentKey;
+
+
 
 };

@@ -18,6 +18,8 @@ void UCAS_KeySettingSlot::NativeConstruct()
 
 	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::TestSelect);
 	KeySelector->OnIsSelectingKeyChanged.AddDynamic(this, &ThisClass::OnBeginKeyChage);
+
+
 }
 
 void UCAS_KeySettingSlot::SetButtonBackgroundColor()
@@ -72,6 +74,7 @@ void UCAS_KeySettingSlot::OnBeginKeyChage()
 
 	FKey Key = CurrentKey.Key;
 	FName KeyName = Key.GetFName();
+
 
 	ClickSlot.Broadcast(this, KeyName);
 
