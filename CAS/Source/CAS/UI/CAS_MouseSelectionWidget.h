@@ -24,7 +24,8 @@ class CAS_API UCAS_MouseSelectionWidget : public UUserWidget
 public:
 	EWidgetPositionType GetWidgetPositionType() { return WidgetPositionType; }
 	void SetWidgetPositionType(EWidgetPositionType PositionType) { WidgetPositionType = PositionType; }
-	
+	void SetTexture(class UTexture2D* Texture);
+
 	FWidgetClickEvent_child WidgetClickEvent_child;
 protected:
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;

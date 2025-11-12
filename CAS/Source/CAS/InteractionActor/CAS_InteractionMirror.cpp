@@ -14,6 +14,9 @@ ACAS_InteractionMirror::ACAS_InteractionMirror()
 
 	LaserComponent = CreateDefaultSubobject<UCAS_LaserComponent>(TEXT("LaserComponent"));
 	LaserComponent->SetupAttachment(StaticMesh);
+
+	MovementUIWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("MovementUIWidgetComponent"));
+	MovementUIWidgetComponent->SetupAttachment(StaticMesh);
 }
 
 void ACAS_InteractionMirror::InteractionWithPlayer()
@@ -50,18 +53,23 @@ void ACAS_InteractionMirror::BeginPlay()
 	}
 
 	InitTransform = GetActorTransform();
-		
-	if (KeyPressUIClass) {		
-		KeyPressWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
-		KeyPressWidgetComponent->SetVisibility(true);
+	
+	if (MovementUIClass) {
+		MovementUIWidgetComponent->SetWidgetClass(MovementUIClass);
+		MovementUIWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		MovementUIWidgetComponent->SetVisibility(false);
 
-	}
-	KeyPressUI = Cast<UCAS_KeyPressMovementUI>(KeyPressWidgetComponent->GetUserWidgetObject());
-	if (KeyTexture && KeyPressUI) {
-		KeyPressUI->SetTexture(KeyTexture);
-		KeyPressUI->SetVisibility(ESlateVisibility::Collapsed);
-	}
+		MovementUIWidgetComponent->SetRelativeLocation(FVector::ZeroVector);
 
+		MovementUI = Cast<UCAS_KeyPressMovementUI>(MovementUIWidgetComponent->GetUserWidgetObject());
+
+		if (MovementUI) {
+			for (auto Info : UIInfo) {
+				MovementUI->SetMovementTexture(Info.Texture, Info.Type);
+			}
+			MovementUI->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
 }
 
 void ACAS_InteractionMirror::Tick(float DeltaTime)

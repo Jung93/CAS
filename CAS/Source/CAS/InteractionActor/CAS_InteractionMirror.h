@@ -6,6 +6,7 @@
 #include "InteractionActor/CAS_InteractionActor.h"
 #include "NiagaraComponent.h"
 #include "NiagaraSystem.h"
+#include "UI/CAS_KeyPressMovementUI.h"
 #include "CAS_InteractionMirror.generated.h"
 
 /**
@@ -25,15 +26,24 @@ public:
 	void ResetMirrorTransform();
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void Tick(float DeltaTime) override;
 protected:
-	UPROPERTY(EditAnywhere)
-	float Degree = 5.0f;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<class UCAS_KeyPressMovementUI> MovementUIClass;
+	UPROPERTY(VisibleAnywhere, Category = "UI")
+	class UWidgetComponent* MovementUIWidgetComponent;
+	UPROPERTY()
+	class UCAS_KeyPressMovementUI* MovementUI = nullptr;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TArray<FMovementUIInfo> UIInfo;
 protected:
 	UPROPERTY(EditAnywhere)
 	class UCAS_LaserComponent* LaserComponent;
 
 	FTransform InitTransform;
+
+	UPROPERTY(EditAnywhere)
+	float Degree = 5.0f;
 
 	UPROPERTY(EditAnywhere,meta = (MakeEditWidget = "true"))
 	FVector TargetLocation = FVector::ZeroVector;

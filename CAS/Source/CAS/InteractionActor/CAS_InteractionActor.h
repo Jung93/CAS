@@ -7,6 +7,8 @@
 #include "Controller/CAS_PlayerController.h"
 #include "CAS_InteractionActor.generated.h"
 
+
+
 UCLASS(Abstract)
 class CAS_API ACAS_InteractionActor : public AActor
 {
