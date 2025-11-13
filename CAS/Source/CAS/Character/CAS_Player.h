@@ -93,7 +93,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IneractionAction;
 
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	class UWidgetInteractionComponent* WidgetInteraction;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -5,6 +5,7 @@
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetInteractionComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -86,7 +87,12 @@ ACAS_Player::ACAS_Player()
 	}
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
-		
+	
+	WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
+	WidgetInteraction->SetupAttachment(GetRootComponent());
+	WidgetInteraction->InteractionDistance = 1000.f;
+	WidgetInteraction->bShowDebug = true;
+	WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
 }
 
 void ACAS_Player::PossessedBy(AController* NewController)
@@ -219,6 +225,9 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
 {
+	//if (WidgetInteraction && WidgetInteraction->GetHoveredWidgetComponent()){
+	//	return;
+	//}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
 
 }
@@ -237,6 +246,10 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 
 		controller->SetInputMode(InputMode);
 	}
+	if (WidgetInteraction)
+	{
+		WidgetInteraction->bEnableHitTesting = true;
+	}
 }
 
 void ACAS_Player::HideMouse(const FInputActionValue& Value)
@@ -249,6 +262,10 @@ void ACAS_Player::HideMouse(const FInputActionValue& Value)
 
 		FInputModeGameOnly InputMode;
 		controller->SetInputMode(InputMode);
+	}
+	if (WidgetInteraction)
+	{
+		WidgetInteraction->bEnableHitTesting = false;
 	}
 }
 
