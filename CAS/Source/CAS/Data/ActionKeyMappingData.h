@@ -12,7 +12,4 @@ struct FActionKeyMappingData : public FTableRowBase
 public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FName ActionName;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-    FName KeyName;
 };

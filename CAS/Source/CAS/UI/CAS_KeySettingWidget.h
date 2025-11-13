@@ -28,6 +28,9 @@ public:
 	UFUNCTION()
 	void CloseSettingWidget();
 
+	UFUNCTION()
+	void ResetKeySetting();
+
 
 	//virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
 	//virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
@@ -57,6 +60,9 @@ protected:
 
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* ExitButton;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* ResetButton;
 
 	UPROPERTY(EditAnywhere)
 	UDataTable* KeyIconTable;

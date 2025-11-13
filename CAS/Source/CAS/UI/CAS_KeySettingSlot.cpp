@@ -42,6 +42,12 @@ void UCAS_KeySettingSlot::SetButtonBackgroundColor()
 
 }
 
+FName UCAS_KeySettingSlot::GetActionName()
+{
+	FText Text = ActionName->GetText();
+	return FName(Text.ToString());
+}
+
 void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* Icon)
 {
 	if(!Action.IsNone())

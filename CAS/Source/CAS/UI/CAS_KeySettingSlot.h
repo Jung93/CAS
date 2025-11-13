@@ -28,6 +28,7 @@ public:
 	void SetButtonBackgroundColor();
 
 	class UImage* GetKeyIcon() { return KeyIcon; }
+	FName GetActionName();
 
 	UFUNCTION()
 	//void SlotSetting(FName Action, UTexture2D* Icon);

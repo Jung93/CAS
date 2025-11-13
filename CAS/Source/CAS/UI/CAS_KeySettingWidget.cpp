@@ -16,8 +16,9 @@ void UCAS_KeySettingWidget::NativeConstruct()
 
 	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
 
-	const TArray<FEnhancedActionKeyMapping>& array = owner->GetCurrentKeyArray();
+	//const TArray<FEnhancedActionKeyMapping>& array = owner->GetCurrentKeyArray();
 
+	auto array = owner->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
 
 	if (KeySettingSlotWidgetClass)
 	{
@@ -25,9 +26,12 @@ void UCAS_KeySettingWidget::NativeConstruct()
 		{
 			UCAS_KeySettingSlot* slot = CreateWidget<UCAS_KeySettingSlot>(GetWorld(), KeySettingSlotWidgetClass);
 
-			FName Action = array[i].Action.GetFName();
-			FName KeyName = array[i].Key.GetFName();
+			auto mappingArray = array[i].Value.Mappings.Array();
+
+			FName Action = array[i].Key;
+			FName KeyName = mappingArray[0].GetCurrentKey().GetFName();
 			UTexture2D* Icon = nullptr;
+
 
 			const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
 			if (Row)
@@ -45,6 +49,8 @@ void UCAS_KeySettingWidget::NativeConstruct()
 	}
 
 	ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseSettingWidget);
+	ResetButton->OnClicked.AddDynamic(this, &ThisClass::ResetKeySetting);
+
 }
 
 void UCAS_KeySettingWidget::NativePreConstruct()
@@ -65,85 +71,48 @@ void UCAS_KeySettingWidget::CloseSettingWidget()
 	SetVisibility(ESlateVisibility::Collapsed);
 }
 
+void UCAS_KeySettingWidget::ResetKeySetting()
+{
+	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
+	auto array = owner->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
+	auto UserSetting = owner->GetUserSetting();
 
-//FReply UCAS_KeySettingWidget::NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent)
-//{
-//	if (!KeySettingSlotWidget)
-//		return FReply::Unhandled();
-//
-//	const FKey Key = InKeyEvent.GetKey();
-//	FName KeyName = Key.GetFName();
-//
-//	UTexture2D* Icon = nullptr;
-//
-//	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
-//	if (Row)
-//	{
-//		Icon = Row->Icon.LoadSynchronous();
-//	}
-//
-//
-//	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
-//
-//	const TArray<FEnhancedActionKeyMapping>& array = owner->GetCurrentKeyArray();
-//
-//	auto Iter = array.FindByPredicate([KeyName](const FEnhancedActionKeyMapping& KeyMapping)
-//		{
-//			return KeyMapping.Key.GetFName().IsEqual(KeyName);
-//		});
-//
-//	if(Iter)
-//		return FReply::Unhandled();
-//
-//	KeySettingSlotWidget->SlotSetting(FName(), KeyName, Icon);
-//
-//	//UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-//	//FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-//	//FLinearColor Color = FLinearColor(1, 0, 0, 0);
-//
-//	//ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
-//
-//	//KeyButton->SetStyle(ButtonStyle);
-//
-//	KeySettingSlotWidget = nullptr;
-//
-//	return FReply::Unhandled();
-//}
+	for (int32 i = 0; i < array.Num(); i++)
+	{
+		UCAS_KeySettingSlot* slot = Cast<UCAS_KeySettingSlot>(KeySettings->GetChildAt(i));
 
-//FReply UCAS_KeySettingWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-//{
-//	if (!KeySettingSlotWidget)
-//		return FReply::Unhandled();
-//
-//	if(KeySettingSlotWidget->IsHovered())
-//		return FReply::Unhandled();
-//
-//
-//	const FKey Key = InMouseEvent.GetEffectingButton();
-//	FName KeyName = Key.GetFName();
-//
-//	UTexture2D* Icon = nullptr;
-//
-//	const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
-//	if (Row)
-//	{
-//		Icon = Row->Icon.LoadSynchronous();
-//	}
-//
-//	KeySettingSlotWidget->SlotSetting(FName(), KeyName, Icon);
-//
-//	//UButton* KeyButton = KeySettingSlotWidget->GetKeyButton();
-//	//FButtonStyle ButtonStyle = KeyButton->WidgetStyle;
-//	//FLinearColor Color = FLinearColor(1, 0, 0, 0);
-//
-//	//ButtonStyle.Normal.OutlineSettings.Color = FSlateColor(Color);
-//
-//	//KeyButton->SetStyle(ButtonStyle);
-//
-//	KeySettingSlotWidget = nullptr;
-//
-//	return FReply::Unhandled();
-//}
+		if (slot)
+		{
+			FName DefaultKey = array[i].Value.Mappings.Array()[0].GetDefaultKey().GetFName();
+
+			UTexture2D* Icon = nullptr;
+
+			const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(DefaultKey, "Jump");
+			if (Row)
+			{
+				Icon = Row->Icon.LoadSynchronous();
+			}
+
+			FMapPlayerKeyArgs KeyArgs;
+
+			KeyArgs.MappingName = slot->GetActionName();
+			KeyArgs.NewKey = FKey(DefaultKey);
+			KeyArgs.Slot = EPlayerMappableKeySlot::First;
+
+			FGameplayTagContainer tags;
+
+			UserSetting->MapPlayerKey(KeyArgs, tags);
+			UserSetting->ApplySettings();
+			UserSetting->SaveSettings();
+
+			slot->SlotSetting(FName(), DefaultKey, Icon);
+
+		}
+
+	}
+
+}
+
 
 void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName CurrentKeyName)
 {
@@ -154,7 +123,7 @@ void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FNa
 		auto Image = KeySettingSlotWidget->GetKeyIcon();
 
 		auto Color = Image->GetColorAndOpacity();
-		Color.A = 0.7f;
+		Color.A = 0.5f;
 		Image->SetColorAndOpacity(Color);
 
 	}
@@ -182,7 +151,7 @@ void UCAS_KeySettingWidget::SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FNa
 
 			auto NewImage = KeySettingSlotWidget->GetKeyIcon();
 			auto NewColor = NewImage->GetColorAndOpacity();
-			NewColor.A = 0.7f;
+			NewColor.A = 0.5f;
 			NewImage->SetColorAndOpacity(NewColor);
 		}
 
@@ -203,23 +172,33 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 
 
 	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
-
 	auto UserSetting = owner->GetUserSetting();
+
+	auto MapArray = UserSetting->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
+
+	for (auto a : MapArray)
+	{
+		auto arr = a.Value.Mappings.Array();
+
+		if (arr[0].GetCurrentKey().GetFName().IsEqual(NewKeyName))
+		{
+			return;
+		}
+
+	}
+
 
 	FMapPlayerKeyArgs KeyArgs;
 
-
-	KeyArgs.MappingName = "Jump";
-	KeyArgs.NewKey = FKey("M");
+	KeyArgs.MappingName = ClickedSlot->GetActionName();
+	KeyArgs.NewKey = FKey(NewKeyName);
 	KeyArgs.Slot = EPlayerMappableKeySlot::First;
 
 	FGameplayTagContainer tags;
 
 	UserSetting->MapPlayerKey(KeyArgs, tags);
 	UserSetting->ApplySettings();
-
-
-
+	UserSetting->SaveSettings();
 
 	ClickedSlot->SlotSetting(FName(), NewKeyName, Icon);
 
