@@ -7,6 +7,7 @@
 #include "Controller/CAS_PlayerController.h"
 #include "CAS_InteractionActor.generated.h"
 
+
 UCLASS(Abstract)
 class CAS_API ACAS_InteractionActor : public AActor
 {
@@ -20,6 +21,8 @@ public:
 	virtual void InteractionWithPlayer() PURE_VIRTUAL(ACAS_InteractionActor::InteractionWithPlayer, ;); 
 	class UStaticMeshComponent* GetMesh() { return StaticMesh; };
 	void ChangeTexture(EInputDeviceType InputDevice);
+	void ChangeUITexture(UTexture2D* Texture);
+
 
 protected:
 	// Called when the game starts or when spawned

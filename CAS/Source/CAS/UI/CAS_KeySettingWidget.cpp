@@ -107,6 +107,9 @@ void UCAS_KeySettingWidget::ResetKeySetting()
 
 			slot->SlotSetting(FName(), DefaultKey, Icon);
 
+			if (slot->GetActionName().IsEqual("Interaction"))
+				owner->ApplyKeyToUI(Icon);
+
 		}
 
 	}
@@ -202,6 +205,8 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 
 	ClickedSlot->SlotSetting(FName(), NewKeyName, Icon);
 
+	if (ClickedSlot->GetActionName().IsEqual("Interaction"))
+		owner->ApplyKeyToUI(Icon);
 }
 
 

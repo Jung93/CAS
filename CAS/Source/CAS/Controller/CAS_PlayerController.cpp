@@ -341,6 +341,15 @@ void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
     }
 }
 
+void ACAS_PlayerController::ApplyKeyToUI(UTexture2D* Texture)
+{
+
+    ChageUITexture.Broadcast(Texture);
+
+}
+
+
+
 
 void ACAS_PlayerController::AddDetectingEnemy(class ACAS_Character* enemy)
 {

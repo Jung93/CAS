@@ -70,8 +70,11 @@ void ACAS_InteractionActor::BeginPlay()
 
 	auto controller = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
 
-	if(controller)
+	if (controller)
+	{
 		controller->OnInputDeviceChanged.AddUObject(this, &ACAS_InteractionActor::ChangeTexture);
+		controller->ChageUITexture.AddUObject(this, &ThisClass::ChangeUITexture);
+	}
 
 }
 
@@ -110,4 +113,13 @@ void ACAS_InteractionActor::ChangeTexture(EInputDeviceType InputDevice)
 	{
 		KeyPressUI->SetTexture(ControllerKeyTexture);
 	}
+}
+
+void ACAS_InteractionActor::ChangeUITexture(UTexture2D* Texture)
+{
+	if (KeyPressUI)
+	{
+		KeyPressUI->SetTexture(Texture);
+	}
+
 }
