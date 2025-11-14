@@ -10,6 +10,7 @@
 #include "Components/CanvasPanelSlot.h"
 #include "Components/Border.h"
 #include "Components/Image.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
 void UCAS_QuickSlotWidget::InitSetting(int32 count)
 {
@@ -73,6 +74,21 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
     if (controller->IsValidLowLevel())
     {
         controller->OnInputDeviceChanged.AddUObject(this, &UCAS_QuickSlotWidget::ChangeInputDeviceUI);
+        controller->ChageQuickSlotTexture.AddUObject(this, &UCAS_QuickSlotWidget::ChangeSlotTexture);
+
+        auto array = controller->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
+
+        for (int32 i = 1; i < 3; i++)
+        {
+            FString TargetStr = FString::Printf(TEXT("SlotChange%i"), i);
+            FName TargetName = FName(TargetStr);
+            auto KeyMapping = array.FindByKey(TargetName)->Value.Mappings.Array();
+
+            //if(KeyMapping[0].GetCurrentKey())
+
+
+        }
+
 
     }
 
@@ -256,63 +272,93 @@ void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlot
 
 void UCAS_QuickSlotWidget::SwitchToggle()
 {
-    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
-    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-    UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
-    UBorder* toggleBorder = Cast<UBorder>(imagePanel->GetChildAt(2));
+    //UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+    //UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+    //UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
+    //UBorder* toggleBorder = Cast<UBorder>(imagePanel->GetChildAt(2));
 
     isToggled = !isToggled;
 
     if (isToggled)
     {
-        toggleBorder->SetBrushFromMaterial(ToggleBorderMaterial);
-        toggleBorder->SetRenderOpacity(1);
+        ToggleEffectBorder->SetBrushFromMaterial(ToggleBorderMaterial);
+        ToggleEffectBorder->SetRenderOpacity(1);
     }
     else
     {
-        toggleBorder->SetBrushFromMaterial(nullptr);
-        toggleBorder->SetRenderOpacity(0);
+        ToggleEffectBorder->SetBrushFromMaterial(nullptr);
+        ToggleEffectBorder->SetRenderOpacity(0);
     }
 }
 
 void UCAS_QuickSlotWidget::ChangeInputDeviceUI(EInputDeviceType InputDevice)
 {
-
-    UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
-    UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-    UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
-
     if (InputDevice == EInputDeviceType::KeyboardMouse)
     {
-        for (int32 i = 0; i < 2;i++)
-        {
-            UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
-            Image->SetColorAndOpacity(FLinearColor(1,1,1,1));
-
-
-            UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
-            HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
-        }
+        Keyboard_Left->SetColorAndOpacity(FLinearColor(1,1,1,1));
+        Keyboard_Right->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+        Controller_Left->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+        Controller_Right->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
     }
     else 
     {
-        for (int32 i = 0; i < 2;i++)
-        {
-            UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
-            Image->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
-
-
-            UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
-            HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
-        }
+        Keyboard_Left->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+        Keyboard_Right->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+        Controller_Left->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+        Controller_Right->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
     }
 
 
 
 
+    //UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
+    //UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
+    //UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
+
+    //if (InputDevice == EInputDeviceType::KeyboardMouse)
+    //{
+    //    for (int32 i = 0; i < 2;i++)
+    //    {
+    //        UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
+    //        Image->SetColorAndOpacity(FLinearColor(1,1,1,1));
+
+
+    //        UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
+    //        HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+    //    }
+    //}
+    //else 
+    //{
+    //    for (int32 i = 0; i < 2;i++)
+    //    {
+    //        UImage* Image = Cast<UImage>(imagePanel->GetChildAt(i));
+    //        Image->SetColorAndOpacity(FLinearColor(1, 1, 1, 0));
+
+
+    //        UImage* HiddenImage = Cast<UImage>(imagePanel->GetChildAt(i + 3));
+    //        HiddenImage->SetColorAndOpacity(FLinearColor(1, 1, 1, 1));
+    //    }
+    //}
 
 
 
 
+
+
+
+
+
+}
+
+void UCAS_QuickSlotWidget::ChangeSlotTexture(FName ActionName, UTexture2D* Texture)
+{
+    if (ActionName.IsEqual("SlotChange1"))
+    {
+        Keyboard_Left->SetBrushFromTexture(Texture);
+    }
+    else if (ActionName.IsEqual("SlotChange2"))
+    {
+        Keyboard_Right->SetBrushFromTexture(Texture);
+    }
 
 }

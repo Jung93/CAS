@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "UI/CAS_SkillSlot.h"
+#include "Components/Image.h"
+#include "Components/Border.h"
 #include "GAS/CAS_GameplayAbility.h"
 #include "Controller/CAS_PlayerController.h"
 #include "CAS_QuickSlotWidget.generated.h"
@@ -37,6 +39,8 @@ public:
 
 	void ChangeInputDeviceUI(EInputDeviceType InputDevice);
 
+	void ChangeSlotTexture(FName ActionName, UTexture2D* Texture);
+
 	FQuickSlotSwapEvent QuickSlotSwapEvent;
 	FRemoveAbilityEvent RemoveAbilityEvent;
 
@@ -54,8 +58,27 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	UMaterialInterface* ToggleBorderMaterial;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	UBorder* ToggleEffectBorder;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	UImage* Keyboard_Left;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	UImage* Keyboard_Right;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	UImage* Controller_Left;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget))
+	UImage* Controller_Right;
+
 	float BorderPosX = 0.0f;
 	float BorderSizeX = 350.0f;
 
 	bool isToggled = false;
+
+	UPROPERTY(EditAnywhere)
+	UDataTable* KeyIconTable;
+
 };

@@ -94,8 +94,9 @@ void UCAS_KeySettingWidget::ResetKeySetting()
 			}
 
 			FMapPlayerKeyArgs KeyArgs;
+			FName ActionName = slot->GetActionName();
 
-			KeyArgs.MappingName = slot->GetActionName();
+			KeyArgs.MappingName = ActionName;
 			KeyArgs.NewKey = FKey(DefaultKey);
 			KeyArgs.Slot = EPlayerMappableKeySlot::First;
 
@@ -107,9 +108,13 @@ void UCAS_KeySettingWidget::ResetKeySetting()
 
 			slot->SlotSetting(FName(), DefaultKey, Icon);
 
-			if (slot->GetActionName().IsEqual("Interaction"))
+			if (ActionName.IsEqual("Interaction"))
 				owner->ApplyKeyToUI(Icon);
 
+			if (ActionName.IsEqual("SlotChange1") || ActionName.IsEqual("SlotChange2"))
+			{
+				owner->ApplyQuickSlotKeyToUI(ActionName, Icon);
+			}
 		}
 
 	}
@@ -192,8 +197,9 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 
 
 	FMapPlayerKeyArgs KeyArgs;
+	FName ActionName = ClickedSlot->GetActionName();
 
-	KeyArgs.MappingName = ClickedSlot->GetActionName();
+	KeyArgs.MappingName = ActionName;
 	KeyArgs.NewKey = FKey(NewKeyName);
 	KeyArgs.Slot = EPlayerMappableKeySlot::First;
 
@@ -205,8 +211,13 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 
 	ClickedSlot->SlotSetting(FName(), NewKeyName, Icon);
 
-	if (ClickedSlot->GetActionName().IsEqual("Interaction"))
+	if (ActionName.IsEqual("Interaction"))
 		owner->ApplyKeyToUI(Icon);
+
+	if (ActionName.IsEqual("SlotChange1") || ActionName.IsEqual("SlotChange2"))
+	{
+		owner->ApplyQuickSlotKeyToUI(ActionName, Icon);
+	}
 }
 
 

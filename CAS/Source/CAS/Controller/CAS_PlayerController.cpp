@@ -348,6 +348,11 @@ void ACAS_PlayerController::ApplyKeyToUI(UTexture2D* Texture)
 
 }
 
+void ACAS_PlayerController::ApplyQuickSlotKeyToUI(FName ActionName, UTexture2D* Texture)
+{
+    ChageQuickSlotTexture.Broadcast(ActionName, Texture);
+}
+
 
 
 

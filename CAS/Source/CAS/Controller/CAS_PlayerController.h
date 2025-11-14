@@ -16,6 +16,7 @@
  */
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnInputDeviceChanged, EInputDeviceType);
 DECLARE_MULTICAST_DELEGATE_OneParam(FChageUITexture, UTexture2D*);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FChageQuickSlotTexture, FName, UTexture2D*);
 
 UENUM(BlueprintType)
 enum class EInputDeviceType : uint8
@@ -44,7 +45,7 @@ public:
 
 	FOnInputDeviceChanged OnInputDeviceChanged;
 	FChageUITexture ChageUITexture;
-
+	FChageQuickSlotTexture ChageQuickSlotTexture;
 
 	bool IsAnyDetectingEnemy() { return !DetectingEnemy.IsEmpty(); }
 
@@ -70,6 +71,7 @@ public:
 	class UEnhancedInputUserSettings* GetUserSetting() { return UserSetting; }
 
 	void ApplyKeyToUI(UTexture2D* Texture);
+	void ApplyQuickSlotKeyToUI(FName ActionName, UTexture2D* Texture);
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
