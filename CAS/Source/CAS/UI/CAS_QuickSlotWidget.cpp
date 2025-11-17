@@ -11,6 +11,9 @@
 #include "Components/Border.h"
 #include "Components/Image.h"
 #include "UserSettings/EnhancedInputUserSettings.h"
+#include "Data/InputKeyIconData.h"
+#include "Containers/Array.h"
+
 
 void UCAS_QuickSlotWidget::InitSetting(int32 count)
 {
@@ -76,19 +79,44 @@ void UCAS_QuickSlotWidget::InitSetting(int32 count)
         controller->OnInputDeviceChanged.AddUObject(this, &UCAS_QuickSlotWidget::ChangeInputDeviceUI);
         controller->ChageQuickSlotTexture.AddUObject(this, &UCAS_QuickSlotWidget::ChangeSlotTexture);
 
-        auto array = controller->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
+        TArray<TPair<FName, FKeyMappingRow>> array = controller->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
 
         for (int32 i = 1; i < 3; i++)
         {
-            FString TargetStr = FString::Printf(TEXT("SlotChange%i"), i);
+            FString TargetStr = FString::Printf(TEXT("SlotChange%d"), i);
             FName TargetName = FName(TargetStr);
-            auto KeyMapping = array.FindByKey(TargetName)->Value.Mappings.Array();
 
-            //if(KeyMapping[0].GetCurrentKey())
+            TPair<FName, FKeyMappingRow>* KeyPair = array.FindByPredicate([TargetName](const TPair<FName, FKeyMappingRow>& Pair)
+                {
+                    return Pair.Key.IsEqual(TargetName);
+                });
 
+            if (!KeyPair)
+                return;
+
+            TArray<FPlayerKeyMapping> KeyMap = KeyPair->Value.Mappings.Array();
+
+            FName KeyName = KeyMap[0].GetCurrentKey().GetFName();
+
+            UTexture2D* Icon = nullptr;
+
+            const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
+            if (Row)
+            {
+                Icon = Row->Icon.LoadSynchronous();
+            }
+
+            if (TargetName.IsEqual("SlotChange1"))
+            {
+                Keyboard_Left->SetBrushFromTexture(Icon);
+            }
+            else if (TargetName.IsEqual("SlotChange2"))
+            {
+                Keyboard_Right->SetBrushFromTexture(Icon);
+
+            }
 
         }
-
 
     }
 

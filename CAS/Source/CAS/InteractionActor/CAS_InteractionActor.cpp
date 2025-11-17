@@ -7,6 +7,8 @@
 #include "Components/SphereComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
+#include "Data/InputKeyIconData.h"
 
 // Sets default values
 ACAS_InteractionActor::ACAS_InteractionActor()
@@ -45,12 +47,57 @@ ACAS_InteractionActor::ACAS_InteractionActor()
 		ControllerKeyTexture = ControllerTextureImage.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UDataTable> KeyTable(TEXT("/Script/Engine.DataTable'/Game/CAS/Resource/Data/CAS_KeyIconData.CAS_KeyIconData'"));
+
+	if (KeyTable.Succeeded())
+	{
+		KeyIconTable = KeyTable.Object;
+	}
+
+
 }
 
 // Called when the game starts or when spawned
 void ACAS_InteractionActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	auto controller = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
+
+	if (controller)
+	{
+		controller->OnInputDeviceChanged.AddUObject(this, &ACAS_InteractionActor::ChangeTexture);
+		controller->ChageUITexture.AddUObject(this, &ThisClass::ChangeUITexture);
+
+
+		TArray<TPair<FName, FKeyMappingRow>> array = controller->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
+
+		FName TargetName = FName("Interaction");
+
+		TPair<FName, FKeyMappingRow>* KeyPair = array.FindByPredicate([TargetName](const TPair<FName, FKeyMappingRow>& Pair)
+			{
+				return Pair.Key.IsEqual(TargetName);
+			});
+
+		if (!KeyPair)
+			return;
+
+		TArray<FPlayerKeyMapping> KeyMap = KeyPair->Value.Mappings.Array();
+
+		FName KeyName = KeyMap[0].GetCurrentKey().GetFName();
+
+
+		const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(KeyName, "Jump");
+		if (Row)
+		{
+			KeyTexture = Row->Icon.LoadSynchronous();
+		}
+
+	}
+
+
+
+
 
 	if (KeyPressUIClass) {
 		KeyPressWidgetComponent->SetWidgetClass(KeyPressUIClass);
@@ -67,14 +114,6 @@ void ACAS_InteractionActor::BeginPlay()
 
 	SenseCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnOverlapEvent);
 	SenseCollider->OnComponentEndOverlap.AddDynamic(this, &ThisClass::EndOverlapEvent);
-
-	auto controller = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
-
-	if (controller)
-	{
-		controller->OnInputDeviceChanged.AddUObject(this, &ACAS_InteractionActor::ChangeTexture);
-		controller->ChageUITexture.AddUObject(this, &ThisClass::ChangeUITexture);
-	}
 
 }
 

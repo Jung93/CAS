@@ -58,6 +58,9 @@ protected:
 
 	bool bCanInteraction = false;
 
+	UPROPERTY(EditAnywhere)
+	UDataTable* KeyIconTable;
+
 protected:
 	//mesh
 	UPROPERTY(EditAnywhere, Category = "Mesh")
