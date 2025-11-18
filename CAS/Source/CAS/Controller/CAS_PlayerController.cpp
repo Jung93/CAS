@@ -112,6 +112,7 @@ void ACAS_PlayerController::SetupInputComponent()
     if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
     {
         Subsystem->AddMappingContext(_inputMappingContext, 0);
+        Subsystem->AddMappingContext(ControllerMappingContext, 0);
 
         UserSetting = Subsystem->GetUserSettings();
 

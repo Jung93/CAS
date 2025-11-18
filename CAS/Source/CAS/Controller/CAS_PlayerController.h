@@ -90,6 +90,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Input")
 	class UInputMappingContext* LookOnlygMappingContext;
 
+	UPROPERTY(EditAnywhere, Category = "Input")
+	class UInputMappingContext* ControllerMappingContext;
+
+
 	UPROPERTY()
 	class UEnhancedInputUserSettings* UserSetting;
 

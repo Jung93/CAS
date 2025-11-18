@@ -16,29 +16,8 @@ void UCAS_KeySettingSlot::NativeConstruct()
 	//KeyButton->OnClicked.AddDynamic(this, &ThisClass::SetButtonBackgroundColor);
 
 
-	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::TestSelect);
+	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::OnSelect);
 	KeySelector->OnIsSelectingKeyChanged.AddDynamic(this, &ThisClass::OnBeginKeyChage);
-
-
-}
-
-void UCAS_KeySettingSlot::SetButtonBackgroundColor()
-{
-	IsClicked = !IsClicked;
-	//FButtonStyle buttonStyle = KeyButton->WidgetStyle;
-	//FLinearColor color;
-
-	//if (IsClicked)
-	//	color = FLinearColor(1, 0, 0, 1);
-	//else
-	//	color = FLinearColor(1, 0, 0, 0);
-
-
-	//buttonStyle.Normal.OutlineSettings.Color = FSlateColor(color);
-
-	//KeyButton->SetStyle(buttonStyle);
-
-
 
 }
 
@@ -63,10 +42,9 @@ void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* I
 	abc.Key = FKey(KeyName);
 	KeySelector->SetSelectedKey(abc);
 
-
 }
 
-void UCAS_KeySettingSlot::TestSelect(FInputChord abc)
+void UCAS_KeySettingSlot::OnSelect(FInputChord abc)
 {
 	FKey Key = abc.Key;
 	FName KeyName = Key.GetFName();
@@ -85,15 +63,3 @@ void UCAS_KeySettingSlot::OnBeginKeyChage()
 	ClickSlot.Broadcast(this, KeyName);
 
 }
-
-
-//void UCAS_KeySettingSlot::InitialSetting(FName Action, FName Key, UTexture2D* Icon)
-//{
-//	FText ActionText = FText::FromName(Action);
-//	FText KeyText = FText::FromName(Key);
-//
-//	ActionName->SetText(ActionText);
-//	KeyName->SetText(KeyText);
-//
-//	KeyIcon->SetBrushFromTexture(Icon);
-//}

@@ -97,8 +97,6 @@ void ACAS_InteractionActor::BeginPlay()
 
 
 
-
-
 	if (KeyPressUIClass) {
 		KeyPressWidgetComponent->SetWidgetClass(KeyPressUIClass);
 		KeyPressWidgetComponent->SetWidgetSpace(EWidgetSpace::Screen);
