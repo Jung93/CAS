@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "Components/Border.h"
+#include "Components/Button.h"	
 #include "Components/Image.h"
 #include "CAS_MouseSelectionWidget.generated.h"
 
@@ -22,25 +22,29 @@ class CAS_API UCAS_MouseSelectionWidget : public UUserWidget
 {
 	GENERATED_BODY()
 public:
+	virtual void NativeConstruct() override;
+
 	EWidgetPositionType GetWidgetPositionType() { return WidgetPositionType; }
 	void SetWidgetPositionType(EWidgetPositionType PositionType) { WidgetPositionType = PositionType; }
 	void SetTexture(class UTexture2D* Texture);
 
 	FWidgetClickEvent_child WidgetClickEvent_child;
-protected:
-	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
-protected:
-	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
-	UBorder* CAS_Border;
 
+protected:
+	UFUNCTION()
+	void ClickedEvent();
+	UFUNCTION()
+	void HoveredEvent();
+	UFUNCTION()
+	void UnhoveredEvent();
+protected:
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UImage* CAS_IconImage;
-
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* CAS_Button;
 	UPROPERTY(EditAnywhere)
 	EWidgetPositionType WidgetPositionType = EWidgetPositionType::NONE;
 
 	FLinearColor EnterColor = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f);
-	FLinearColor LeaveColor = FLinearColor(1.0f, 1.0f, 1.0f, 0.7f);
+	FLinearColor LeaveColor = FLinearColor(1.0f, 1.0f, 1.0f, 0.9f);
 };

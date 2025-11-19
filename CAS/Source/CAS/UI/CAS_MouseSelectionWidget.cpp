@@ -3,27 +3,32 @@
 
 #include "UI/CAS_MouseSelectionWidget.h"
 
+void UCAS_MouseSelectionWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	CAS_Button->OnClicked.AddDynamic(this, &ThisClass::ClickedEvent);
+	CAS_Button->OnHovered.AddDynamic(this, &ThisClass::HoveredEvent);
+	CAS_Button->OnUnhovered.AddDynamic(this, &ThisClass::UnhoveredEvent);
+}
+
 void UCAS_MouseSelectionWidget::SetTexture(UTexture2D* Texture)
 {
 	CAS_IconImage->SetBrushFromTexture(Texture);
 }
 
-FReply UCAS_MouseSelectionWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+void UCAS_MouseSelectionWidget::ClickedEvent()
 {
-	Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);;
-	if (InMouseEvent.IsMouseButtonDown(EKeys::LeftMouseButton)) {
-
-		WidgetClickEvent_child.Broadcast(WidgetPositionType);
-	}
-	return FReply::Handled();
+	WidgetClickEvent_child.Broadcast(WidgetPositionType);
 }
 
-void UCAS_MouseSelectionWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+void UCAS_MouseSelectionWidget::HoveredEvent()
 {
-	CAS_Border->SetBrushColor(EnterColor);
+	CAS_IconImage->SetColorAndOpacity(EnterColor);
 }
 
-void UCAS_MouseSelectionWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
+void UCAS_MouseSelectionWidget::UnhoveredEvent()
 {
-	CAS_Border->SetBrushColor(LeaveColor);
+	CAS_IconImage->SetColorAndOpacity(LeaveColor);
 }
+

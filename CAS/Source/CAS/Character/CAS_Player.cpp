@@ -90,7 +90,7 @@ ACAS_Player::ACAS_Player()
 	
 	WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
 	WidgetInteraction->SetupAttachment(GetRootComponent());
-	WidgetInteraction->InteractionDistance = 1000.f;
+	WidgetInteraction->InteractionDistance = 1000.0f;
 	WidgetInteraction->bShowDebug = true;
 	WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
 }
@@ -225,11 +225,17 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
 {
-	//if (WidgetInteraction && WidgetInteraction->GetHoveredWidgetComponent()){
-	//	return;
-	//}
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
+}
 
+void ACAS_Player::RightMouseClicked(const FInputActionValue& Value)
+{
+	WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
+}
+
+void ACAS_Player::RightMouseReleased(const FInputActionValue& Value)
+{
+	WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
 }
 
 void ACAS_Player::ShowMouse(const FInputActionValue& Value)
@@ -520,7 +526,9 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
-		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
+
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::RightMouseClicked);
+		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &ACAS_Player::RightMouseReleased);
 
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);

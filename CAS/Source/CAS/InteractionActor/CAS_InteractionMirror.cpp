@@ -56,6 +56,7 @@ void ACAS_InteractionMirror::BeginPlay()
 				MovementUI->SetMovementTexture(Info.Texture, Info.Type);
 			}
 			MovementUI->SetVisibility(ESlateVisibility::Visible);
+			MovementUI->WidgetClickEvent.AddUObject(this, &ThisClass::WidgetClicked);
 		}
 	}
 }
@@ -64,14 +65,46 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (auto PlayerController = GetWorld()->GetFirstPlayerController()) {
-		if (auto Player = Cast<ACAS_Character>(PlayerController->GetPawn())) {
-	
-			FVector PlayerDir = Player->GetActorLocation() - MovementUIWidgetComponent->GetComponentLocation();
-			PlayerDir.Z = 0;
-			MovementUIWidgetComponent->SetWorldRotation(PlayerDir.Rotation());
+	if (auto PlayerController = GetWorld()->GetFirstPlayerController())
+	{
+		if (auto Player = Cast<ACAS_Character>(PlayerController->GetPawn()))
+		{
+			FVector CamLoc;
+			FRotator CamRot;
+			PlayerController->GetPlayerViewPoint(CamLoc, CamRot);
+
+			FVector Dir = CamLoc - MovementUIWidgetComponent->GetComponentLocation();
+			Dir.Z = 0;
+			MovementUIWidgetComponent->SetWorldRotation(Dir.Rotation());
 		}
 	}
+}
+
+void ACAS_InteractionMirror::WidgetClicked(EWidgetPositionType Type)
+{
+	if (Type == EWidgetPositionType::NONE) {
+		return;
+	}
+	else if (Type == EWidgetPositionType::Left) {
+		AddActorWorldRotation(FRotator(0, -Degree, 0));
+	}
+	else if (Type == EWidgetPositionType::Right) {
+		AddActorWorldRotation(FRotator(0, Degree, 0));
+	}
+}
+
+void ACAS_InteractionMirror::OnOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Super::OnOverlapEvent(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+
+}
+
+void ACAS_InteractionMirror::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	Super::EndOverlapEvent(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex);
+
+	ExitMovementUIMode();
 }
 
 void ACAS_InteractionMirror::OpenMovementUIMode()
