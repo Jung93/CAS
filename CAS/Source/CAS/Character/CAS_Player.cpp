@@ -93,6 +93,7 @@ ACAS_Player::ACAS_Player()
 	WidgetInteraction->InteractionDistance = 1000.0f;
 	WidgetInteraction->bShowDebug = true;
 	WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
+	WidgetInteraction->TraceChannel = ECollisionChannel::ECC_GameTraceChannel8;
 }
 
 void ACAS_Player::PossessedBy(AController* NewController)
@@ -671,17 +672,19 @@ void ACAS_Player::LoadCharacterData()
 
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	for (int32 i = 0; i < PlayerAbilityCount; i++) {
-		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);		
+		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);
 		TSubclassOf<UGameplayAbility> AbilityClass = AbilityData.AbilityClass;
 		AddPlayerAbility(AbilityClass);
 	}
 
-	auto CurrHP = GameInstance->GetPlayerHPCount();	
+	auto CurrHP = GameInstance->GetPlayerHPCount();
 	GameInstance->ClearPlayerHPCount();
 
-	auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
-	if (widget&& CurrHP != -1) {
-		widget->UpdateHp(CurrHP);
-		GetAttributeSet()->SetHealth(CurrHP);
+	if (HpBarWidgetComponent) {
+		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
+		if (widget && CurrHP != -1) {
+			widget->UpdateHp(CurrHP);
+			GetAttributeSet()->SetHealth(CurrHP);
+		}
 	}
 }

@@ -72,7 +72,7 @@ void ACAS_InteractionMirror::Tick(float DeltaTime)
 			FVector CamLoc;
 			FRotator CamRot;
 			PlayerController->GetPlayerViewPoint(CamLoc, CamRot);
-
+	
 			FVector Dir = CamLoc - MovementUIWidgetComponent->GetComponentLocation();
 			Dir.Z = 0;
 			MovementUIWidgetComponent->SetWorldRotation(Dir.Rotation());
@@ -86,10 +86,10 @@ void ACAS_InteractionMirror::WidgetClicked(EWidgetPositionType Type)
 		return;
 	}
 	else if (Type == EWidgetPositionType::Left) {
-		AddActorWorldRotation(FRotator(0, -Degree, 0));
+		StaticMesh->AddRelativeRotation(FRotator(0, -Degree, 0));
 	}
 	else if (Type == EWidgetPositionType::Right) {
-		AddActorWorldRotation(FRotator(0, Degree, 0));
+		StaticMesh->AddRelativeRotation(FRotator(0, Degree, 0));
 	}
 }
 
