@@ -5,7 +5,6 @@
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/WidgetInteractionComponent.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -87,13 +86,7 @@ ACAS_Player::ACAS_Player()
 	}
 
 	QuickSlotWidgetComponent = CreateDefaultSubobject<UCAS_QuickSlotWidgetComponent>(TEXT("QuickSlotWidgetComponent"));
-	
-	WidgetInteraction = CreateDefaultSubobject<UWidgetInteractionComponent>(TEXT("WidgetInteraction"));
-	WidgetInteraction->SetupAttachment(GetRootComponent());
-	WidgetInteraction->InteractionDistance = 1000.0f;
-	WidgetInteraction->bShowDebug = true;
-	WidgetInteraction->InteractionSource = EWidgetInteractionSource::Mouse;
-	WidgetInteraction->TraceChannel = ECollisionChannel::ECC_GameTraceChannel8;
+		
 }
 
 void ACAS_Player::PossessedBy(AController* NewController)
@@ -227,16 +220,7 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 void ACAS_Player::Capture(const FInputActionValue& Value)
 {
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
-}
 
-void ACAS_Player::RightMouseClicked(const FInputActionValue& Value)
-{
-	WidgetInteraction->PressPointerKey(EKeys::LeftMouseButton);
-}
-
-void ACAS_Player::RightMouseReleased(const FInputActionValue& Value)
-{
-	WidgetInteraction->ReleasePointerKey(EKeys::LeftMouseButton);
 }
 
 void ACAS_Player::ShowMouse(const FInputActionValue& Value)
@@ -253,10 +237,6 @@ void ACAS_Player::ShowMouse(const FInputActionValue& Value)
 
 		controller->SetInputMode(InputMode);
 	}
-	if (WidgetInteraction)
-	{
-		WidgetInteraction->bEnableHitTesting = true;
-	}
 }
 
 void ACAS_Player::HideMouse(const FInputActionValue& Value)
@@ -269,10 +249,6 @@ void ACAS_Player::HideMouse(const FInputActionValue& Value)
 
 		FInputModeGameOnly InputMode;
 		controller->SetInputMode(InputMode);
-	}
-	if (WidgetInteraction)
-	{
-		WidgetInteraction->bEnableHitTesting = false;
 	}
 }
 
@@ -527,9 +503,7 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACAS_Player::Look);
 
 		EnhancedInputComponent->BindAction(CaptureAction, ETriggerEvent::Started, this, &ACAS_Player::Capture);
-
-		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::RightMouseClicked);
-		EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Completed, this, &ACAS_Player::RightMouseReleased);
+		//EnhancedInputComponent->BindAction(RightClickAction, ETriggerEvent::Started, this, &ACAS_Player::StealAbility);
 
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Started, this, &ACAS_Player::ShowMouse);
 		EnhancedInputComponent->BindAction(ShowMouseAction, ETriggerEvent::Completed, this, &ACAS_Player::HideMouse);
@@ -672,19 +646,17 @@ void ACAS_Player::LoadCharacterData()
 
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 	for (int32 i = 0; i < PlayerAbilityCount; i++) {
-		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);
+		FCAS_SlotData AbilityData = GameInstance->GetQuickSlotAbilityData(i);		
 		TSubclassOf<UGameplayAbility> AbilityClass = AbilityData.AbilityClass;
 		AddPlayerAbility(AbilityClass);
 	}
 
-	auto CurrHP = GameInstance->GetPlayerHPCount();
+	auto CurrHP = GameInstance->GetPlayerHPCount();	
 	GameInstance->ClearPlayerHPCount();
 
-	if (HpBarWidgetComponent) {
-		auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
-		if (widget && CurrHP != -1) {
-			widget->UpdateHp(CurrHP);
-			GetAttributeSet()->SetHealth(CurrHP);
-		}
+	auto widget = Cast<UCAS_Hpbar>(HpBarWidgetComponent->GetWidget());
+	if (widget&& CurrHP != -1) {
+		widget->UpdateHp(CurrHP);
+		GetAttributeSet()->SetHealth(CurrHP);
 	}
 }

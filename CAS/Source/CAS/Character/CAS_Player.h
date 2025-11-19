@@ -35,9 +35,6 @@ protected:
 
 	void Capture(const FInputActionValue& Value);
 
-	void RightMouseClicked(const FInputActionValue& Value);
-	void RightMouseReleased(const FInputActionValue& Value);
-
 	void ShowMouse(const FInputActionValue& Value);
 	void HideMouse(const FInputActionValue& Value);
 
@@ -80,7 +77,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CaptureAction;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ShowMouseAction;
 
@@ -96,10 +93,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* IneractionAction;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	class UWidgetInteractionComponent* WidgetInteraction;
 
-	bool bInteractionUI = false;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
