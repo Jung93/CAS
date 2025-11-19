@@ -16,7 +16,9 @@ void ACAS_EnemyNoCapt_ScaredRunner::BeginPlay()
 	Super::BeginPlay();
 
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Move.SuperSpeed"));
-	HpBarWidgetComponent->SetVisibility(false);
+	if (HpBarWidgetComponent) {
+		HpBarWidgetComponent->SetVisibility(false);
+	}
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OverlapBeginEvent);
 }
 

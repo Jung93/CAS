@@ -30,7 +30,7 @@ ACAS_Character::ACAS_Character()
 
 	HpBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HpBar"));
 	HpBarWidgetComponent->SetupAttachment(RootComponent);
-
+	
 	HpBarWidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 	
 	HpBarWidgetComponent->SetCollisionProfileName("NoCollision");
