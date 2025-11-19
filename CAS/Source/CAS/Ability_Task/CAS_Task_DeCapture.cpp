@@ -42,8 +42,8 @@ void UCAS_Task_DeCapture::Activate()
 
 	player->SetHp(curHp);
 
-	////디버그용으로 빙의해제되면 체력이 1 남음
-	owner->SetHp(1);
+	int32 HpBeforeCapture = owner->GetHP();
+	owner->SetHp(HpBeforeCapture);
 
 	auto iter = GetWorld()->GetControllerIterator();
 	for (int i = 0; i < GetWorld()->GetNumControllers(); i++)

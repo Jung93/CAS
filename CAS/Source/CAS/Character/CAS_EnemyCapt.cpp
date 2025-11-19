@@ -148,10 +148,13 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 	auto player = _hat->GetPlayer();
 	auto playerHP = player->GetAttributeSet()->GetHealth();
 
+
+
 	auto controller = GetController();
 
 	controller->UnPossess();
 
+	CurrentHp = this->AttributeSet->GetHealth();
 	this->AttributeSet->SetHealth(playerHP);
 	this->AttributeSet->HpChanged.Broadcast(playerHP);
 

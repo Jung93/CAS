@@ -53,7 +53,7 @@ public:
 
 	TSubclassOf<class UGameplayAbility> GetEnemyAbility() {return EnemyAbility;};
 
-
+	int32 GetHP() { return CurrentHp; }
 
 	virtual void ActivateEnemyAbility() PURE_VIRTUAL(ThisClass::ActivateEnemyAbility, );
 protected:
@@ -95,5 +95,6 @@ protected:
 	bool _isStun = false;
 	float _stunTime = 0.0f;
 	float _maxStunTime = 5.0f;
+	int32 CurrentHp = 0;
 
 };
