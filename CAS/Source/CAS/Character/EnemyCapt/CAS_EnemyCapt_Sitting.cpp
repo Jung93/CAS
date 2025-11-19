@@ -18,9 +18,7 @@ void ACAS_EnemyCapt_Sitting::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HpBarWidgetComponent) {
-		HpBarWidgetComponent->SetVisibility(false);
-	}
+	HpBarWidgetComponent->SetVisibility(false);
 }
 
 void ACAS_EnemyCapt_Sitting::PossessedBy(AController* NewController)
