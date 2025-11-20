@@ -28,7 +28,7 @@ public:
 	void SlotSetting(FName Action, FName KeyName, UTexture2D* Icon);
 
 	UFUNCTION()
-	void OnSelect(FInputChord abc);
+	void OnSelect(FInputChord NewKey);
 
 	UFUNCTION()
 	void OnBeginKeyChage();

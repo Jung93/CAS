@@ -13,8 +13,6 @@ void UCAS_KeySettingSlot::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	//KeyButton->OnClicked.AddDynamic(this, &ThisClass::SetButtonBackgroundColor);
-
 
 	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::OnSelect);
 	KeySelector->OnIsSelectingKeyChanged.AddDynamic(this, &ThisClass::OnBeginKeyChage);
@@ -44,9 +42,9 @@ void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* I
 
 }
 
-void UCAS_KeySettingSlot::OnSelect(FInputChord abc)
+void UCAS_KeySettingSlot::OnSelect(FInputChord NewKey)
 {
-	FKey Key = abc.Key;
+	FKey Key = NewKey.Key;
 	FName KeyName = Key.GetFName();
 
 	ChangeSlot.Broadcast(this, KeyName);

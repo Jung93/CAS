@@ -16,11 +16,7 @@ void UCAS_KeySettingWidget::NativeConstruct()
 
 	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
 
-	//const TArray<FEnhancedActionKeyMapping>& array = owner->GetCurrentKeyArray();
-
 	TArray<TPair<FName, FKeyMappingRow>> array = owner->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
-
-
 
 	if (KeySettingSlotWidgetClass)
 	{

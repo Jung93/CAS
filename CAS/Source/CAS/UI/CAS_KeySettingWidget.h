@@ -34,8 +34,6 @@ public:
 	UFUNCTION()
 	void ResetKeySetting();
 
-	//virtual FReply NativeOnKeyDown(const FGeometry& InGeometry, const FKeyEvent& InKeyEvent) override;
-	//virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
 	UFUNCTION()
 	void SetClickedSlot(UCAS_KeySettingSlot* ClickedSlot, FName CurrentKeyName);

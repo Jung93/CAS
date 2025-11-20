@@ -59,16 +59,7 @@ void UCAS_Task_DeCapture::Activate()
 	auto aiController = Cast<AAIController>(*iter);
 	aiController->Possess(owner);
 
-	//FVector acotrLocation = owner->GetActorLocation();
 
-	//float dropRadius = 300.0f;
-	//FVector randomOffset = FMath::VRand() * FMath::FRandRange(200.0f, dropRadius);
-	//FVector dropLocation = acotrLocation + randomOffset;
-	//dropLocation.Z = acotrLocation.Z;
-
-	//player->SetActorLocation(dropLocation);
-
-	//-----------------------------------
 	FVector actorLocation = owner->GetActorLocation();
 	float dropRadius = 300.0f;
 
@@ -136,7 +127,6 @@ void UCAS_Task_DeCapture::Activate()
 	owner->GetHat()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	owner->GetHat()->Return();
 	owner->ClearHat();
-	//owner->BeStunned();
 
 	TaskEndEvent.Broadcast();
 }

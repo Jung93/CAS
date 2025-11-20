@@ -136,6 +136,7 @@ bool ACAS_PlayerController::InputKey(const FInputKeyParams& Params)
 {
     Super::InputKey(Params);
 
+
     if (Params.IsGamepad())
     {
         OnLastInputDeviceChanged(EInputDeviceType::Gamepad);
@@ -152,6 +153,7 @@ void ACAS_PlayerController::OnLastInputDeviceChanged(EInputDeviceType DeviceType
 {
     if (CurrentDevice != DeviceType)
     {
+
         CurrentDevice = DeviceType;
 
         FString DeviceName = StaticEnum<EInputDeviceType>()->GetNameStringByValue((int64)DeviceType);
@@ -340,6 +342,7 @@ void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
         // PlayerController에 커서 좌표 세팅
         SetMouseLocation(NewPos.X, NewPos.Y);
     }
+
 }
 
 void ACAS_PlayerController::ApplyKeyToUI(UTexture2D* Texture)
