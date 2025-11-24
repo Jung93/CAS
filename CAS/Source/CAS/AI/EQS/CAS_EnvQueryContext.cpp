@@ -31,5 +31,5 @@ void UCAS_EnvQueryContext::ProvideContext(FEnvQueryInstance& QueryInstance, FEnv
 		return;
 	}
 	
-	UEnvQueryItemType_Actor::SetContextHelper(ContextData, Cast<ACAS_Player>(PlayerKey));
+	UEnvQueryItemType_Actor::SetContextHelper(ContextData, Cast<AActor>(PlayerKey));
 }
