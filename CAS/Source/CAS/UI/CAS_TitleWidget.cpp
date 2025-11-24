@@ -47,7 +47,7 @@ void UCAS_TitleWidget::StartNewGame()
 {
     auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());
 
-    GameInstance->SetNextLevelName("Test");
+    GameInstance->SetNextLevelName("MS_TestMap4");
     GameInstance->OpenLoadingLevel();
 }
 

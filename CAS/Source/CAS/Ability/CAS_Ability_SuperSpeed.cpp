@@ -111,6 +111,9 @@ void UCAS_Ability_SuperSpeed::ReceiveTarget(ACAS_Character* Target, int32 TaskLe
 
 		TimerDelegate.BindLambda([this, Target, TaskLevel, EffectContextHandle, AbilitySystemComp, Handle, player]()
 		{
+			if (!player->IsValidLowLevel() || !AbilitySystemComp->IsValidLowLevel())
+				return;
+
 			RemoveGamePlayEffect(Target, TagEffectClassPlayer, TaskLevel, EffectContextHandle, AbilitySystemComp);
 			AbilitySystemComp->RemoveActiveGameplayEffect(Handle);
 			player->SwitchSlotChangable();
