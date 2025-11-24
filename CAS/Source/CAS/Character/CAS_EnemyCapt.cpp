@@ -87,6 +87,13 @@ void ACAS_EnemyCapt::Tick(float DeltaTime)
 	}
 	EnemyController->GetPerceptionComponent()->GetCurrentlyPerceivedActors(UAISense_Sight::StaticClass(), PerceivedActors);
 
+	auto Blackboard = EnemyController->GetBlackboardComponent();
+	AActor* PerceivedPlayer = nullptr;
+
+	/*
+	for문 돌면서 플레이어가 있는지 부터 체크
+	플레이어 탐지 -> 저장 , 탐지 x -> nullptr저장	
+	*/
 	for (AActor* Actor : PerceivedActors)
 	{
 		if (auto Hat = Cast<ACAS_Hat>(Actor)) {
@@ -94,14 +101,24 @@ void ACAS_EnemyCapt::Tick(float DeltaTime)
 		}
 		auto Character = Cast<ACAS_Character>(Actor);
 		auto ASC = Character->GetAbilitySystemComponent();
+
 		if (ASC) {
 			bool bDetectable = Character->GetAbilitySystemComponent()->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("State.Detectable"));
 
 			if (bDetectable) {
-				EnemyController->GetBlackboardComponent()->SetValueAsObject("player", Actor);
+				auto CurController = Character->GetController();
+
+				if (auto CheckController = Cast<APlayerController>(CurController)) {
+					PerceivedPlayer = Actor;
+				}
+				
 			}
+			//탐지가능하지않으면 플레이어 탐지된것이 X
 		}
 	}
+	
+	Blackboard->SetValueAsObject("player", PerceivedPlayer);
+	
 
 	if (auto ASC = GetAbilitySystemComponent()) {
 		if (ASC->HasMatchingGameplayTag(FGameplayTag::RequestGameplayTag("Effect.Status.Stun"))) {
