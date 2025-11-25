@@ -20,15 +20,10 @@ public:
 
 	void SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkillSlots, const TSubclassOf<class UGameplayAbility>& newAbility);
 	void SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*> TargetSkillSlots);
-	FString GetSkillDescription(FName AbilityTagName);
 
 	TArray<UCAS_SkillSlot*>& GetSkillSlots() { return SkillSlots; }
 
-
-
 protected:
-	//virtual void NativeTick(const FGeometry& MyGeometery, float InDeltaTime) override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slots")
 	TSubclassOf<UCAS_SkillSlot> SlotWidgetClass;
 	UPROPERTY()
@@ -40,4 +35,7 @@ protected:
 
 	UPROPERTY()
 	TSubclassOf<class UGameplayAbility> TargetAbility;
+
+	UPROPERTY(EditAnywhere)
+	UDataTable* DescriptionTable;
 };

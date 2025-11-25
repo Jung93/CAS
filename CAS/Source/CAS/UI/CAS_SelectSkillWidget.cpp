@@ -13,6 +13,7 @@
 #include "Misc/Paths.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
+#include "Data/SkillDescriptionData.h"
 
 #include "Components/CanvasPanel.h"
 #include "Components/CanvasPanelSlot.h"
@@ -22,6 +23,7 @@
 #include "Components/TextBlock.h"
 
 #include "Kismet/GameplayStatics.h"
+
 
 
 
@@ -70,8 +72,14 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         auto text = TextBlocks[i];
 
         FName AbilityTagName = SkillSlots[i]->GetSlotData().SkillData.AbilityTag;
-        FString AbilityStr = GetSkillDescription(AbilityTagName);
-        FText AbilityDesc = FText::FromString(AbilityStr);
+        FText AbilityDesc = FText();
+
+        const FSkillDescriptionData* Row = DescriptionTable->FindRow<FSkillDescriptionData>(AbilityTagName, "");
+
+        if (Row)
+        {
+            AbilityDesc = Row->Description;
+        }
 
         text->SetText(AbilityDesc);
     }
@@ -90,8 +98,14 @@ void UCAS_SelectSkillWidget::SetSlots(const TArray<UCAS_SkillSlot*> CurrentSkill
         SkillSlots[SkillSlots.Num() - 1]->SetSlotData(Data);
 
         FName AbilityTagName = Data.SkillData.AbilityTag;
-        FText TagName = FText::FromString(GetSkillDescription(AbilityTagName));
+        FText TagName = FText();
 
+        const FSkillDescriptionData* Row = DescriptionTable->FindRow<FSkillDescriptionData>(AbilityTagName, "");
+
+        if (Row)
+        {
+            TagName = Row->Description;
+        }
 
         TextBlocks[SkillSlots.Num() - 1]->SetText(TagName);
         TargetAbility = newAbility;
@@ -138,50 +152,4 @@ void UCAS_SelectSkillWidget::SetSlots(int32 TargetIndex, TArray<UCAS_SkillSlot*>
 
     TargetAbility = nullptr;
 
-
 }
-
-FString UCAS_SelectSkillWidget::GetSkillDescription(FName AbilityTagName)
-{
-    FString Result = TEXT("None");
-
-    FString FilePath = FPaths::ProjectContentDir() / TEXT("CAS/Resource/SkillDescription.json");
-    FString JsonStr;
-
-    if (!FFileHelper::LoadFileToString(JsonStr, *FilePath))
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to load JSON file: %s"), *FilePath);
-        return Result;
-    }
-
-    TSharedRef<TJsonReader<>> Reader = TJsonReaderFactory<>::Create(JsonStr);
-    TSharedPtr<FJsonObject> JsonObject;
-
-    if (FJsonSerializer::Deserialize(Reader, JsonObject) && JsonObject.IsValid())
-    {
-        FString Value;
-        if (JsonObject->TryGetStringField(AbilityTagName.ToString(), Value))
-        {
-            return Value;
-        }
-    }
-
-    return Result;
-}
-
-//void UCAS_SelectSkillWidget::NativeTick(const FGeometry& MyGeometery, float DeltaTime)
-//{
-//    //Super::NativeTick(MyGeometery, DeltaTime);
-//
-//    //auto root = Cast<UCanvasPanel>(GetRootWidget());
-//    //auto border = Cast<UBorder>(root->GetChildAt(0));
-//    //auto slot2 = Cast<UCanvasPanelSlot>(border->Slot);
-//
-//    //GEngine->GameViewport->GetViewportSize(WidgetSize);
-//
-//    //float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
-//    //WidgetSize /= Scale; // DPI 보정 적용
-//
-//    //slot2->SetSize(WidgetSize);
-//
-//}
