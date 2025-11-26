@@ -17,9 +17,7 @@ void UCAS_QuitGameWidget::NativeConstruct()
 
 	if (QuitWidget) {
 		QuitWidget->AddToViewport(5);
-
 		QuitWidget->SetVisibility(ESlateVisibility::Collapsed);
-
 		QuitWidget->NO_OnClickedEvent(this, FName("CloseQuitWidget"));
 		QuitWidget->YES_OnClickedEvent(this, FName("QuitGame"));
 
@@ -27,11 +25,9 @@ void UCAS_QuitGameWidget::NativeConstruct()
 
 	if (KeySettingWidget) {
 		KeySettingWidget->AddToViewport(5);
-
 		KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
 		KeySettingWidget->SetQuitGameWidget(this);
 	}
-
 
 
 	SettingButton->OnClicked.AddDynamic(this, &ThisClass::OpenSettingWidget);
@@ -46,22 +42,6 @@ void UCAS_QuitGameWidget::NativeConstruct()
 void UCAS_QuitGameWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
-
-	//if (KeySettingWidgetClass && KeySettingSlotWidgetClass)
-	//{
-	//	UCAS_KeySettingWidget* keywidget = CreateWidget<UCAS_KeySettingWidget>(GetWorld(), KeySettingWidgetClass);
-
-	//	for (int32 i = 0; i < 3; i++)
-	//	{
-	//		UCAS_KeySettingSlot* slot = CreateWidget<UCAS_KeySettingSlot>(GetWorld(), KeySettingSlotWidgetClass);
-
-	//		keywidget->SetKeySettingSlotWidget(slot);
-
-	//		keywidget->NativePreConstruct();
-
-	//	}
-
-	//}
 
 }
 

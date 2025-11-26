@@ -26,8 +26,6 @@
 
 
 
-
-
 void UCAS_SelectSkillWidget::InitSetting()
 {
     SkillSlots.SetNum(5);

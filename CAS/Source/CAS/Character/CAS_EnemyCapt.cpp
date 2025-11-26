@@ -191,6 +191,7 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 		bUseControllerRotationYaw = false;
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
+
 	}
 }
 

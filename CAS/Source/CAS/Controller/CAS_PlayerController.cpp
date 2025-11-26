@@ -40,17 +40,6 @@ void ACAS_PlayerController::EnableInputWhenAttack()
 void ACAS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-   
-    //TSharedRef<FNavigationConfig> NavConfig = MakeShared<FNavigationConfig>();
-
-    //// 기본 키 등록 해제
-    //NavConfig->KeyEventRules.Remove(EKeys::SpaceBar);
-    //NavConfig->KeyEventRules.Remove(EKeys::Enter);
-    //NavConfig->KeyEventRules.Remove(EKeys::Tab);
-
-    //// 혹시 필요한 경우 방향키는 유지 가능
-    //FSlateApplication::Get().SetNavigationConfig(NavConfig);
-
 
     SaveLoadWidget = CreateWidget<UCAS_SaveLoadWidget>(GetWorld(), SaveLoadWidgetClass);
     SaveLoadWidget->AddToViewport(3);
@@ -347,9 +336,7 @@ void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
 
 void ACAS_PlayerController::ApplyKeyToUI(UTexture2D* Texture)
 {
-
     ChageUITexture.Broadcast(Texture);
-
 }
 
 void ACAS_PlayerController::ApplyQuickSlotKeyToUI(FName ActionName, UTexture2D* Texture)

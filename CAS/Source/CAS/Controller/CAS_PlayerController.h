@@ -129,15 +129,11 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCAS_TitleWidget> TitleWidgetClass;
 
-
 	UPROPERTY()
 	class UCAS_QuitGameWidget* QuitGameWidget;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UCAS_QuitGameWidget> QuitGameWidgetClass;
-
-
-
 
 	UPROPERTY(EditAnywhere, Category = "Cursor")
 	TSubclassOf<UUserWidget> GamepadCursorClass;
