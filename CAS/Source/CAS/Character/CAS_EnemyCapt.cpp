@@ -192,6 +192,9 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 
+		playerController->RemoveDetectingEnemy(this);
+
+
 	}
 }
 
