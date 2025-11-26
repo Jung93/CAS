@@ -3,6 +3,7 @@
 
 #include "UI/CAS_KeySettingWidget.h"
 #include "UI/CAS_KeySettingSlot.h"
+#include "UI/CAS_QuitGameWidget.h"
 #include "Components/VerticalBox.h"
 #include "Components/Image.h"
 #include "Controller/CAS_PlayerController.h"
@@ -66,7 +67,7 @@ void UCAS_KeySettingWidget::SetKeySettingSlotWidget(UCAS_KeySettingSlot* keySett
 
 void UCAS_KeySettingWidget::CloseSettingWidget()
 {
-	SetVisibility(ESlateVisibility::Collapsed);
+	QuitGameWidget->CloseSettingWidget();
 }
 
 void UCAS_KeySettingWidget::ResetKeySetting()

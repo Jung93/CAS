@@ -29,7 +29,7 @@ void UCAS_QuitGameWidget::NativeConstruct()
 		KeySettingWidget->AddToViewport(5);
 
 		KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
-
+		KeySettingWidget->SetQuitGameWidget(this);
 	}
 
 
@@ -85,11 +85,13 @@ void UCAS_QuitGameWidget::CloseWidget()
 void UCAS_QuitGameWidget::OpenSettingWidget()
 {
 	KeySettingWidget->SetVisibility(ESlateVisibility::Visible);
+	SetVisibility(ESlateVisibility::Collapsed);
 }
 
 void UCAS_QuitGameWidget::CloseSettingWidget()
 {
 	KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
+	SetVisibility(ESlateVisibility::Visible);
 }
 
 void UCAS_QuitGameWidget::OpenQuitWidget()

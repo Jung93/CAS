@@ -27,6 +27,7 @@ public:
 
 	class UVerticalBox* GetVerticalBox() { return KeySettings; }
 	void SetKeySettingSlotWidget(UCAS_KeySettingSlot* keySettingSlot);
+	void SetQuitGameWidget(class UCAS_QuitGameWidget* Target) { QuitGameWidget = Target; };
 
 	UFUNCTION()
 	void CloseSettingWidget();
@@ -51,6 +52,9 @@ protected:
 
 	UPROPERTY()
 	UCAS_KeySettingSlot* KeySettingSlotWidget = nullptr;
+
+	UPROPERTY()
+	class UCAS_QuitGameWidget* QuitGameWidget = nullptr;
 
 	UPROPERTY()
 	TArray<UCAS_KeySettingSlot*> KeySlots;
