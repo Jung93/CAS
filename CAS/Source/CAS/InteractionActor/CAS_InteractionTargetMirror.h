@@ -19,6 +19,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void WidgetClicked(EWidgetPositionType Type) override;
+
+	void RotationToDir(FVector Location);
 protected:
 	UPROPERTY(EditAnywhere)
 	class ACAS_SwitchLinkedFloor* TargetFloor;

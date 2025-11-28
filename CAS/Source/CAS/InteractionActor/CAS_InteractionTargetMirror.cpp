@@ -15,16 +15,21 @@ void ACAS_InteractionTargetMirror::BeginPlay()
 
 	Super::BeginPlay();
 
-	const auto& TargetActors = TargetFloor->GetOwningActors();
+	if (TargetFloor) {
+		const auto& TargetActors = TargetFloor->GetOwningActors();
 
-	for (auto TargetActor : TargetActors) {
-		FVector ActorLocation = TargetActor->GetActorLocation();
-		if (ActorLocation == GetActorLocation()) {
-			continue;
+		for (auto TargetActor : TargetActors) {
+			FVector ActorLocation = TargetActor->GetActorLocation();
+			if (ActorLocation == GetActorLocation()) {
+				continue;
+			}
+			TargetActorLocation.Add(ActorLocation);
 		}
-		TargetActorLocation.Add(ActorLocation);
+		ArrayNum = TargetActors.Num();
 	}
-	ArrayNum = TargetActors.Num();
+
+	RotationToDir(TargetActorLocation[TargetIndex]);
+
 }
 
 void ACAS_InteractionTargetMirror::WidgetClicked(EWidgetPositionType Type)
@@ -47,7 +52,12 @@ void ACAS_InteractionTargetMirror::WidgetClicked(EWidgetPositionType Type)
 		TargetIndex %= ArrayNum;
 	}
 	
-	FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), TargetActorLocation[TargetIndex]);
+	RotationToDir(TargetActorLocation[TargetIndex]);
+}
+
+void ACAS_InteractionTargetMirror::RotationToDir(FVector Location)
+{
+	FRotator LookAtRot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Location);
 
 	SetActorRotation(LookAtRot);
 }
