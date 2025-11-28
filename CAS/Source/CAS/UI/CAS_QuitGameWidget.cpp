@@ -7,6 +7,8 @@
 #include "Components/VerticalBox.h"
 #include "Kismet/GameplayStatics.h"
 #include "Controller/CAS_PlayerController.h"
+#include "UI/CAS_SaveLoadWidget.h"
+
 
 void UCAS_QuitGameWidget::NativeConstruct()
 {
@@ -30,11 +32,18 @@ void UCAS_QuitGameWidget::NativeConstruct()
 	}
 
 
+	if (LoadWidgetClass) {
+		auto controller = GetWorld()->GetFirstPlayerController();
+		auto playerController = Cast<ACAS_PlayerController>(controller);
+		LoadWidget = CreateWidget<UCAS_SaveLoadWidget>(playerController, LoadWidgetClass);
+		LoadWidget->InitialSetting();
+	}
+
+
 	SettingButton->OnClicked.AddDynamic(this, &ThisClass::OpenSettingWidget);
 	QuitButton->OnClicked.AddDynamic(this, &ThisClass::OpenQuitWidget);
 	ExitButton->OnClicked.AddDynamic(this, &ThisClass::CloseWidget);
-
-
+	LoadButton->OnClicked.AddDynamic(this, &ThisClass::OpenLoadWidget);
 	SetVisibility(ESlateVisibility::Collapsed);
 
 }
@@ -82,6 +91,11 @@ void UCAS_QuitGameWidget::OpenQuitWidget()
 void UCAS_QuitGameWidget::CloseQuitWidget()
 {
 	QuitWidget->SetVisibility(ESlateVisibility::Collapsed);
+}
+
+void UCAS_QuitGameWidget::OpenLoadWidget()
+{
+	LoadWidget->SetVisibility(ESlateVisibility::Visible);
 }
 
 void UCAS_QuitGameWidget::QuitGame()
