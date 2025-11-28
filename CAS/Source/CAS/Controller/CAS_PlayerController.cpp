@@ -116,7 +116,7 @@ void ACAS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(DebugAction, ETriggerEvent::Started, this, &ThisClass::PrintDebugMessage);
         EnhancedInputComponent->BindAction(ControlSaveLoadAction, ETriggerEvent::Started, this, &ThisClass::ControlSaveLoadWidget);
         EnhancedInputComponent->BindAction(QuitGameAction, ETriggerEvent::Started, this, &ThisClass::QuitGame);
-        EnhancedInputComponent->BindAction(CursorMoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveVirtualCursor);
+        //EnhancedInputComponent->BindAction(CursorMoveAction, ETriggerEvent::Triggered, this, &ThisClass::MoveVirtualCursor);
 
 	}
 }
@@ -315,24 +315,24 @@ void ACAS_PlayerController::OpenTitle()
 }
 
 
-void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
-{
-    if (CurrentDevice != EInputDeviceType::Gamepad) return;
-
-    FVector2D StickValue = Value.Get<FVector2D>();
-    if (!StickValue.IsNearlyZero())
-    {
-        FVector2D CurrentPos;
-        GetMousePosition(CurrentPos.X, CurrentPos.Y);
-
-        float Speed = 10.f;
-        FVector2D NewPos = CurrentPos + StickValue * Speed;
-
-        // PlayerController에 커서 좌표 세팅
-        SetMouseLocation(NewPos.X, NewPos.Y);
-    }
-
-}
+//void ACAS_PlayerController::MoveVirtualCursor(const FInputActionValue& Value)
+//{
+//    if (CurrentDevice != EInputDeviceType::Gamepad) return;
+//
+//    FVector2D StickValue = Value.Get<FVector2D>();
+//    if (!StickValue.IsNearlyZero())
+//    {
+//        FVector2D CurrentPos;
+//        GetMousePosition(CurrentPos.X, CurrentPos.Y);
+//
+//        float Speed = 10.f;
+//        FVector2D NewPos = CurrentPos + StickValue * Speed;
+//
+//        // PlayerController에 커서 좌표 세팅
+//        SetMouseLocation(NewPos.X, NewPos.Y);
+//    }
+//
+//}
 
 void ACAS_PlayerController::ApplyKeyToUI(UTexture2D* Texture)
 {

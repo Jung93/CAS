@@ -4,6 +4,7 @@
 #include "Character/CAS_EnemyCapt.h"
 #include "Controller/CAS_PlayerController.h"
 #include "Engine/LocalPlayer.h"
+#include "Global/CAS_GameInstance.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -194,7 +195,15 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 
 		playerController->RemoveDetectingEnemy(this);
 
-
+		bool lastDetection = !playerController->IsAnyDetectingEnemy();
+		if (lastDetection)
+		{
+			UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(this->GetGameInstance());
+			if (gi)
+			{
+				gi->CrossFadeMusic(false);
+			}
+		}
 	}
 }
 
