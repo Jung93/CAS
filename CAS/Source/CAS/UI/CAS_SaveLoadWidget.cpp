@@ -18,7 +18,7 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 	OverwriteWidget = CreateWidget<UCAS_SelectWidget>(GetWorld(), SelectWidgetClass);
 
 	if (SelectionWidget) {
-		SelectionWidget->AddToViewport(5);
+		SelectionWidget->AddToViewport(8);
 
 		SelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
 
@@ -34,7 +34,7 @@ void UCAS_SaveLoadWidget::NativeConstruct()
 	}
 
 	if (OverwriteWidget) {
-		OverwriteWidget->AddToViewport(6);
+		OverwriteWidget->AddToViewport(9);
 
 		OverwriteWidget->SetVisibility(ESlateVisibility::Collapsed);
 
@@ -74,7 +74,7 @@ void UCAS_SaveLoadWidget::NativePreConstruct()
 void UCAS_SaveLoadWidget::InitialSetting(bool IsSaveMode)
 {
 	bSaveMode = IsSaveMode;
-	AddToViewport(3);
+	AddToViewport(5);
 	SetVisibility(ESlateVisibility::Collapsed);
 }
 

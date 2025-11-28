@@ -8,6 +8,7 @@
 #include "UI/CAS_KeySettingWidget.h"
 #include "UI/CAS_KeySettingSlot.h"
 #include "Components/Button.h"
+#include "UI/CAS_SaveLoadWidget.h"
 
 #include "CAS_QuitGameWidget.generated.h"
 
@@ -39,6 +40,9 @@ public:
 	UFUNCTION()
 	void CloseQuitWidget();
 
+	UFUNCTION()
+	void OpenLoadWidget();
+
 
 	UFUNCTION()
 	void QuitGame();
@@ -58,6 +62,12 @@ protected:
 	UPROPERTY()
 	UCAS_KeySettingWidget* KeySettingWidget = nullptr;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCAS_SaveLoadWidget> LoadWidgetClass;
+
+	UPROPERTY()
+	UCAS_SaveLoadWidget* LoadWidget = nullptr;
+
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
 	//TSubclassOf<UCAS_KeySettingSlot> KeySettingSlotWidgetClass;
 
@@ -72,4 +82,7 @@ protected:
 
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	UButton* ExitButton;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	UButton* LoadButton;
 };
