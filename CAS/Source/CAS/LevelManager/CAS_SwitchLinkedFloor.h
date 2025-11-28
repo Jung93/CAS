@@ -23,7 +23,7 @@ protected:
 	virtual void OnConstruction(const FTransform& Transform) override;
 public:
 	virtual void Tick(float DeltaTime) override;
-
+	const TArray<AActor*>& GetOwningActors() { return Actors; }
 protected:
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> Actors;
