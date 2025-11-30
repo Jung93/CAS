@@ -110,6 +110,11 @@ void ACAS_PlayerController::SetupInputComponent()
             UserSetting->RegisterInputMappingContext(_inputMappingContext);
         }
 
+        if (!UserSetting->IsMappingContextRegistered(ControllerMappingContext))
+        {
+            UserSetting->RegisterInputMappingContext(ControllerMappingContext);
+        }
+
     }
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
 

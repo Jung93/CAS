@@ -219,4 +219,10 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 	}
 }
 
+void UCAS_KeySettingWidget::SetSlotFocus()
+{
+	auto slot = Cast<UCAS_KeySettingSlot>(KeySettings->GetChildAt(0));
+	slot->SetFocus();
+}
+
 

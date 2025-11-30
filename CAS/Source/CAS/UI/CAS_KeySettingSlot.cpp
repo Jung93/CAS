@@ -46,6 +46,8 @@ void UCAS_KeySettingSlot::OnSelect(FInputChord NewKey)
 {
 	FKey Key = NewKey.Key;
 	FName KeyName = Key.GetFName();
+	FName InputType = Key.GetMenuCategory();
+
 
 	ChangeSlot.Broadcast(this, KeyName);
 }

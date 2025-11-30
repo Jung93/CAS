@@ -75,6 +75,7 @@ void UCAS_QuitGameWidget::OpenSettingWidget()
 {
 	KeySettingWidget->SetVisibility(ESlateVisibility::Visible);
 	SetVisibility(ESlateVisibility::Collapsed);
+	KeySettingWidget->SetSlotFocus();
 }
 
 void UCAS_QuitGameWidget::CloseSettingWidget()

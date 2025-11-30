@@ -46,6 +46,8 @@ public:
 	UDataTable* GetKeyIconTable() { return KeyIconTable; };
 
 
+	void SetSlotFocus();
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
 	TSubclassOf<UCAS_KeySettingSlot> KeySettingSlotWidgetClass;
