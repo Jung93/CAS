@@ -60,6 +60,8 @@ void UCAS_LaserComponent::TraceLaser(float DeltaTime)
 			if (Mirror != ChildActor) {
 				ClearChildActor();								
 			}
+			auto Mesh = Mirror->GetMesh();
+			Mesh->SetRenderCustomDepth(true);
 			Mirror->SetLaserActivated(true);
 			ChildActor = Mirror;
 		}
@@ -80,6 +82,9 @@ void UCAS_LaserComponent::TraceLaser(float DeltaTime)
 void UCAS_LaserComponent::ClearChildActor()
 {
 	if (auto Mirror = Cast<ACAS_InteractionMirror>(ChildActor)) {
+		
+		auto Mesh = Mirror->GetMesh();
+		Mesh->SetRenderCustomDepth(false);
 		Mirror->SetLaserActivated(false);
 	}
 	else if (auto Target = Cast<ACAS_LaserTarget>(ChildActor)) {

@@ -21,8 +21,6 @@ ACAS_InteractionMirror::ACAS_InteractionMirror()
 
 void ACAS_InteractionMirror::InteractionWithPlayer()
 {
-	//AddActorWorldRotation(FRotator(0, Degree, 0));
-
 	OpenMovementUIMode();
 }
 
@@ -59,6 +57,7 @@ void ACAS_InteractionMirror::BeginPlay()
 			MovementUI->WidgetClickEvent.AddUObject(this, &ThisClass::WidgetClicked);
 		}
 	}
+	StaticMesh->SetRenderCustomDepth(false);
 }
 
 void ACAS_InteractionMirror::Tick(float DeltaTime)

@@ -26,9 +26,9 @@ void ACAS_InteractionTargetMirror::BeginPlay()
 			TargetActorLocation.Add(ActorLocation);
 		}
 		ArrayNum = TargetActors.Num();
-	}
 
-	RotationToDir(TargetActorLocation[TargetIndex]);
+		RotationToDir(TargetActorLocation[TargetIndex]);
+	}
 
 }
 
