@@ -22,14 +22,17 @@ public:
 	//virtual void NativePreConstruct() override;
 
 private:
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void DisplayContinueWidget();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CloseContinueWidget();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void StartNewGame();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void QuitGame();
+
+	UFUNCTION(BlueprintCallable)
+	UCAS_SaveLoadWidget* GetContinueWidget() { return ContinueWidget; }
 
 private:			
 	UPROPERTY(EditAnywhere, Category = "Slots")

@@ -10,7 +10,7 @@
 
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FClickSlot, UCAS_KeySettingSlot*, FName);
-DECLARE_MULTICAST_DELEGATE_TwoParams(FChangeSlot, UCAS_KeySettingSlot*, FName);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FChangeSlot, UCAS_KeySettingSlot*, FName, FName);
 
 
 UCLASS()
@@ -25,17 +25,20 @@ public:
 	FName GetActionName();
 
 	UFUNCTION()
-	void SlotSetting(FName Action, FName KeyName, UTexture2D* Icon);
+	void SlotSetting(FName Action, FName KeyName, UTexture2D* Icon, int32 Index);
 
-	UFUNCTION()
-	void OnSelect(FInputChord NewKey);
+	//void OnSelect(FInputChord NewKey);
 
 	UFUNCTION()
 	void OnBeginKeyChage();
 
+	UFUNCTION(BlueprintCallable)
+	int32 GetSlotIndex() { return SlotIndex; }
 
 	FClickSlot ClickSlot;
 	FChangeSlot ChangeSlot;
+
+	//virtual FReply NativeOnFocusReceived(const FGeometry& Geometry, const FFocusEvent& event) override;
 
 
 protected:
@@ -52,6 +55,6 @@ protected:
 
 	FInputChord CurrentKey;
 
-
+	int32 SlotIndex = 0;
 
 };

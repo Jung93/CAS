@@ -105,15 +105,17 @@ void ACAS_PlayerController::SetupInputComponent()
 
         UserSetting = Subsystem->GetUserSettings();
 
-        if (!UserSetting->IsMappingContextRegistered(_inputMappingContext))
-        {
-            UserSetting->RegisterInputMappingContext(_inputMappingContext);
-        }
 
         if (!UserSetting->IsMappingContextRegistered(ControllerMappingContext))
         {
             UserSetting->RegisterInputMappingContext(ControllerMappingContext);
         }
+
+        if (!UserSetting->IsMappingContextRegistered(_inputMappingContext))
+        {
+            UserSetting->RegisterInputMappingContext(_inputMappingContext);
+        }
+
 
     }
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent)) {
@@ -291,6 +293,7 @@ void ACAS_PlayerController::EnterTitleUIMode()
     if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
     {
         Subsystem->RemoveMappingContext(_inputMappingContext);
+        Subsystem->RemoveMappingContext(ControllerMappingContext);
     }
 
     bShowMouseCursor = true;
@@ -303,6 +306,7 @@ void ACAS_PlayerController::ExitTitleUIMode()
     if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
     {
         Subsystem->AddMappingContext(_inputMappingContext, 0);
+        Subsystem->AddMappingContext(ControllerMappingContext, 0);
     }
 
     bShowMouseCursor = false;

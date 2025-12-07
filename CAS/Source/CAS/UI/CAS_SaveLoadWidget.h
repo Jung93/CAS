@@ -29,7 +29,7 @@ public:
 	void CloseSelectionWidget();
 	UFUNCTION()
 	void DisplaySaveLoadWidget();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CloseSaveLoadWidget();
 	UFUNCTION()
 	void OverwriteSlot();
@@ -39,6 +39,13 @@ public:
 	void SaveLoadFromSlot();
 
 	bool bSaveMode = false;
+
+	UFUNCTION(BlueprintCallable)
+	void SetPrevOpenedWidget(UUserWidget* Widget) { PrevOpenedWidget = Widget; };
+
+	UFUNCTION(BlueprintCallable)
+	UUserWidget* GetPrevOpenedWidget() { return PrevOpenedWidget; }
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
 	int32 SlotCount = 0;
@@ -59,5 +66,8 @@ protected:
 	UButton* CAS_ExitButton;
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	class UVerticalBox* CAS_VerticalBox;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadWrite)
+	UUserWidget* PrevOpenedWidget;
 
 };

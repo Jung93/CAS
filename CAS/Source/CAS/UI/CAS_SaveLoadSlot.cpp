@@ -23,6 +23,7 @@ void UCAS_SaveLoadSlot::BindOnClickedEvent(UObject* Object, FName name)
 	FScriptDelegate Delegate;
 	Delegate.BindUFunction(Object,name);
 	CAS_SaveLoadButton->OnClicked.Add(Delegate);
+
 }
 
 void UCAS_SaveLoadSlot::UpdateSlotInfo(int32 Slotindex)

@@ -48,5 +48,6 @@ void ACAS_SaveNPC::EndOverlapEvent(UPrimitiveComponent* OverlappedComponent, AAc
 void ACAS_SaveNPC::InteractionWithPlayer()												
 {
 	SaveLoadWidget->DisplaySaveLoadWidget();
+	SaveLoadWidget->SetKeyboardFocus();
 }
 

@@ -14,7 +14,6 @@ void UCAS_KeySettingSlot::NativeConstruct()
 	Super::NativeConstruct();
 
 
-	KeySelector->OnKeySelected.AddDynamic(this, &ThisClass::OnSelect);
 	KeySelector->OnIsSelectingKeyChanged.AddDynamic(this, &ThisClass::OnBeginKeyChage);
 
 }
@@ -25,7 +24,7 @@ FName UCAS_KeySettingSlot::GetActionName()
 	return FName(Text.ToString());
 }
 
-void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* Icon)
+void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* Icon, int32 Index)
 {
 	if(!Action.IsNone())
 	{
@@ -39,19 +38,19 @@ void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* I
 
 	abc.Key = FKey(KeyName);
 	KeySelector->SetSelectedKey(abc);
-
+	SlotIndex = Index;
 }
 
-void UCAS_KeySettingSlot::OnSelect(FInputChord NewKey)
-{
-	FKey Key = NewKey.Key;
-	FName KeyName = Key.GetFName();
-	FName InputType = Key.GetMenuCategory();
-
-
-	ChangeSlot.Broadcast(this, KeyName);
-}
-
+//void UCAS_KeySettingSlot::OnSelect(FInputChord NewKey)
+//{
+//	FKey Key = NewKey.Key;
+//	FName KeyName = Key.GetFName();
+//	FName InputType = Key.GetMenuCategory();
+//
+//
+//	ChangeSlot.Broadcast(this, KeyName);
+//}
+//
 void UCAS_KeySettingSlot::OnBeginKeyChage()
 {
 	CurrentKey = KeySelector->GetSelectedKey();
@@ -63,3 +62,13 @@ void UCAS_KeySettingSlot::OnBeginKeyChage()
 	ClickSlot.Broadcast(this, KeyName);
 
 }
+
+//FReply UCAS_KeySettingSlot::NativeOnFocusReceived(const FGeometry& Geometry, const FFocusEvent& event)
+//{
+//	Super::NativeOnFocusReceived(Geometry, event);
+//
+//
+//
+//
+//	return FReply::Handled();
+//}

@@ -84,6 +84,7 @@ void UCAS_SaveLoadWidget::DisplaySelectionWidget()
 		return;
 	}
 	SelectionWidget->SetVisibility(ESlateVisibility::Visible);
+	SelectionWidget->SetKeyboardFocus();
 }
 
 void UCAS_SaveLoadWidget::CloseSelectionWidget()
@@ -92,6 +93,8 @@ void UCAS_SaveLoadWidget::CloseSelectionWidget()
 		return;
 	}
 	SelectionWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	SetKeyboardFocus();
 }
 
 void UCAS_SaveLoadWidget::DisplaySaveLoadWidget()
@@ -108,11 +111,19 @@ void UCAS_SaveLoadWidget::CloseSaveLoadWidget()
 	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 
+	if (PrevOpenedWidget)
+	{
+		PrevOpenedWidget->SetKeyboardFocus();
+	}
+
+
 	auto titleWidget = playerController->GetTitleWidget();
 	if(titleWidget && titleWidget->IsVisible())
 		return;
 
 	playerController->ExitUIMode();
+
+
 }
 
 void UCAS_SaveLoadWidget::OverwriteSlot()
@@ -146,6 +157,7 @@ void UCAS_SaveLoadWidget::CloseOverwriteWidget()
 		return;
 	}
 	OverwriteWidget->SetVisibility(ESlateVisibility::Collapsed);
+	SelectionWidget->SetKeyboardFocus();
 }
 
 void UCAS_SaveLoadWidget::SaveLoadFromSlot()
@@ -172,6 +184,7 @@ void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 	if (bSaveMode) {
 		if (UGameplayStatics::DoesSaveGameExist(FString::Printf(TEXT("SLOT_%d"), index), 0)) {
 			OverwriteWidget->SetVisibility(ESlateVisibility::Visible);
+			OverwriteWidget->SetKeyboardFocus();
 			return;
 		}
 		else {

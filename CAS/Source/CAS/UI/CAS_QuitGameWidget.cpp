@@ -58,9 +58,13 @@ void UCAS_QuitGameWidget::NativePreConstruct()
 void UCAS_QuitGameWidget::OpenWidget()
 {
 	SetVisibility(ESlateVisibility::Visible);
+	SetKeyboardFocus();
+
 	auto controller = GetWorld()->GetFirstPlayerController();
 	auto playerController = Cast<ACAS_PlayerController>(controller);
 	playerController->EnterUIMode();
+
+
 }
 
 void UCAS_QuitGameWidget::CloseWidget()
@@ -82,21 +86,32 @@ void UCAS_QuitGameWidget::CloseSettingWidget()
 {
 	KeySettingWidget->SetVisibility(ESlateVisibility::Collapsed);
 	SetVisibility(ESlateVisibility::Visible);
+
+	SettingButton->SetKeyboardFocus();
+
 }
 
 void UCAS_QuitGameWidget::OpenQuitWidget()
 {
 	QuitWidget->SetVisibility(ESlateVisibility::Visible);
+	QuitWidget->SetKeyboardFocus();
 }
 
 void UCAS_QuitGameWidget::CloseQuitWidget()
 {
 	QuitWidget->SetVisibility(ESlateVisibility::Collapsed);
+
+	QuitButton->SetKeyboardFocus();
+
 }
 
 void UCAS_QuitGameWidget::OpenLoadWidget()
 {
 	LoadWidget->SetVisibility(ESlateVisibility::Visible);
+	LoadWidget->SetKeyboardFocus();
+
+	LoadWidget->SetPrevOpenedWidget(this);
+
 }
 
 void UCAS_QuitGameWidget::QuitGame()

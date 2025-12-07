@@ -25,6 +25,9 @@ void UCAS_TitleWidget::NativeConstruct()
 	CAS_NewGameSlot->SetButtonText(TEXT("NEW GAME"));
     CAS_QuitGameSlot->BindOnClickedEvent(this, "QuitGame");
     CAS_QuitGameSlot->SetButtonText(TEXT("Quit Game"));
+
+    SetKeyboardFocus();
+
 }
 
 void UCAS_TitleWidget::DisplayContinueWidget()
@@ -32,6 +35,8 @@ void UCAS_TitleWidget::DisplayContinueWidget()
     if (ContinueWidget)
     {
         ContinueWidget->SetVisibility(ESlateVisibility::Visible);
+        ContinueWidget->SetKeyboardFocus();
+        ContinueWidget->SetPrevOpenedWidget(this);
     }
 }
 
