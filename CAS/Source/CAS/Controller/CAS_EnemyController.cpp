@@ -3,6 +3,8 @@
 
 #include "Controller/CAS_EnemyController.h"
 #include "Controller/CAS_PlayerController.h"
+#include "Character/EnemyCapt/CAS_EnemyCapt_SuperJump.h"
+#include "Character/EnemyCapt/CAS_EnemyCapt_Sitting.h"
 #include "AI/CAS_BehaviorComponent.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Character/CAS_Character.h"
@@ -122,6 +124,14 @@ void ACAS_EnemyController::OnTargetPerceptionUpdated(AActor* Actor, FAIStimulus 
 		if (!ThisPawn) {
 			return;
 		}
+
+		if (Cast<ACAS_EnemyCapt_SuperJump>(ThisPawn) || Cast<ACAS_EnemyCapt_Sitting>(ThisPawn))
+			return;
+
+		//auto name = ThisPawn->GetClass()->GetName();
+		//if (name == "BP_EnemyCapt_SuperJump_C" || name == "BP_EnemyCapt_Sitting_C")
+		//	return;
+
 		if (StimulusID == SightConfig->GetSenseID()) {
 			
 			if (bDetectable) {

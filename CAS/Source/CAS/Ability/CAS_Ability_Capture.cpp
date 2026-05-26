@@ -51,10 +51,12 @@ void UCAS_Ability_Capture::PlayAnimNotify(FName NotifyName, const FBranchingPoin
 
 	if (NotifyName == "Capture1")
 	{
+		//hat을 플레이어 손에 부착
 		Hat->Ready();
 	}
 	else if (NotifyName == "Capture2")
 	{
+		//hat을 플레이어 손에서 탈착하고 앞으로 날림
 		auto dir = player->GetActorForwardVector();
 
 		Hat->Throw(dir);

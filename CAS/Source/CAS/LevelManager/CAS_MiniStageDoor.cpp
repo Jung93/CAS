@@ -12,7 +12,7 @@ void ACAS_MiniStageDoor::BeginPlay()
 	DoorPosition = Door__Mesh->GetRelativeLocation();
 
 	auto PuzzleSubsystem = GetWorld()->GetSubsystem<UCAS_WorldSubsystem>();
-	PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::DoorOpen);
+	//PuzzleSubsystem->OnPuzzleCompleted.AddUObject(this, &ThisClass::DoorOpen);
 
 	auto gi = Cast<UCAS_GameInstance>(GetGameInstance());
 

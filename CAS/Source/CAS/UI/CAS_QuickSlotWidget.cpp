@@ -260,11 +260,6 @@ void UCAS_QuickSlotWidget::BlockSlotSwap(TArray<UCAS_SkillSlot*> SelectSkillSlot
 
 void UCAS_QuickSlotWidget::SwitchToggle()
 {
-    //UCanvasPanel* root = Cast<UCanvasPanel>(GetRootWidget());
-    //UCanvasPanel* panel = Cast<UCanvasPanel>(root->GetChildAt(0));
-    //UCanvasPanel* imagePanel = Cast<UCanvasPanel>(panel->GetChildAt(4));
-    //UBorder* toggleBorder = Cast<UBorder>(imagePanel->GetChildAt(2));
-
     isToggled = !isToggled;
 
     if (isToggled)

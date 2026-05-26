@@ -28,7 +28,17 @@ void UCAS_KeySettingSlot::SlotSetting(FName Action, FName KeyName, UTexture2D* I
 {
 	if(!Action.IsNone())
 	{
-		FText ActionText = FText::FromName(Action);
+		FString aaa = Action.ToString();
+
+		FString target = "Gamepad";
+		FString to = "";
+
+		aaa = aaa.Replace(*target, *to);
+
+		FName newName = FName(aaa);
+
+		FText ActionText = FText::FromName(newName);
+
 		ActionName->SetText(ActionText);
 	}
 

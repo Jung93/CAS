@@ -16,4 +16,20 @@ public:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     TSoftObjectPtr<UTexture2D> Icon;
+
+
+    const FInputKeyIconData* FindByKeyName(FName TargetName)
+    {
+        if (KeyName == TargetName)
+        {
+            return this;
+        }
+        else
+        {
+            return nullptr;
+        }
+    
+    };
+
+
 };

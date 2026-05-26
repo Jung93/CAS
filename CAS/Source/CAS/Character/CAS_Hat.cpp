@@ -25,7 +25,6 @@ ACAS_Hat::ACAS_Hat()
 void ACAS_Hat::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
 }
 
@@ -59,7 +58,7 @@ void ACAS_Hat::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 void ACAS_Hat::Ready()
 {
 	IsReady = true;
-	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r")); // 소켓 이름 "head" 예시
+	AttachToComponent(_player->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("index_02_r"));
 }
 
 void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromWeep, const FHitResult& SweepResult)
@@ -75,17 +74,21 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 		auto asc = enemy->GetAbilitySystemComponent();
 		auto tag = FGameplayTag::RequestGameplayTag(FName("Effect.Status.Stun"));
 
+		//기절 상태일 경우 빙의 안함
 		if (asc->HasMatchingGameplayTag(tag))
 			return;
 
+		//빙의 대상에게 빙의 처리
 		_testCaptureTarget = enemy;
 		_testCaptureTarget->BeCaptured(this);
 
 		_isThrowing = false;
 		_isReturning = false;
 
+		//빙의 대상의 메쉬에 hat 부착
 		AttachToComponent(_testCaptureTarget->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 
+		//플레이어 숨김 처리
 		_player->SetActorHiddenInGame(true);
 		_player->SetActorEnableCollision(false);
 		_player->GetHitScan()->SetActorEnableCollision(false);
@@ -95,6 +98,7 @@ void ACAS_Hat::OnMyCharacterOverlap(UPrimitiveComponent* OverlappedComponent, AA
 
 	if (_isReturning)
 	{
+		//빙의없이 다시 돌아올 때 플레이어의 메쉬에 hat 부착
 		auto player = Cast<ACAS_Player>(OtherActor);
 
 		if (player->IsValidLowLevel())
@@ -118,6 +122,7 @@ void ACAS_Hat::Throw(const FVector& direction)
 	if (_testCaptureTarget->IsValidLowLevel())
 		return;
 
+	//빙의 어빌리티 사용 시 hat 이 날아갈 위치와 방향
 	StartLocation = GetActorLocation();
 	MoveDirection = direction.GetSafeNormal();
 	TargetLocation = StartLocation + MoveDirection * 600.0f;
@@ -130,17 +135,12 @@ void ACAS_Hat::Throw(const FVector& direction)
 
 void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 {
-	_capturingTime += DeltaTime;
+	//hat 의 전진, 복귀
 
+	_capturingTime += DeltaTime;
 
 	float halfTime = _isReturning? _totalMoveTime * 0.8f : _totalMoveTime * 0.4f;
 	float lerpValue = (_capturingTime / halfTime);
-
-	//FRotator CurrentRotator = GetActorRotation();
-	//FRotator AddRotator = FRotator(180.f * DeltaTime, 360.f * DeltaTime, 0); // 각축 회전
-	//FRotator NewRotator = CurrentRotator + AddRotator;
-	//SetActorRotation(NewRotator);
-
 
 	if (!_isReturning)
 	{
@@ -149,7 +149,7 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 
 		if (_capturingTime >= halfTime)
 		{
-			// 반환 시작
+			//복귀 시작
 			_capturingTime = 0.0f;
 			_isReturning = true;
 			TargetLocation = GetActorLocation();
@@ -159,6 +159,7 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 	{
 		FVector playerLocation = _player->GetMesh()->GetSocketTransform(FName("tophead")).GetLocation();
 
+		//플레이어 위치를 계산해서 복귀
 		if (_isThrowing == true)
 		{
 			FVector NewLocation = FMath::Lerp(TargetLocation, playerLocation, lerpValue);
@@ -178,11 +179,8 @@ void ACAS_Hat::ThrowAndReturn(float DeltaTime)
 
 void ACAS_Hat::Return()
 {
-	/*TargetLocation = GetActorLocation();
 
-	_isThrowing = true;
-	_isReturning = true;
-	_capturingTime = 0.0f;*/
+	//빙의 해제 시 플레이어 숨김 처리 해제
 	_player->SetActorHiddenInGame(false);
 	_player->SetActorEnableCollision(true);
 	_player->GetHitScan()->SetActorEnableCollision(true);

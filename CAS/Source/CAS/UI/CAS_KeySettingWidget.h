@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Controller/CAS_PlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "InputActionValue.h"
@@ -66,6 +67,8 @@ public:
 	void SetResetButtonFocus(bool Focused) { IsResetButtonFocused = Focused; }
 
 
+	void ChangeInputDeviceUI(EInputDeviceType InputDevice);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Slot")
 	TSubclassOf<UCAS_KeyboardSettingSlot> KeySettingSlotWidgetClass;
@@ -109,6 +112,18 @@ protected:
 
 	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
 	class UWidgetSwitcher* SettingSwitcher;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	class UImage* LeftTabImage;
+
+	UPROPERTY(Visibleanywhere, BlueprintReadOnly, meta = (BindWidget))
+	class UImage* RightTabImage;
+
+	UPROPERTY(Editanywhere, BlueprintReadWrite)
+	TArray<UTexture2D*> KeyboardTexture;
+
+	UPROPERTY(Editanywhere, BlueprintReadWrite)
+	TArray<UTexture2D*> GamepadTexture;
 
 	bool IsExitButtonFocused = false;
 	bool IsResetButtonFocused = false;

@@ -19,6 +19,11 @@ void UCAS_GamepadKeySettingSlot::OnSelect(FInputChord NewKey)
 	if (InputType.IsEqual("Key"))
 		return;
 
+
+	if(ActionName->GetText().EqualTo(FText::FromString("Move")))
+		return;
+
+
 	FName KeyName = Key.GetFName();
 
 	ChangeSlot.Broadcast(this, KeyName, InputType);

@@ -160,6 +160,8 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 	if (_isCaptured) {
 		return;
 	}
+
+	//빙의되면 AIController를 해제하고 PlayerController를 통해 조종
 	_hat = hat;
 	_isCaptured = true;
 
@@ -171,6 +173,7 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 
 	controller->UnPossess();
 
+	//빙의 되기 전의 HP를 저장해두고 현재 HP는 빙의한 플레이어의 HP로 설정
 	CurrentHp = this->AttributeSet->GetHealth();
 	this->AttributeSet->SetHealth(playerHP);
 	this->AttributeSet->HpChanged.Broadcast(playerHP);
@@ -178,10 +181,12 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 	ACAS_PlayerController* playerController = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
 	if (playerController)
 	{
+		//카메라 시점을 플레이어에서 빙의된 적으로 1초동안 부드럽게 이동
 		playerController->SetViewTargetWithBlend(this, 1.0f, EViewTargetBlendFunction::VTBlend_Cubic);
 		player->DisableInput(playerController);
 		FTimerHandle TimerHandle;
 
+		//1초 후에 PlayerController로 조종 시작(Possess)
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([player, playerController, this]() {
 			player->EnableInput(playerController);
 			playerController->Possess(this);
@@ -193,8 +198,10 @@ void ACAS_EnemyCapt::BeCaptured(ACAS_Hat* hat)
 		GetCharacterMovement()->bOrientRotationToMovement = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
 
+		//빙의된 Enemy의 플레이어 감지를 제거
 		playerController->RemoveDetectingEnemy(this);
 
+		//빙의된 시점에 플레이어를 감지한 Enemy가 없을 경우 배경음악을 변경 
 		bool lastDetection = !playerController->IsAnyDetectingEnemy();
 		if (lastDetection)
 		{
@@ -239,6 +246,7 @@ void ACAS_EnemyCapt::Look(const FInputActionValue& Value)
 
 void ACAS_EnemyCapt::DeCaptureAbility(const FInputActionValue& Value)
 {
+	//빙의된 Enemy에게 GameplayTag 부여
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.DeCapture"));
 }
 
@@ -258,11 +266,13 @@ void ACAS_EnemyCapt::InputReleased(const FInputActionValue& Value)
 
 void ACAS_EnemyCapt::RightClickAction(const FInputActionValue& Value)
 {
+	//빙의했을 때 Enemy의 능력을 플레이어가 사용
 	ActivateEnemyAbility();
 }
 
 void ACAS_EnemyCapt::AddDefaultAbilites()
 {
+	//에디터에서 설정한 기본 어빌리티를 AbilitySystemComponent에 등록
 	UCAS_AbilitySystemComponent* ASC = Cast<UCAS_AbilitySystemComponent>(AbilitySystemComponent);
 	if (!ASC) {
 		return;
@@ -274,6 +284,7 @@ void ACAS_EnemyCapt::AddDefaultAbilites()
 
 void ACAS_EnemyCapt::AddPlayerAbility(AActor* actor)
 {
+	//빙의 해제 시 Enemy의 고유 어빌리티를 플레이어에게 등록
 	auto Player = Cast<ACAS_Player>(actor);
 	if (Player) {
 		Player->AddPlayerAbility(EnemyAbility);

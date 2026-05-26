@@ -18,6 +18,8 @@ void UCAS_KeySettingWidget::NativeConstruct()
 
 	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
 
+	owner->OnInputDeviceChanged.AddUObject(this, &ThisClass::ChangeInputDeviceUI);
+
 	TArray<TPair<FName, FKeyMappingRow>> array = owner->GetUserSetting()->GetCurrentKeyProfile()->GetPlayerMappingRows().Array();
 
 	if (KeySettingSlotWidgetClass && GamepadKeySettingSlotWidgetClass)
@@ -281,23 +283,48 @@ void UCAS_KeySettingWidget::ChangeClickedSlot(UCAS_KeySettingSlot* ClickedSlot, 
 
 	if (InputType.IsEqual("Key"))
 	{
-		const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(NewKeyName, "Jump");
-		if (Row)
+
+		for (auto KeyMap : KeyIconTable->GetRowMap())
 		{
-			Icon = Row->Icon.LoadSynchronous();
+			const FInputKeyIconData* Row = (FInputKeyIconData*)KeyMap.Value;
+
+			if (Row && Row->KeyName == NewKeyName)
+			{
+				Icon = Row->Icon.LoadSynchronous();
+			}
+
 		}
 
+
+		//아직 지우면 안됨
+		//const FInputKeyIconData* Row = KeyIconTable->FindRow<FInputKeyIconData>(NewKeyName, "Jump");
+		//if (Row)
+		//{
+		//	Icon = Row->Icon.LoadSynchronous();
+		//}
 	}
 	else
 	{
-		const FInputKeyIconData* Row = GamepadIconTable->FindRow<FInputKeyIconData>(NewKeyName, "Jump");
-		if (Row)
+
+		for (auto KeyMap : GamepadIconTable->GetRowMap())
 		{
-			Icon = Row->Icon.LoadSynchronous();
+			const FInputKeyIconData* Row = (FInputKeyIconData*)KeyMap.Value;
+
+			if (Row && Row->KeyName == NewKeyName)
+			{
+				Icon = Row->Icon.LoadSynchronous();
+			}
+
 		}
+
+		//아직 지우면 안됨
+		//const FInputKeyIconData* Row = GamepadIconTable->FindRow<FInputKeyIconData>(NewKeyName, "Jump");
+		//if (Row)
+		//{
+		//	Icon = Row->Icon.LoadSynchronous();
+		//}
+
 	}
-
-
 
 
 	auto owner = Cast<ACAS_PlayerController>(GetOwningPlayer());
@@ -350,3 +377,17 @@ void UCAS_KeySettingWidget::SetSlotFocus()
 }
 
 
+void UCAS_KeySettingWidget::ChangeInputDeviceUI(EInputDeviceType InputDevice)
+{
+	if (InputDevice == EInputDeviceType::KeyboardMouse)
+	{
+		LeftTabImage->SetBrushFromTexture(KeyboardTexture[0]);
+		RightTabImage->SetBrushFromTexture(KeyboardTexture[1]);
+	}
+	else
+	{
+		LeftTabImage->SetBrushFromTexture(GamepadTexture[0]);
+		RightTabImage->SetBrushFromTexture(GamepadTexture[1]);
+	}
+
+}

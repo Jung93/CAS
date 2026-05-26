@@ -56,6 +56,7 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 	{
 		ASC->AddLooseGameplayTag(FGameplayTag::RequestGameplayTag("State.Dead"));
 
+		//Gameplaycue에 등록된 소리 재생
 		if (Cast<ACAS_Player>(Character))
 			ASC->ExecuteGameplayCue(FGameplayTag::RequestGameplayTag("GameplayCue.Sound.Player"));
 		else
@@ -70,18 +71,22 @@ void UCAS_Ability_Dead::PlayAnimNotify(FName NotifyName, const FBranchingPointNo
 
 		if (playerController->IsValidLowLevel())
 		{
+			//플레이어가 죽을 경우
 			playerController->ClearDetectingEnemy();
 			playerController->OpenTitle();
 			PlayMontageTask->TaskEndEvent.Broadcast();
 			return;
 		}
 
+		//Enemy가 죽을 경우 
 		auto player = Cast<ACAS_PlayerController>(GetWorld()->GetFirstPlayerController());
 
 		if (player)
 		{
+			//플레이어 감지 제거
 			player->RemoveDetectingEnemy(Character);
 
+			//플레이어 감지한 Enemy가 없을 경우 배경음악 변경
 			if (!player->IsAnyDetectingEnemy())
 			{
 				UCAS_GameInstance* gi = Cast<UCAS_GameInstance>(player->GetGameInstance());

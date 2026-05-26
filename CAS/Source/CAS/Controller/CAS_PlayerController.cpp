@@ -154,7 +154,7 @@ void ACAS_PlayerController::OnLastInputDeviceChanged(EInputDeviceType DeviceType
 
         FString DeviceName = StaticEnum<EInputDeviceType>()->GetNameStringByValue((int64)DeviceType);
 
-        GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DeviceName);
+        //GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, DeviceName);
 
         // 기존 위젯 제거
         if (CurrentCursorWidget)
@@ -180,7 +180,6 @@ void ACAS_PlayerController::OnLastInputDeviceChanged(EInputDeviceType DeviceType
         }
 
 
-        // 예: UI 위젯에 델리게이트 호출
         OnInputDeviceChanged.Broadcast(CurrentDevice);
     }
 

@@ -66,10 +66,10 @@ ACAS_Player::ACAS_Player()
 
 	AbilitySystemComponent = nullptr;
 	AttributeSet = nullptr;
+	//기본 어빌리티 등록
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> CaptureAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Capture.GA_Ability_Capture_C'"));
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> PickAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_PickUp.GA_Ability_PickUp_C'"));
 	static ConstructorHelpers::FClassFinder<UGameplayAbility> PushAbilityClass(TEXT("/Script/Engine.Blueprint'/Game/CAS/Blueprint/Ability/GA_Ability_Push.GA_Ability_Push_C'"));
-
 
 	if (CaptureAbilityClass.Succeeded())
 	{
@@ -226,6 +226,7 @@ void ACAS_Player::StealAbility(const FInputActionValue& Value)
 
 void ACAS_Player::Capture(const FInputActionValue& Value)
 {
+	//GameplayTag를 확인하여 해당 어빌리티 실행 
 	ActivateAbility(FGameplayTag::RequestGameplayTag("Ability.Attack.Capture"));
 }
 
@@ -325,8 +326,10 @@ void ACAS_Player::ChangeSlot01(const FInputActionValue& Value)
 	if (!isSlotChangable)
 		return;
 
+	//스킬 퀵슬록 로테이션 
 	QuickSlotWidget->ChangeSlotToLeft();
 
+	//퀵슬록에 등록된 어빌리티 순서 변경
 	int32 num = PlayerAbilityCount - 1;
 	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
 	FCAS_SlotData data = abilities[0];
@@ -344,9 +347,10 @@ void ACAS_Player::ChangeSlot02(const FInputActionValue& Value)
 {
 	if (!isSlotChangable)
 		return;
-
+	//스킬 퀵슬록 로테이션 
 	QuickSlotWidget->ChangeSlotToRight();
 
+	//퀵슬록에 등록된 어빌리티 순서 변경
 	int32 num = PlayerAbilityCount - 1;
 	TArray<FCAS_SlotData>& abilities = QuickSlotWidgetComponent->GetPlayerAbilities();
 	FCAS_SlotData data = abilities[num];
@@ -430,8 +434,6 @@ void ACAS_Player::BeginPlay()
 
 		if (_hatSpawn)
 		{
-
-
 			_hatSpawn->SetPlayer(this);
 			_hatSpawn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("tophead")); // 소켓 이름 "head" 예시
 		}
@@ -488,6 +490,7 @@ void ACAS_Player::BeginPlay()
 
 	FString CurrentLevelName = UGameplayStatics::GetCurrentLevelName(this);
 
+	//타이틀 화면에서 플레이어 숨김
 	if (CurrentLevelName == FName("Title"))
 	{
 		HideForTitle();
@@ -551,13 +554,12 @@ void ACAS_Player::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 void ACAS_Player::DeactivateHat()
 {
+	//플리에어 사망 시 hat 숨김
 	if (_hatSpawn) 
 	{
 		_hatSpawn->SetActorEnableCollision(false);
 		_hatSpawn->SetActorHiddenInGame(true);
 	}
-
-
 }
 
 void ACAS_Player::InitAbilitySystemComponent()
@@ -627,6 +629,7 @@ bool ACAS_Player::IsDead()
 
 void ACAS_Player::ToggleSkill()
 {
+	//토글, 지속형 스킬의 경우 스킬 아이콘 수정
 	QuickSlotWidget->SwitchToggle();
 
 }
