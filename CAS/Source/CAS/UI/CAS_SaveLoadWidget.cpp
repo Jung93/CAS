@@ -160,6 +160,14 @@ void UCAS_SaveLoadWidget::CloseOverwriteWidget()
 	SelectionWidget->SetKeyboardFocus();
 }
 
+void UCAS_SaveLoadWidget::RefreshSlots()
+{
+	for (int32 i = 0; i < SlotCount; i++)
+	{
+		SaveLoadSlots[i]->UpdateSlotInfo(i);
+	}
+}
+
 void UCAS_SaveLoadWidget::SaveLoadFromSlot()
 {
 	auto GameInstance = Cast<UCAS_GameInstance>(GetGameInstance());

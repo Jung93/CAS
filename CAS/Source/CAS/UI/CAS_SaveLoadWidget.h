@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UUserWidget* GetPrevOpenedWidget() { return PrevOpenedWidget; }
 
+	UFUNCTION(BlueprintCallable)
+	void RefreshSlots();
+
 protected:
 	UPROPERTY(EditAnywhere, Category = "Slots")
 	int32 SlotCount = 0;

@@ -107,6 +107,7 @@ void UCAS_QuitGameWidget::CloseQuitWidget()
 
 void UCAS_QuitGameWidget::OpenLoadWidget()
 {
+	LoadWidget->RefreshSlots();
 	LoadWidget->SetVisibility(ESlateVisibility::Visible);
 	LoadWidget->SetKeyboardFocus();
 
